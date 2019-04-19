@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- === BASICS === -->
-    <groupId>da.cambiare.in.futuro</groupId>
-    <artifactId>cambiareMiRaccomando__attenzione</artifactId>
-    <name>[?]</name>
+    <groupId>it.unitn.disi.wp</groupId>
+    <artifactId>cup</artifactId>
+    <name>CUP</name>
     <version>1.0.0</version>
     <packaging>war</packaging>
 

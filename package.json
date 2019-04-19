@@ -1,13 +1,13 @@
 {
-    "name": "da_cambiare",
+    "name": "cup",
     "version": "1.0.0",
-    "description": "[?]",
+    "description": "Questo servizio consente l'accesso al sistema di prenotazione per i Servizi Sanitari delle visite specialistiche e delle prestazioni di diagnostica strumentale",
     "license": "MIT",
     "private": true,
     "main": "index.js",
     "repository": {
         "type": "git",
-        "url": "[?]"
+        "url": "https://github.com/carlocorradini/cup.git"
     },
     "engines": {
         "node": ">=8.12.0",
