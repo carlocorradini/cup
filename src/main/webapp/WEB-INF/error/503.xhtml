@@ -1,0 +1,37 @@
+<ui:composition
+    template="#{stdTemplate.errorLayout}"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <ui:param name="errorCode" value="503" />
+
+    <ui:define name="status">
+        #{i18n['error.503.status']}
+    </ui:define>
+
+    <ui:define name="message">
+        #{i18n['error.503.message']}&#160;&#129327;
+    </ui:define>
+
+    <ui:define name="moreInfo">
+        <li>
+            <span>#{i18n['error.503.check']}</span>
+        </li>
+    </ui:define>
+
+    <ui:define name="animation">
+        <div class="planet-container">
+            <div class="planet">
+                <div class="line line1"></div>
+                <div class="line line2"></div>
+                <div class="line line3"></div>
+                <div class="line line4"></div>
+                <div class="line line5"></div>
+                <div class="line line6"></div>
+                <div class="line line7"></div>
+                <div class="line line8"></div>
+                <div class="line line9"></div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

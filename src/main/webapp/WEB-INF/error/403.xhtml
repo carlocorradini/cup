@@ -1,0 +1,37 @@
+<ui:composition
+    template="#{stdTemplate.errorLayout}"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <ui:param name="errorCode" value="403" />
+
+    <ui:define name="status">
+        #{i18n['error.403.status']}
+    </ui:define>
+
+    <ui:define name="message">
+        #{i18n['error.403.message']}&#160;&#128373;
+    </ui:define>
+
+    <ui:define name="animation">
+        <div class="sea">
+            <div class="circle-wrapper">
+                <div class="bubble"></div>
+                <div class="submarine-wrapper">
+                    <div class="submarine-body">
+                        <div class="window"></div>
+                        <div class="engine"></div>
+                        <div class="light"></div>
+                    </div>
+                    <div class="helix"></div>
+                    <div class="hat">
+                        <div class="leds-wrapper">
+                            <div class="periscope"></div>
+                            <div class="leds"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

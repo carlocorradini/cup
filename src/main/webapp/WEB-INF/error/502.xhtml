@@ -1,0 +1,23 @@
+<ui:composition
+    template="#{stdTemplate.errorLayout}"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <ui:param name="errorCode" value="502" />
+
+    <ui:define name="status">
+        #{i18n['error.502.status']}
+    </ui:define>
+
+    <ui:define name="message">
+        #{i18n['error.502.message']}&#160;&#128565;
+    </ui:define>
+
+    <ui:define name="animation">
+        <div class="gateway">
+            <div class="inner one"></div>
+            <div class="inner two"></div>
+            <div class="inner three"></div>
+        </div>
+    </ui:define>
+</ui:composition>

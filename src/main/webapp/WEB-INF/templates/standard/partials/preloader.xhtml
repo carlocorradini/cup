@@ -1,0 +1,30 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <div class="preloader">
+        <div class="preloader-container">
+            <div class="logo"></div>
+            <div class="preloader-content">
+                <div class="life">
+                    <svg viewBox="0 0 16 12">
+                        <polyline
+                            class="back"
+                            points="1 6 4 6 6 11 10 1 12 6 15 6"
+                        ></polyline>
+                        <polyline
+                            class="front"
+                            points="1 6 4 6 6 11 10 1 12 6 15 6"
+                        ></polyline>
+                    </svg>
+                </div>
+                <div class="preloader-text">
+                    #{i18n['common.loading']}
+                    <div class="preloader-text-dots">
+                        <span>.</span>&#160;<span>.</span>&#160;<span>.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ui:composition>

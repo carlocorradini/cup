@@ -1,0 +1,28 @@
+<ui:composition
+    template="#{stdTemplate.errorLayout}"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <ui:param name="errorCode" value="404" />
+
+    <ui:define name="status">
+        #{i18n['error.404.status']}
+    </ui:define>
+
+    <ui:define name="message">
+        #{i18n['error.404.message']}&#160;&#128531;
+    </ui:define>
+
+    <ui:define name="moreInfo">
+        <li>
+            <span>#{i18n['error.404.check']}&#160;(URL)</span>
+        </li>
+    </ui:define>
+
+    <ui:define name="animation">
+        <div class="ghost">
+            <div class="face"></div>
+        </div>
+        <div class="ghost-shadow"></div>
+    </ui:define>
+</ui:composition>

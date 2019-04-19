@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    lang="#{i18nBean.language}"
+>
+    <f:view locale="#{i18nBean.locale}">
+        <h:head>
+            <title>
+                #{i18n['common.error']}&#160;#{errorCode}
+                &#160;|&#160;<ui:insert name="status" />
+            </title>
+            <!-- === META TAGS === -->
+            <meta charset="UTF-8" />
+            <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+            <c:if test="#{errorCode == 404}">
+                <meta name="robots" content="noindex,nofollow" />
+            </c:if>
+            <c:if test="#{errorCode != 404}">
+                <meta name="robots" content="index,follow" />
+            </c:if>
+            <meta http-equiv="cache-control" content="no-cache" />
+            <meta name="owner" content="Carlo Corradini" />
+            <meta name="designer" content="Carlo Corradini &#38; Vendors" />
+            <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0"
+            />
+            <meta
+                name="author"
+                content="Carlo Corradini, carlo.corradini@studenti.unitn.it"
+            />
+
+            <!-- === FAVICON === -->
+            <ui:insert name="favicon">
+                <ui:include src="#{stdTemplate.favicon}" />
+            </ui:insert>
+
+            <!-- === CSS & JS === -->
+            <!-- Semantic UI -->
+            <h:outputStylesheet
+                library="semantic-ui"
+                name="components/reset.min.css"
+                target="head"
+            />
+            <h:outputStylesheet
+                library="semantic-ui"
+                name="components/site.min.css"
+                target="head"
+            />
+            <h:outputStylesheet
+                library="semantic-ui"
+                name="components/header.min.css"
+                target="head"
+            />
+            <h:outputStylesheet
+                library="semantic-ui"
+                name="components/message.min.css"
+                target="head"
+            />
+            <h:outputStylesheet
+                library="semantic-ui"
+                name="components/icon.min.css"
+                target="head"
+            />
+            <!-- Default -->
+            <h:outputStylesheet
+                library="default"
+                name="css/error.css"
+                target="head"
+            />
+        </h:head>
+        <h:body>
+            <div class="errordocument-fixed">
+                <div class="errordocument _#{errorCode}">
+                    <div class="content">
+                        <h1 class="ui red header">
+                            #{i18n['common.error']}&#160;#{errorCode}
+                        </h1>
+                        <h4 class="ui red header">
+                            <ui:insert name="status" />
+                        </h4>
+
+                        <ui:insert name="animation" />
+
+                        <h3 class="ui grey header">
+                            #{i18n['error.whoops']}!
+                        </h3>
+                        <h4 class="ui grey header">
+                            <ui:insert name="message" />
+                        </h4>
+
+                        <div class="ui icon message info medium">
+                            <i class="info circle icon"></i>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n['common.info.short']}
+                                </div>
+                                <ul class="list">
+                                    <li>
+                                        <h:link
+                                            value="#{i18n['error.return']}"
+                                            outcome="#{request.contextPath}/index.xhtml"
+                                        />
+                                    </li>
+                                    <ui:insert name="moreInfo" />
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:body>
+    </f:view>
+</html>
