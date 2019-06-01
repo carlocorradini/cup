@@ -1,9 +1,9 @@
-package bean;
+package it.unitn.disi.wp.cup.bean;
 
 import java.io.Serializable;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import config.StdTemplateConfig;
+import it.unitn.disi.wp.cup.config.StdTemplateConfig;
 
 /**
  * Permits the access to web pages of the Standard Template Configuration

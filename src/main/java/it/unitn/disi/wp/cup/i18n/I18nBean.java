@@ -1,4 +1,4 @@
-package i18n;
+package it.unitn.disi.wp.cup.i18n;
 
 import java.io.Serializable;
 import java.util.Locale;

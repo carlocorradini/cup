@@ -1,4 +1,4 @@
-package config;
+package it.unitn.disi.wp.cup.config;
 
 /**
  * Database Configuration
@@ -36,6 +36,15 @@ public final class DatabaseConfig extends ConfigManager {
     }
 
     /**
+     * Return the name of the Database
+     *
+     * @return Name DB
+     */
+    public String getName() {
+        return super.getString("name");
+    }
+
+    /**
      * Return the username of the Database
      *
      * @return Username DB
@@ -51,6 +60,15 @@ public final class DatabaseConfig extends ConfigManager {
      */
     public String getPassword() {
         return super.getString("password");
+    }
+
+    /**
+     * Return the ssl boolean of the Database
+     *
+     * @return true if DB need SSL, false otherwise
+     */
+    public boolean getSsl() {
+        return super.getBoolean("ssl");
     }
 
 }

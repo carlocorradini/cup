@@ -1,4 +1,4 @@
-package config;
+package it.unitn.disi.wp.cup.config;
 
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
@@ -35,8 +35,8 @@ public final class ConfigLoader {
                 .setIncludesAllowed(INCLUDES_ALLOWED));
         try {
             return builder.getConfiguration();
-        } catch (ConfigurationException e) {
-            e.printStackTrace(System.err);
+        } catch (ConfigurationException ex) {
+            ex.printStackTrace(System.err);
         }
         return null;
     }

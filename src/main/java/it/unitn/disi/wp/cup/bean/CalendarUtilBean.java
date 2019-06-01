@@ -1,11 +1,11 @@
-package bean;
+package it.unitn.disi.wp.cup.bean;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import util.CalendarUtil;
+import it.unitn.disi.wp.cup.util.CalendarUtil;
 
 /**
  * Permits the access to web pages of the Calendar Util

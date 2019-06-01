@@ -1,4 +1,4 @@
-package config;
+package it.unitn.disi.wp.cup.config;
 
 import org.apache.commons.configuration2.PropertiesConfiguration;
 

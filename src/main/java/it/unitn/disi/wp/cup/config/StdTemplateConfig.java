@@ -1,4 +1,4 @@
-package config;
+package it.unitn.disi.wp.cup.config;
 
 /**
  * Standard Template Configuration

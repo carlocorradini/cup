@@ -1,4 +1,4 @@
-package util;
+package it.unitn.disi.wp.cup.util;
 
 import java.util.Calendar;
 import java.util.Locale;
