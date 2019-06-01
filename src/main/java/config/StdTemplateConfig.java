@@ -1,24 +1,24 @@
-package config.manager;
+package config;
 
 /**
- * Manager Standard Template Path
+ * Standard Template Configuration
  *
  * @author Carlo Corradini
  */
-public class StdTemplateManager extends ConfigManager {
+public class StdTemplateConfig extends ConfigManager {
 
     private static final String FILE_NAME = "template.properties";
     private static final String CATEGORY = "std";
 
     /**
-     * Crea uno Standard Template Manager
+     * Create a Standard Template Configuration
      */
-    public StdTemplateManager() {
+    public StdTemplateConfig() {
         super(FILE_NAME, CATEGORY);
     }
 
     /**
-     * Ritorna il percorso del master layout
+     * Return the master layout path
      *
      * @return Master Layout path
      */
@@ -27,7 +27,7 @@ public class StdTemplateManager extends ConfigManager {
     }
 
     /**
-     * Ritorna il percorso all'Header
+     * Return the header path
      *
      * @return Header path
      */
@@ -36,7 +36,7 @@ public class StdTemplateManager extends ConfigManager {
     }
 
     /**
-     * Ritorna il percorso al contenuto
+     * Return the content path
      *
      * @return Content path
      */
@@ -45,7 +45,7 @@ public class StdTemplateManager extends ConfigManager {
     }
 
     /**
-     * Ritorna il percorso al footer
+     * Return the footer path
      *
      * @return Footer path
      */
@@ -54,7 +54,7 @@ public class StdTemplateManager extends ConfigManager {
     }
 
     /**
-     * Ritorna il percorso alle favicon
+     * Return the favicon path
      *
      * @return Favicon path
      */
@@ -63,7 +63,7 @@ public class StdTemplateManager extends ConfigManager {
     }
 
     /**
-     * Ritorna il percorso al preloader
+     * Return the preloader path
      *
      * @return Preloader path
      */
@@ -72,7 +72,7 @@ public class StdTemplateManager extends ConfigManager {
     }
 
     /**
-     * Ritorna il percorso a noscript
+     * Return the noscript path
      *
      * @return Noscript path
      */
@@ -81,7 +81,7 @@ public class StdTemplateManager extends ConfigManager {
     }
 
     /**
-     * Ritorna il percorso ad error layout
+     * Return the error layout path
      *
      * @return Error Layout path
      */

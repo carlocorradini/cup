@@ -8,7 +8,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 /**
- * Gestione Internalizzazione in base alla richiesta da parte del Client
+ * Internalization i18n
  *
  * @author Carlo Corradini
  */
@@ -20,7 +20,7 @@ public final class I18nBean implements Serializable {
     private Locale locale;
 
     /**
-     * Inizializzazione dopo avere caricato tutte le dipendenze e le risorse
+     * Initialize the Class after all dependencies and resources has been loaded
      */
     @PostConstruct
     public void init() {
@@ -28,28 +28,28 @@ public final class I18nBean implements Serializable {
     }
 
     /**
-     * Ritorna un object Locale che rappresenta una specifica regione
-     * geografica, politica o culturale
+     * Return the Locale that represent a specific geographical, political or
+     * cultural region
      *
-     * @return La regione (Locale) della sessione attuale
+     * @return The Locale of the current Session
      */
     public Locale getLocale() {
         return locale;
     }
 
     /**
-     * Ritorna il codice lingua della sessione attuale
+     * Return the language code of the current Session
      *
-     * @return Il Codice lingua relativo
+     * @return The relative language code
      */
     public String getLanguage() {
         return locale.getLanguage();
     }
 
     /**
-     * Cambia la lingua della sessione attuale in base al codice
+     * Change the current session language given the language code
      *
-     * @param language Codice lingua
+     * @param language Language code
      */
     public void setLanguage(String language) {
         locale = new Locale(language);

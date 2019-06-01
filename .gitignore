@@ -65,6 +65,7 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+faces-config.NavData
  
 ######################
 # IDEA

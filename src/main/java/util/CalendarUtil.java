@@ -4,8 +4,9 @@ import java.util.Calendar;
 import java.util.Locale;
 
 /**
- * Classe di comodità gestione Calendario in base alla Locale regione
+ * Convenience Class for Managing the Calendar with the Default or Client Locale
  *
+ * @see java.util.Calendar
  * @author Carlo Corradini
  */
 public class CalendarUtil {
@@ -13,124 +14,124 @@ public class CalendarUtil {
     private Calendar calendar;
 
     /**
-     * Inizializza il calendario in base alla regione
+     * Initialize the Calendar using the Locale passed
      *
-     * @param locale Regione locale
+     * @param locale Locale region
      */
     public CalendarUtil(Locale locale) {
         calendar = Calendar.getInstance(locale);
     }
 
     /**
-     * Inizializza il calendario con la regione di default
+     * Initialize the Calendar using the Default Region
      */
     public CalendarUtil() {
         this(Locale.getDefault());
     }
 
     /**
-     * Permette di cambiare il calendario in base alla regione desiderata
+     * Change the Calendar to the preferred Locale
      *
-     * @param locale Regione locale desiderata
+     * @param locale Locale region
      */
     public void setCalendarByLocale(Locale locale) {
         calendar = Calendar.getInstance(locale);
     }
 
     /**
-     * Ritorna l'anno in base alla regione
+     * Return the Calendar year
      *
-     * @return Anno
+     * @return Year
      */
     public int getYear() {
         return calendar.get(Calendar.YEAR);
     }
 
     /**
-     * Ritorna il mese in base alla regione
+     * Return the Calendar month
      *
-     * @return Mese
+     * @return Month
      */
     public int getMonth() {
         return calendar.get(Calendar.MONTH);
     }
 
     /**
-     * Ritorna il giorno del mese in base alla regione
+     * Return the Calendar day of the month
      *
-     * @return Giorno del mese
+     * @return Day of the Month
      */
     public int getDayOfMonth() {
         return calendar.get(Calendar.DAY_OF_MONTH);
     }
 
     /**
-     * Ritorna il giorno della settimana in base alla regione
+     * Return the Calendar day of the week
      *
-     * @return Giorno della settimana
+     * @return Day of the week
      */
     public int getDayOfWeek() {
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     /**
-     * Ritorna il numero della settimana dell'anno in base alla regione
+     * Return the Calendar week of the year
      *
-     * @return Numero della settimana annuale
+     * @return Week of the Year
      */
     public int getWeekOfYear() {
         return calendar.get(Calendar.WEEK_OF_YEAR);
     }
 
     /**
-     * Ritorna il numero della settimana del mese in base alla regione
+     * Return the Calendar week of the month
      *
-     * @return Numero settimana mensile
+     * @return Week of the month
      */
     public int getWeekOfMonth() {
         return calendar.get(Calendar.WEEK_OF_MONTH);
     }
 
     /**
-     * Ritorna l'ora in formato 12h in base alla regione
+     * Return the Calendar hour in 12h format
      *
-     * @return Ora 12h
+     * @return hour in 12h format
      */
     public int getHour() {
         return calendar.get(Calendar.HOUR);
     }
 
     /**
-     * Ritorna l'ora in formato 24h in base alla regione
+     * Return the Calendar hour in 24h format
      *
-     * @return Ora 24h
+     * @return hour in 24h format
      */
     public int getHourOfDay() {
         return calendar.get(Calendar.HOUR_OF_DAY);
     }
 
     /**
-     * Ritorna i minuti in base alla regione
+     * Return the Calendar minute
      *
-     * @return Minuto
+     * @return minute
      */
     public int getMinute() {
         return calendar.get(Calendar.MINUTE);
     }
 
     /**
-     * Ritorna i secondi in base alla regione
+     * Return the Calendar second
      *
-     * @return Secondo
+     * @return second
      */
     public int getSecond() {
         return calendar.get(Calendar.SECOND);
     }
 
     /**
-     * Ritorna i millisecondi in base alla regione
+     * Return the Calendar millisecond
      *
-     * @return Millisecondo
+     * @return millisecond
      */
     public int getMilliSecond() {
         return calendar.get(Calendar.MILLISECOND);

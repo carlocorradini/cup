@@ -1,24 +1,24 @@
-package config.manager;
+package config;
 
 /**
- * Manager configurazione Database
+ * Database Configuration
  *
  * @author Carlo Corradini
  */
-public final class DatabaseManager extends ConfigManager {
+public final class DatabaseConfig extends ConfigManager {
 
     private static final String FILE_NAME = "database.properties";
     private static final String CATEGORY = "db";
 
     /**
-     * Crea un DatabaseManager
+     * Create a Database Configuration
      */
-    public DatabaseManager() {
+    public DatabaseConfig() {
         super(FILE_NAME, CATEGORY);
     }
 
     /**
-     * Ritorna l'host del database
+     * Return the host of the Database
      *
      * @return Host DB
      */
@@ -27,7 +27,7 @@ public final class DatabaseManager extends ConfigManager {
     }
 
     /**
-     * Ritorna la porta del database
+     * Return the port of the Database
      *
      * @return Port DB
      */
@@ -36,7 +36,7 @@ public final class DatabaseManager extends ConfigManager {
     }
 
     /**
-     * Ritorna l'username di accesso
+     * Return the username of the Database
      *
      * @return Username DB
      */
@@ -45,7 +45,7 @@ public final class DatabaseManager extends ConfigManager {
     }
 
     /**
-     * Ritorna la password di accesso
+     * Return the password of the Database
      *
      * @return Password DB
      */

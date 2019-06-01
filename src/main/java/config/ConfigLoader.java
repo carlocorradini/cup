@@ -1,4 +1,4 @@
-package config.loader;
+package config;
 
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
@@ -7,8 +7,7 @@ import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 /**
- * Caricamento in memoria file di configurazione presente nella cartella
- * 'resources'
+ * Load in memory a configuration file from 'resources' folder
  *
  * @author Carlo Corradini
  */
@@ -20,11 +19,11 @@ public final class ConfigLoader {
     private static final boolean INCLUDES_ALLOWED = true;
 
     /**
-     * Dato il nome di un file di configurazione, lo carica e ritorna le
-     * proprietà accessibili attraverso getters
+     * Given a configuration File Name, load it and return properties accessible
+     * with getters
      *
-     * @param fileName Nome del File
-     * @return Proprità
+     * @param fileName Name of the File
+     * @return PropertiesConfiguration Object
      */
     public static PropertiesConfiguration get(String fileName) {
         FileBasedConfigurationBuilder<PropertiesConfiguration> builder = new FileBasedConfigurationBuilder<>(
@@ -37,7 +36,7 @@ public final class ConfigLoader {
         try {
             return builder.getConfiguration();
         } catch (ConfigurationException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
         return null;
     }

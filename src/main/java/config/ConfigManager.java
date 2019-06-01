@@ -1,10 +1,9 @@
-package config.manager;
+package config;
 
 import org.apache.commons.configuration2.PropertiesConfiguration;
-import config.loader.ConfigLoader;
 
 /**
- * Manager delle proprietà file di configurazione
+ * Configuration Manager for properties File
  *
  * @author Carlo Corradini
  */
@@ -14,11 +13,11 @@ public abstract class ConfigManager {
     private final String category;
 
     /**
-     * Crea un Manager dato il nome del file di configurazione e la categoria
-     * padre
+     * Create a Manager given a Name of the Configuration File and the category
+     * associated with it
      *
-     * @param fileName Nome del file
-     * @param category Categoria padre delle proprietà, es. padre.figlio
+     * @param fileName Name of the File
+     * @param category Properties category
      */
     public ConfigManager(String fileName, String category) {
         this.config = ConfigLoader.get(String.format("%s/%s", "config", fileName));
@@ -30,40 +29,40 @@ public abstract class ConfigManager {
     }
 
     /**
-     * Ritorna la stringa associata alla chiave
+     * Return the String associated with the key
      *
-     * @param key Chiave di configurazione
-     * @return La stringa associata
+     * @param key Configuration key
+     * @return The String value
      */
     protected String getString(String key) {
         return config.getString(formatter(key));
     }
 
     /**
-     * Ritorna l'intero associato alla chiave
+     * Return the int associated with the key
      *
-     * @param key Chiave di configurazione
-     * @return L'intero associato
+     * @param key Configuration key
+     * @return The int value
      */
     protected int getInt(String key) {
         return config.getInt(formatter(key));
     }
 
     /**
-     * Ritorna il booleano associato alla chiave
+     * Return the boolean associated with the key
      *
-     * @param key Chiave di configurazione
-     * @return Il booleano associato
+     * @param key Configuration key
+     * @return The boolean value
      */
     protected boolean getBoolean(String key) {
         return config.getBoolean(formatter(key));
     }
 
     /**
-     * Ritorna il double associato alla chiave
+     * Return the double associated with the key
      *
-     * @param key Chiave di configurazione
-     * @return Il double associato
+     * @param key Configuration key
+     * @return The double value
      */
     protected double getDouble(String key) {
         return config.getDouble(formatter(key));
