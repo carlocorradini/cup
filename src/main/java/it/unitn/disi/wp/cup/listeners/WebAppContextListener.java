@@ -7,12 +7,14 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAOFactory;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 /**
  * Web App life-cycle listener
  *
  * @author Carlo Corradini
  */
+@WebListener
 public class WebAppContextListener implements ServletContextListener {
 
     private static final String DB_DRIVER = "org.postgresql.Driver";
