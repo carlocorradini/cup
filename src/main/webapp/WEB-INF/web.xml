@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.1" 
-         xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+<web-app version="3.1"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
 
     <!-- === BASICS === -->
-    <display-name>[?]</display-name>
-    <description>[?]</description>
+    <display-name>CUP</display-name>
+    <description>Centrale Unica Prenotazioni</description>
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
@@ -46,6 +47,13 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
+    <!-- === SESSION === -->
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+
     <!-- === ERROR PAGES === -->
     <!-- Forbidden directory listing -->
     <error-page>
@@ -72,7 +80,7 @@
         <error-code>503</error-code>
         <location>/WEB-INF/error/503.xhtml</location>
     </error-page>
-    
+
     <!-- MIME MAPPING -->
     <mime-mapping>
         <extension>webmanifest</extension>

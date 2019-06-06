@@ -1,9 +1,12 @@
 package it.unitn.disi.wp.cup.listeners;
 
 import it.unitn.disi.wp.cup.config.DatabaseConfig;
+import it.unitn.disi.wp.cup.config.StdTemplateConfig;
+import it.unitn.disi.wp.cup.config.exception.ConfigException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAOFactory;
+
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -24,22 +27,16 @@ public class WebAppContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         DAOFactory daoFactory;
-        DatabaseConfig databaseConfig;
-
-        databaseConfig = new DatabaseConfig();
 
         try {
-            JDBCDAOFactory.configure(DB_DRIVER,
-                    String.format(DB_URL,
-                            databaseConfig.getHost(),
-                            databaseConfig.getPort(),
-                            databaseConfig.getName(),
-                            databaseConfig.getUsername(),
-                            databaseConfig.getPassword(),
-                            databaseConfig.getSsl()));
+            /* - Load Configurations - */
+            DatabaseConfig.load();
+            StdTemplateConfig.load();
+            /* END Load Configuration */
+            JDBCDAOFactory.configure(DB_DRIVER, DatabaseConfig.getUrl());
             daoFactory = JDBCDAOFactory.getInstance();
             sce.getServletContext().setAttribute(DAO_FACTORY, daoFactory);
-        } catch (DAOFactoryException ex) {
+        } catch (DAOFactoryException | ConfigException ex) {
             Logger.getLogger(getClass().getName()).severe(ex.toString());
             throw new RuntimeException(ex);
         }

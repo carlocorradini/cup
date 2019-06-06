@@ -1,149 +1,152 @@
 <!DOCTYPE html>
 <html
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    lang="#{i18nBean.language}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        lang="#{i18nBean.language}"
 >
-    <f:view locale="#{i18nBean.locale}">
-        <h:head>
-            <title>
-                <ui:insert name="title">#{i18n['head.title']}</ui:insert>
-            </title>
-            <!-- === META TAGS === -->
-            <meta charset="UTF-8" />
-            <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-            <meta name="robots" content="index,follow" />
-            <meta http-equiv="cache-control" content="no-cache" />
-            <meta name="owner" content="Carlo Corradini" />
-            <meta name="designer" content="Carlo Corradini &#38; Vendors" />
-            <meta
+<f:view locale="#{i18nBean.locale}">
+    <h:head>
+        <title>
+            <ui:insert name="title">#{i18n['head.title']}</ui:insert>
+        </title>
+        <!-- === META TAGS === -->
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+        <meta name="robots" content="index,follow"/>
+        <meta http-equiv="cache-control" content="max-age=0"/>
+        <meta http-equiv="cache-control" content="no-cache"/>
+        <meta http-equiv="expires" content="0"/>
+        <meta http-equiv="pragma" content="no-cache"/>
+        <meta name="owner" content="Carlo Corradini"/>
+        <meta name="designer" content="Carlo Corradini &#38; Vendors"/>
+        <meta
                 name="viewport"
                 content="width=device-width, initial-scale=1.0"
-            />
-            <meta
+        />
+        <meta
                 name="copyright"
                 content="&#169; 2019 - #{calendar.year} | #{i18n['common.copyright']}"
-            />
-            <ui:insert name="keywords">
-                <meta name="keywords" content="HTML,CSS,XML,JavaScript" />
-            </ui:insert>
-            <ui:insert name="author">
-                <meta
+        />
+        <ui:insert name="keywords">
+            <meta name="keywords" content="HTML,CSS,XML,JavaScript"/>
+        </ui:insert>
+        <ui:insert name="author">
+            <meta
                     name="author"
                     content="Carlo Corradini, carlo.corradini@studenti.unitn.it"
-                />
-            </ui:insert>
-            <ui:insert name="description">
-                <meta
+            />
+        </ui:insert>
+        <ui:insert name="description">
+            <meta
                     name="description"
                     content="#{i18n['head.description']}"
-                />
-            </ui:insert>
+            />
+        </ui:insert>
 
-            <!-- === FAVICON === -->
-            <ui:insert name="favicon">
-                <ui:include src="#{stdTemplate.favicon}" />
-            </ui:insert>
+        <!-- === FAVICON === -->
+        <ui:insert name="favicon">
+            <ui:include src="#{stdTemplate.favicon}"/>
+        </ui:insert>
 
-            <!-- === CSS & JS === -->
-            <!-- jQuery -->
-            <h:outputScript
+        <!-- === CSS & JS === -->
+        <!-- jQuery -->
+        <h:outputScript
                 library="jquery"
                 name="js/jquery.min.js"
                 target="body"
-            />
-            <!-- Cookie Consent -->
-            <h:outputStylesheet
+        />
+        <!-- Cookie Consent -->
+        <h:outputStylesheet
                 library="cookieconsent"
                 name="css/cookieconsent.min.css"
                 target="head"
-            />
-            <h:outputScript
+        />
+        <h:outputScript
                 library="cookieconsent"
                 name="js/cookieconsent.min.js"
                 target="body"
-            />
-            <!-- Semantic UI -->
-            <h:outputStylesheet
+        />
+        <!-- Semantic UI -->
+        <h:outputStylesheet
                 library="semantic-ui"
                 name="css/semantic.min.css"
                 target="head"
-            />
-            <h:outputScript
+        />
+        <h:outputScript
                 library="semantic-ui"
                 name="js/semantic.min.js"
                 target="body"
-            />
-            <!-- Default -->
-            <h:outputStylesheet
+        />
+        <!-- Default -->
+        <h:outputStylesheet
                 library="default"
                 name="css/style.css"
                 target="head"
-            />
-            <h:outputScript
+        />
+        <h:outputScript
                 library="default"
                 name="js/script.js"
                 target="body"
-            />
-            <!-- Injected -->
-            <ui:insert name="css" />
-            <ui:insert name="js" />
-        </h:head>
-        <h:body>
-            <!-- === PRELOADER === -->
-            <ui:insert name="preloader">
-                <ui:include src="#{stdTemplate.preloader}" />
+        />
+        <!-- Injected -->
+        <ui:insert name="css"/>
+        <ui:insert name="js"/>
+    </h:head>
+    <h:body>
+        <!-- === PRELOADER === -->
+        <ui:insert name="preloader">
+            <ui:include src="#{stdTemplate.preloader}"/>
+        </ui:insert>
+
+        <!-- === NOSCRIPT === -->
+        <ui:insert name="noscript">
+            <ui:include src="#{stdTemplate.noscript}"/>
+        </ui:insert>
+
+        <!-- === WRAPPER === -->
+        <div class="wrapper">
+            <!-- === HEADER === -->
+            <ui:insert name="header">
+                <ui:include src="#{stdTemplate.header}"/>
             </ui:insert>
 
-            <!-- === NOSCRIPT === -->
-            <ui:insert name="noscript">
-                <ui:include src="#{stdTemplate.noscript}" />
+            <!-- === CONTENT === -->
+            <ui:insert name="content">
+                <ui:include src="#{stdTemplate.content}"/>
             </ui:insert>
+        </div>
 
-            <!-- === WRAPPER === -->
-            <div class="wrapper">
-                <!-- === HEADER === -->
-                <ui:insert name="header">
-                    <ui:include src="#{stdTemplate.header}" />
-                </ui:insert>
+        <!-- === FOOTER === -->
+        <ui:insert name="footer">
+            <ui:include src="#{stdTemplate.footer}"/>
+        </ui:insert>
 
-                <!-- === CONTENT === -->
-                <ui:insert name="content">
-                    <ui:include src="#{stdTemplate.content}" />
-                </ui:insert>
-            </div>
-
-            <!-- === FOOTER === -->
-            <ui:insert name="footer">
-                <ui:include src="#{stdTemplate.footer}" />
-            </ui:insert>
-
-            <!-- === COOKIE CONSENT === -->
-            <!-- prettier-ignore -->
-            <script type="text/javascript">
-                window.addEventListener("load", function() {
-                    window.cookieconsent.initialise({
-                        "palette": {
-                            "popup": {
-                                "background": "#237afc"
-                            },
-                            "button": {
-                                "background": "#ffffff",
-                                "text": "#237afc"
-                            }
+        <!-- === COOKIE CONSENT === -->
+        <!-- prettier-ignore -->
+        <script type="text/javascript">
+            window.addEventListener("load", function () {
+                window.cookieconsent.initialise({
+                    "palette": {
+                        "popup": {
+                            "background": "#237afc"
                         },
-                        "theme": "classic",
-                        "content": {
-                            "message": "#{i18n['cookie.message']}",
-                            "dismiss": "#{i18n['cookie.dismiss']}",
-                            "link": "#{i18n['cookie.link']}",
-                            "href": "https://cookiesandyou.com"
+                        "button": {
+                            "background": "#ffffff",
+                            "text": "#237afc"
                         }
-                    })
-                });
-            </script>
-        </h:body>
-    </f:view>
+                    },
+                    "theme": "classic",
+                    "content": {
+                        "message": "#{i18n['cookie.message']}",
+                        "dismiss": "#{i18n['cookie.dismiss']}",
+                        "link": "#{i18n['cookie.link']}",
+                        "href": "https://cookiesandyou.com"
+                    }
+                })
+            });
+        </script>
+    </h:body>
+</f:view>
 </html>

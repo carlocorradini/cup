@@ -1,5 +1,6 @@
-package it.unitn.disi.wp.cup.config;
+package it.unitn.disi.wp.cup.config.loader;
 
+import it.unitn.disi.wp.cup.config.exception.ConfigException;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
@@ -7,7 +8,7 @@ import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 /**
- * Load in memory a configuration file from 'resources' folder
+ * Load a configuration file from 'resources' folder
  *
  * @author Carlo Corradini
  */
@@ -24,8 +25,9 @@ public final class ConfigLoader {
      *
      * @param fileName Name of the File
      * @return PropertiesConfiguration Object
+     * @throws ConfigException If cannot Load the Configuration file
      */
-    public static PropertiesConfiguration get(String fileName) {
+    public static PropertiesConfiguration get(String fileName) throws ConfigException {
         FileBasedConfigurationBuilder<PropertiesConfiguration> builder = new FileBasedConfigurationBuilder<>(
                 PropertiesConfiguration.class).configure(new Parameters().properties()
                 .setFileName(fileName)
@@ -36,8 +38,7 @@ public final class ConfigLoader {
         try {
             return builder.getConfiguration();
         } catch (ConfigurationException ex) {
-            ex.printStackTrace(System.err);
+            throw new ConfigException("Unable to get the Configuration file: " + ex.getMessage());
         }
-        return null;
     }
 }

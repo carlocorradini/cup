@@ -1,29 +1,31 @@
 <ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
 >
     <noscript>
         <style type="text/css">
-            body { overflow: hidden; }
+            body {
+                overflow: hidden;
+            }
         </style>
         <div class="noscript-container scrollbar-x-y">
             <div class="noscript-content">
                 <div class="ui icon message warning massive">
-                    <i class="js square icon"></i>
+                    <i class="js square icon"/>
                     <div class="content">
                         <div class="header">
-                            <i class="exclamation triangle icon"></i>
+                            <i class="exclamation triangle icon"/>
                             #{i18n['common.enable']} JAVASCRIPT
                         </div>
                         <p>
                             #{i18n['noscript.message']}
-                            <br />
+                            <br/>
                             <span>
-                                <i class="info circle icon"></i>
+                                <i class="info circle icon"/>
                                 <h:outputLink
-                                    value="https://www.enable-javascript.com/#{i18nBean.language}"
-                                    target="_blank"
+                                        value="https://www.enable-javascript.com/#{i18nBean.language}"
+                                        target="_blank"
                                 >
                                     #{i18n['noscript.info']}
                                 </h:outputLink>

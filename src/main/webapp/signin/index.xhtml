@@ -1,84 +1,82 @@
 <ui:composition
-    template="#{stdTemplate.masterLayout}"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
 >
     <ui:define name="title">Sign In</ui:define>
     <ui:define name="css">
         <h:outputStylesheet
-            library="default"
-            name="css/signin.css"
-            target="head"
+                library="default"
+                name="css/signin.css"
+                target="head"
         />
     </ui:define>
     <ui:define name="js">
-        <h:outputScript library="default" name="js/signin.js" target="body" />
+        <h:outputScript library="default" name="js/signin.js" target="body"/>
     </ui:define>
 
-    <ui:define name="header"></ui:define>
+    <ui:define name="header"/>
     <ui:define name="content">
         <div class="sign-in-fixed">
-            <a
-                href="/"
-                class="red ui icon button"
-                data-tooltip="Torna alla Home"
-                data-inverted=""
-                data-position="bottom left"
-            >
-                <i class="home icon"></i>
-            </a>
+            <h:link value="" outcome="/index"
+                    class="red ui icon button"
+                    data-tooltip="Torna alla Home"
+                    data-inverted=""
+                    data-position="bottom left">
+                <i class="home icon"/>
+            </h:link>
             <div class="sign-in">
                 <div class="content">
                     <div class="ui piled segment">
                         <form
-                            id="sign-in-form"
-                            class="ui attached form segment large"
-                            action="#"
+                                id="sign-in-form"
+                                class="ui attached form segment large"
+                                action="#"
                         >
                             <h1 class="ui horizontal divider header">
-                                <i class="shield icon"></i>
+                                <i class="shield icon"/>
                             </h1>
                             <div class="field">
                                 <label>Username</label>
                                 <div class="ui left icon input">
                                     <input
-                                        type="text"
-                                        name="username"
-                                        placeholder="Username"
-                                        autocomplete="off"
-                                        required="true"
+                                            type="text"
+                                            name="username"
+                                            placeholder="Username"
+                                            autocomplete="off"
+                                            required="true"
                                     />
-                                    <i class="user icon"></i>
+                                    <i class="user icon"/>
                                 </div>
                             </div>
                             <div class="field">
                                 <label>Password</label>
                                 <div class="ui left icon input">
                                     <input
-                                        type="password"
-                                        name="password"
-                                        placeholder="Password"
-                                        autocomplete="off"
-                                        required="true"
+                                            type="password"
+                                            name="password"
+                                            placeholder="Password"
+                                            autocomplete="off"
+                                            required="true"
                                     />
-                                    <i class="lock icon"></i>
+                                    <i class="lock icon"/>
                                 </div>
                             </div>
                             <div
-                                class="ui blue fluid big button submit"
-                                tabindex="0"
+                                    class="ui blue fluid big button submit"
+                                    tabindex="0"
                             >
-                                <i class="send icon"></i>
+                                <i class="send icon"/>
                                 Accedi
                             </div>
                             <div class="ui error message"></div>
                         </form>
                         <div
-                            id="sign-in-message"
-                            class="ui large bottom attached message"
+                                id="sign-in-message"
+                                class="ui large bottom attached message"
                         >
-                            <i class="info circle icon"></i>
+                            <i class="info circle icon"/>
                             <span>Inserisci le credenziali per accedere</span>
                         </div>
                     </div>
@@ -86,5 +84,5 @@
             </div>
         </div>
     </ui:define>
-    <ui:define name="footer"></ui:define>
+    <ui:define name="footer"/>
 </ui:composition>

@@ -22,7 +22,7 @@ public class DAOException extends Exception {
      * {@link #initCause}
      *
      * @param message The detail message. The detail message is saved for later
-     * retrieval by the {@link #getMessage()} method
+     *                retrieval by the {@link #getMessage()} method
      */
     public DAOException(String message) {
         super(message);
@@ -37,8 +37,8 @@ public class DAOException extends Exception {
      * java.security.PrivilegedActionException})
      *
      * @param cause The cause (which is saved for later retrieval by the
-     * {@link #getCause()} method). (A <tt>null</tt> value is permitted, and
-     * indicates that the cause is nonexistent or unknown.)
+     *              {@link #getCause()} method). (A <tt>null</tt> value is permitted, and
+     *              indicates that the cause is nonexistent or unknown.)
      */
     public DAOException(Throwable cause) {
         super(cause);
@@ -51,10 +51,10 @@ public class DAOException extends Exception {
      * automatically incorporated in this exception's detail message.
      *
      * @param message The detail message (which is saved for later retrieval by
-     * the {@link #getMessage()} method)
-     * @param cause The cause (which is saved for later retrieval by the
-     * {@link #getCause()} method). (A <tt>null</tt> value is permitted, and
-     * indicates that the cause is nonexistent or unknown.)
+     *                the {@link #getMessage()} method)
+     * @param cause   The cause (which is saved for later retrieval by the
+     *                {@link #getCause()} method). (A <tt>null</tt> value is permitted, and
+     *                indicates that the cause is nonexistent or unknown.)
      */
     public DAOException(String message, Throwable cause) {
         super(message, cause);
