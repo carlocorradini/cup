@@ -2,16 +2,16 @@ package it.unitn.disi.wp.cup.persistence.dao.factory.jdbc;
 
 import it.unitn.disi.wp.cup.persistence.dao.DAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
+
 import java.sql.Connection;
 import java.util.HashMap;
 
 /**
  * This is the base DAO class all concrete DAO using JDBC technology must extend
  *
- * @param <ENTITY_CLASS> the class of the entities the dao handle
+ * @param <ENTITY_CLASS>      the class of the entities the dao handle
  * @param <PRIMARY_KEY_CLASS> the class of the primary key of the entity the dao
- * handle
- *
+ *                            handle
  * @author Carlo Corradini
  */
 public abstract class JDBCDAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> implements DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
@@ -19,7 +19,7 @@ public abstract class JDBCDAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> implements DAO<EN
     /**
      * The JDBC {@link Connection} used to access the persistence system
      */
-    protected final Connection connection;
+    protected final Connection CONNECTION;
     /**
      * The list of other DAOs this DAO can interact with
      */
@@ -32,7 +32,7 @@ public abstract class JDBCDAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> implements DAO<EN
      */
     protected JDBCDAO(Connection connection) {
         super();
-        this.connection = connection;
+        this.CONNECTION = connection;
         FRIEND_DAOS = new HashMap<>();
     }
 
@@ -41,8 +41,8 @@ public abstract class JDBCDAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> implements DAO<EN
      * parameter
      *
      * @param <DAO_CLASS> The class name of the DAO that can interact with this
-     * DAO
-     * @param daoClass The class of the DAO that can interact with this DAO
+     *                    DAO
+     * @param daoClass    The class of the DAO that can interact with this DAO
      * @return The instance of the DAO or null if no DAO of the type passed as
      * parameter can interact with this DAO
      * @throws DAOFactoryException If an error occurred

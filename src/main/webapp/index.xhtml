@@ -3,7 +3,7 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
->
+        xmlns:f="http://java.sun.com/jsf/core">
     <ui:define name="title">Pagina 1</ui:define>
 
     <ui:define name="content">
@@ -18,11 +18,20 @@
                     value="Italian"
             />
         </h:form>
-        <p>
-            <span>#{i18n['common.copyright']}</span>
-            <br/>
-            <span>#{stdTemplate.header}</span>
-            <span>#{calendar.year}</span>
-        </p>
+
+        <h:dataTable value="#{person.personDAO.all}" var="person">
+            <h:column>
+                <f:facet name="header">ID</f:facet>
+                #{person.id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">NAME</f:facet>
+                #{person.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">SURNAME</f:facet>
+                #{person.surname}
+            </h:column>
+        </h:dataTable>
     </ui:define>
 </ui:composition>

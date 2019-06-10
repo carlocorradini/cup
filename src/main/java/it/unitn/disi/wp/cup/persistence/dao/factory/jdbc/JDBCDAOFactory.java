@@ -3,13 +3,13 @@ package it.unitn.disi.wp.cup.persistence.dao.factory.jdbc;
 import it.unitn.disi.wp.cup.persistence.dao.DAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 /**
  * This JDBC implementation of {@code DAOFactory}
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class JDBCDAOFactory implements DAOFactory {
 
-    private final transient Connection connection;
+    private final transient Connection CONNECTION;
     private final transient HashMap<Class, DAO> DAO_CACHE;
     private static JDBCDAOFactory instance;
 
@@ -27,7 +27,7 @@ public class JDBCDAOFactory implements DAOFactory {
 
         try {
             Class.forName(dbDriver, true, getClass().getClassLoader());
-            connection = DriverManager.getConnection(dbUrl);
+            CONNECTION = DriverManager.getConnection(dbUrl);
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex.getMessage(), ex.getCause());
         } catch (SQLException ex) {
@@ -41,12 +41,11 @@ public class JDBCDAOFactory implements DAOFactory {
      * Call this method before use the instance of this class
      *
      * @param dbDriver The Driver to access the database represented by
-     * "org.[DB_VENDOR].Driver
-     * @param dbUrl The Url to access the database, represented by
-     * jdbc:[DB_NAME]://[DB_HOST]:[DB_PORT]/[DB_NAME]?user=[DB_USERNAME]&password=[DB_PASSWORD]&ssl=[DB_SSL]
+     *                 "org.[DB_VENDOR].Driver
+     * @param dbUrl    The Url to access the database, represented by
+     *                 jdbc:[DB_NAME]://[DB_HOST]:[DB_PORT]/[DB_NAME]?user=[DB_USERNAME]&password=[DB_PASSWORD]&ssl=[DB_SSL]
      * @throws DAOFactoryException If an error occurred during DAO factory
-     * configuration.
-     *
+     *                             configuration.
      */
     public static void configure(String dbDriver, String dbUrl) throws DAOFactoryException {
         if (instance == null) {
@@ -61,7 +60,7 @@ public class JDBCDAOFactory implements DAOFactory {
      *
      * @return The singleton instance of this {@code DAOFactory}
      * @throws DAOFactoryException If an error occurred if this DAO factory is
-     * not yet configured
+     *                             not yet configured
      */
     public static JDBCDAOFactory getInstance() throws DAOFactoryException {
         if (instance == null) {
@@ -75,18 +74,13 @@ public class JDBCDAOFactory implements DAOFactory {
      */
     @Override
     public void shutdown() {
-        try {
-            DriverManager.getConnection("jdbc:postgresql:;shutdown=true");
-        } catch (SQLException ex) {
-            Logger.getLogger(JDBCDAOFactory.class.getName()).info(ex.getMessage());
-        }
     }
 
     /**
      * Returns the concrete {@link DAO dao} which type is the class passed as
      * parameter
      *
-     * @param <DAO_CLASS> The class name of the {@code dao} to get
+     * @param <DAO_CLASS>  The class name of the {@code dao} to get
      * @param daoInterface The class instance of the {@code dao} to get
      * @return The concrete {@code dao} which type is the class passed as
      * parameter
@@ -111,7 +105,7 @@ public class JDBCDAOFactory implements DAOFactory {
         try {
             daoClass = Class.forName(prefix + daoInterface.getSimpleName());
             constructor = daoClass.getConstructor(Connection.class);
-            daoInstance = constructor.newInstance(connection);
+            daoInstance = constructor.newInstance(CONNECTION);
 
             if (!(daoInstance instanceof JDBCDAO)) {
                 throw new DAOFactoryException("The daoInterface passed as parameter doesn't extend JDBCDAO class");

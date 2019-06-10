@@ -3,8 +3,9 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
->
-    <ui:define name="title">Sign In</ui:define>
+        xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    >
+    <ui:define name="title">#{i18n['common.signIn']}</ui:define>
     <ui:define name="css">
         <h:outputStylesheet
                 library="default"
@@ -12,77 +13,126 @@
                 target="head"
         />
     </ui:define>
-    <ui:define name="js">
-        <h:outputScript library="default" name="js/signin.js" target="body"/>
-    </ui:define>
 
     <ui:define name="header"/>
+
     <ui:define name="content">
         <div class="sign-in-fixed">
-            <h:link value="" outcome="/index"
-                    class="red ui icon button"
-                    data-tooltip="Torna alla Home"
-                    data-inverted=""
-                    data-position="bottom left">
-                <i class="home icon"/>
-            </h:link>
             <div class="sign-in">
                 <div class="content">
+                    <h:link outcome="/index"
+                            styleClass="sign-in-return"
+                            p:data-inverted=""
+                            p:data-tooltip="#{i18n['signin.return']}"
+                            p:data-position="bottom center">
+                        <h:graphicImage library="default"
+                                        name="images/favicon/android-chrome-192x192.png"
+                                        alt="Icon"
+                        />
+                    </h:link>
                     <div class="ui piled segment">
-                        <form
-                                id="sign-in-form"
-                                class="ui attached form segment large"
-                                action="#"
-                        >
+                        <form id="sign-in-form"
+                              action="#{request.contextPath}/signin.handler"
+                              method="post"
+                              class="ui attached form segment large">
                             <h1 class="ui horizontal divider header">
                                 <i class="shield icon"/>
                             </h1>
                             <div class="field">
-                                <label>Username</label>
+                                <label>#{i18n['commom.email']}</label>
                                 <div class="ui left icon input">
                                     <input
-                                            type="text"
-                                            name="username"
-                                            placeholder="Username"
+                                            type="email"
+                                            name="email"
+                                            placeholder="email@example.com"
+                                            required=""
                                             autocomplete="off"
-                                            required="true"
+                                            spellcheck="false"
                                     />
-                                    <i class="user icon"/>
+                                    <i class="envelope open icon"/>
                                 </div>
                             </div>
                             <div class="field">
-                                <label>Password</label>
+                                <label>#{i18n['common.password']}</label>
                                 <div class="ui left icon input">
                                     <input
                                             type="password"
                                             name="password"
-                                            placeholder="Password"
+                                            placeholder="#{i18n['common.password']}"
+                                            required=""
                                             autocomplete="off"
-                                            required="true"
+                                            spellcheck="false"
                                     />
                                     <i class="lock icon"/>
                                 </div>
                             </div>
-                            <div
-                                    class="ui blue fluid big button submit"
-                                    tabindex="0"
-                            >
+                            <div class="ui blue fluid big button submit"
+                                 tabindex="0">
                                 <i class="send icon"/>
-                                Accedi
+                                #{i18n['common.signIn']}
                             </div>
+
                             <div class="ui error message"></div>
                         </form>
-                        <div
-                                id="sign-in-message"
-                                class="ui large bottom attached message"
-                        >
+
+                        <div id="sign-in-message"
+                             class="ui large bottom attached message">
                             <i class="info circle icon"/>
-                            <span>Inserisci le credenziali per accedere</span>
+                            <span>#{i18n['signin.message']}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </ui:define>
+
     <ui:define name="footer"/>
+
+    <ui:define name="js-injected">
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function () {
+                const $form = $("#sign-in-form");
+                $form.form({
+                    fields: {
+                        email: {
+                            identifier: "email",
+                            rules: [
+                                {
+                                    type: "email",
+                                    prompt: "#{i18n['signin.email.error']}"
+                                },
+                                {
+                                    type: "empty",
+                                    prompt: "#{i18n['signin.email.required']}"
+                                },
+                                {
+                                    type: "maxLength[50]",
+                                    prompt: "#{i18n['signin.email.maxLength']}"
+                                }
+                            ]
+                        },
+                        password: {
+                            identifier: "password",
+                            rules: [
+                                {
+                                    type: "empty",
+                                    prompt: "#{i18n['signin.password.required']}"
+                                },
+                                {
+                                    type: "minLength[8]",
+                                    prompt:
+                                        "#{i18n['signin.password.minLength']}"
+                                },
+                                {
+                                    type: "maxLength[25]",
+                                    prompt:
+                                        "#{i18n['signin.password.maxLength']}"
+                                }
+                            ]
+                        }
+                    }
+                });
+            });
+        </script>
+    </ui:define>
 </ui:composition>

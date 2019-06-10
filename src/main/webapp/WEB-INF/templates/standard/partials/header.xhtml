@@ -1,26 +1,29 @@
-<ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
     <div class="header">
-        <div
-            class="ui menu huge"
-            style="border-top-left-radius: 0; border-top-right-radius: 0;"
-        >
-            <div class="item">
-                <h:graphicImage
-                    library="default"
-                    name="images/favicon/android-chrome-512x512.png"
-                    alt="Icon"
+        <div class="ui menu huge"
+             style="border-top-left-radius: 0; border-top-right-radius: 0;">
+            <h:link outcome="/index"
+                    styleClass="item"
+            >
+                <h:graphicImage library="default"
+                                name="images/favicon/android-chrome-512x512.png"
+                                alt="Icon"
                 />
-            </div>
+            </h:link>
             <div class="right menu">
                 <div class="item">
-                    <div class="ui primary button">Sign in</div>
+                    <h:link value="#{i18n['common.signIn']}"
+                            outcome="/signin/index"
+                            styleClass="ui primary button"
+                    />
                 </div>
                 <div class="item">
-                    <div class="ui button">Sign up</div>
+                    <h:link value="#{i18n['common.signUp']}"
+                            outcome="/signup/index"
+                            styleClass="ui button"
+                    />
                 </div>
             </div>
         </div>

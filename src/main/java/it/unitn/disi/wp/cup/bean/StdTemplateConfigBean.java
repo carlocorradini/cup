@@ -15,7 +15,7 @@ import it.unitn.disi.wp.cup.config.exception.ConfigException;
  */
 @ManagedBean(name = "stdTemplate")
 @ApplicationScoped
-public class StdTemplateConfigBean implements Serializable {
+public final class StdTemplateConfigBean implements Serializable {
 
     private static final long serialVersionUID = 7987304702812982518L;
 

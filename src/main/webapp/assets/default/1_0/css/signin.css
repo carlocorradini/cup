@@ -8,12 +8,13 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    background-image: url("https://source.unsplash.com/random/?nature");
+    background-image: url("https://source.unsplash.com/daily");
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
 }
+
 .sign-in-fixed .ui.button:first-child {
     top: 0;
     left: 0;
@@ -21,6 +22,7 @@
     border-top-right-radius: 0;
     border-bottom-left-radius: 0;
 }
+
 .sign-in {
     display: flex;
     flex-direction: column;
@@ -31,6 +33,7 @@
     background-color: transparent;
     overflow: auto;
 }
+
 .sign-in .content {
     width: 100%;
     max-width: 600px;
@@ -39,12 +42,29 @@
     padding: 15px;
     background-color: transparent;
 }
+
+.sign-in .content .ui.piled.segment {
+    margin-top: 0.5em;
+}
+
+.sign-in .content .sign-in-return {
+    display: block;
+    margin: 0 auto;
+    width: 96px;
+}
+
+.sign-in .content .sign-in-return img {
+    width: 100%;
+    height: auto;
+}
+
 /* Media Query */
 @media only screen and (max-width: 768px) {
     .sign-in .content {
         padding: 5px;
     }
 }
+
 @media only screen and (max-width: 481px) {
     .sign-in {
         padding: 0;

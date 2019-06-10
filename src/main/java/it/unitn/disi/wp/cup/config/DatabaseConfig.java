@@ -37,16 +37,34 @@ public final class DatabaseConfig extends Config {
      *
      * @return Url DB
      * @throws ConfigException If the instance has not been initialized
+     * @see org.apache.commons.configuration2.PropertiesConfiguration
      */
     public static String getUrl() throws ConfigException {
         checkInstance();
-        return String.format(instance.getString("url"),
-                DatabaseConfig.getHost(),
-                DatabaseConfig.getPort(),
-                DatabaseConfig.getName(),
-                DatabaseConfig.getUsername(),
-                DatabaseConfig.getPassword(),
-                DatabaseConfig.getSsl());
+        return instance.getString("url");
+    }
+
+    /**
+     * Return the formatted Database Driver
+     *
+     * @return Driver DB
+     * @throws ConfigException If the instance has not been initialized
+     * @see org.apache.commons.configuration2.PropertiesConfiguration
+     */
+    public static String getDriver() throws ConfigException {
+        checkInstance();
+        return instance.getString("driver");
+    }
+
+    /**
+     * Return the vendor of the Database
+     *
+     * @return Vendor DB
+     * @throws ConfigException If the instance has not been initialized
+     */
+    public static String getVendor() throws ConfigException {
+        checkInstance();
+        return instance.getString("vendor");
     }
 
     /**

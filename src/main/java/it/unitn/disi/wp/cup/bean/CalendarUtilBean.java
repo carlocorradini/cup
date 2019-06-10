@@ -15,7 +15,7 @@ import it.unitn.disi.wp.cup.util.CalendarUtil;
  */
 @ManagedBean(name = "calendar")
 @RequestScoped
-public class CalendarUtilBean extends CalendarUtil implements Serializable {
+public final class CalendarUtilBean extends CalendarUtil implements Serializable {
 
     private static final long serialVersionUID = 3267733896872815748L;
 

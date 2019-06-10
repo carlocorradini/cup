@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        lang="#{i18nBean.language}"
->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      lang="#{i18nBean.language}">
 <f:view locale="#{i18nBean.locale}">
     <h:head>
         <title>
@@ -21,28 +19,16 @@
         <meta http-equiv="pragma" content="no-cache"/>
         <meta name="owner" content="Carlo Corradini"/>
         <meta name="designer" content="Carlo Corradini &#38; Vendors"/>
-        <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1.0"
-        />
-        <meta
-                name="copyright"
-                content="&#169; 2019 - #{calendar.year} | #{i18n['common.copyright']}"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="copyright" content="&#169; 2019 - #{calendar.year} | #{i18n['common.copyright']}"/>
         <ui:insert name="keywords">
             <meta name="keywords" content="HTML,CSS,XML,JavaScript"/>
         </ui:insert>
         <ui:insert name="author">
-            <meta
-                    name="author"
-                    content="Carlo Corradini, carlo.corradini@studenti.unitn.it"
-            />
+            <meta name="author" content="Carlo Corradini, carlo.corradini@studenti.unitn.it"/>
         </ui:insert>
         <ui:insert name="description">
-            <meta
-                    name="description"
-                    content="#{i18n['head.description']}"
-            />
+            <meta name="description" content="#{i18n['head.description']}"/>
         </ui:insert>
 
         <!-- === FAVICON === -->
@@ -52,44 +38,30 @@
 
         <!-- === CSS & JS === -->
         <!-- jQuery -->
-        <h:outputScript
-                library="jquery"
-                name="js/jquery.min.js"
-                target="body"
-        />
+        <h:outputScript library="jquery"
+                        name="js/jquery.min.js"
+                        target="body"/>
         <!-- Cookie Consent -->
-        <h:outputStylesheet
-                library="cookieconsent"
-                name="css/cookieconsent.min.css"
-                target="head"
-        />
-        <h:outputScript
-                library="cookieconsent"
-                name="js/cookieconsent.min.js"
-                target="body"
-        />
+        <h:outputStylesheet library="cookieconsent"
+                            name="css/cookieconsent.min.css"
+                            target="head"/>
+        <h:outputScript library="cookieconsent"
+                        name="js/cookieconsent.min.js"
+                        target="body"/>
         <!-- Semantic UI -->
-        <h:outputStylesheet
-                library="semantic-ui"
-                name="css/semantic.min.css"
-                target="head"
-        />
-        <h:outputScript
-                library="semantic-ui"
-                name="js/semantic.min.js"
-                target="body"
-        />
+        <h:outputStylesheet library="semantic-ui"
+                            name="css/semantic.min.css"
+                            target="head"/>
+        <h:outputScript library="semantic-ui"
+                        name="js/semantic.min.js"
+                        target="body"/>
         <!-- Default -->
-        <h:outputStylesheet
-                library="default"
-                name="css/style.css"
-                target="head"
-        />
-        <h:outputScript
-                library="default"
-                name="js/script.js"
-                target="body"
-        />
+        <h:outputStylesheet library="default"
+                            name="css/style.css"
+                            target="head"/>
+        <h:outputScript library="default"
+                        name="js/script.js"
+                        target="body"/>
         <!-- Injected -->
         <ui:insert name="css"/>
         <ui:insert name="js"/>
@@ -123,8 +95,10 @@
             <ui:include src="#{stdTemplate.footer}"/>
         </ui:insert>
 
+        <!-- === INJECTED JavaScript === -->
+        <ui:insert name="js-injected"/>
+
         <!-- === COOKIE CONSENT === -->
-        <!-- prettier-ignore -->
         <script type="text/javascript">
             window.addEventListener("load", function () {
                 window.cookieconsent.initialise({
