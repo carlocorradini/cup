@@ -1,4 +1,4 @@
-package it.unitn.disi.wp.cup.bean;
+package it.unitn.disi.wp.cup.bean.util;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;

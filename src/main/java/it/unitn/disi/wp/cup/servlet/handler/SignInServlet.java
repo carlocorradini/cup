@@ -1,5 +1,7 @@
 package it.unitn.disi.wp.cup.servlet.handler;
 
+import it.unitn.disi.wp.cup.config.AuthConfig;
+import it.unitn.disi.wp.cup.config.exception.ConfigException;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
@@ -16,39 +18,38 @@ import java.io.IOException;
 @WebServlet("/signin.handler")
 public final class SignInServlet extends HttpServlet {
     private static final long serialVersionUID = 8393696396451465996L;
-    private static final String EMAIL = "email";
-    private static final String PASSWORD = "password";
+    private static final String PARAM_EMAIL = "email";
+    private static final String PARAM_PASSWORD = "password";
+    private static final String AUTH_ERROR = "authError";
     private PersonDAO personDAO;
 
     @Override
     public void init() throws ServletException {
         try {
-            personDAO = ((DAOFactory) super.getServletContext().getAttribute(DAOFactory.DAO_FACTORY)).getDAO(PersonDAO.class);
-        } catch (DAOFactoryException ex) {
+            personDAO = DAOFactory.getDAOFactory(this).getDAO(PersonDAO.class);
+        } catch (DAOFactoryException | NullPointerException ex) {
             throw new ServletException(ex);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String email = req.getParameter(EMAIL);
-        String password = req.getParameter(PASSWORD);
+        String email = req.getParameter(PARAM_EMAIL);
+        String password = req.getParameter(PARAM_PASSWORD);
 
         try {
             Person person = personDAO.getByEmailAndPassword(email, password);
             if (person == null) {
-                resp.sendRedirect(resp.encodeRedirectURL(super.getServletContext().getContextPath() + "/signin/index.xhtml"));
+                req.setAttribute(AUTH_ERROR, true);
+                req.getRequestDispatcher("/signin/index.xhtml").forward(req, resp);
             } else {
-                req.getSession().setAttribute("user", person);
-                resp.sendRedirect(resp.encodeRedirectURL(super.getServletContext().getContextPath() + "/restricted/index.xhtml"));
+                req.getSession().setAttribute(AuthConfig.getSessionName(), person);
+                resp.sendRedirect(resp.encodeRedirectURL(super.getServletContext().getContextPath() + "/dashboard/index.xhtml"));
             }
         } catch (DAOException ex) {
             req.getServletContext().log("Impossible to retrieve the Person", ex);
+        } catch (ConfigException ex) {
+            req.getServletContext().log("Impossible to retrieve the Auth Config", ex);
         }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
     }
 }

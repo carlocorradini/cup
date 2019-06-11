@@ -1,4 +1,4 @@
-package it.unitn.disi.wp.cup.bean;
+package it.unitn.disi.wp.cup.bean.config;
 
 import java.io.Serializable;
 import javax.faces.bean.ApplicationScoped;

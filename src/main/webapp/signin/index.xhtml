@@ -3,7 +3,8 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+        xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     >
     <ui:define name="title">#{i18n['common.signIn']}</ui:define>
     <ui:define name="css">
@@ -34,7 +35,8 @@
                         <form id="sign-in-form"
                               action="#{request.contextPath}/signin.handler"
                               method="post"
-                              class="ui attached form segment large">
+                              class="ui attached form segment large"
+                        >
                             <h1 class="ui horizontal divider header">
                                 <i class="shield icon"/>
                             </h1>
@@ -74,11 +76,29 @@
 
                             <div class="ui error message"></div>
                         </form>
+                        <c:choose>
+                            <c:when test="#{not empty requestScope.authError}">
+                                <c:set var="messageClass" value="negative"/>
+                                <c:set var="messageIcon" value="exclamation triangle"/>
+                                <c:set var="messageText" value="#{i18n['signin.auth.error']}"/>
+                            </c:when>
+                            <c:when test="#{not empty requestScope.authSignOut}">
+                                <c:set var="messageClass" value="positive"/>
+                                <c:set var="messageIcon" value="check"/>
+                                <c:set var="messageText" value="#{i18n['signin.auth.signOut']}"/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="messageClass" value=""/>
+                                <c:set var="messageIcon" value="info circle"/>
+                                <c:set var="messageText" value="#{i18n['signin.message']}"/>
+                            </c:otherwise>
+                        </c:choose>
 
                         <div id="sign-in-message"
-                             class="ui large bottom attached message">
-                            <i class="info circle icon"/>
-                            <span>#{i18n['signin.message']}</span>
+                             class="ui large bottom attached message #{messageClass}"
+                        >
+                            <i class="#{messageIcon} icon"/>
+                            <span>#{messageText}</span>
                         </div>
                     </div>
                 </div>

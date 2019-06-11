@@ -15,14 +15,6 @@
     background-size: cover;
 }
 
-.sign-in-fixed .ui.button:first-child {
-    top: 0;
-    left: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
 .sign-in {
     display: flex;
     flex-direction: column;
@@ -45,6 +37,10 @@
 
 .sign-in .content .ui.piled.segment {
     margin-top: 0.5em;
+}
+
+.sign-in .content .ui.header  i.icon{
+    margin: 0;
 }
 
 .sign-in .content .sign-in-return {

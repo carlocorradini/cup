@@ -42,10 +42,12 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
 
         try (Statement stmt = CONNECTION.createStatement()) {
             try (ResultSet rs = stmt.executeQuery(SQL_GET_COUNT)) {
-                if (rs.next()) count = rs.getLong(1);
+                if (rs.next()) {
+                    count = rs.getLong(1);
+                }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to count PersonBean", ex);
+            throw new DAOException("Impossible to count PersonDaoBean", ex);
         }
 
         return count;
@@ -60,21 +62,22 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
      */
     @Override
     public Person getByPrimaryKey(Integer primaryKey) throws DAOException {
-        Person person;
+        Person person = null;
         if (primaryKey == null)
             throw new DAOException("Primary key is null");
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_BY_PRIMARY_KEY)) {
             pStmt.setInt(1, primaryKey);
             try (ResultSet rs = pStmt.executeQuery()) {
-                rs.next();
-                person = new Person();
-                person.setId(rs.getInt("id"));
-                person.setName(rs.getString("name"));
-                person.setSurname(rs.getString("surname"));
+                if (rs.next()) {
+                    person = new Person();
+                    person.setId(rs.getInt("id"));
+                    person.setName(rs.getString("name"));
+                    person.setSurname(rs.getString("surname"));
+                }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get PersonBean for the passed primary key", ex);
+            throw new DAOException("Impossible to get Person for the passed primary key", ex);
         }
 
         return person;
@@ -102,7 +105,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the list of PersonBean", ex);
+            throw new DAOException("Impossible to get the list of Person", ex);
         }
 
         return persons;
@@ -110,7 +113,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
 
     @Override
     public Person getByEmailAndPassword(String email, String password) throws DAOException {
-        Person person;
+        Person person = null;
         if (email == null || password == null)
             throw new DAOException("Email & Password are mandatory fields", new NullPointerException("Email or password are null"));
 
@@ -118,13 +121,14 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
             pStmt.setString(1, email);
             pStmt.setString(2, password);
             try (ResultSet rs = pStmt.executeQuery()) {
-                rs.next();
-                person = new Person();
-                person.setId(rs.getInt("id"));
-                person.setEmail(rs.getString("email"));
-                person.setPassword(rs.getString("password"));
-                person.setName(rs.getString("name"));
-                person.setSurname(rs.getString("surname"));
+                if (rs.next()) {
+                    person = new Person();
+                    person.setId(rs.getInt("id"));
+                    person.setEmail(rs.getString("email"));
+                    person.setPassword(rs.getString("password"));
+                    person.setName(rs.getString("name"));
+                    person.setSurname(rs.getString("surname"));
+                }
             }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to get the Person", ex);

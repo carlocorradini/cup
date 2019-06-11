@@ -2,11 +2,13 @@ package it.unitn.disi.wp.cup.persistence.dao.factory;
 
 import it.unitn.disi.wp.cup.persistence.dao.DAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
+import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAOFactory;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
 
 /**
  * This interface must be implemented by all the concrete
@@ -46,6 +48,26 @@ public interface DAOFactory {
      */
     static DAOFactory getDAOFactory() throws DAOFactoryException {
         DAOFactory daoFactory = (DAOFactory) ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getAttribute(DAO_FACTORY);
+        if (daoFactory == null)
+            throw new DAOFactoryException("Impossible to get dao factory for storage system");
+
+        return daoFactory;
+    }
+
+    /**
+     * Get the DAOFactory in the Servlet Context
+     *
+     * @param servlet The servlet to get from
+     * @return The DAOFactory instance
+     * @throws DAOFactoryException  If DAOFactory is null
+     * @throws NullPointerException If {@code servlet} is null
+     */
+    static DAOFactory getDAOFactory(final HttpServlet servlet) throws DAOFactoryException, NullPointerException {
+        DAOFactory daoFactory;
+        if (servlet == null)
+            throw new NullPointerException("Servlet cannot bet null");
+
+        daoFactory = (DAOFactory) servlet.getServletContext().getAttribute(DAO_FACTORY);
         if (daoFactory == null)
             throw new DAOFactoryException("Impossible to get dao factory for storage system");
 

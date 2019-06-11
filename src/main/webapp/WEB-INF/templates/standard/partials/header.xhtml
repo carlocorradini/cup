@@ -1,9 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <div class="header">
-        <div class="ui menu huge"
-             style="border-top-left-radius: 0; border-top-right-radius: 0;">
+    <div class=" header">
+        <div class="ui menu huge ">
             <h:link outcome="/index"
                     styleClass="item"
             >
@@ -13,18 +12,52 @@
                 />
             </h:link>
             <div class="right menu">
-                <div class="item">
-                    <h:link value="#{i18n['common.signIn']}"
-                            outcome="/signin/index"
-                            styleClass="ui primary button"
-                    />
+                <div class="ui dropdown item">
+                    <i class="world icon"/> #{i18nBean.language}
+                    <div class="menu">
+                        <h:form>
+                            <h:commandLink
+                                    action="#{i18nBean.setLanguage('en')}"
+                                    value="English"
+                                    styleClass="item"
+                            />
+                            <h:commandLink
+                                    action="#{i18nBean.setLanguage('it')}"
+                                    value="Italiano"
+                                    styleClass="item"
+                            />
+                        </h:form>
+                    </div>
                 </div>
-                <div class="item">
-                    <h:link value="#{i18n['common.signUp']}"
-                            outcome="/signup/index"
-                            styleClass="ui button"
-                    />
-                </div>
+
+
+                <ui:fragment rendered="#{empty person.person}">
+                    <div class="item">
+                        <h:link value="#{i18n['common.signIn']}"
+                                outcome="/signin/index"
+                                styleClass="ui primary button"
+                        />
+                    </div>
+                    <div class="item">
+                        <h:link value="#{i18n['common.signUp']}"
+                                outcome="/signup/index"
+                                styleClass="ui button"
+                        />
+                    </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{not empty person.person}">
+                    <div class="ui dropdown item">
+                        #{person.person.name} <i class="dropdown icon"/>
+                        <div class="menu">
+                            <div class="item">Profile</div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <a href="#{request.contextPath}/signout.handler" class="ui red button">
+                            #{i18n['common.signOut']}
+                        </a>
+                    </div>
+                </ui:fragment>
             </div>
         </div>
     </div>

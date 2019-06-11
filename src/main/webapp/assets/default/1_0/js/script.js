@@ -7,10 +7,13 @@ function windowLoaded() {
         .delay(350)
         .fadeOut("slow");
 }
+
 // === PAGE READY ===
 function documentReady() {
     // Hide Noscript
     $("noscript").hide();
+    // Enable Dropdown
+    $(".ui.dropdown").dropdown();
 }
 
 // === START ===

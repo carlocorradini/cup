@@ -1,5 +1,6 @@
 package it.unitn.disi.wp.cup.listener;
 
+import it.unitn.disi.wp.cup.config.AuthConfig;
 import it.unitn.disi.wp.cup.config.DatabaseConfig;
 import it.unitn.disi.wp.cup.config.StdTemplateConfig;
 import it.unitn.disi.wp.cup.config.exception.ConfigException;
@@ -25,6 +26,7 @@ public class WebAppContextListener implements ServletContextListener {
             /* - Load Configurations - */
             DatabaseConfig.load();
             StdTemplateConfig.load();
+            AuthConfig.load();
             JDBCDAOFactory.configure(DatabaseConfig.getDriver(), DatabaseConfig.getUrl());
             /* END Load Configuration */
 

@@ -1,6 +1,11 @@
 package it.unitn.disi.wp.cup.i18n;
 
+import org.apache.commons.collections.IteratorUtils;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -54,6 +59,18 @@ public final class I18nBean implements Serializable {
     public void setLanguage(String language) {
         locale = new Locale(language);
         FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale(language));
+    }
+
+    /**
+     * Return the list of supported languages
+     *
+     * @return The list of languages
+     */
+    public List<Locale> getSupportedLocale() {
+        Iterator<Locale> iterator = FacesContext.getCurrentInstance().getApplication().getSupportedLocales();
+        List<Locale> list = IteratorUtils.toList(iterator);
+        list.add(FacesContext.getCurrentInstance().getApplication().getDefaultLocale());
+        return list;
     }
 
 }
