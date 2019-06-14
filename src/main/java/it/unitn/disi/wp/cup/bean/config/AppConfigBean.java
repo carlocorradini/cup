@@ -26,6 +26,20 @@ public final class AppConfigBean implements Serializable {
     }
 
     /**
+     * @see AppConfig#getDomain()
+     */
+    public String getDomain() {
+        return AppConfig.getDomain();
+    }
+
+    /**
+     * @see AppConfig#getHostname()
+     */
+    public String getHostname() {
+        return AppConfig.getHostname();
+    }
+
+    /**
      * @see AppConfig#getAuthorName()
      */
     public String getAuthorName() {

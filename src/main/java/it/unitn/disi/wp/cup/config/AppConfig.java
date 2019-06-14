@@ -51,6 +51,34 @@ public final class AppConfig extends Config {
     }
 
     /**
+     * Return the domain of the App
+     *
+     * @return The App domain
+     */
+    public static String getDomain() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get App Domain", ex);
+        }
+        return instance.getString("domain");
+    }
+
+    /**
+     * Return the hostname of the App
+     *
+     * @return The App hostname
+     */
+    public static String getHostname() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get App Hostname", ex);
+        }
+        return instance.getString("hostname");
+    }
+
+    /**
      * Return the author name of the App
      *
      * @return The App author Name

@@ -1,16 +1,28 @@
 <ui:composition
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
 >
     <ui:define name="title">#{i18n["common.privacy"]}</ui:define>
 
     <ui:define name="content">
         <div class="privacy-container">
+            <ui:fragment rendered="#{i18nBean.language != 'it'}">
+                <div class="ui icon warning message">
+                    <i class="close icon"/>
+                    <i class="globe icon"/>
+                    <div class="content">
+                        <div class="header">
+                            We apologize but privacy page is only available in Italian
+                        </div>
+                    </div>
+                </div>
+            </ui:fragment>
             <h3 class="ui dividing header">
                 Ragioni dell’Informativa
             </h3>
-            La presente informativa sulla privacy (l’“<strong>Informativa Privacy</strong>”) contiene informazioni importanti sui Suoi dati personali che vengono raccolti visitando il presente sito web www.cup.it (il “<strong>Sito</strong>") come utente non registrato (l’“<strong>Utente</strong>”) al fine di poter visualizzare e/o usufruire dei servizi offerti sul Sito (i “<strong>Servizi</strong>”).
+            La presente informativa sulla privacy (l’“<strong>Informativa Privacy</strong>”) contiene informazioni importanti sui Suoi dati personali che vengono raccolti visitando il presente sito web #{app.hostname} (il “<strong>Sito</strong>") come utente non registrato (l’“<strong>Utente</strong>”) al fine di poter visualizzare e/o usufruire dei servizi offerti sul Sito (i “<strong>Servizi</strong>”).
             <br/>
             Si informa, ai sensi della vigente normativa in materia di protezione dei dati personali (la “<strong>Normativa Privacy</strong>”), ivi incluso il Regolamento (UE) 2016/679 (il “<strong>GDPR</strong>”), che tratterà i dati dei propri Utenti con le modalità e per le finalità di seguito descritte.
             <br/>
@@ -29,23 +41,25 @@
             <br/>
             La presente Informativa Privacy contiene informazioni importanti su quanto segue:
             <div class="ui list">
-                <div class="item"><strong>1. TIPOLOGIA DI DATI TRATTATI ATTRAVERSO IL SITO</strong></div>
-                <div class="item"><strong>2. BASE GIURIDICA E FINALITÀ DEL TRATTAMENTO</strong></div>
-                <div class="item"><strong>3. NATURA DEL CONFERIMENTO DEI DATI</strong></div>
-                <div class="item"><strong>4. TRATTAMENTO DEI DATI E MODALITÀ DEL TRATTAMENTO</strong></div>
-                <div class="item"><strong>5. ACCESSO AI DATI PERSONALI</strong></div>
-                <div class="item"><strong>6. COMUNICAZIONE DEI DATI PERSONALI</strong></div>
-                <div class="item"><strong>7. TRASFERIMENTO DEI DATI PERSONALI EXTRA UE</strong></div>
-                <div class="item"><strong>8. I SUOI DIRITTI</strong></div>
-                <div class="item">
+                <a href="#privacy_01" class="item"><strong>1. TIPOLOGIA DI DATI TRATTATI ATTRAVERSO IL SITO</strong></a>
+                <a href="#privacy_02" class="item"><strong>2. BASE GIURIDICA E FINALITÀ DEL TRATTAMENTO</strong></a>
+                <a href="#privacy_03" class="item"><strong>3. NATURA DEL CONFERIMENTO DEI DATI</strong></a>
+                <a href="#privacy_04" class="item">
+                    <strong>4. TRATTAMENTO DEI DATI E MODALITÀ DEL TRATTAMENTO</strong>
+                </a>
+                <a href="#privacy_05" class="item"><strong>5. ACCESSO AI DATI PERSONALI</strong></a>
+                <a href="#privacy_06" class="item"><strong>6. COMUNICAZIONE DEI DATI PERSONALI</strong></a>
+                <a href="#privacy_07" class="item"><strong>7. TRASFERIMENTO DEI DATI PERSONALI EXTRA UE</strong></a>
+                <a href="#privacy_08" class="item"><strong>8. I SUOI DIRITTI</strong></a>
+                <a href="#privacy_09" class="item">
                     <strong>9. ESERCIZIO DEI SUOI DIRITTI E RECLAMO AL GARANTE DELLA PROTEZIONE DEI DATI PERSONALI</strong>
-                </div>
-                <div class="item">
+                </a>
+                <a href="#privacy_10" class="item">
                     <strong>10. TITOLARE, RESPONSABILE DEL TRATTAMENTO E RESPONSABILE DELLA PROTEZIONE DEI DATI PERSONALI</strong>
-                </div>
+                </a>
             </div>
 
-            <h3 class="ui dividing header">
+            <h3 class="ui dividing header" id="privacy_01">
                 1. TIPOLOGIA DI DATI TRATTATI ATTRAVERSO IL SITO
             </h3>
             Ai sensi della Normativa Privacy, il Titolare tratta i seguenti dati personali da Lei comunicati (i Suoi “<strong>Dati Personali</strong>”) durante la navigazione sul Sito:
@@ -66,12 +80,12 @@
             In questa categoria di dati rientrano, ad esempio, gli indirizzi IP o i nomi di dominio dei computer utilizzati dagli Utenti che si connettono al Sito, le pagine visitate dagli Utenti all’interno dello stesso, i nomi di dominio e gli indirizzi dei siti internet dai quali l’Utente ha effettuato l’accesso (mediante
             <em>referral</em>) al Sito, gli indirizzi in notazione URI (<em>Uniform Resource Identifier</em>) delle risorse richieste, l’orario della richiesta, il metodo utilizzato nel sottoporre la richiesta al server web, la dimensione del file ottenuto in risposta, il codice numerico indicante lo stato della risposta data dal server web, ed altri parametri relativi al tipo di browser (es. Internet Explorer, Google Chrome, Firefox), sistema operativo (es. Windows) e all’ambiente informatico dell’Utente.
             <br/>
-            Tali dati sono raccolti mediante cookie tecnici proprietari di prima parte e cookie analitici di terza parte. Per ulteriori informazioni sui dati di navigazione, si invitano gli Utenti a consultare l’<a
-                href="/cookie"><strong>Informativa Cookie</strong></a> del Sito.
+            Tali dati sono raccolti mediante cookie tecnici proprietari di prima parte e cookie analitici di terza parte. Per ulteriori informazioni sui dati di navigazione, si invitano gli Utenti a consultare l’
+            <h:link outcome="/cookie/index"><strong>Informativa Cookie</strong></h:link> del Sito.
             <br/>
             L'Utente si assume la responsabilità della veridicità dei dati personali forniti, pubblicati o condivisi mediante questo Sito e garantisce di avere il diritto di comunicarli o diffonderli, liberando il Titolare da qualsiasi responsabilità verso terzi.
 
-            <h3 class="ui dividing header">
+            <h3 class="ui dividing header" id="privacy_02">
                 2. BASE GIURIDICA E FINALITÀ DEL TRATTAMENTO
             </h3>
             Il trattamento dei Suoi dati, raccolti tramite il Sito, ha come base giuridica il suo consenso.
@@ -107,12 +121,12 @@
                 </div>
             </div>
 
-            <h3 class="ui dividing header">
+            <h3 class="ui dividing header" id="privacy_03">
                 3. NATURA DEL CONFERIMENTO DEI DATI
             </h3>
             Il conferimento dei dati da parte dell’Utente è obbligatorio per le finalità di servizio di cui ai punto 2.1 della presente informativa. L'eventuale rifiuto di fornire detti dati potrà comportare l'impossibilità di fruire dei servizi offerti dalla Società mediante il Sito.
 
-            <h3 class="ui dividing header">
+            <h3 class="ui dividing header" id="privacy_04">
                 4. TRATTAMENTO DEI DATI E MODALITÀ DEL TRATTAMENTO
             </h3>
             La informiamo inoltre che il trattamento dei Suoi dati personali, ai sensi dell’art. 4 GDPR, potrà consistere nelle seguenti attività (il “<strong>Trattamento</strong>”): raccolta, registrazione, organizzazione, strutturazione, conservazione, adattamento o modifica, estrazione, consultazione, uso, comunicazione mediante trasmissione, qualsiasi altra forma di messa a disposizione, raffronto o interconnessione, limitazione, cancellazione o distruzione dei dati.
@@ -145,7 +159,7 @@
             <br/>
             L’Utente prende tuttavia atto che la stessa comunicazione di dati personali per mezzo di siti internet presenta dei rischi legati alla divulgazione di tali dati e che nessun sistema è totalmente sicuro od a prova di manomissione e/o intrusione da parte di terzi.
 
-            <h3 class="ui dividing header">
+            <h3 class="ui dividing header" id="privacy_05">
                 5. ACCESSO AI DATI PERSONALI
             </h3>
             Ferme restando le comunicazioni eseguite in adempimento di obblighi di legge e/o regolamentari, i Suoi Dati Personali potranno essere resi accessibili, per le Finalità, a:
@@ -159,7 +173,7 @@
                 </div>
             </div>
 
-            <h3 class="ui dividing header">
+            <h3 class="ui dividing header" id="privacy_06">
                 6. COMUNICAZIONE DEI DATI PERSONALI
             </h3>
             Senza l’espresso consenso dell’Utente (ai sensi dell’art. 6 lett. b) e c) del GDPR), il Titolare potrà comunicare i dati dell’Utente per le Finalità di servizio di cui ai punti 2.1, lettere. d) e f) a organismi di vigilanza e/o di controllo, Autorità giudiziarie nonché a tutti gli altri soggetti ai quali la comunicazione sia obbligatoria per legge per l’espletamento delle Finalità dette, in qualità di autonomi titolari del trattamento.
@@ -198,7 +212,7 @@
                 </div>
             </div>
 
-            <h3 class="ui dividing header">
+            <h3 class="ui dividing header" id="privacy_07">
                 7. TRASFERIMENTO DEI DATI PERSONALI EXTRA UE
             </h3>
             I Suoi Dati Personali non saranno soggetti a trasferimento nei confronti di soggetti terzi rispetto a quelli indicati nella presente informativa.
@@ -207,7 +221,7 @@
             <br/>
             Un eventuale trasferimento dei Suoi Dati Personali in Paesi extra UE potrà avvenire unicamente nei termini e con le garanzie previsti dalla Normativa Privacy.
 
-            <h3 class="ui dividing header">
+            <h3 class="ui dividing header" id="privacy_08">
                 8. I SUOI DIRITTI
             </h3>
             La informiamo che, nella sua qualità di interessato, a norma di legge, avrà il diritto di revocare il Suo consenso in qualsiasi momento, inoltre potrà in ogni momento esercitare i seguenti diritti (i “<strong>Suoi Diritti</strong>”):
@@ -262,7 +276,7 @@
             </div>
             Nei casi di cui sopra, ove necessario, il Titolare porterà a conoscenza dei soggetti terzi ai quali i Suoi Dati Personali sono comunicati dell’eventuale esercizio dei Suoi Diritti, ad eccezione di specifici casi (es. quando tale adempimento si riveli impossibile o comporti un impiego di mezzi manifestamente sproporzionato rispetto al diritto tutelato).
 
-            <h3 class="ui dividing header">
+            <h3 class="ui dividing header" id="privacy_09">
                 9. ESERCIZIO DEI SUOI DIRITTI E RECLAMO AL GARANTE DELLA PROTEZIONE DEI DATI PERSONALI
             </h3>
             Potrà in qualsiasi momento esercitare i Suoi Diritti nelle seguenti modalità:
@@ -294,10 +308,10 @@
                     </div>
                 </div>
             </div>
-            Per maggiori informazioni, si invita a consultare la <a href="https://www.garanteprivacy.it"
-                                                                    target="_blank"><strong>pagina web</strong></a> del Garante.
+            Per maggiori informazioni, si invita a consultare la
+            <a href="https://www.garanteprivacy.it" target="_blank"><strong>pagina web</strong></a> del Garante.
 
-            <h3 class="ui dividing header">
+            <h3 class="ui dividing header" id="privacy_10">
                 10. TITOLARE, RESPONSABILE DEL TRATTAMENTO E RESPONSABILE DELLA PROTEZIONE DEI DATI PERSONALI
             </h3>
             Di seguito i/il responsabile/i del trattamento e della protezione dei dati personali:
@@ -338,5 +352,15 @@
             <br/>
             Ultimo aggiornamento: 1 aprile 2019
         </div>
+    </ui:define>
+
+    <ui:define name="js-injected">
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function () {
+                $(".message .close").on("click", function () {
+                    $(this).closest(".message").transition("fade");
+                });
+            });
+        </script>
     </ui:define>
 </ui:composition>

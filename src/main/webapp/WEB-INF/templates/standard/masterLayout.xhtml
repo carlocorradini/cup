@@ -3,11 +3,12 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       lang="#{i18nBean.language}">
 <f:view locale="#{i18nBean.locale}">
     <h:head>
         <title>
-            <ui:insert name="title">#{i18n['head.title']}</ui:insert>
+            <ui:insert name="title">#{i18n['head.title']}</ui:insert> | #{fn:toUpperCase(app.name)}
         </title>
         <!-- === META TAGS === -->
         <meta charset="UTF-8"/>
@@ -116,7 +117,7 @@
                         "message": "#{i18n['cookie.message']}",
                         "dismiss": "#{i18n['cookie.dismiss']}",
                         "link": "#{i18n['cookie.link']}",
-                        "href": "https://cookiesandyou.com"
+                        "href": "#{request.contextPath}/cookie/index.xhtml"
                     }
                 })
             });

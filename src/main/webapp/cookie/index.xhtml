@@ -1,0 +1,204 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <ui:define name="title">#{i18n["common.cookie"]}</ui:define>
+
+    <ui:define name="content">
+        <div class="cookie-container">
+            <ui:fragment rendered="#{i18nBean.language != 'it'}">
+                <div class="ui icon warning message">
+                    <i class="close icon"/>
+                    <i class="globe icon"/>
+                    <div class="content">
+                        <div class="header">
+                            We apologize but cookie page is only available in Italian
+                        </div>
+                    </div>
+                </div>
+            </ui:fragment>
+            <h3 class="ui dividing header">
+                Informativa Cookie estesa
+            </h3>
+            Ai sensi della vigente normativa in materia di protezione dei dati personali (“<strong>Normativa Privacy”</strong>), incluso in Reg. UE 2016/679 (“<strong>GDPR</strong>”) e il Provvedimento del Garante per la protezione dei dati personali (“<strong>Garante Privacy</strong>”) n. 229/2014 sull’individuazione delle modalità semplificate per l'informativa e l'acquisizione del consenso per l'uso dei cookie, #{app.authorName}, in qualità di titolare del trattamento (il “<strong>Titolare</strong>”) Le fornisce le seguenti informazioni relative ai cookie installati sul dominio #{app.hostname} (il “<strong>Sito</strong>”).
+
+            <h3 class="ui dividing header">
+                Cosa sono i Cookie?
+            </h3>
+            I cookie sono dati creati da un server che sono memorizzati in file di testo sull’hard disk del computer o su qualsiasi dispositivo utilizzato dall’utente per accedere al Sito su Internet (smartphone, tablet) e permettono di raccogliere informazioni sulla navigazione effettuata dall’utente sul Sito.
+            <br/>
+            I cookie possono essere memorizzati in modo permanente sul Suo computer e avere una durata variabile (c.d. cookie persistenti), ma possono anche svanire con la chiusura del browser o avere una durata limitata (c.d. cookie di sessione).
+            <br/>
+            I cookie possono essere istallati dal Sito che sta visitando (c.d. cookie di prima parte) o possono essere istallati da altri siti web (c.d. cookie di terze parti).
+
+            <h3 class="ui dividing header">
+                Tipologie di Cookie utilizzati e relative finalità
+            </h3>
+            <div class="ui bulleted list">
+                <div class="item">
+                    <div class="content">
+                        <div class="header">
+                            Cookie tecnici
+                        </div>
+                        <div class="description">
+                            Questi cookie di prima parte sono utilizzati per garantire e agevolare le attività strettamente necessarie al funzionamento del Sito per la normale navigazione del sito e permetterne le relative funzionalità (quali consentire ad esempio di autenticarsi ad aree riservate, di salvare la Sua sessione, le Sue preferenze di navigazione, di salvare prodotti nel carrello, ricordare alcuni criteri selezionali come la lingua, gestire la distribuzione del traffico, ecc.) e per raccogliere alcune informazioni in forma aggregata (anonima) sugli utenti.
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        <div class="header">
+                            Cookie analitici
+                        </div>
+                        <div class="description">
+                            Questi cookie sono utilizzati per raccogliere informazioni sull’utilizzo del Sito da parte degli utenti (numero di visitatori, pagine visitate, tempo di permanenza sul sito ecc.).
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        <div class="header">
+                            Cookie di profilazione
+                        </div>
+                        <div class="description">
+                            Sono quei cookie necessari a creare profili utenti al fine di inviare messaggi pubblicitari in linea con le preferenze manifestate dall’utente all’interno delle pagine del Sito.
+                            <br/>
+                            Il Sito non utilizza cookie di profilazione.
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        <div class="header">
+                            Cookie di profilazione – Social media
+                        </div>
+                        <div class="description">
+                            Questi cookie di terze parti permettono agli utenti di interagire con i social network (Facebook, Twitter, YouTube, Vimeo, ecc.) ed in particolare di condividere contenuti del sito attraverso i suddetti canali.
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        <div class="header">
+                            Cookie di profilazione – Advertising
+                        </div>
+                        <div class="description">
+                            Questi cookie di terze parti permettono di raccogliere dati ed interessi dei visitatori, al fine di costruire su di loro un profilo dettagliato utilizzato successivamente a fini di marketing. In questo modo, gli utenti saranno in grado di ricevere annunci pubblicitari personalizzati e mirati sulla base dei loro interessi.]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="ui dividing header">
+                Cookie utilizzati sul Sito
+            </h3>
+            Le caratteristiche dei cookie utilizzati sul Sito sono illustrate nella tabella che segue.
+            <br/>
+            Si segnala che il Sito utilizza i seguenti cookie tecnici di prima parte:
+
+            <table class="ui basi celled table striped">
+                <thead>
+                <tr>
+                    <th>Cookie</th>
+                    <th>Dominio</th>
+                    <th>Tipologia</th>
+                    <th>Durata</th>
+                    <th>Finalità</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>JSESSIONID</td>
+                    <td>#{app.hostname}</td>
+                    <td>tecnico</td>
+                    <td>sessione</td>
+                    <td>Utilizzato per l'identificazione univoca della sessione</td>
+                </tr>
+                <tr>
+                    <td>cookieconsent_status</td>
+                    <td>#{app.hostname}</td>
+                    <td>tecnico</td>
+                    <td>sessione</td>
+                    <td>Raccoglie l'avvenuta lettura della cookie policy e il relativo consenso</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h3 class="ui dividing header">
+                Gestione delle preferenze sui cookie
+            </h3>
+            Al momento del primo accesso a qualunque pagina del Sito, è presente un banner che contiene una informativa breve. Proseguendo la navigazione, mediante l’accesso ad altra area del sito o la selezione di un elemento dello stesso (ad esempio, di un'immagine o di un link), Lei fornisce il consenso all'uso dei cookie. Il consenso all’uso dei cookie è registrato con un “cookie tecnico”.
+            <br/>
+            Può infine opporsi alla registrazione di cookie sul Suo hard disk configurando il suo browser di navigazione in modo da disabilitare i cookie.
+            <br/>
+            Disabilitando i cookie, alcune funzioni delle pagine web potrebbero non essere eseguite correttamente.
+
+            <h3 class="ui dividing header">
+                Comunicazione e diffusione dei dati
+            </h3>
+            I dati raccolti utilizzando i cookie potranno essere trattati da dipendenti e collaboratori del Titolare in qualità di soggetti autorizzati al trattamento e/o amministratori di sistema.
+            <br/>
+            I dati raccolti utilizzando i cookie non saranno ceduti a terzi.
+            <br/>
+            I dati raccolti utilizzando i cookie non saranno diffusi.
+
+            <h3 class="ui dividing header">
+                I Suoi diritti
+            </h3>
+            In ogni momento potrà richiedere informazioni sul trattamento dei Suoi dati personali, ottenere l’aggiornamento, la rettifica o integrazione degli stessi, nonché ottenere la cancellazione, la trasformazione in forma anonima o il blocco dei dati trattati in violazione di legge e opporsi al trattamento dei Tuoi Dati Personali secondo quanto previsto dal GDPR riportato per esteso in coda alla presente policy.
+            <br/>
+            Per l'esercizio dei Tuoi diritti puoi rivolgerti al Titolare del trattamento inviando un’e-mail a #{app.infoEmail}.
+            <br/>
+            Titolare e responsabile del trattamento:
+            <br/>
+            <div class="ui bulleted list">
+                <div class="item">
+                    <div class="content">
+                        <div class="header">
+                            Titolare del trattamento
+                        </div>
+                        <div class="description">
+                            #{app.authorName}
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        <div class="header">
+                            Responsabile del trattamento
+                        </div>
+                        <div class="description">
+                            #{app.authorName}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="ui dividing header">
+                Rinvio
+            </h3>
+            Per ulteriori informazioni si rinvia alle
+            <h:link outcome="/privacy/index">
+                <strong>Privacy Policy</strong>
+            </h:link>
+            del presente Sito.
+
+            <br/>
+            <br/>
+            <br/>
+            Ultimo aggiornamento: 1 aprile 2019
+        </div>
+    </ui:define>
+
+    <ui:define name="js-injected">
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function () {
+                $(".message .close").on("click", function () {
+                    $(this).closest(".message").transition("fade");
+                });
+            });
+        </script>
+    </ui:define>
+</ui:composition>
