@@ -1,8 +1,6 @@
 package it.unitn.disi.wp.cup.listener;
 
-import it.unitn.disi.wp.cup.config.AuthConfig;
-import it.unitn.disi.wp.cup.config.DatabaseConfig;
-import it.unitn.disi.wp.cup.config.StdTemplateConfig;
+import it.unitn.disi.wp.cup.config.*;
 import it.unitn.disi.wp.cup.config.exception.ConfigException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
@@ -27,9 +25,10 @@ public class WebAppContextListener implements ServletContextListener {
             DatabaseConfig.load();
             StdTemplateConfig.load();
             AuthConfig.load();
+            AppConfig.load();
+            EmailConfig.load();
             JDBCDAOFactory.configure(DatabaseConfig.getDriver(), DatabaseConfig.getUrl());
             /* END Load Configuration */
-
             sce.getServletContext().setAttribute(DAOFactory.DAO_FACTORY, JDBCDAOFactory.getInstance());
         } catch (DAOFactoryException | ConfigException ex) {
             Logger.getLogger(getClass().getName()).severe(ex.toString());

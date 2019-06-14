@@ -7,13 +7,6 @@
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     >
     <ui:define name="title">#{i18n['common.signIn']}</ui:define>
-    <ui:define name="css">
-        <h:outputStylesheet
-                library="default"
-                name="css/signin.css"
-                target="head"
-        />
-    </ui:define>
 
     <ui:define name="header"/>
 
@@ -22,14 +15,10 @@
             <div class="sign-in">
                 <div class="content">
                     <h:link outcome="/index"
-                            styleClass="sign-in-return"
+                            styleClass="sign-in-return logo medium"
                             p:data-inverted=""
                             p:data-tooltip="#{i18n['signin.return']}"
                             p:data-position="bottom center">
-                        <h:graphicImage library="default"
-                                        name="images/favicon/android-chrome-192x192.png"
-                                        alt="Icon"
-                        />
                     </h:link>
                     <div class="ui piled segment">
                         <form id="sign-in-form"

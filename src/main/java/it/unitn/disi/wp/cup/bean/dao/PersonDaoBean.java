@@ -1,7 +1,6 @@
 package it.unitn.disi.wp.cup.bean.dao;
 
 import it.unitn.disi.wp.cup.config.AuthConfig;
-import it.unitn.disi.wp.cup.config.exception.ConfigException;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
@@ -36,7 +35,7 @@ public final class PersonDaoBean implements Serializable {
         try {
             personDAO = DAOFactory.getDAOFactory().getDAO(PersonDAO.class);
             person = (Person) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(AuthConfig.getSessionName());
-        } catch (DAOFactoryException | ConfigException ex) {
+        } catch (DAOFactoryException ex) {
             throw new RuntimeException(ex);
         }
     }

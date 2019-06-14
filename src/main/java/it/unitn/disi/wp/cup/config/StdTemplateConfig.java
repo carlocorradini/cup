@@ -2,6 +2,9 @@ package it.unitn.disi.wp.cup.config;
 
 import it.unitn.disi.wp.cup.config.exception.ConfigException;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Standard Template Configuration
  *
@@ -11,6 +14,7 @@ public final class StdTemplateConfig extends Config {
 
     private static final String FILE_NAME = "template.properties";
     private static final String CATEGORY = "std";
+    private static final Logger LOGGER = Logger.getLogger(StdTemplateConfig.class.getName());
     private static StdTemplateConfig instance;
 
     private StdTemplateConfig() throws ConfigException {
@@ -36,10 +40,13 @@ public final class StdTemplateConfig extends Config {
      * Return the master layout path
      *
      * @return Master Layout path
-     * @throws ConfigException If the instance has not been initialized
      */
-    public static String getMasterLayout() throws ConfigException {
-        checkInstance();
+    public static String getMasterLayout() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Master Layout path", ex);
+        }
         return instance.getString("masterLayout");
     }
 
@@ -47,10 +54,13 @@ public final class StdTemplateConfig extends Config {
      * Return the header path
      *
      * @return Header path
-     * @throws ConfigException If the instance has not been initialized
      */
-    public static String getHeader() throws ConfigException {
-        checkInstance();
+    public static String getHeader() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Header path", ex);
+        }
         return instance.getString("header");
     }
 
@@ -58,10 +68,13 @@ public final class StdTemplateConfig extends Config {
      * Return the content path
      *
      * @return Content path
-     * @throws ConfigException If the instance has not been initialized
      */
-    public static String getContent() throws ConfigException {
-        checkInstance();
+    public static String getContent() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Content path", ex);
+        }
         return instance.getString("content");
     }
 
@@ -69,10 +82,13 @@ public final class StdTemplateConfig extends Config {
      * Return the footer path
      *
      * @return Footer path
-     * @throws ConfigException If the instance has not been initialized
      */
-    public static String getFooter() throws ConfigException {
-        checkInstance();
+    public static String getFooter() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Footer path", ex);
+        }
         return instance.getString("footer");
     }
 
@@ -80,10 +96,13 @@ public final class StdTemplateConfig extends Config {
      * Return the favicon path
      *
      * @return Favicon path
-     * @throws ConfigException If the instance has not been initialized
      */
-    public static String getFavicon() throws ConfigException {
-        checkInstance();
+    public static String getFavicon() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Favicon path", ex);
+        }
         return instance.getString("favicon");
     }
 
@@ -91,21 +110,27 @@ public final class StdTemplateConfig extends Config {
      * Return the preloader path
      *
      * @return Preloader path
-     * @throws ConfigException If the instance has not been initialized
      */
-    public static String getPreloader() throws ConfigException {
-        checkInstance();
+    public static String getPreloader() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Preloader path", ex);
+        }
         return instance.getString("preloader");
     }
 
     /**
      * Return the noscript path
      *
-     * @return Noscript path
-     * @throws ConfigException If the instance has not been initialized
+     * @return NoScript path
      */
-    public static String getNoscript() throws ConfigException {
-        checkInstance();
+    public static String getNoScript() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get NoScript path", ex);
+        }
         return instance.getString("noscript");
     }
 
@@ -113,10 +138,13 @@ public final class StdTemplateConfig extends Config {
      * Return the error layout path
      *
      * @return Error Layout path
-     * @throws ConfigException If the instance has not been initialized
      */
-    public static String getErrorLayout() throws ConfigException {
-        checkInstance();
+    public static String getErrorLayout() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Error Layout path", ex);
+        }
         return instance.getString("errorLayout");
     }
 }

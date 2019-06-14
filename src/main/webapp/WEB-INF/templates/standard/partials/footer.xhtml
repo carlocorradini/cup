@@ -1,6 +1,8 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+        xmlns:h="http://java.sun.com/jsf/html"
 >
     <footer class="footer">
         <div class="footer-limiter">
@@ -9,32 +11,40 @@
                     <i class="map marker alternate icon"/>
                     <p>
                         <span class="address">
-                            Via Nazionale 140, Padergnone
+                            #{app.infoPlaceAddress} #{app.infoPlaceNumber}, #{app.infoPlaceCap}
                         </span>
-                        Vallelaghi (TN)
+                        #{app.infoPlaceCity}
                     </p>
                     <div class="ui divider"></div>
                 </div>
                 <div class="element">
                     <i class="phone icon"/>
-                    <p>+39 333 6791840</p>
+                    <p>+39 #{app.infoPhone}</p>
                     <div class="ui divider"></div>
                 </div>
                 <div class="element">
                     <i class="envelope icon"/>
                     <p>
-                        <a href="mailto:info@fotomarcomiori.it"
-                        >info@fotomarcomiori.it
+                        <a href="mailto:#{app.infoEmail}">
+                            #{app.infoEmail}
                         </a>
                     </p>
                 </div>
             </div>
             <div class="footer-right">
                 <div class="legal">
-                    <a href="https://cookiesandyou.com" target="_blank">
-                        <i class="basketball ball icon fitted"/>
-                        &#160;Cookie
-                    </a>
+                    <div class="item">
+                        <h:link outcome="/privacy/index">
+                            <i class="shield alternate icon fitted"/>
+                            &#160;#{i18n["common.privacy"]}
+                        </h:link>
+                    </div>
+                    <div class="item">
+                        <h:link outcome="/cookie/index">
+                            <i class="basketball ball icon fitted"/>
+                            &#160;#{i18n["common.cookie"]}
+                        </h:link>
+                    </div>
                 </div>
                 <div class="made-with-love">
                     Made with <i class="heart icon fitted"/> in
@@ -44,12 +54,12 @@
             <div class="footer-left">
                 <div class="logo"></div>
                 <div class="credits">
-                    NOME SITO <span>by Carlo Corradini</span>
+                    #{fn:toUpperCase(app.name)} <span>by #{app.authorName}</span>
                 </div>
                 <div class="copyright">
-                    NOME SITO&#160;
+                    #{fn:toUpperCase(app.name)}&#160;
                     <i class="copyright outline icon fitted"/>
-                    &#160;2018 - #{calendar.year}
+                    &#160;#{app.sinceYear} - #{calendar.year}
                 </div>
             </div>
         </div>

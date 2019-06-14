@@ -1,7 +1,6 @@
 package it.unitn.disi.wp.cup.servlet.handler;
 
 import it.unitn.disi.wp.cup.config.AuthConfig;
-import it.unitn.disi.wp.cup.config.exception.ConfigException;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 
 import javax.servlet.ServletException;
@@ -21,15 +20,11 @@ public final class SignOutServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
 
         if (session != null) {
-            try {
-                Person person = (Person) session.getAttribute(AuthConfig.getSessionName());
-                if (person != null) {
-                    session.removeAttribute(AuthConfig.getSessionName());
-                    session.invalidate();
-                    req.setAttribute(AUTH_SIGN_OUT, true);
-                }
-            } catch (ConfigException ex) {
-                throw new RuntimeException(ex);
+            Person person = (Person) session.getAttribute(AuthConfig.getSessionName());
+            if (person != null) {
+                session.removeAttribute(AuthConfig.getSessionName());
+                session.invalidate();
+                req.setAttribute(AUTH_SIGN_OUT, true);
             }
         }
 

@@ -1,7 +1,6 @@
 package it.unitn.disi.wp.cup.servlet.handler;
 
 import it.unitn.disi.wp.cup.config.AuthConfig;
-import it.unitn.disi.wp.cup.config.exception.ConfigException;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
@@ -48,8 +47,6 @@ public final class SignInServlet extends HttpServlet {
             }
         } catch (DAOException ex) {
             req.getServletContext().log("Impossible to retrieve the Person", ex);
-        } catch (ConfigException ex) {
-            req.getServletContext().log("Impossible to retrieve the Auth Config", ex);
         }
     }
 }

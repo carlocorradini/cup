@@ -6,7 +6,7 @@
             <square150x150logo src="/javax.faces.resource/images/favicon/mstile-150x150.png.xhtml?ln=default&v=1_0" />
             <square310x310logo src="/javax.faces.resource/images/favicon/mstile-310x310.png.xhtml?ln=default&v=1_0" />
             <wide310x150logo src="/javax.faces.resource/images/favicon/mstile-310x150.png.xhtml?ln=default&v=1_0" />
-            <TileColor>#da532c</TileColor>
+            <TileColor>#ffffff</TileColor>
         </tile>
     </msapplication>
 </browserconfig>

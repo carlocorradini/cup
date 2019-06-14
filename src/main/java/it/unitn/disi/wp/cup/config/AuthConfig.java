@@ -2,8 +2,11 @@ package it.unitn.disi.wp.cup.config;
 
 import it.unitn.disi.wp.cup.config.exception.ConfigException;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- * Database Config for loading Database Configuration files
+ * Authorization Configuration
  *
  * @author Carlo Corradini
  */
@@ -11,6 +14,7 @@ public final class AuthConfig extends Config {
 
     private static final String FILE_NAME = "auth.properties";
     private static final String CATEGORY = "auth";
+    private static final Logger LOGGER = Logger.getLogger(AuthConfig.class.getName());
     private static AuthConfig instance;
 
     private AuthConfig() throws ConfigException {
@@ -25,7 +29,7 @@ public final class AuthConfig extends Config {
     public static void load() throws ConfigException {
         if (instance == null) {
             instance = new AuthConfig();
-        } else throw new ConfigException("DatabaseConfig has been already initialized");
+        } else throw new ConfigException("AppConfig has been already initialized");
     }
 
     private static void checkInstance() throws ConfigException {
@@ -36,10 +40,13 @@ public final class AuthConfig extends Config {
      * Return the session parameter name of the authenticated Person
      *
      * @return Session Name
-     * @throws ConfigException If the instance has not been initialized
      */
-    public static String getSessionName() throws ConfigException {
-        checkInstance();
+    public static String getSessionName() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Session Name", ex);
+        }
         return instance.getString("session.name");
     }
 }

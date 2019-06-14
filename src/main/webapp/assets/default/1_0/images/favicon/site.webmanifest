@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "CUP",
+    "short_name": "CUP",
     "icons": [
         {
             "src": "/javax.faces.resource/images/favicon/android-chrome-192x192.png.xhtml?ln=default&v=1_0",
@@ -13,6 +13,6 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#da532c",
-    "background_color": "#da532c"
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff"
 }

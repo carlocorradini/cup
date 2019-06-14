@@ -37,5 +37,9 @@
                 #{person.surname}
             </h:column>
         </h:dataTable>
+
+        <ui:repeat value="#{app.authorList}" var="a">
+            <div class="item">#{a}</div>
+        </ui:repeat>
     </ui:define>
 </ui:composition>

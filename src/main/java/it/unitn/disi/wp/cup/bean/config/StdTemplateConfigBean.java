@@ -5,7 +5,6 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
 import it.unitn.disi.wp.cup.config.StdTemplateConfig;
-import it.unitn.disi.wp.cup.config.exception.ConfigException;
 
 /**
  * Permits the access to web pages of the Standard Template Configuration
@@ -22,56 +21,56 @@ public final class StdTemplateConfigBean implements Serializable {
     /**
      * @see StdTemplateConfig#getMasterLayout()
      */
-    public String getMasterLayout() throws ConfigException {
+    public String getMasterLayout() {
         return StdTemplateConfig.getMasterLayout();
     }
 
     /**
      * @see StdTemplateConfig#getHeader()
      */
-    public String getHeader() throws ConfigException {
+    public String getHeader() {
         return StdTemplateConfig.getHeader();
     }
 
     /**
      * @see StdTemplateConfig#getContent()
      */
-    public String getContent() throws ConfigException {
+    public String getContent() {
         return StdTemplateConfig.getContent();
     }
 
     /**
      * @see StdTemplateConfig#getFooter()
      */
-    public String getFooter() throws ConfigException {
+    public String getFooter() {
         return StdTemplateConfig.getFooter();
     }
 
     /**
      * @see StdTemplateConfig#getFavicon()
      */
-    public String getFavicon() throws ConfigException {
+    public String getFavicon() {
         return StdTemplateConfig.getFavicon();
     }
 
     /**
      * @see StdTemplateConfig#getPreloader()
      */
-    public String getPreloader() throws ConfigException {
+    public String getPreloader() {
         return StdTemplateConfig.getPreloader();
     }
 
     /**
-     * @see StdTemplateConfig#getNoscript()
+     * @see StdTemplateConfig#getNoScript()
      */
-    public String getNoscript() throws ConfigException {
-        return StdTemplateConfig.getNoscript();
+    public String getNoScript() {
+        return StdTemplateConfig.getNoScript();
     }
 
     /**
      * @see StdTemplateConfig#getErrorLayout()
      */
-    public String getErrorLayout() throws ConfigException {
+    public String getErrorLayout() {
         return StdTemplateConfig.getErrorLayout();
     }
 }

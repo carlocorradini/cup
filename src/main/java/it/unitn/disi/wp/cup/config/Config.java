@@ -4,6 +4,8 @@ import it.unitn.disi.wp.cup.config.exception.ConfigException;
 import it.unitn.disi.wp.cup.config.loader.ConfigLoader;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 
+import java.util.List;
+
 /**
  * Configuration Manager for properties File
  *
@@ -11,6 +13,7 @@ import org.apache.commons.configuration2.PropertiesConfiguration;
  */
 public abstract class Config {
 
+    private static final String CONFIG = "config";
     private final PropertiesConfiguration config;
     private final String category;
 
@@ -23,7 +26,7 @@ public abstract class Config {
      * @throws ConfigException If cannot Load the Configuration file
      */
     public Config(String fileName, String category) throws ConfigException {
-        this.config = ConfigLoader.get(String.format("%s/%s", "config", fileName));
+        this.config = ConfigLoader.get(String.format("%s/%s", CONFIG, fileName));
         this.category = category;
     }
 
@@ -69,6 +72,17 @@ public abstract class Config {
      */
     protected double getDouble(String key) {
         return config.getDouble(formatter(key));
+    }
+
+    /**
+     * Return the List associated with the key.
+     * The list must be delimited by {@value ConfigLoader#LIST_DELIMITER delimiter}
+     *
+     * @param key Configuration key
+     * @return The List
+     */
+    protected List getList(String key) {
+        return config.getList(formatter(key));
     }
 
 }

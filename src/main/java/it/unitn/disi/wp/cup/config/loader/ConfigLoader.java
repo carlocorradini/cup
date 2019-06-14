@@ -14,10 +14,10 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
  */
 public final class ConfigLoader {
 
-    private static final String ENCODING = "UTF-8";
-    private static final char LIST_DELIMITER = ',';
-    private static final boolean THROW_EXCEPTION_ON_MISSING = true;
-    private static final boolean INCLUDES_ALLOWED = true;
+    public static final String ENCODING = "UTF-8";
+    public static final char LIST_DELIMITER = ',';
+    public static final boolean THROW_EXCEPTION_ON_MISSING = true;
+    public static final boolean INCLUDES_ALLOWED = true;
 
     /**
      * Given a configuration File Name, load it and return properties accessible
