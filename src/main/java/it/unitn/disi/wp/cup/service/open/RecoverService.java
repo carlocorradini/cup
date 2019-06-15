@@ -1,4 +1,4 @@
-package it.unitn.disi.wp.cup.service;
+package it.unitn.disi.wp.cup.service.open;
 
 import com.alibaba.fastjson.JSON;
 import it.unitn.disi.wp.cup.config.AppConfig;

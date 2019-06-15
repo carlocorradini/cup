@@ -97,7 +97,7 @@
                         $form.removeClass("warning success");
                         $.ajax({
                             type: "GET",
-                            url: "#{request.contextPath}/service/recover/" + $form.find('input[name="email"]').val(),
+                            url: "#{request.contextPath}/service/open/recover/" + $form.find('input[name="email"]').val(),
                             cache: false,
                             success: function (data) {
                                 $form.removeClass("loading");

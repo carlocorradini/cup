@@ -1,4 +1,4 @@
-package it.unitn.disi.wp.cup.service;
+package it.unitn.disi.wp.cup.service.open;
 
 import com.alibaba.fastjson.support.jaxrs.FastJsonProvider;
 
@@ -11,7 +11,7 @@ import java.util.Set;
  *
  * @author Carlo Corradini
  */
-@ApplicationPath("service")
+@ApplicationPath("service/open")
 public class ApplicationConfig extends Application {
 
     @Override
