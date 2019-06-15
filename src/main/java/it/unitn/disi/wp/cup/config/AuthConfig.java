@@ -49,4 +49,32 @@ public final class AuthConfig extends Config {
         }
         return instance.getString("session.name");
     }
+
+    /**
+     * Return the Cookie Remember Name
+     *
+     * @return Cookie Remember Name
+     */
+    public static String getCookieRememberName() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Cookie Remember Name", ex);
+        }
+        return instance.getString("cookie.remember.name");
+    }
+
+    /**
+     * Return the Cookie Remember Max Age
+     *
+     * @return Cookie Remember Max Age
+     */
+    public static int getCookieRememberMaxAge() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Cookie Remember Max Age", ex);
+        }
+        return instance.getInt("cookie.remember.maxAge");
+    }
 }

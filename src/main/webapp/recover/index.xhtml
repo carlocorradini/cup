@@ -1,0 +1,119 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <ui:define name="title">#{i18n["signin.recover"]}</ui:define>
+
+    <ui:define name="content">
+        <div class="recover-container">
+            <div class="background"></div>
+
+            <div class="ui piled segment">
+                <h2 class="ui center aligned header">
+                    #{i18n["signin.recover"]}
+                </h2>
+
+                <form id="recover-form"
+                      action="#"
+                      method="post"
+                      class="ui attached form segment large"
+                >
+                    <h1 class="ui horizontal divider header">
+                        <i class="recycle icon"/>
+                    </h1>
+                    <div class="field">
+                        <label>#{i18n['commom.email']}</label>
+                        <div class="ui left icon input">
+                            <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="email@example.com"
+                                    required=""
+                                    autocomplete="off"
+                                    spellcheck="false"
+                            />
+                            <i class="envelope open icon"/>
+                        </div>
+                    </div>
+                    <div class="ui blue fluid big button submit"
+                         tabindex="0">
+                        <i class="send icon"/>
+                        #{i18n['common.recover']}
+                    </div>
+
+                    <div class="ui icon success message medium">
+                        <i class="checkmark icon"/>
+                        <div class="content">
+                            <div class="header">
+                                #{i18n["recover.success.title"]}
+                            </div>
+                            <p>#{i18n["recover.success.message"]}</p>
+                        </div>
+                    </div>
+                    <div class="ui icon warning message medium">
+                        <i class="exclamation triangle icon"/>
+                        <div class="content">
+                            <div class="header">
+                                #{i18n["recover.warning.title"]}
+                            </div>
+                            <p>#{i18n["recover.warning.message"]}</p>
+                        </div>
+                    </div>
+
+                    <div class="ui error message"></div>
+                </form>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="js-injected">
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function () {
+                const $form = $("#recover-form");
+
+                $form.form({
+                    fields: {
+                        email: {
+                            identifier: "email",
+                            rules: [
+                                {
+                                    type: "email",
+                                    prompt: "#{i18n['signin.email.error']}"
+                                },
+                                {
+                                    type: "empty",
+                                    prompt: "#{i18n['signin.email.required']}"
+                                },
+                                {
+                                    type: "maxLength[50]",
+                                    prompt: "#{i18n['signin.email.maxLength']}"
+                                }
+                            ]
+                        }
+                    },
+                    onSuccess: function () {
+                        $form.addClass("loading");
+                        $form.removeClass("warning success");
+                        $.ajax({
+                            type: "GET",
+                            url: "#{request.contextPath}/service/recover/" + $form.find('input[name="email"]').val(),
+                            cache: false,
+                            success: function (data) {
+                                $form.removeClass("loading");
+                                if (!data.error)
+                                    $form.addClass("success");
+                                else
+                                    $form.addClass("warning");
+                            },
+                            error: function () {
+                                console.error("Unable to recover");
+                            }
+                        });
+                        return false;
+                    }
+                });
+            });
+        </script>
+    </ui:define>
+</ui:composition>

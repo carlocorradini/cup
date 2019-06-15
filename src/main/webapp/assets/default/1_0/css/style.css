@@ -619,3 +619,41 @@ a.cc-btn.cc-dismiss:hover {
         padding: 5px;
     }
 }
+
+/* === RECOVER === */
+.recover-container {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin: auto;
+    padding: 15px;
+    background-color: transparent;
+}
+
+.recover-container .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #fffbd5;
+    background-image: url("https://source.unsplash.com/1920x1080/?nature");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    z-index: -1;
+}
+
+/* Media Query */
+@media only screen and (max-width: 768px) {
+    .recover-container {
+        padding: 5px;
+    }
+
+    .recover-container .background {
+        background-image: linear-gradient(to right, #fffbd5, #b20a2c);
+    }
+}

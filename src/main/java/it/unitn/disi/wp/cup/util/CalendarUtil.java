@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 /**
- * Convenience Class for Managing the Calendar with the Default or Client Locale
+ * Util Class for Managing the Calendar with the Default or Client Locale
  *
  * @see java.util.Calendar
  * @author Carlo Corradini

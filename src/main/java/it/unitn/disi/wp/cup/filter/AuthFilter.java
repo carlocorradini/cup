@@ -1,8 +1,8 @@
 
 package it.unitn.disi.wp.cup.filter;
 
-import it.unitn.disi.wp.cup.config.AuthConfig;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
+import it.unitn.disi.wp.cup.util.AuthUtil;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -10,7 +10,6 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * Filter that check if the person is authenticated (and authorized)
@@ -49,10 +48,9 @@ public final class AuthFilter implements Filter {
      * @throws ServletException If a servlet error occurs
      */
     private void doBeforeProcessing(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException, ServletException {
-        HttpSession session;
         HttpServletRequest req;
         HttpServletResponse resp;
-        Person person = null;
+        Person person;
         if (DEBUG) {
             log("AuthFilter:DoBeforeProcessing");
         }
@@ -60,11 +58,8 @@ public final class AuthFilter implements Filter {
         if (servletRequest instanceof HttpServletRequest) {
             req = (HttpServletRequest) servletRequest;
             resp = (HttpServletResponse) servletResponse;
-            session = req.getSession(false);
 
-            if (session != null) {
-                person = (Person) session.getAttribute(AuthConfig.getSessionName());
-            }
+            person = AuthUtil.getAuthPerson(req);
             if (person == null) {
                 resp.sendRedirect(resp.encodeRedirectURL(req.getServletContext().getContextPath() + "/signin/index.xhtml"));
             }
@@ -119,7 +114,7 @@ public final class AuthFilter implements Filter {
      * @return the {@link FilterConfig filter configuration object}
      */
     public FilterConfig getFilterConfig() {
-        return (this.filterConfig);
+        return filterConfig;
     }
 
     /**

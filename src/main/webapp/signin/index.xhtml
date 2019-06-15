@@ -57,11 +57,33 @@
                                     <i class="lock icon"/>
                                 </div>
                             </div>
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input
+                                            type="checkbox"
+                                            name="remember"
+                                            class="hidden"
+                                            tabindex="0"/>
+                                    <label>#{i18n["signin.remember"]}</label>
+                                </div>
+                            </div>
+
                             <div class="ui blue fluid big button submit"
                                  tabindex="0">
                                 <i class="send icon"/>
                                 #{i18n['common.signIn']}
                             </div>
+
+                            <div class="ui horizontal divider">
+                                Or
+                            </div>
+
+                            <h:link outcome="/recover/index"
+                                    styleClass="ui olive fluid medium button"
+                                    tabindex="0">
+                                <i class="recycle icon"/>
+                                #{i18n['signin.recover']}
+                            </h:link>
 
                             <div class="ui error message"></div>
                         </form>
@@ -101,6 +123,8 @@
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function () {
                 const $form = $("#sign-in-form");
+
+                $(".ui.checkbox").checkbox();
                 $form.form({
                     fields: {
                         email: {

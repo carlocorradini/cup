@@ -1,28 +1,29 @@
-package it.unitn.disi.wp.cup.servlet.handler;
+package it.unitn.disi.wp.cup.util;
 
 import it.unitn.disi.wp.cup.config.EmailConfig;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@WebServlet("/email.handler")
-public final class EmailServlet extends HttpServlet {
-    private static final Logger LOGGER = Logger.getLogger(EmailServlet.class.getName());
-    private Properties properties;
+/**
+ * Email Utility class for Sending email
+ *
+ * @author Carlo Corradini
+ */
+public class EmailUtil {
 
-    @Override
-    public void init() throws ServletException {
+    private static final Logger LOGGER = Logger.getLogger(EmailUtil.class.getName());
+    private static Properties properties;
+
+    /**
+     * Configure the Utility with the loaded Property
+     */
+    public static void configure() {
         properties = System.getProperties();
         properties.setProperty("mail.smtp.host", EmailConfig.getSmtpHost());
         properties.setProperty("mail.smtp.port", Integer.toString(EmailConfig.getSmtpPort()));
@@ -33,8 +34,14 @@ public final class EmailServlet extends HttpServlet {
         properties.setProperty("mail.debug", Boolean.toString(EmailConfig.getDebug()));
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    /**
+     * Send a simple mail
+     *
+     * @param recipient The email of the recipient
+     * @param subject   The subject of the email to send
+     * @param text      The body of the email to send
+     */
+    public static void send(String recipient, String subject, String text) {
         Session session;
         Message message;
 
@@ -49,9 +56,9 @@ public final class EmailServlet extends HttpServlet {
 
         try {
             message.setFrom(new InternetAddress(EmailConfig.getUsername()));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("carlo.corradini@studenti.unitn.it"));
-            message.setSubject("TESTING EMAIL WITH JAVA");
-            message.setText("Corpo della email");
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+            message.setSubject(subject);
+            message.setText(text);
             message.setSentDate(new Date());
 
             Transport.send(message);

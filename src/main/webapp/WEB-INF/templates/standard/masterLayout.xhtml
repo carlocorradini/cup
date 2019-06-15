@@ -86,9 +86,11 @@
             </ui:insert>
 
             <!-- === CONTENT === -->
-            <ui:insert name="content">
-                <ui:include src="#{stdTemplate.content}"/>
-            </ui:insert>
+            <div class="content">
+                <ui:insert name="content">
+                    <ui:include src="#{stdTemplate.content}"/>
+                </ui:insert>
+            </div>
         </div>
 
         <!-- === FOOTER === -->

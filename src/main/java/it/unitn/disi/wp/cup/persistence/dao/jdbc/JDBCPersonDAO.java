@@ -19,7 +19,8 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
     private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM person";
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM person WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM person";
-    private static final String SQL_GET_BY_EMAIL_AND_PASSWORD = "SELECT * FROM person WHERE email = ? AND password = ? LIMIT 1";
+    private static final String SQL_GET_BY_EMAIL = "SELECT * FROM person WHERE email = ? LIMIT 1";
+    private static final String SQL_UPDATE = "UPDATE person SET name = ?, surname = ?, email = ?, password = ? WHERE id = ?";
 
     /**
      * The default constructor of the class
@@ -28,6 +29,24 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
      */
     public JDBCPersonDAO(Connection connection) {
         super(connection);
+    }
+
+    @Override
+    public Person setAndGetDAO(ResultSet rs) throws DAOException {
+        Person person;
+        if (rs == null) throw new DAOException("ResultSet cannot be null");
+
+        try {
+            person = new Person();
+            person.setId(rs.getInt("id"));
+            person.setEmail(rs.getString("email"));
+            person.setPassword(rs.getString("password"));
+            person.setName(rs.getString("name"));
+            person.setSurname(rs.getString("surname"));
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to set Person by ResultSet", ex);
+        }
+        return person;
     }
 
     /**
@@ -70,10 +89,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
             pStmt.setInt(1, primaryKey);
             try (ResultSet rs = pStmt.executeQuery()) {
                 if (rs.next()) {
-                    person = new Person();
-                    person.setId(rs.getInt("id"));
-                    person.setName(rs.getString("name"));
-                    person.setSurname(rs.getString("surname"));
+                    person = setAndGetDAO(rs);
                 }
             }
         } catch (SQLException ex) {
@@ -96,12 +112,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
         try (Statement stmt = CONNECTION.createStatement()) {
             try (ResultSet rs = stmt.executeQuery(SQL_GET_ALL)) {
                 while (rs.next()) {
-                    Person person = new Person();
-                    person.setId(rs.getInt("id"));
-                    person.setName(rs.getString("name"));
-                    person.setSurname(rs.getString("surname"));
-
-                    persons.add(person);
+                    persons.add(setAndGetDAO(rs));
                 }
             }
         } catch (SQLException ex) {
@@ -112,22 +123,16 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
     }
 
     @Override
-    public Person getByEmailAndPassword(String email, String password) throws DAOException {
+    public Person getByEmail(String email) throws DAOException {
         Person person = null;
-        if (email == null || password == null)
-            throw new DAOException("Email & Password are mandatory fields", new NullPointerException("Email or password are null"));
+        if (email == null)
+            throw new DAOException("Email is a mandatory fields", new NullPointerException("Email is null"));
 
-        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_BY_EMAIL_AND_PASSWORD)) {
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_BY_EMAIL)) {
             pStmt.setString(1, email);
-            pStmt.setString(2, password);
             try (ResultSet rs = pStmt.executeQuery()) {
                 if (rs.next()) {
-                    person = new Person();
-                    person.setId(rs.getInt("id"));
-                    person.setEmail(rs.getString("email"));
-                    person.setPassword(rs.getString("password"));
-                    person.setName(rs.getString("name"));
-                    person.setSurname(rs.getString("surname"));
+                    person = setAndGetDAO(rs);
                 }
             }
         } catch (SQLException ex) {
@@ -135,5 +140,27 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
         }
 
         return person;
+    }
+
+    @Override
+    public boolean update(Person person) throws DAOException {
+        boolean toRtn = false;
+        if (person == null)
+            throw new DAOException("Person is a mandatory field", new NullPointerException("Person is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_UPDATE)) {
+            pStmt.setString(1, person.getName());
+            pStmt.setString(2, person.getSurname());
+            pStmt.setString(3, person.getEmail());
+            pStmt.setString(4, person.getPassword());
+            pStmt.setInt(5, person.getId());
+
+            if (pStmt.executeUpdate() == 1)
+                toRtn = true;
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to update the Person", ex);
+        }
+
+        return toRtn;
     }
 }
