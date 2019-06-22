@@ -108,6 +108,8 @@ public class PersonService {
                 if (personAvatar.getId() != null) {
                     person.setAvatar(personAvatar);
                     if (personDAO.update(person)) {
+                        // I Need to Update the Person in the Session Scope
+                        person.setAvatarHistory(personAvatarDAO.getAllByPersonId(person.getId()));
                         message.setError(JsonMessage.ERROR_NO_ERROR);
                     }
                 }

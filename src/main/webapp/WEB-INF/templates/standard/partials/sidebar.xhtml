@@ -4,76 +4,83 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 >
-    <nav class="ui left sidebar vertical menu" id="sidebar-menu">
+    <ui:fragment rendered="#{not empty person.person}">
+        <nav class="ui left sidebar vertical menu" id="sidebar-menu">
 
-        <div id="sidebar-avatar-error" class="hidden">
-            <div class="ui negative message tiny">
-                <i class="exclamation triangle icon"/>
-                #{i18n["sidebar.avatar.error"]}
-                <h:outputText value="#{app.configAvatarMaxFileSize / 1024}">
-                    <f:convertNumber integerOnly="true"/>
-                </h:outputText>
-                KByte
+            <div id="sidebar-avatar-error" class="hidden">
+                <div class="ui negative message tiny">
+                    <i class="exclamation triangle icon"/>
+                    #{i18n["sidebar.avatar.error"]}
+                    <h:outputText value="#{app.configAvatarMaxFileSize / 1024}">
+                        <f:convertNumber integerOnly="true"/>
+                    </h:outputText>
+                    KByte
+                </div>
             </div>
-        </div>
 
-        <div class="avatar">
-            <div class="avatar-edit">
-                <input type="file" id="sidebar-avatar-input"
-                       accept=".png, .jpg, .jpeg"
-                       data-max-size="#{app.configAvatarMaxFileSize}"
-                />
-                <label for="sidebar-avatar-input">
-                    <i class="pencil alternate icon"/>
-                </label>
+            <div class="avatar">
+                <div class="avatar-edit">
+                    <input type="file" id="sidebar-avatar-input"
+                           accept=".png, .jpg, .jpeg"
+                           data-max-size="#{app.configAvatarMaxFileSize}"
+                    />
+                    <label for="sidebar-avatar-input">
+                        <i class="pencil alternate icon"/>
+                    </label>
+                </div>
+                <div class="avatar-save hidden" id="sidebar-avatar-save">
+                    <i class="save outline icon blue"/>
+                    <i class="check icon green hidden"/>
+                    <i class="close icon red hidden"/>
+                    <i class="notched circle loading icon hidden"/>
+                </div>
+                <div class="avatar-preview">
+                    <h:graphicImage id="sidebar-avatar-image"
+                                    library="default"
+                                    name="images/avatar/#{person.person.avatar.name}#{app.configAvatarExtension}"
+                                    alt="Avatar"
+                    />
+                </div>
             </div>
-            <div class="avatar-save hidden" id="sidebar-avatar-save">
-                <i class="save outline icon blue"/>
-                <i class="check icon green hidden"/>
-                <i class="close icon red hidden"/>
-                <i class="notched circle loading icon hidden"/>
-            </div>
-            <div class="avatar-preview">
-                <h:graphicImage id="sidebar-avatar-image"
-                                library="default"
-                                name="images/avatar/#{person.person.avatar.name}#{app.configAvatarExtension}"
-                                alt="Avatar"
-                />
-            </div>
-        </div>
 
-        <h4 class="name-surname text-overflow-ellipsis">
-            #{fn:toUpperCase(fn:substring(person.person.name, 0, 1))}#{fn:toLowerCase(fn:substring(person.person.name, 1,fn:length(person.person.name)))}
-            #{fn:toUpperCase(fn:substring(person.person.surname, 0, 1))}#{fn:toLowerCase(fn:substring(person.person.surname, 1,fn:length(person.person.surname)))}
-        </h4>
+            <h4 class="name-surname text-overflow-ellipsis">
+                #{fn:toUpperCase(fn:substring(person.person.name, 0, 1))}#{fn:toLowerCase(fn:substring(person.person.name, 1,fn:length(person.person.name)))}
+                #{fn:toUpperCase(fn:substring(person.person.surname, 0, 1))}#{fn:toLowerCase(fn:substring(person.person.surname, 1,fn:length(person.person.surname)))}
+            </h4>
 
-        <div class="item">
-            <div class="ui input">
-                <input type="text" placeholder="Search..."/>
+            <div class="item">
+                <div class="ui input">
+                    <input type="text" placeholder="Search..."/>
+                </div>
             </div>
-        </div>
-        <div class="item">
-            Home
-            <div class="menu">
-                <a class="active item">Search</a>
-                <a class="item">Add</a>
-                <a class="item">Remove</a>
+
+            <a class="item">
+                <i class="th icon"/> Dashboard
+            </a>
+
+            <div class="item">
+                Home
+                <div class="menu">
+                    <a class="active item">Search</a>
+                    <a class="item">Add</a>
+                    <a class="item">Remove</a>
+                </div>
             </div>
-        </div>
-        <a class="item">
-            <i class="grid layout icon"></i> Browse
-        </a>
-        <a class="item">
-            Messages
-        </a>
-        <div class="ui dropdown item">
-            More
-            <i class="dropdown icon"></i>
-            <div class="menu">
-                <a class="item"><i class="edit icon"></i> Edit Profile</a>
-                <a class="item"><i class="globe icon"></i> Choose Language</a>
-                <a class="item"><i class="settings icon"></i> Account Settings</a>
+            <a class="item">
+                <i class="grid layout icon"></i> Browse
+            </a>
+            <a class="item">
+                Messages
+            </a>
+            <div class="ui dropdown item">
+                More
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item"><i class="edit icon"></i> Edit Profile</a>
+                    <a class="item"><i class="globe icon"></i> Choose Language</a>
+                    <a class="item"><i class="settings icon"></i> Account Settings</a>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </ui:fragment>
 </ui:composition>

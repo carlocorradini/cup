@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Carlo Corradini
  */
 @WebFilter(
-        value = "/dashboard/*",
+        urlPatterns = {"/dashboard/*", "/service/restricted/*"},
         dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD}
 )
 public final class AuthFilter implements Filter {

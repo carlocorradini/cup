@@ -53,11 +53,13 @@ function sidebarHandler() {
     });
 
     // Avatar Upload local
+    sidebar.avatar.input.click(function () {
+        this.value = null; // Bug when selecting the same File
+    });
     sidebar.avatar.input.change(function () {
         if (this.files && this.files[0]) {
             if (this.files[0].size > maxFileSize) {
                 sidebar.avatar.error.removeClass("hidden");
-                sidebar.avatar.input.trigger("change");
             } else {
                 const reader = new FileReader();
                 newAvatar = this.files[0];

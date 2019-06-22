@@ -9,12 +9,14 @@
         <ui:fragment rendered="#{not empty person.person}">
             <p>Welcome #{person.person.name}, you have been logged in!</p>
 
-            <ui:repeat value="#{person.person.avatarHistory}" var="a">
-                <h:graphicImage library="default"
-                                name="images/avatar/#{a.name}#{app.configAvatarExtension}"
-                                alt="Avatar"
-                />
-            </ui:repeat>
+            <div class="ui small images">
+                <ui:repeat value="#{person.person.avatarHistory}" var="a">
+                    <h:graphicImage library="default"
+                                    name="images/avatar/#{a.name}#{app.configAvatarExtension}"
+                                    alt="Avatar"
+                    />
+                </ui:repeat>
+            </div>
 
         </ui:fragment>
     </ui:define>

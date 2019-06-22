@@ -13,10 +13,12 @@
                     />
                 </h:link>
 
-                <a class="item" id="sidebar-menu-button">
-                    <i class="sidebar icon"/>
-                    Menu
-                </a>
+                <ui:fragment rendered="#{not empty person.person}">
+                    <a class="item" id="sidebar-menu-button">
+                        <i class="sidebar icon"/>
+                        <span class="text">#{i18n["header.menu"]}</span>
+                    </a>
+                </ui:fragment>
 
                 <div class="right menu">
                     <div class="ui dropdown item">
