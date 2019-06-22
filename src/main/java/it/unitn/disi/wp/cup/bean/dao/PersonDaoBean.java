@@ -1,16 +1,20 @@
 package it.unitn.disi.wp.cup.bean.dao;
 
-import it.unitn.disi.wp.cup.config.AuthConfig;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
+import it.unitn.disi.wp.cup.util.AuthUtil;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Person Bean
@@ -24,19 +28,23 @@ import java.io.Serializable;
 public final class PersonDaoBean implements Serializable {
 
     private static final long serialVersionUID = -4058980644509062209L;
-    private PersonDAO personDAO;
-    private Person person;
+    private final static Logger LOGGER = Logger.getLogger(PersonDaoBean.class.getName());
+    private PersonDAO personDAO = null;
+    private Person person = null;
 
     /**
      * Initialize the personDAO
      */
     @PostConstruct
     public void init() {
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
             personDAO = DAOFactory.getDAOFactory().getDAO(PersonDAO.class);
-            person = (Person) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(AuthConfig.getSessionName());
+            if (context.getRequest() instanceof HttpServletRequest) {
+                person = AuthUtil.getAuthPerson((HttpServletRequest) context.getRequest());
+            }
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(ex);
+            LOGGER.log(Level.SEVERE, null, ex);
         }
     }
 

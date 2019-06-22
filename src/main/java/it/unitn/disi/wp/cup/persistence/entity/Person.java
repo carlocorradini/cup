@@ -1,14 +1,15 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
- * Entity PersonBeanbirthdate
+ * Entity Person
  *
  * @author Carlo Corradini
  */
 public final class Person {
-    private Integer id;
+    private Long id;
     private String email;
     private String password;
     private String name;
@@ -19,14 +20,15 @@ public final class Person {
     private String birthPlace;
     private String province;
     private String doctor;
-    private String avatar;
+    private PersonAvatar avatar;
+    private List<PersonAvatar> avatarHistory;
 
     /**
      * Return the id of the Person
      *
      * @return Person id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -35,7 +37,7 @@ public final class Person {
      *
      * @param id Person id
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -109,5 +111,59 @@ public final class Person {
      */
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    /**
+     * Return the sex of the Person
+     *
+     * @return Person sex
+     */
+    public char getSex() {
+        return sex;
+    }
+
+    /**
+     * Set the sex of the Person
+     *
+     * @param sex Person sex
+     */
+    public void setSex(char sex) {
+        this.sex = sex;
+    }
+
+    /**
+     * Return the avatar of the Person
+     *
+     * @return Person avatar
+     */
+    public PersonAvatar getAvatar() {
+        return avatar;
+    }
+
+    /**
+     * Set the avatar of the Person
+     *
+     * @param avatar Person avatar
+     */
+    public void setAvatar(PersonAvatar avatar) {
+        this.avatar = avatar;
+    }
+
+    /**
+     * Return the avatar history of the Person
+     *
+     * @return Person avatar history
+     */
+    public List<PersonAvatar> getAvatarHistory() {
+        return avatarHistory;
+    }
+
+    /**
+     * Set the avatar history of the Person
+     *
+     * @param avatarHistory Person avatar history
+     */
+    public void setAvatarHistory(List<PersonAvatar> avatarHistory) {
+        this.avatarHistory = avatarHistory;
     }
 }

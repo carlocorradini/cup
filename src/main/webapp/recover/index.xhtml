@@ -101,7 +101,7 @@
                             cache: false,
                             success: function (data) {
                                 $form.removeClass("loading");
-                                if (!data.error)
+                                if (data.error === 0)
                                     $form.addClass("success");
                                 else
                                     $form.addClass("warning");

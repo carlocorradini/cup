@@ -6,7 +6,6 @@ import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
-import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Carlo Corradini
  */
-public class AuthUtil {
+public final class AuthUtil {
     private static final Logger LOGGER = Logger.getLogger(AuthUtil.class.getName());
     private static PersonDAO personDAO = null;
 

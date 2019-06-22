@@ -104,8 +104,8 @@ public class JDBCDAOFactory implements DAOFactory {
 
         try {
             daoClass = Class.forName(prefix + daoInterface.getSimpleName());
-            constructor = daoClass.getConstructor(Connection.class);
-            daoInstance = constructor.newInstance(CONNECTION);
+            constructor = daoClass.getConstructor(Connection.class, DAOFactory.class);
+            daoInstance = constructor.newInstance(CONNECTION, this);
 
             if (!(daoInstance instanceof JDBCDAO)) {
                 throw new DAOFactoryException("The daoInterface passed as parameter doesn't extend JDBCDAO class");

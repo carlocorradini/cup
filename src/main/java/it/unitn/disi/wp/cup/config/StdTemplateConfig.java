@@ -65,6 +65,20 @@ public final class StdTemplateConfig extends Config {
     }
 
     /**
+     * Return the sidebar path
+     *
+     * @return Sidebar path
+     */
+    public static String getSidebar() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Sidebar path", ex);
+        }
+        return instance.getString("sidebar");
+    }
+
+    /**
      * Return the content path
      *
      * @return Content path

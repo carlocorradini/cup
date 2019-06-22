@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  *
  * @author Carlo Corradini
  */
-public class CryptUtil {
+public final class CryptUtil {
     private static final int COST = 12;
     private static final Logger LOGGER = Logger.getLogger(CryptUtil.class.getName());
 

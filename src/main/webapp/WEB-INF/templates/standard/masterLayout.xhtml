@@ -37,6 +37,9 @@
             <ui:include src="#{stdTemplate.favicon}"/>
         </ui:insert>
 
+        <!-- === CONTEXT_PATH in JS=== -->
+        <script type="text/javascript">window.CONTEXT_PATH = "#{request.contextPath}";</script>
+
         <!-- === CSS & JS === -->
         <!-- jQuery -->
         <h:outputScript library="jquery"
@@ -78,25 +81,32 @@
             <ui:include src="#{stdTemplate.noScript}"/>
         </ui:insert>
 
-        <!-- === WRAPPER === -->
-        <div class="wrapper">
-            <!-- === HEADER === -->
-            <ui:insert name="header">
-                <ui:include src="#{stdTemplate.header}"/>
-            </ui:insert>
-
-            <!-- === CONTENT === -->
-            <div class="content">
-                <ui:insert name="content">
-                    <ui:include src="#{stdTemplate.content}"/>
-                </ui:insert>
-            </div>
-        </div>
-
-        <!-- === FOOTER === -->
-        <ui:insert name="footer">
-            <ui:include src="#{stdTemplate.footer}"/>
+        <!-- === SIDEBAR === -->
+        <ui:insert name="sidebar">
+            <ui:include src="#{stdTemplate.sidebar}"/>
         </ui:insert>
+
+        <!-- === WRAPPER === -->
+        <div class="dimmed pusher">
+            <div class="wrapper">
+                <!-- === HEADER === -->
+                <ui:insert name="header">
+                    <ui:include src="#{stdTemplate.header}"/>
+                </ui:insert>
+
+                <!-- === CONTENT === -->
+                <div class="content">
+                    <ui:insert name="content">
+                        <ui:include src="#{stdTemplate.content}"/>
+                    </ui:insert>
+                </div>
+            </div>
+
+            <!-- === FOOTER === -->
+            <ui:insert name="footer">
+                <ui:include src="#{stdTemplate.footer}"/>
+            </ui:insert>
+        </div>
 
         <!-- === INJECTED JavaScript === -->
         <ui:insert name="js-injected"/>

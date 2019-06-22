@@ -8,7 +8,7 @@ import it.unitn.disi.wp.cup.persistence.entity.Person;
  *
  * @author Carlo Corradini
  */
-public interface PersonDAO extends DAO<Person, Integer> {
+public interface PersonDAO extends DAO<Person, Long> {
     /**
      * Return the {@link Person person} with the given {@code email}
      *

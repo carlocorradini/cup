@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * The basic DAO interface that all DAOs must implement
  *
- * @param <ENTITY_CLASS>      The class of the entity to handle
- * @param <PRIMARY_KEY_CLASS> The class of the primary key of the entity the DAO
+ * @param <ENTITY_CLASS>      The class of the obj to handle
+ * @param <PRIMARY_KEY_CLASS> The class of the primary key of the obj the DAO
  *                            handle
  * @author Carlo Corradini
  */
@@ -39,7 +39,7 @@ public interface DAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> {
      * Returns the {@code ENTITY_CLASS} instance of the storage system record
      * with the primary key equals to the one passed as parameter
      *
-     * @param primaryKey The primary key used to obtain the entity instance
+     * @param primaryKey The primary key used to obtain the obj instance
      * @return the {@code ENTITY_CLASS} instance of the storage system record
      * with the primary key equals to the one passed as parameter or
      * {@code null} if no entities with that primary key is present into the

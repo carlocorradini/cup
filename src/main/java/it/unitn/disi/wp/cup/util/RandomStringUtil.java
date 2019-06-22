@@ -7,7 +7,7 @@ import java.security.SecureRandom;
  *
  * @author Carlo Corradini
  */
-public class RandomStringUtil {
+public final class RandomStringUtil {
     private static final String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_!£$%&/()=?^*\\|";
     private static final SecureRandom RANDOM = new SecureRandom();
 

@@ -1,7 +1,10 @@
 package it.unitn.disi.wp.cup.persistence.dao.jdbc;
 
+import it.unitn.disi.wp.cup.persistence.dao.PersonAvatarDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
+import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
+import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 
@@ -14,36 +17,43 @@ import java.util.List;
  *
  * @author Carlo Corradini
  */
-public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO {
+public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
 
     private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM person";
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM person WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM person";
     private static final String SQL_GET_BY_EMAIL = "SELECT * FROM person WHERE email = ? LIMIT 1";
-    private static final String SQL_UPDATE = "UPDATE person SET name = ?, surname = ?, email = ?, password = ? WHERE id = ?";
+    private static final String SQL_UPDATE = "UPDATE person SET name = ?, surname = ?, email = ?, password = ?, sex = ?, avatar_id = ? WHERE id = ?";
 
     /**
      * The default constructor of the class
      *
      * @param connection The Connection to the persistence system
+     * @param daoFactory The DAOFactory to get DAOs
      */
-    public JDBCPersonDAO(Connection connection) {
-        super(connection);
+    public JDBCPersonDAO(Connection connection, DAOFactory daoFactory) {
+        super(connection, daoFactory);
     }
 
     @Override
     public Person setAndGetDAO(ResultSet rs) throws DAOException {
         Person person;
+        PersonAvatarDAO personAvatarDAO;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
 
         try {
+            personAvatarDAO = DAO_FACTORY.getDAO(PersonAvatarDAO.class);
             person = new Person();
-            person.setId(rs.getInt("id"));
+
+            person.setId(rs.getLong("id"));
             person.setEmail(rs.getString("email"));
             person.setPassword(rs.getString("password"));
             person.setName(rs.getString("name"));
             person.setSurname(rs.getString("surname"));
-        } catch (SQLException ex) {
+            person.setSex(rs.getString("sex").charAt(0));
+            person.setAvatar(personAvatarDAO.getByPrimaryKey(rs.getLong("avatar_id")));
+            person.setAvatarHistory(personAvatarDAO.getAllByPersonId(person.getId()));
+        } catch (SQLException | DAOFactoryException ex) {
             throw new DAOException("Impossible to set Person by ResultSet", ex);
         }
         return person;
@@ -66,27 +76,27 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to count PersonDaoBean", ex);
+            throw new DAOException("Impossible to count Person", ex);
         }
 
         return count;
     }
 
     /**
-     * Return the {@link Person person} with the primary key equals to @primaryKey
+     * Return the {@link Person person} with the primary key equals to {@code primaryKey}
      *
-     * @param primaryKey The primary key used to obtain the entity instance
-     * @return The {@link Person person} with @primaryKey
+     * @param primaryKey The primary key used to obtain the obj instance
+     * @return The {@link Person person} with {@code primaryKey}
      * @throws DAOException If an error occurred during the information retrieving
      */
     @Override
-    public Person getByPrimaryKey(Integer primaryKey) throws DAOException {
+    public Person getByPrimaryKey(Long primaryKey) throws DAOException {
         Person person = null;
         if (primaryKey == null)
             throw new DAOException("Primary key is null");
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_BY_PRIMARY_KEY)) {
-            pStmt.setInt(1, primaryKey);
+            pStmt.setLong(1, primaryKey);
             try (ResultSet rs = pStmt.executeQuery()) {
                 if (rs.next()) {
                     person = setAndGetDAO(rs);
@@ -153,7 +163,9 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Integer> implements PersonDAO
             pStmt.setString(2, person.getSurname());
             pStmt.setString(3, person.getEmail());
             pStmt.setString(4, person.getPassword());
-            pStmt.setInt(5, person.getId());
+            pStmt.setString(5, Character.toString(person.getSex()));
+            pStmt.setLong(6, person.getAvatar().getId());
+            pStmt.setLong(7, person.getId());
 
             if (pStmt.executeUpdate() == 1)
                 toRtn = true;

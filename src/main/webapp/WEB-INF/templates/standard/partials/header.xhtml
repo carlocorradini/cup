@@ -1,58 +1,60 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <div class=" header">
-        <div class="ui menu huge ">
-            <h:link outcome="/index"
-                    styleClass="item"
-            >
-                <h:graphicImage library="default"
-                                name="images/favicon/android-chrome-512x512.png"
-                                alt="Icon"
-                />
-            </h:link>
-            <div class="right menu">
-                <div class="ui dropdown item">
-                    <i class="world icon"/> #{i18nBean.language}
-                    <div class="menu">
-                        <h:form>
-                            <h:commandLink
-                                    action="#{i18nBean.setLanguage('en')}"
-                                    value="English"
-                                    styleClass="item"
-                            />
-                            <h:commandLink
-                                    action="#{i18nBean.setLanguage('it')}"
-                                    value="Italiano"
-                                    styleClass="item"
-                            />
-                        </h:form>
-                    </div>
-                </div>
+    <header class=" header">
+        <div class="ui menu huge">
+            <div class="header-limiter">
+                <h:link outcome="/index"
+                        styleClass="item"
+                >
+                    <h:graphicImage library="default"
+                                    name="images/favicon/android-chrome-512x512.png"
+                                    alt="Icon"
+                    />
+                </h:link>
 
+                <a class="item" id="sidebar-menu-button">
+                    <i class="sidebar icon"/>
+                    Menu
+                </a>
 
-                <ui:fragment rendered="#{empty person.person}">
-                    <div class="item">
-                        <h:link value="#{i18n['common.signIn']}"
-                                outcome="/signin/index"
-                                styleClass="ui primary button"
-                        />
-                    </div>
-                </ui:fragment>
-                <ui:fragment rendered="#{not empty person.person}">
+                <div class="right menu">
                     <div class="ui dropdown item">
-                        #{person.person.name} <i class="dropdown icon"/>
+                        <i class="world icon"/> #{i18nBean.language}
                         <div class="menu">
-                            <div class="item">Profile</div>
+                            <h:form>
+                                <h:commandLink
+                                        action="#{i18nBean.setLanguage('en')}"
+                                        value="English"
+                                        styleClass="item"
+                                />
+                                <h:commandLink
+                                        action="#{i18nBean.setLanguage('it')}"
+                                        value="Italiano"
+                                        styleClass="item"
+                                />
+                            </h:form>
                         </div>
                     </div>
-                    <div class="item">
-                        <a href="#{request.contextPath}/signout.handler" class="ui red button">
-                            #{i18n['common.signOut']}
-                        </a>
-                    </div>
-                </ui:fragment>
+
+
+                    <ui:fragment rendered="#{empty person.person}">
+                        <div class="item">
+                            <h:link value="#{i18n['common.signIn']}"
+                                    outcome="/signin/index"
+                                    styleClass="ui primary button"
+                            />
+                        </div>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{not empty person.person}">
+                        <div class="item">
+                            <a href="#{request.contextPath}/signout.handler" class="ui red button">
+                                #{i18n['common.signOut']}
+                            </a>
+                        </div>
+                    </ui:fragment>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
 </ui:composition>

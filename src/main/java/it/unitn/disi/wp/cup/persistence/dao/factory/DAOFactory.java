@@ -41,10 +41,10 @@ public interface DAOFactory {
     <DAO_CLASS extends DAO> DAO_CLASS getDAO(Class<DAO_CLASS> daoInterface) throws DAOFactoryException;
 
     /**
-     * Get the DAOFactory in the Context
+     * Get the DAOFactory in the Faces Context
      *
-     * @return The DAOFactory instance
-     * @throws DAOFactoryException If DAOFactory is null
+     * @return The {@link DAOFactory} instance
+     * @throws DAOFactoryException If {@link DAOFactory} is null
      */
     static DAOFactory getDAOFactory() throws DAOFactoryException {
         DAOFactory daoFactory = (DAOFactory) ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getAttribute(DAO_FACTORY);
@@ -55,19 +55,34 @@ public interface DAOFactory {
     }
 
     /**
-     * Get the DAOFactory in the Servlet Context
+     * Get the DAOFactory in the Servlet Context using Servlet Object
      *
      * @param servlet The servlet to get from
-     * @return The DAOFactory instance
-     * @throws DAOFactoryException  If DAOFactory is null
+     * @return The {@link DAOFactory} instance
+     * @throws DAOFactoryException  If {@link DAOFactory} is null
      * @throws NullPointerException If {@code servlet} is null
      */
     static DAOFactory getDAOFactory(final HttpServlet servlet) throws DAOFactoryException, NullPointerException {
-        DAOFactory daoFactory;
         if (servlet == null)
             throw new NullPointerException("Servlet cannot bet null");
 
-        daoFactory = (DAOFactory) servlet.getServletContext().getAttribute(DAO_FACTORY);
+        return getDAOFactory(servlet.getServletContext());
+    }
+
+    /**
+     * Get the DAOFactory in the Servlet Context
+     *
+     * @param servletContext The ServletContext to get from
+     * @return The {@link DAOFactory}
+     * @throws DAOFactoryException  If {@link DAOFactory} is null
+     * @throws NullPointerException If {@code servletContext} is null
+     */
+    static DAOFactory getDAOFactory(final ServletContext servletContext) throws DAOFactoryException, NullPointerException {
+        DAOFactory daoFactory;
+        if (servletContext == null)
+            throw new NullPointerException("Servlet cannot be null");
+
+        daoFactory = (DAOFactory) servletContext.getAttribute(DAO_FACTORY);
         if (daoFactory == null)
             throw new DAOFactoryException("Impossible to get dao factory for storage system");
 

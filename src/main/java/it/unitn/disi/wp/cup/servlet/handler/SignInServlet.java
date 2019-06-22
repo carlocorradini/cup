@@ -12,7 +12,6 @@ import java.io.IOException;
 
 @WebServlet(value = "/signin.handler")
 public final class SignInServlet extends HttpServlet {
-    private static final long serialVersionUID = 8393696396451465996L;
     private static final String PARAM_EMAIL = "email";
     private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_REMEMBER = "remember";

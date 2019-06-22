@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author Carlo Corradini
  */
-public class EmailUtil {
+public final class EmailUtil {
 
     private static final Logger LOGGER = Logger.getLogger(EmailUtil.class.getName());
     private static Properties properties;

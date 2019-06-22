@@ -245,4 +245,74 @@ public final class AppConfig extends Config {
         }
         return instance.getString("info.place.city");
     }
+
+    /**
+     * Return the Config Avatar Max File Size
+     *
+     * @return The App Config Avatar Max File Size
+     */
+    public static int getConfigAvatarMaxFileSize() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Avatar MaxFileSize", ex);
+        }
+        return instance.getInt("config.avatar.maxFileSize");
+    }
+
+    /**
+     * Return the Config Avatar Path
+     *
+     * @return The App Config Avatar Path
+     */
+    public static String getConfigAvatarPath() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Avatar Path", ex);
+        }
+        return instance.getString("config.avatar.path");
+    }
+
+    /**
+     * Return the Config Avatar Backup Path
+     *
+     * @return The App Config Avatar Backup Path
+     */
+    public static String getConfigAvatarBackupPath() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Avatar Backup Path", ex);
+        }
+        return instance.getString("config.avatar.pathBackup");
+    }
+
+    /**
+     * Return the Config Avatar Extension
+     *
+     * @return The App Config Avatar Extension
+     */
+    public static String getConfigAvatarExtension() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Avatar Extension", ex);
+        }
+        return instance.getString("config.avatar.extension");
+    }
+
+    /**
+     * Return the Config Avatar Resize Size
+     *
+     * @return The App Config Avatar Resize Size
+     */
+    public static int getConfigAvatarResizeSize() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Avatar Resize Size", ex);
+        }
+        return instance.getInt("config.avatar.resizeSize");
+    }
 }

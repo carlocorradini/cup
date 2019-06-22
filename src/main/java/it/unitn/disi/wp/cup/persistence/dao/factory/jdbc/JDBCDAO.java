@@ -2,6 +2,7 @@ package it.unitn.disi.wp.cup.persistence.dao.factory.jdbc;
 
 import it.unitn.disi.wp.cup.persistence.dao.DAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
+import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 
 import java.sql.Connection;
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.HashMap;
  * This is the base DAO class all concrete DAO using JDBC technology must extend
  *
  * @param <ENTITY_CLASS>      the class of the entities the dao handle
- * @param <PRIMARY_KEY_CLASS> the class of the primary key of the entity the dao
+ * @param <PRIMARY_KEY_CLASS> the class of the primary key of the obj the dao
  *                            handle
  * @author Carlo Corradini
  */
@@ -20,6 +21,12 @@ public abstract class JDBCDAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> implements DAO<EN
      * The JDBC {@link Connection} used to access the persistence system
      */
     protected final Connection CONNECTION;
+
+    /**
+     * The {@link DAOFactory} used to acess DAOs
+     */
+    protected final DAOFactory DAO_FACTORY;
+
     /**
      * The list of other DAOs this DAO can interact with
      */
@@ -30,9 +37,10 @@ public abstract class JDBCDAO<ENTITY_CLASS, PRIMARY_KEY_CLASS> implements DAO<EN
      *
      * @param connection The internal {@code Connection}
      */
-    protected JDBCDAO(Connection connection) {
+    protected JDBCDAO(Connection connection, DAOFactory daoFactory) {
         super();
         this.CONNECTION = connection;
+        this.DAO_FACTORY = daoFactory;
         FRIEND_DAOS = new HashMap<>();
     }
 

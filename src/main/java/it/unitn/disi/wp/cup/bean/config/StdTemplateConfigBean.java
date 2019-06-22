@@ -33,6 +33,13 @@ public final class StdTemplateConfigBean implements Serializable {
     }
 
     /**
+     * @see StdTemplateConfig#getSidebar()
+     */
+    public String getSidebar() {
+        return StdTemplateConfig.getSidebar();
+    }
+
+    /**
      * @see StdTemplateConfig#getContent()
      */
     public String getContent() {
