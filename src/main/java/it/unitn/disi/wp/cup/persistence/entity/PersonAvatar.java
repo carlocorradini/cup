@@ -7,7 +7,7 @@ import java.time.OffsetDateTime;
  *
  * @author Carlo Corradini
  */
-public final class PersonAvatar {
+public class PersonAvatar {
     private Long id;
     private Long personId;
     private String name;

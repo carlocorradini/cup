@@ -3,7 +3,6 @@ package it.unitn.disi.wp.cup.i18n;
 import org.apache.commons.collections.IteratorUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;

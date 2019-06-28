@@ -3,14 +3,14 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Pagina 1</ui:define>
+    <ui:define name="title">#{i18n["dashboard.dashboard"]}</ui:define>
 
     <ui:define name="content">
-        <ui:fragment rendered="#{not empty person.person}">
-            <p>Welcome #{person.person.name}, you have been logged in!</p>
+        <ui:fragment rendered="#{not empty person.authPerson}">
+            <p>Welcome #{person.authPerson.name}, you have been logged in!</p>
 
             <div class="ui small images">
-                <ui:repeat value="#{person.person.avatarHistory}" var="a">
+                <ui:repeat value="#{person.authPerson.avatarHistory}" var="a">
                     <h:graphicImage library="default"
                                     name="images/avatar/#{a.name}#{app.configAvatarExtension}"
                                     alt="Avatar"

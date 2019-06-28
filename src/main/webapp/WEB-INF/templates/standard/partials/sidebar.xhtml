@@ -4,8 +4,12 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 >
-    <ui:fragment rendered="#{not empty person.person}">
-        <nav class="ui left sidebar vertical menu" id="sidebar-menu">
+    <ui:fragment rendered="#{not empty person.authPerson}">
+        <nav class="ui left sidebar vertical menu big" id="sidebar-menu">
+
+            <div class="close-container">
+                <div id="sidebar-menu-close" class="close"></div>
+            </div>
 
             <div id="sidebar-avatar-error" class="hidden">
                 <div class="ui negative message tiny">
@@ -37,15 +41,15 @@
                 <div class="avatar-preview">
                     <h:graphicImage id="sidebar-avatar-image"
                                     library="default"
-                                    name="images/avatar/#{person.person.avatar.name}#{app.configAvatarExtension}"
+                                    name="images/avatar/#{person.authPerson.avatar.name}#{app.configAvatarExtension}"
                                     alt="Avatar"
                     />
                 </div>
             </div>
 
             <h4 class="name-surname text-overflow-ellipsis">
-                #{fn:toUpperCase(fn:substring(person.person.name, 0, 1))}#{fn:toLowerCase(fn:substring(person.person.name, 1,fn:length(person.person.name)))}
-                #{fn:toUpperCase(fn:substring(person.person.surname, 0, 1))}#{fn:toLowerCase(fn:substring(person.person.surname, 1,fn:length(person.person.surname)))}
+                #{fn:toUpperCase(fn:substring(person.authPerson.name, 0, 1))}#{fn:toLowerCase(fn:substring(person.authPerson.name, 1,fn:length(person.authPerson.name)))}
+                #{fn:toUpperCase(fn:substring(person.authPerson.surname, 0, 1))}#{fn:toLowerCase(fn:substring(person.authPerson.surname, 1,fn:length(person.authPerson.surname)))}
             </h4>
 
             <div class="item">
@@ -54,32 +58,28 @@
                 </div>
             </div>
 
-            <a class="item">
-                <i class="th icon"/> Dashboard
-            </a>
+            <h:link outcome="/dashboard/index"
+                    styleClass="item"
+            >
+                <i class="th icon"/>
+                #{i18n["dashboard.dashboard"]}
+            </h:link>
 
             <div class="item">
-                Home
+                <div class="header">Esami</div>
                 <div class="menu">
-                    <a class="active item">Search</a>
-                    <a class="item">Add</a>
-                    <a class="item">Remove</a>
+                    <a class="item">
+                        Risultati
+                        <div class="ui label">3</div>
+                    </a>
+                    <a class="item">prenotazioni</a>
                 </div>
             </div>
-            <a class="item">
-                <i class="grid layout icon"></i> Browse
-            </a>
-            <a class="item">
-                Messages
-            </a>
-            <div class="ui dropdown item">
-                More
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <a class="item"><i class="edit icon"></i> Edit Profile</a>
-                    <a class="item"><i class="globe icon"></i> Choose Language</a>
-                    <a class="item"><i class="settings icon"></i> Account Settings</a>
-                </div>
+
+            <div class="item">
+                <a href="#{request.contextPath}/signout.handler" class="ui red fluid button">
+                    #{i18n['common.signOut']}
+                </a>
             </div>
         </nav>
     </ui:fragment>

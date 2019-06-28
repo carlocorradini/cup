@@ -30,7 +30,7 @@ public final class PersonDaoBean implements Serializable {
     private static final long serialVersionUID = -4058980644509062209L;
     private final static Logger LOGGER = Logger.getLogger(PersonDaoBean.class.getName());
     private PersonDAO personDAO = null;
-    private Person person = null;
+    private Person authPerson = null;
 
     /**
      * Initialize the personDAO
@@ -41,7 +41,7 @@ public final class PersonDaoBean implements Serializable {
         try {
             personDAO = DAOFactory.getDAOFactory().getDAO(PersonDAO.class);
             if (context.getRequest() instanceof HttpServletRequest) {
-                person = AuthUtil.getAuthPerson((HttpServletRequest) context.getRequest());
+                authPerson = AuthUtil.getAuthPerson((HttpServletRequest) context.getRequest());
             }
         } catch (DAOFactoryException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -58,11 +58,11 @@ public final class PersonDaoBean implements Serializable {
     }
 
     /**
-     * Return the person in the current session
+     * Return the Authenticated person in the current session
      *
-     * @return The person in the current session, null otherwise
+     * @return The Authenticated person in the current session, null otherwise
      */
-    public Person getPerson() {
-        return person;
+    public Person getAuthPerson() {
+        return authPerson;
     }
 }

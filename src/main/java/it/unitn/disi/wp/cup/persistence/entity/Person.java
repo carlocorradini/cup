@@ -8,18 +8,18 @@ import java.util.List;
  *
  * @author Carlo Corradini
  */
-public final class Person {
+public class Person {
     private Long id;
     private String email;
     private String password;
     private String name;
     private String surname;
-    private String CF;
     private char sex;
+    private String fiscalCode;
     private LocalDate birthDate;
-    private String birthPlace;
-    private String province;
-    private String doctor;
+    private City bithCity;
+    private City city;
+    private Doctor doctor;
     private PersonAvatar avatar;
     private List<PersonAvatar> avatarHistory;
 
@@ -129,6 +129,96 @@ public final class Person {
      */
     public void setSex(char sex) {
         this.sex = sex;
+    }
+
+    /**
+     * Return the fiscal code of the Person
+     *
+     * @return Person fiscal code
+     */
+    public String getFiscalCode() {
+        return fiscalCode;
+    }
+
+    /**
+     * Set the fiscal code of the Person
+     *
+     * @param fiscalCode Person fiscal code
+     */
+    public void setFiscalCode(String fiscalCode) {
+        this.fiscalCode = fiscalCode;
+    }
+
+    /**
+     * Return the birth date of the Person
+     *
+     * @return Person birth date
+     */
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    /**
+     * Set the birth date of the Person
+     *
+     * @param birthDate Person birth date
+     */
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    /**
+     * Return the birth city of the Person
+     *
+     * @return Person birth city
+     */
+    public City getBithCity() {
+        return bithCity;
+    }
+
+    /**
+     * Set the birth city of the Person
+     *
+     * @param bithCity Person birth city
+     */
+    public void setBithCity(City bithCity) {
+        this.bithCity = bithCity;
+    }
+
+    /**
+     * Return the city of the Person
+     *
+     * @return Person city
+     */
+    public City getCity() {
+        return city;
+    }
+
+    /**
+     * Set the city of the Person
+     *
+     * @param city Person city
+     */
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    /**
+     * Return the doctor of the Person
+     *
+     * @return Person doctor
+     */
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    /**
+     * Set the doctor of the Person
+     *
+     * @param doctor Person doctor
+     */
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
     /**

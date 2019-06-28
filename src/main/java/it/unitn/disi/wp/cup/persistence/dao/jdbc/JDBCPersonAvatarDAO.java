@@ -11,6 +11,11 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JDBC implementation of {@link PersonAvatar} interface
+ *
+ * @author Carlo Corradini
+ */
 public class JDBCPersonAvatarDAO extends JDBCDAO<PersonAvatar, Long> implements PersonAvatarDAO {
 
     private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM person_avatar";

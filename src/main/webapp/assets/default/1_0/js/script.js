@@ -31,6 +31,7 @@ function sidebarHandler() {
     const sidebar = {
         sidebar: $("#sidebar-menu"),
         button: $("#sidebar-menu-button"),
+        close: $("#sidebar-menu-close"),
         avatar: {
             input: $("#sidebar-avatar-input"),
             image: $("#sidebar-avatar-image"),
@@ -41,11 +42,21 @@ function sidebarHandler() {
     const maxFileSize = parseInt(sidebar.avatar.input.data("max-size"), 10);
     let newAvatar = null;
 
+    //todo REMOVE THIS!!!
+    sidebar.sidebar
+        .sidebar("setting", "transition", "overlay")
+        .sidebar("toggle");
+
+
     // Enable Sidebar
     sidebar.button.click(function () {
         sidebar.sidebar
             .sidebar("setting", "transition", "overlay")
             .sidebar("toggle");
+    });
+    // Close on X
+    sidebar.close.click(function () {
+        sidebar.sidebar.sidebar("hide");
     });
     // Close on ESC key
     $document.keyup(function (e) {
@@ -54,7 +65,7 @@ function sidebarHandler() {
 
     // Avatar Upload local
     sidebar.avatar.input.click(function () {
-        this.value = null; // Bug when selecting the same File
+        this.value = null; // Adjust when selecting the same File
     });
     sidebar.avatar.input.change(function () {
         if (this.files && this.files[0]) {
@@ -77,7 +88,7 @@ function sidebarHandler() {
         }
     });
 
-    // Avatar Upload remote
+    // Avatar Upload to Server
     sidebar.avatar.save.click(function () {
         if (newAvatar !== null) {
             const formData = new FormData();

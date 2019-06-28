@@ -1,5 +1,6 @@
 package it.unitn.disi.wp.cup.persistence.dao.jdbc;
 
+import it.unitn.disi.wp.cup.persistence.dao.CityDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonAvatarDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
@@ -9,6 +10,7 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +41,15 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
     public Person setAndGetDAO(ResultSet rs) throws DAOException {
         Person person;
         PersonAvatarDAO personAvatarDAO;
+        CityDAO cityDAO;
+        DoctorDAO doctorDAO;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
 
         try {
             personAvatarDAO = DAO_FACTORY.getDAO(PersonAvatarDAO.class);
+            cityDAO = DAO_FACTORY.getDAO(CityDAO.class);
+            doctorDAO = DAO_FACTORY.getDAO(DoctorDAO.class);
+
             person = new Person();
 
             person.setId(rs.getLong("id"));
@@ -51,6 +58,11 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
             person.setName(rs.getString("name"));
             person.setSurname(rs.getString("surname"));
             person.setSex(rs.getString("sex").charAt(0));
+            person.setFiscalCode(rs.getString("fiscal_code"));
+            person.setBirthDate(rs.getObject("birth_date", LocalDate.class));
+            person.setBithCity(cityDAO.getByPrimaryKey(rs.getLong("birth_city_id")));
+            person.setCity(cityDAO.getByPrimaryKey(rs.getLong("city_id")));
+            person.setDoctor(doctorDAO.getByPrimaryKey(rs.getLong("doctor_id")));
             person.setAvatar(personAvatarDAO.getByPrimaryKey(rs.getLong("avatar_id")));
             person.setAvatarHistory(personAvatarDAO.getAllByPersonId(person.getId()));
         } catch (SQLException | DAOFactoryException ex) {

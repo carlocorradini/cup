@@ -61,6 +61,51 @@ header.header .header-limiter {
 }
 
 /* === SIDEBAR === */
+/* Close */
+nav.sidebar .close-container {
+    display: block;
+    height: 20px;
+    padding: 1px;
+}
+
+nav.sidebar .close-container .close {
+    position: relative;
+    float: right;
+    width: 20px;
+    height: 20px;
+    opacity: 0.3;
+    cursor: pointer;
+    transition: opacity 150ms linear;
+}
+
+nav.sidebar .close-container .close:after,
+nav.sidebar .close-container .close:before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    height: 18px;
+    width: 2px;
+    background-color: #333333;
+    transition: background-color 150ms linear;
+}
+
+nav.sidebar .close-container .close:after {
+    transform: rotate(-45deg);
+}
+
+nav.sidebar .close-container .close:before {
+    transform: rotate(45deg);
+}
+
+nav.sidebar .close-container .close:hover {
+    opacity: 1;
+}
+
+nav.sidebar .close-container .close:hover:after,
+nav.sidebar .close-container .close:hover:before {
+    background-color: #db2828;
+}
+
 /* Avatar Message */
 nav.sidebar #sidebar-avatar-error {
     padding: 5px;
@@ -70,7 +115,7 @@ nav.sidebar #sidebar-avatar-error {
 nav.sidebar .avatar {
     position: relative;
     max-width: 205px;
-    margin: 10px auto;
+    margin: 0 auto 10px auto;
 }
 
 nav.sidebar .avatar .avatar-edit,
