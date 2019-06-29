@@ -37,17 +37,31 @@ public final class AuthConfig extends Config {
     }
 
     /**
-     * Return the session parameter name of the authenticated Person
+     * Return the session name of the authenticated Person
      *
-     * @return Session Name
+     * @return Session Person name
      */
-    public static String getSessionName() {
+    public static String getSessionPersonName() {
         try {
             checkInstance();
         } catch (ConfigException ex) {
-            LOGGER.log(Level.SEVERE, "Unable to get Session Name", ex);
+            LOGGER.log(Level.SEVERE, "Unable to get Session Person Name", ex);
         }
-        return instance.getString("session.name");
+        return instance.getString("session.person.name");
+    }
+
+    /**
+     * Return the session name of the authenticated Doctor
+     *
+     * @return Session Doctor name
+     */
+    public static String getSessionDoctorName() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Session Doctor Name", ex);
+        }
+        return instance.getString("session.doctor.name");
     }
 
     /**

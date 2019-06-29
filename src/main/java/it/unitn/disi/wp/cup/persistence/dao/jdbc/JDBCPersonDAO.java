@@ -1,6 +1,7 @@
 package it.unitn.disi.wp.cup.persistence.dao.jdbc;
 
 import it.unitn.disi.wp.cup.persistence.dao.CityDAO;
+import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonAvatarDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
@@ -41,14 +42,14 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
     public Person setAndGetDAO(ResultSet rs) throws DAOException {
         Person person;
         PersonAvatarDAO personAvatarDAO;
-        CityDAO cityDAO;
         DoctorDAO doctorDAO;
+        CityDAO cityDAO;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
 
         try {
             personAvatarDAO = DAO_FACTORY.getDAO(PersonAvatarDAO.class);
-            cityDAO = DAO_FACTORY.getDAO(CityDAO.class);
             doctorDAO = DAO_FACTORY.getDAO(DoctorDAO.class);
+            cityDAO = DAO_FACTORY.getDAO(CityDAO.class);
 
             person = new Person();
 
@@ -62,7 +63,6 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
             person.setBirthDate(rs.getObject("birth_date", LocalDate.class));
             person.setBithCity(cityDAO.getByPrimaryKey(rs.getLong("birth_city_id")));
             person.setCity(cityDAO.getByPrimaryKey(rs.getLong("city_id")));
-            person.setDoctor(doctorDAO.getByPrimaryKey(rs.getLong("doctor_id")));
             person.setAvatar(personAvatarDAO.getByPrimaryKey(rs.getLong("avatar_id")));
             person.setAvatarHistory(personAvatarDAO.getAllByPersonId(person.getId()));
         } catch (SQLException | DAOFactoryException ex) {

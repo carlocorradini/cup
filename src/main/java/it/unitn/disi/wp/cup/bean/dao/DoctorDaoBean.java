@@ -1,9 +1,9 @@
 package it.unitn.disi.wp.cup.bean.dao;
 
-import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
+import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
-import it.unitn.disi.wp.cup.persistence.entity.Person;
+import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 
 import javax.annotation.PostConstruct;
@@ -17,31 +17,29 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Person Bean
+ * Doctor Bean
  *
  * @author Carlo Corradini
- * @see Person
- * @see PersonDAO
+ * @see Doctor
  */
-@ManagedBean(name = "person")
+@ManagedBean(name = "doctor")
 @RequestScoped
-public final class PersonDaoBean implements Serializable {
-
-    private static final long serialVersionUID = -4058980644509062209L;
-    private final static Logger LOGGER = Logger.getLogger(PersonDaoBean.class.getName());
-    private PersonDAO personDAO = null;
-    private Person authPerson = null;
+public final class DoctorDaoBean implements Serializable {
+    private static final long serialVersionUID = -4028930644505062207L;
+    private final static Logger LOGGER = Logger.getLogger(DoctorDaoBean.class.getName());
+    private DoctorDAO doctorDAO = null;
+    private Doctor authDoctor = null;
 
     /**
-     * Initialize the {@link PersonDaoBean}
+     * Initialize the {@link DoctorDaoBean}
      */
     @PostConstruct
     public void init() {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
-            personDAO = DAOFactory.getDAOFactory().getDAO(PersonDAO.class);
+            doctorDAO = DAOFactory.getDAOFactory().getDAO(DoctorDAO.class);
             if (context.getRequest() instanceof HttpServletRequest) {
-                authPerson = AuthUtil.getAuthPerson((HttpServletRequest) context.getRequest());
+                authDoctor = AuthUtil.getAuthDoctor((HttpServletRequest) context.getRequest());
             }
         } catch (DAOFactoryException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -49,20 +47,20 @@ public final class PersonDaoBean implements Serializable {
     }
 
     /**
-     * Return the PersonDAO
+     * Return the DoctorDAO
      *
-     * @return The PersonDAO
+     * @return The DoctorDAO
      */
-    public PersonDAO getPersonDAO() {
-        return personDAO;
+    public DoctorDAO getDoctorDAO() {
+        return doctorDAO;
     }
 
     /**
-     * Return the Authenticated person in the current session
+     * Return the Authenticated doctor in the current session
      *
-     * @return The Authenticated person in the current session, null otherwise
+     * @return The Authenticated doctor in the current session, null otherwise
      */
-    public Person getAuthPerson() {
-        return authPerson;
+    public Doctor getAuthDoctor() {
+        return authDoctor;
     }
 }

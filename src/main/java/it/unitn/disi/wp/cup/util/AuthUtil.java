@@ -1,10 +1,12 @@
 package it.unitn.disi.wp.cup.util;
 
 import it.unitn.disi.wp.cup.config.AuthConfig;
+import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
+import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import java.util.logging.Logger;
 public final class AuthUtil {
     private static final Logger LOGGER = Logger.getLogger(AuthUtil.class.getName());
     private static PersonDAO personDAO = null;
+    private static DoctorDAO doctorDAO = null;
 
     /**
      * Configure the class
@@ -33,6 +36,7 @@ public final class AuthUtil {
             throw new NullPointerException("DAOFactory cannot be null");
         try {
             personDAO = daoFactory.getDAO(PersonDAO.class);
+            doctorDAO = daoFactory.getDAO(DoctorDAO.class);
         } catch (DAOFactoryException | NullPointerException ex) {
             LOGGER.log(Level.SEVERE, "Unable to get DAOFactory", ex);
         }
@@ -57,14 +61,39 @@ public final class AuthUtil {
             if (req != null) {
                 session = req.getSession(false);
                 if (session != null) {
-                    person = (Person) session.getAttribute(AuthConfig.getSessionName());
+                    person = (Person) session.getAttribute(AuthConfig.getSessionPersonName());
                 }
             }
         } catch (NullPointerException ex) {
-            LOGGER.log(Level.SEVERE, "Unable to Current Auth Person", ex);
+            LOGGER.log(Level.SEVERE, "Unable to get Current Auth Person", ex);
         }
 
         return person;
+    }
+
+    /**
+     * Return the current authenticated Doctor
+     *
+     * @param req The ServletRequest
+     * @return The auth Doctor, null otherwise
+     */
+    public static Doctor getAuthDoctor(HttpServletRequest req) {
+        Doctor doctor = null;
+        HttpSession session;
+
+        try {
+            isConfigured();
+            if (req != null) {
+                session = req.getSession(false);
+                if (session != null) {
+                    doctor = (Doctor) session.getAttribute(AuthConfig.getSessionDoctorName());
+                }
+            }
+        } catch (NullPointerException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Current Auth Doctor", ex);
+        }
+
+        return doctor;
     }
 
     /**
@@ -84,9 +113,17 @@ public final class AuthUtil {
             isConfigured();
             if (email != null && password != null && req != null) {
                 Person noAuthPerson = personDAO.getByEmail(email);
+                Doctor doctor;
+
                 if (noAuthPerson != null && CryptUtil.validate(password, noAuthPerson.getPassword()) && getAuthPerson(req) == null) {
                     person = noAuthPerson;
-                    req.getSession().setAttribute(AuthConfig.getSessionName(), person);
+                    doctor = doctorDAO.getByPrimaryKey(person.getId());
+
+                    req.getSession().setAttribute(AuthConfig.getSessionPersonName(), person);
+                    if (doctor != null) {
+                        // The Person is a Doctor
+                        req.getSession().setAttribute(AuthConfig.getSessionDoctorName(), doctor);
+                    }
                 }
             }
         } catch (DAOException | NullPointerException ex) {
@@ -114,7 +151,8 @@ public final class AuthUtil {
                 if (session != null) {
                     person = getAuthPerson(req);
                     if (person != null) {
-                        session.removeAttribute(AuthConfig.getSessionName());
+                        session.removeAttribute(AuthConfig.getSessionPersonName());
+                        session.removeAttribute(AuthConfig.getSessionDoctorName());
                         session.invalidate();
                     }
                 }
@@ -125,4 +163,5 @@ public final class AuthUtil {
 
         return person;
     }
+
 }

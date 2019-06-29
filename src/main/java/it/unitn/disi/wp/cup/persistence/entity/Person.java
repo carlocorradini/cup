@@ -19,7 +19,6 @@ public class Person {
     private LocalDate birthDate;
     private City bithCity;
     private City city;
-    private Doctor doctor;
     private PersonAvatar avatar;
     private List<PersonAvatar> avatarHistory;
 
@@ -201,24 +200,6 @@ public class Person {
      */
     public void setCity(City city) {
         this.city = city;
-    }
-
-    /**
-     * Return the doctor of the Person
-     *
-     * @return Person doctor
-     */
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    /**
-     * Set the doctor of the Person
-     *
-     * @param doctor Person doctor
-     */
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
     }
 
     /**

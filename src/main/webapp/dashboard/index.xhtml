@@ -2,12 +2,33 @@
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">#{i18n["dashboard.dashboard"]}</ui:define>
+        xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="title">#{i18n["dcarlo SEI UN DOTTORE!!!ashboard.dashboard"]}</ui:define>
 
     <ui:define name="content">
         <ui:fragment rendered="#{not empty person.authPerson}">
             <p>Welcome #{person.authPerson.name}, you have been logged in!</p>
+
+            <ui:fragment rendered="#{not empty doctor.authDoctor}">
+                <h1>#{person.authPerson.name} SEI UN DOTTORE!!!</h1>
+                <h:dataTable value="#{doctor.authDoctor.patients}" var="p"
+                             styleClass="ui celled table"
+                             headerClass=""
+                             rowClasses="">
+                    <h:column>
+                        <f:facet name="header">ID</f:facet>
+                        #{p.id}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">NAME</f:facet>
+                        #{p.name}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">SURNAME</f:facet>
+                        #{p.surname}
+                    </h:column>
+                </h:dataTable>
+            </ui:fragment>
 
             <div class="ui small images">
                 <ui:repeat value="#{person.authPerson.avatarHistory}" var="a">
