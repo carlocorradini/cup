@@ -75,6 +75,15 @@
                     <a class="item">prenotazioni</a>
                 </div>
             </div>
+            <ui:fragment rendered="#{not empty doctor.authDoctor}">
+                <div class="item">
+                    <div class="header">Pazienti</div>
+                    <div class="menu">
+                        <a class="item">Esami</a>
+                        <a class="item">Ricette</a>
+                    </div>
+                </div>
+            </ui:fragment>
 
             <div class="item">
                 <a href="#{request.contextPath}/signout.handler" class="ui red fluid button">

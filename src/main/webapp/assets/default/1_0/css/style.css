@@ -200,6 +200,7 @@ nav.sidebar .name-surname {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 5px;
 }
 
 /* === PRELOADER === */

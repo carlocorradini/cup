@@ -2,6 +2,7 @@ package it.unitn.disi.wp.cup.persistence.dao;
 
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.entity.PersonAvatar;
+import it.unitn.disi.wp.cup.persistence.entity.Person;
 
 import java.util.List;
 
@@ -20,6 +21,15 @@ public interface PersonAvatarDAO extends DAO<PersonAvatar, Long> {
      * @throws DAOException If an error occurred during the information retrieving
      */
     public Long insert(PersonAvatar personAvatar) throws DAOException;
+
+    /**
+     * Return the last {@link PersonAvatar} of the {@link Person} with {@code personId id}
+     *
+     * @param personId The {@link Person person} {@code personId id} to get the last {@link PersonAvatar avatar}
+     * @return The last used {@link PersonAvatar avatar}, null if the {@link Person person} has no avatar
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    public PersonAvatar getCurrentByPersonId(Long personId) throws DAOException;
 
     /**
      * Return the {@link List} of all {@link PersonAvatar} of the Person given its {@code personId id}

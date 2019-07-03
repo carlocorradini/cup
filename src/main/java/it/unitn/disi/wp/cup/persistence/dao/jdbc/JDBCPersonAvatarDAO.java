@@ -22,6 +22,8 @@ public class JDBCPersonAvatarDAO extends JDBCDAO<PersonAvatar, Long> implements 
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM person_avatar WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM person_avatar";
     private static final String SQL_INSERT = "INSERT INTO person_avatar(person_id, name) VALUES(?, ?)";
+    private static final String SQL_GET_CURRENT_BY_PERSON_ID_ = "WITH history AS (SELECT * FROM person_avatar WHERE person_id = ?)" +
+            " SELECT * FROM history WHERE history.upload = (SELECT MAX(upload) AS max_upload FROM history) LIMIT 1";
     private static final String SQL_GET_ALL_BY_PERSON_ID = "SELECT * FROM person_avatar WHERE person_id = ? ORDER BY upload ASC";
 
     /**
@@ -145,6 +147,26 @@ public class JDBCPersonAvatarDAO extends JDBCDAO<PersonAvatar, Long> implements 
         }
 
         return toRtn;
+    }
+
+    @Override
+    public PersonAvatar getCurrentByPersonId(Long personId) throws DAOException {
+        PersonAvatar personAvatar = null;
+        if (personId == null)
+            throw new DAOException("Person id is mandatory");
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_CURRENT_BY_PERSON_ID_)) {
+            pStmt.setLong(1, personId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                if (rs.next()) {
+                    personAvatar = setAndGetDAO(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the current PersonAvatar for the passed Person ID", ex);
+        }
+
+        return personAvatar;
     }
 
     @Override
