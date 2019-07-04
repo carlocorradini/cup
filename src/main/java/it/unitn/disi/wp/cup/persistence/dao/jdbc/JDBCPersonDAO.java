@@ -1,14 +1,15 @@
 package it.unitn.disi.wp.cup.persistence.dao.jdbc;
 
 import it.unitn.disi.wp.cup.persistence.dao.CityDAO;
-import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonAvatarDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
+import it.unitn.disi.wp.cup.persistence.dao.PersonSexDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
+import it.unitn.disi.wp.cup.util.PersonAvatarUtil;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM person WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM person";
     private static final String SQL_GET_BY_EMAIL = "SELECT * FROM person WHERE email = ? LIMIT 1";
-    private static final String SQL_UPDATE = "UPDATE person SET name = ?, surname = ?, email = ?, password = ?, sex = ?, avatar_id = ? WHERE id = ?";
+    private static final String SQL_UPDATE = "UPDATE person SET email = ?, password = ?, name = ?, surname = ?, sex = ?, fiscal_code = ?, birth_date = ?, birth_city_id = ?, city_id = ? WHERE id = ?";
 
     /**
      * The default constructor of the class
@@ -42,11 +43,13 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
     public Person setAndGetDAO(ResultSet rs) throws DAOException {
         Person person;
         PersonAvatarDAO personAvatarDAO;
+        PersonSexDAO personSexDAO;
         CityDAO cityDAO;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
 
         try {
             personAvatarDAO = DAO_FACTORY.getDAO(PersonAvatarDAO.class);
+            personSexDAO = DAO_FACTORY.getDAO(PersonSexDAO.class);
             cityDAO = DAO_FACTORY.getDAO(CityDAO.class);
 
             person = new Person();
@@ -56,12 +59,12 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
             person.setPassword(rs.getString("password"));
             person.setName(rs.getString("name"));
             person.setSurname(rs.getString("surname"));
-            person.setSex(rs.getString("sex").charAt(0));
+            person.setSex(personSexDAO.getByPrimaryKey(rs.getString("sex").charAt(0)));
             person.setFiscalCode(rs.getString("fiscal_code"));
             person.setBirthDate(rs.getObject("birth_date", LocalDate.class));
             person.setBithCity(cityDAO.getByPrimaryKey(rs.getLong("birth_city_id")));
             person.setCity(cityDAO.getByPrimaryKey(rs.getLong("city_id")));
-            person.setAvatar(personAvatarDAO.getCurrentByPersonId(person.getId()));
+            person.setAvatar(PersonAvatarUtil.checkPersonAvatar(personAvatarDAO.getCurrentByPersonId(person.getId()), person.getId(), person.getSex()));
             person.setAvatarHistory(personAvatarDAO.getAllByPersonId(person.getId()));
         } catch (SQLException | DAOFactoryException ex) {
             throw new DAOException("Impossible to set Person by ResultSet", ex);
@@ -169,13 +172,16 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
             throw new DAOException("Person is a mandatory field", new NullPointerException("Person is null"));
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_UPDATE)) {
-            pStmt.setString(1, person.getName());
-            pStmt.setString(2, person.getSurname());
-            pStmt.setString(3, person.getEmail());
-            pStmt.setString(4, person.getPassword());
-            pStmt.setString(5, Character.toString(person.getSex()));
-            pStmt.setLong(6, person.getAvatar().getId());
-            pStmt.setLong(7, person.getId());
+            pStmt.setString(1, person.getEmail());
+            pStmt.setString(2, person.getPassword());
+            pStmt.setString(3, person.getName());
+            pStmt.setString(4, person.getSurname());
+            pStmt.setString(5, Character.toString(person.getSex().getSex()));
+            pStmt.setString(6, person.getFiscalCode());
+            pStmt.setObject(7, person.getBirthDate());
+            pStmt.setLong(8, person.getBithCity().getId());
+            pStmt.setLong(9, person.getCity().getId());
+            pStmt.setLong(10, person.getId());
 
             if (pStmt.executeUpdate() == 1)
                 toRtn = true;

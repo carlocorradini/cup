@@ -1,0 +1,32 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Patients</ui:define>
+
+    <ui:define name="content">
+        <ui:fragment rendered="#{not empty doctor.authDoctor}">
+            <div class="ui cards">
+                <ui:repeat value="#{doctor.authDoctor.patients}" var="p">
+                    <div class="card">
+                        <div class="content">
+                            <h:graphicImage library="default"
+                                            name="#{app.configAvatarPath}/#{p.avatar.name}#{app.configAvatarExtension}"
+                                            alt="Avatar"
+                                            styleClass="right floated tiny ui rounded image"
+                            />
+                            <div class="header">#{p.name} #{p.surname}</div>
+                            <div class="meta">#{p.sex.sex}</div>
+                            <div class="meta">#{p.fiscalCode}</div>
+                        </div>
+                            <div class="ui bottom attached basic green button">
+                                Scheda
+                            </div>
+                    </div>
+                </ui:repeat>
+            </div>
+        </ui:fragment>
+    </ui:define>
+
+</ui:composition>

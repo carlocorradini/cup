@@ -14,7 +14,7 @@ public class Person {
     private String password;
     private String name;
     private String surname;
-    private char sex;
+    private PersonSex sex;
     private String fiscalCode;
     private LocalDate birthDate;
     private City bithCity;
@@ -117,7 +117,7 @@ public class Person {
      *
      * @return Person sex
      */
-    public char getSex() {
+    public PersonSex getSex() {
         return sex;
     }
 
@@ -126,7 +126,7 @@ public class Person {
      *
      * @param sex Person sex
      */
-    public void setSex(char sex) {
+    public void setSex(PersonSex sex) {
         this.sex = sex;
     }
 
