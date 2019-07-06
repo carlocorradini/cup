@@ -2,7 +2,6 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 >
     <ui:fragment rendered="#{not empty person.authPerson}">
         <nav class="ui left sidebar vertical menu big" id="sidebar-menu">
@@ -41,15 +40,14 @@
                 <div class="avatar-preview">
                     <h:graphicImage id="sidebar-avatar-image"
                                     library="default"
-                                    name="images/avatar/#{person.authPerson.avatar.name}#{app.configAvatarExtension}"
+                                    name="#{person.authPerson.avatar.nameAsResource}"
                                     alt="Avatar"
                     />
                 </div>
             </div>
 
             <h4 class="name-surname text-overflow-ellipsis">
-                #{fn:toUpperCase(fn:substring(person.authPerson.name, 0, 1))}#{fn:toLowerCase(fn:substring(person.authPerson.name, 1,fn:length(person.authPerson.name)))}
-                #{fn:toUpperCase(fn:substring(person.authPerson.surname, 0, 1))}#{fn:toLowerCase(fn:substring(person.authPerson.surname, 1,fn:length(person.authPerson.surname)))}
+                #{person.authPerson.fullNameCapitalized}
             </h4>
 
             <div class="item">

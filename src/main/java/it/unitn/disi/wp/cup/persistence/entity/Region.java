@@ -1,5 +1,7 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
+import it.unitn.disi.wp.cup.util.StringUtil;
+
 /**
  * Entity Region
  *
@@ -34,6 +36,15 @@ public class Region {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Return the name of the Region capitalized
+     *
+     * @return Region name capitalized
+     */
+    public String getNameCapitalized() {
+        return StringUtil.capitalize(name);
     }
 
     /**

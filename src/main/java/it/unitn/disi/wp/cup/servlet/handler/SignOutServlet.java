@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/signout.handler")
+@WebServlet(value = "/signout.handler",
+        name = "signOutHandler")
 public final class SignOutServlet extends HttpServlet {
 
     private static final String AUTH_SIGN_OUT = "authSignOut";

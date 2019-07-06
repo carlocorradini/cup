@@ -1,0 +1,13 @@
+<facelet-taglib version="2.2"
+                xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd">
+
+    <namespace>http://cup.it/LocalDateConverter</namespace>
+    <tag>
+        <tag-name>convertLocalDate</tag-name>
+        <converter>
+            <converter-id>it.unitn.disi.wp.cup.converter.LocalDateConverter</converter-id>
+        </converter>
+    </tag>
+</facelet-taglib>

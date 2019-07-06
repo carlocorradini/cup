@@ -2,30 +2,77 @@
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Patients</ui:define>
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:ldc="http://cup.it/LocalDateConverter"
+>
+    <ui:define name="title">#{i18n["common.patients"]}</ui:define>
 
     <ui:define name="content">
         <ui:fragment rendered="#{not empty doctor.authDoctor}">
-            <div class="ui cards">
-                <ui:repeat value="#{doctor.authDoctor.patients}" var="p">
-                    <div class="card">
+
+            <h2 class="ui center aligned icon header">
+                <i class="circular users icon"/>
+                #{i18n["common.patients"]} #{i18n["common.of"]} #{person.authPerson.fullNameCapitalized}
+            </h2>
+
+            <div class="ui divider"></div>
+
+            <c:choose>
+                <c:when test="#{empty doctor.authDoctor.patients}">
+                    <div class="ui icon floating message">
+                        <i class="info circle icon"/>
                         <div class="content">
-                            <h:graphicImage library="default"
-                                            name="#{app.configAvatarPath}/#{p.avatar.name}#{app.configAvatarExtension}"
-                                            alt="Avatar"
-                                            styleClass="right floated tiny ui rounded image"
-                            />
-                            <div class="header">#{p.name} #{p.surname}</div>
-                            <div class="meta">#{p.sex.sex}</div>
-                            <div class="meta">#{p.fiscalCode}</div>
-                        </div>
-                            <div class="ui bottom attached basic green button">
-                                Scheda
+                            <div class="header">
+                                #{i18n["dashboard.doctor.patients.empty.message"]}
                             </div>
+                            <p>#{i18n["dashboard.doctor.patients.empty.subMessage"]}</p>
+                        </div>
                     </div>
-                </ui:repeat>
-            </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="ui cards centered" id="doctor-patients">
+                        <ui:repeat value="#{doctor.authDoctor.patients}" var="p">
+                            <div class="ui raised card">
+                                <div class="content">
+                                    <h:graphicImage library="default"
+                                                    name="#{p.avatar.nameAsResource}"
+                                                    alt="Avatar"
+                                                    styleClass="bordered right floated tiny ui rounded image person-avatar"
+                                    />
+                                    <div class="header">#{p.fullNameCapitalized}</div>
+                                    <div class="meta">
+                                        <i class="hashtag icon"/> #{p.id}
+                                    </div>
+                                    <div class="meta">
+                                        <i class="genderless icon"/> #{p.sex.sex}
+                                    </div>
+                                    <div class="meta">
+                                        <i class="birthday cake icon"/>
+                                        <h:outputText value="#{p.birthDate}">
+                                            <ldc:convertLocalDate type="date" dateStyle="default"/>
+                                        </h:outputText>
+                                    </div>
+                                    <div class="meta">
+                                        <i class="id card outline icon"/>
+                                        #{p.fiscalCode}
+                                    </div>
+                                </div>
+                                <h:link outcome="/dashboard/doctor/patient/index"
+                                        styleClass="ui bottom attached inverted red button">
+                                    <f:param name="patientId" value="#{p.id}"/>
+
+                                    <i class="heartbeat icon"/>
+                                    #{i18n["common.personalCard"]}
+                                </h:link>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+
+            <div class="ui divider"></div>
         </ui:fragment>
     </ui:define>
 

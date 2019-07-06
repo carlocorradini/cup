@@ -1,5 +1,7 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
+import it.unitn.disi.wp.cup.util.StringUtil;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class Person {
     private City bithCity;
     private City city;
     private PersonAvatar avatar;
+    private List<DoctorVisit> doctorVisits;
     private List<PersonAvatar> avatarHistory;
 
     /**
@@ -86,6 +89,15 @@ public class Person {
     }
 
     /**
+     * Return the name of the Person capitalized
+     *
+     * @return Person name capitalized
+     */
+    public String getNameCapitalized() {
+        return StringUtil.capitalize(name);
+    }
+
+    /**
      * Set the name of the Person
      *
      * @param name Person name
@@ -104,12 +116,39 @@ public class Person {
     }
 
     /**
+     * Return the surname of the Person capitalized
+     *
+     * @return Person surname capitalized
+     */
+    public String getSurnameCapitalized() {
+        return StringUtil.capitalize(surname);
+    }
+
+    /**
      * Set the surname of the Person
      *
      * @param surname Person surname
      */
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    /**
+     * Return the Full Name of the Person
+     *
+     * @return Full Name of the Person
+     */
+    public String getFullName() {
+        return getName() + " " + getSurname();
+    }
+
+    /**
+     * Return the Full Name of the Person Capitalized
+     *
+     * @return Capitalized Full Name of the Person
+     */
+    public String getFullNameCapitalized() {
+        return getNameCapitalized() + " " + getSurnameCapitalized();
     }
 
     /**
@@ -218,6 +257,19 @@ public class Person {
      */
     public void setAvatar(PersonAvatar avatar) {
         this.avatar = avatar;
+    }
+
+    public List<DoctorVisit> getDoctorVisits() {
+        return doctorVisits;
+    }
+
+    /**
+     * Set the visits of the Person
+     *
+     * @param doctorVisits Person doctor visits
+     */
+    public void setDoctorVisits(List<DoctorVisit> doctorVisits) {
+        this.doctorVisits = doctorVisits;
     }
 
     /**

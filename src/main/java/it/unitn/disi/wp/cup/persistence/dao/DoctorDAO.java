@@ -17,7 +17,7 @@ public interface DoctorDAO extends DAO<Doctor, Long> {
      * Return a {@link List list} of {@link Person patients} in care given a {@link Doctor doctor}
      *
      * @param doctor The {@link Doctor doctor} to get {@link Person patients} in care
-     * @return The [@link {@link List list}] of {@link Person patients}
+     * @return The {@link List list} of {@link Person patients}
      * @throws DAOException If an error occurred during the information retrieving
      */
     List<Person> getPatients(Doctor doctor) throws DAOException;

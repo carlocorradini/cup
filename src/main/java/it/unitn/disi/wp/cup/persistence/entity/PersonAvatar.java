@@ -1,5 +1,7 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
+import it.unitn.disi.wp.cup.config.AppConfig;
+
 import java.time.OffsetDateTime;
 import java.util.Map;
 
@@ -99,5 +101,14 @@ public class PersonAvatar {
      */
     public void setUpload(OffsetDateTime upload) {
         this.upload = upload;
+    }
+
+    /**
+     * Return the name of the {@link PersonAvatar avatar} for resource usage
+     *
+     * @return The avatar name as Resource
+     */
+    public String getNameAsResource() {
+        return AppConfig.getConfigAvatarPath() + "/" + name + AppConfig.getConfigAvatarExtension();
     }
 }

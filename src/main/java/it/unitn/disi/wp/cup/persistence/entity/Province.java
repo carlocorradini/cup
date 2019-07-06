@@ -1,5 +1,7 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
+import it.unitn.disi.wp.cup.util.StringUtil;
+
 /**
  * Entity Province
  *
@@ -39,6 +41,15 @@ public class Province {
     }
 
     /**
+     * Return the name long of the Province capitalized
+     *
+     * @return Province name long capitalized
+     */
+    public String getNameLongCapitalized() {
+        return StringUtil.capitalize(nameLong);
+    }
+
+    /**
      * Set the Province name long
      *
      * @param nameLong Province name long
@@ -49,11 +60,12 @@ public class Province {
 
     /**
      * Return the name short of the Province
+     * The name short is always in Upper Case
      *
      * @return Province name short
      */
     public String getNameShort() {
-        return nameShort;
+        return nameShort.toUpperCase();
     }
 
     /**

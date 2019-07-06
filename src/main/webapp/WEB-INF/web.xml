@@ -28,6 +28,11 @@
         <param-name>javax.faces.WEBAPP_RESOURCES_DIRECTORY</param-name>
         <param-value>/assets</param-value>
     </context-param>
+    <!-- Custom Converter -->
+    <context-param>
+        <param-name>facelets.LIBRARIES</param-name>
+        <param-value>/META-INF/LocalDateConverter-taglib.xml</param-value>
+    </context-param>
 
     <!-- === ENV === -->
     <env-entry>

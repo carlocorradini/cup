@@ -8,7 +8,7 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.util.CryptUtil;
 import it.unitn.disi.wp.cup.util.EmailUtil;
-import it.unitn.disi.wp.cup.util.RandomStringUtil;
+import it.unitn.disi.wp.cup.util.StringUtil;
 import it.unitn.disi.wp.cup.util.obj.JsonMessage;
 
 import javax.servlet.ServletContext;
@@ -64,7 +64,7 @@ public class RecoverService {
                 if (person == null) {
                     message.setError(JsonMessage.ERROR_AUTHENTICATION);
                 } else {
-                    String newPassword = RandomStringUtil.generate(PASSWORD_LENGTH);
+                    String newPassword = StringUtil.generateRandom(PASSWORD_LENGTH);
                     person.setPassword(CryptUtil.hashPassword(newPassword));
 
                     if (personDAO.update(person)) {

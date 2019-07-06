@@ -1,5 +1,7 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
+import it.unitn.disi.wp.cup.util.StringUtil;
+
 /**
  * Entity City
  *
@@ -35,6 +37,15 @@ public class City {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Return the name of the City capitalized
+     *
+     * @return City name capitalized
+     */
+    public String getNameCapitalized() {
+        return StringUtil.capitalize(name);
     }
 
     /**

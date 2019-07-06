@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(value = "/signin.handler")
+@WebServlet(value = "/signin.handler",
+        name = "signInHandler")
 public final class SignInServlet extends HttpServlet {
     private static final String PARAM_EMAIL = "email";
     private static final String PARAM_PASSWORD = "password";

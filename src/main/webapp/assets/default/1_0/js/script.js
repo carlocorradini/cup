@@ -20,14 +20,14 @@ function documentReady() {
     $(".ui.dropdown").dropdown();
 
     // Enable Sidebar Functionality
-    sidebarHandler();
+    sidebarConfig();
 }
 
 // === START ===
 $window.on("load", windowLoaded);
 $document.ready(documentReady);
 
-function sidebarHandler() {
+function sidebarConfig() {
     const sidebar = {
         sidebar: $("#sidebar-menu"),
         button: $("#sidebar-menu-button"),
@@ -38,6 +38,7 @@ function sidebarHandler() {
             save: $("#sidebar-avatar-save"),
             error: $("#sidebar-avatar-error")
         }
+
     };
     const maxFileSize = parseInt(sidebar.avatar.input.data("max-size"), 10);
     let newAvatar = null;

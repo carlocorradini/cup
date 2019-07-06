@@ -826,3 +826,10 @@ footer.footer .footer-right .made-with-love:hover span:nth-of-type(3) {
         background-image: linear-gradient(to right, #fffbd5, #b20a2c);
     }
 }
+
+/* === PATIENTS === */
+#doctor-patients img.person-avatar {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}

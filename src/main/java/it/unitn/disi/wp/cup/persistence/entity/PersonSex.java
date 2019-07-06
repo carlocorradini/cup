@@ -30,11 +30,12 @@ public class PersonSex {
 
     /**
      * Return the sex {@link Character character}
+     * {@code sex Sex} is always in uppercase
      *
      * @return Sex {@link Character character}
      */
     public char getSex() {
-        return sex;
+        return Character.toUpperCase(sex);
     }
 
     /**

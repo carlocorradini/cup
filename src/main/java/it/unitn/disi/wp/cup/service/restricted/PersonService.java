@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -63,7 +64,7 @@ public class PersonService {
 
     /**
      * Given an {@code avatarInputStream} save it and set as the new Avatar for the Authenticated Person
-     * Save a Backup Image
+     * Save a Backup Image if {@link AppConfig::getConfigAvatarBackupPath Backup Path} is valid
      *
      * @param avatarInputStream The Avatar Image InputStream
      * @param avatarDetail      The Avatar Image Details
@@ -93,16 +94,17 @@ public class PersonService {
                 String avatarName = String.format("%d_%s", person.getId(), new SimpleDateFormat("dd-MM-yy_HH-mm-ss").format(new Date()));
                 String avatarNameWithExt = avatarName + AppConfig.getConfigAvatarExtension();
 
-                file = new File(FilenameUtils.separatorsToUnix(servletContext.getRealPath("/") + "assets/default/1_0" + AppConfig.getConfigAvatarPath() + "/"
-                        + avatarNameWithExt));
-                file_backup = new File(FilenameUtils.separatorsToUnix(AppConfig.getConfigAvatarBackupPath() + "/" + avatarNameWithExt));
+                file = new File(FilenameUtils.separatorsToUnix(servletContext.getRealPath("/") + "assets/default/1_0" + AppConfig.getConfigAvatarPath() + avatarNameWithExt));
+                FileUtils.copyInputStreamToFile(new ByteArrayInputStream(avatar.toByteArray()), file);
+
+                // Save a Backup file only if the @{link AppConfig::getConfigAvatarBackupPath Backup Path} is valid
+                if (!AppConfig.getConfigAvatarBackupPath().isEmpty() && AppConfig.getConfigAvatarBackupPath() != null) {
+                    file_backup = new File(FilenameUtils.separatorsToUnix(AppConfig.getConfigAvatarBackupPath() + avatarNameWithExt));
+                    FileUtils.copyInputStreamToFile(new ByteArrayInputStream(avatar.toByteArray()), file_backup);
+                }
 
                 personAvatar.setPersonId(person.getId());
                 personAvatar.setName(avatarName);
-
-                FileUtils.copyInputStreamToFile(new ByteArrayInputStream(avatar.toByteArray()), file);
-                FileUtils.copyInputStreamToFile(new ByteArrayInputStream(avatar.toByteArray()), file_backup);
-
                 personAvatar.setId(personAvatarDAO.insert(personAvatar));
 
                 if (personAvatar.getId() != null) {
