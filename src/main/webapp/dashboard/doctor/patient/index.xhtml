@@ -1,11 +1,176 @@
 <ui:composition
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:ldc="http://cup.it/jstl/localDateConverter"
+        xmlns:ltc="http://cup.it/jstl/localTimeConverter"
+>
     <ui:define name="title">Paziente</ui:define>
 
     <ui:define name="content">
-        Ciao
+        <ui:fragment rendered="#{not empty doctor.authDoctor}">
+            <c:choose>
+                <c:when test="#{empty doctor.patient}">
+                    <div class="ui icon floating message">
+                        <i class="info circle icon"/>
+                        <div class="content">
+                            <div class="header">
+                                #{i18n["dashboard.doctor.patient.empty.message"]}
+                                <div class="ui blue label">
+                                    <i class="hashtag icon"/>
+                                    #{param.patientId}
+                                </div>
+                            </div>
+                            <p>#{i18n["dashboard.doctor.patient.empty.subMessage"]}:</p>
+                            <ul class="list">
+                                <li>#{i18n["dashboard.doctor.patient.empty.list_1"]}</li>
+                                <li>#{i18n["dashboard.doctor.patient.empty.list_2"]}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+
+                    <h2 class="ui center aligned icon header">
+                        <i class="circular user icon"/>
+                        #{i18n["common.personalCard"]} #{i18n["common.of"]} #{doctor.patient.fullNameCapitalized}
+                    </h2>
+
+                    <div class="ui divider"></div>
+
+                    <div class="ui stacked segment" id="doctor-patient">
+                        <div class="ui top attached tabular menu">
+                            <a class="item active" data-tab="first">Informazioni Personali</a>
+                            <a class="item" data-tab="second">Visite</a>
+                            <a class="item" data-tab="third">Esami</a>
+                        </div>
+                        <div class="ui bottom attached tab segment active" data-tab="first">
+                            <div class="ui stackable two column grid">
+                                <div class="column">
+                                    <h:graphicImage library="default"
+                                                    name="#{doctor.patient.avatar.nameAsResource}"
+                                                    alt="Avatar"
+                                                    styleClass="bordered medium ui rounded image person-avatar"
+                                    />
+                                </div>
+                                <div class="column">
+                                    <table class="ui very basic collapsing celled table">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                ID
+                                            </td>
+                                            <td>
+                                                #{doctor.patient.id}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Name
+                                            </td>
+                                            <td>
+                                                #{doctor.patient.nameCapitalized}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Surname
+                                            </td>
+                                            <td>
+                                                #{doctor.patient.surnameCapitalized}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Sex
+                                            </td>
+                                            <td>
+                                                #{doctor.patient.sex.sex}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Birth Day
+                                            </td>
+                                            <td>
+                                                #{doctor.patient.birthDate}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Birth City
+                                            </td>
+                                            <td>
+                                                #{doctor.patient.birthCity.nameCapitalized}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Fiscal Code
+                                            </td>
+                                            <td>
+                                                #{doctor.patient.fiscalCode}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                City
+                                            </td>
+                                            <td>
+                                                #{doctor.patient.city.nameCapitalized}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui bottom attached tab segment" data-tab="second">
+                            <h:dataTable value="#{doctor.patient.doctorVisits}" var="dv"
+                                         styleClass="ui celled striped table"
+                                         headerClass=""
+                                         rowClasses="">
+                                <h:column>
+                                    <f:facet name="header">MADE</f:facet>
+                                    <ui:fragment rendered="#{dv.made}">
+                                        <i class="large green checkmark icon"/>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{!dv.made}">
+                                        <i class="window minimize outline icon"/>
+                                    </ui:fragment>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">DOCTOR ID</f:facet>
+                                    #{dv.doctorId}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">DATE</f:facet>
+                                    <h:outputText value="#{dv.date.toLocalDate()}">
+                                        <ldc:convertLocalDate type="date" dateStyle="default"/>
+                                    </h:outputText>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">ORA</f:facet>
+                                    <h:outputText value="#{dv.date.toLocalTime()}">
+                                        <ltc:convertTimeDate type="time" dateStyle="default"/>
+                                    </h:outputText>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">COMMENT</f:facet>
+                                    #{dv.comment}
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                        <div class="ui bottom attached tab segment" data-tab="third">
+
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </ui:fragment>
     </ui:define>
 
 </ui:composition>

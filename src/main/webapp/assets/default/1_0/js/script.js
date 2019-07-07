@@ -19,6 +19,9 @@ function documentReady() {
     // Enable Dropdown
     $(".ui.dropdown").dropdown();
 
+    // Enable Tab
+    $(".menu .item").tab();
+
     // Enable Sidebar Functionality
     sidebarConfig();
 }

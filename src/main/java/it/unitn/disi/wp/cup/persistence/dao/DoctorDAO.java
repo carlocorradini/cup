@@ -16,18 +16,18 @@ public interface DoctorDAO extends DAO<Doctor, Long> {
     /**
      * Return a {@link List list} of {@link Person patients} in care given a {@link Doctor doctor}
      *
-     * @param doctor The {@link Doctor doctor} to get {@link Person patients} in care
+     * @param doctorId The id of the {@link Doctor doctor}
      * @return The {@link List list} of {@link Person patients}
      * @throws DAOException If an error occurred during the information retrieving
      */
-    List<Person> getPatients(Doctor doctor) throws DAOException;
+    List<Person> getPatientsByDoctorId(Long doctorId) throws DAOException;
 
     /**
      * Return the last {@link Doctor doctor} of the Person
      *
-     * @param patient The patient to get the {@link Doctor doctor} for
-     * @return The {@link Doctor doctor} of the Patient, null otherwise
+     * @param patientId The {@link Person patient} id to get the {@link Doctor doctor}
+     * @return The {@link Doctor doctor} of the {@link Person patient}, null otherwise
      * @throws DAOException If an error occurred during the information retrieving
      */
-    Doctor getByPatient(Person patient) throws DAOException;
+    Doctor getDoctorByPatientId(Long patientId) throws DAOException;
 }

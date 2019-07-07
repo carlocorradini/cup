@@ -89,7 +89,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.5</version>
+            <version>42.2.6</version>
         </dependency>
         <!-- Email -->
         <dependency>
@@ -156,24 +156,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
-            </plugin>
-            <!-- Embedded Server -->
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.4.15.v20190215</version>
-                <configuration>
-                    <scanIntervalSeconds>5</scanIntervalSeconds>
-                    <httpConnector>
-                        <port>8080</port>
-                    </httpConnector>
-                    <webApp>
-                        <_initParams>
-                            <org.eclipse.jetty.servlet.Default.useFileMappedBuffer>false
-                            </org.eclipse.jetty.servlet.Default.useFileMappedBuffer>
-                        </_initParams>
-                    </webApp>
-                </configuration>
             </plugin>
         </plugins>
     </build>

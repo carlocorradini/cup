@@ -51,7 +51,7 @@ public class JDBCDoctorDAO extends JDBCDAO<Doctor, Long> implements DoctorDAO {
             doctor = new Doctor();
 
             doctor.setId(rs.getLong("id"));
-            doctor.setPatients(getPatients(doctor));
+            doctor.setPatients(getPatientsByDoctorId(doctor.getId()));
             doctor.setDoctorVisits(doctorVisitDAO.getAllByDoctorId(doctor.getId()));
         } catch (SQLException | DAOFactoryException ex) {
             throw new DAOException("Impossible to set Doctor by ResultSet", ex);
@@ -132,15 +132,16 @@ public class JDBCDoctorDAO extends JDBCDAO<Doctor, Long> implements DoctorDAO {
         return doctors;
     }
 
+
     @Override
-    public List<Person> getPatients(Doctor doctor) throws DAOException {
+    public List<Person> getPatientsByDoctorId(Long doctorId) throws DAOException {
         List<Person> patients = new ArrayList<>();
         PersonDAO personDAO;
-        if (doctor == null)
-            throw new DAOException("Doctor is a mandatory field", new NullPointerException("Doctor is null"));
+        if (doctorId == null)
+            throw new DAOException("Doctor Id is a mandatory field", new NullPointerException("Doctor Id is null"));
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_PATIENTS)) {
-            pStmt.setLong(1, doctor.getId());
+            pStmt.setLong(1, doctorId);
             personDAO = DAO_FACTORY.getDAO(PersonDAO.class);
 
             try (ResultSet rs = pStmt.executeQuery()) {
@@ -156,20 +157,20 @@ public class JDBCDoctorDAO extends JDBCDAO<Doctor, Long> implements DoctorDAO {
     }
 
     @Override
-    public Doctor getByPatient(Person patient) throws DAOException {
+    public Doctor getDoctorByPatientId(Long patientId) throws DAOException {
         Doctor doctor = null;
-        if (patient == null)
-            throw new DAOException("Patient is a mandatory field", new NullPointerException("Patient is null"));
+        if (patientId == null)
+            throw new DAOException("Patient Id is a mandatory field", new NullPointerException("Patient Id is null"));
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_BY_PATIENT)) {
-            pStmt.setLong(1, patient.getId());
+            pStmt.setLong(1, patientId);
             try (ResultSet rs = pStmt.executeQuery()) {
                 if (rs.next()) {
                     doctor = getByPrimaryKey(rs.getLong("doctor_id"));
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the Doctor by Patient", ex);
+            throw new DAOException("Impossible to get the Doctor by Patient Id", ex);
         }
 
         return doctor;

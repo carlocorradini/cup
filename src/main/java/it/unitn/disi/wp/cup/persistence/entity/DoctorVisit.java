@@ -88,4 +88,15 @@ public class DoctorVisit {
             this.comment = comment;
         else this.comment = null;
     }
+
+    /**
+     * Check if the visit has been already made
+     *
+     * @return True if this visit has already made, false otherwise
+     */
+    public boolean isMade() {
+        if (date != null)
+            return date.isBefore(OffsetDateTime.now());
+        else return false;
+    }
 }

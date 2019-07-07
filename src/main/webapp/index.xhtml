@@ -1,45 +1,5 @@
 <ui:composition
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core">
-    <ui:define name="title">Pagina 1</ui:define>
-
-    <ui:define name="content">
-        <h:form>
-            <h:commandButton
-                    action="#{i18nBean.setLanguage('en')}"
-                    value="English"
-            />
-            <h:outputText value=" "/>
-            <h:commandButton
-                    action="#{i18nBean.setLanguage('it')}"
-                    value="Italian"
-            />
-        </h:form>
-
-        <ui:repeat value="#{i18nBean.supportedLocale}" var="locale">
-            <div class="item">#{locale.language}</div>
-        </ui:repeat>
-
-        <h:dataTable value="#{person.personDAO.all}" var="person">
-            <h:column>
-                <f:facet name="header">ID</f:facet>
-                #{person.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">NAME</f:facet>
-                #{person.name}
-            </h:column>
-            <h:column>
-                <f:facet name="header">SURNAME</f:facet>
-                #{person.surname}
-            </h:column>
-        </h:dataTable>
-
-        <ui:repeat value="#{app.authorList}" var="a">
-            <div class="item">#{a}</div>
-        </ui:repeat>
-    </ui:define>
+        xmlns:ui="http://java.sun.com/jsf/facelets">
 </ui:composition>

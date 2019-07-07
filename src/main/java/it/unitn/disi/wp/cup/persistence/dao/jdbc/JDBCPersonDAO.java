@@ -61,7 +61,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
             person.setSex(personSexDAO.getByPrimaryKey(rs.getString("sex").charAt(0)));
             person.setFiscalCode(rs.getString("fiscal_code"));
             person.setBirthDate(rs.getObject("birth_date", LocalDate.class));
-            person.setBithCity(cityDAO.getByPrimaryKey(rs.getLong("birth_city_id")));
+            person.setBirthCity(cityDAO.getByPrimaryKey(rs.getLong("birth_city_id")));
             person.setCity(cityDAO.getByPrimaryKey(rs.getLong("city_id")));
             person.setAvatar(PersonAvatarUtil.checkPersonAvatar(personAvatarDAO.getCurrentByPersonId(person.getId()), person.getId(), person.getSex()));
             person.setDoctorVisits(doctorVisitDAO.getAllByPersonId(person.getId()));
@@ -179,7 +179,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
             pStmt.setString(5, Character.toString(person.getSex().getSex()));
             pStmt.setString(6, person.getFiscalCode());
             pStmt.setObject(7, person.getBirthDate());
-            pStmt.setLong(8, person.getBithCity().getId());
+            pStmt.setLong(8, person.getBirthCity().getId());
             pStmt.setLong(9, person.getCity().getId());
             pStmt.setLong(10, person.getId());
 

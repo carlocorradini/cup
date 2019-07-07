@@ -75,14 +75,12 @@
             </div>
             <ui:fragment rendered="#{not empty doctor.authDoctor}">
                 <div class="item">
-                    <div class="header">Pazienti</div>
+                    <div class="header">#{i18n["common.patients"]}</div>
                     <div class="menu">
                         <h:link outcome="/dashboard/doctor/patients/index"
                                 styleClass="item">
                             Lista
                         </h:link>
-                        <a class="item">Esami</a>
-                        <a class="item">Ricette</a>
                     </div>
                 </div>
             </ui:fragment>

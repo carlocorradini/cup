@@ -12,6 +12,22 @@ public class Doctor {
     private List<Person> patients;
     private List<DoctorVisit> doctorVisits;
 
+    @Override
+    public boolean equals(Object obj) {
+        Doctor doctor;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        doctor = (Doctor) obj;
+        return id.equals(doctor.id);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        return prime + ((id == null) ? 0 : id.hashCode());
+    }
+
     /**
      * Return the id of the Doctor
      *
@@ -21,6 +37,11 @@ public class Doctor {
         return id;
     }
 
+    /**
+     * Set the id of the Doctor
+     *
+     * @param id Doctor id
+     */
     public void setId(Long id) {
         this.id = id;
     }

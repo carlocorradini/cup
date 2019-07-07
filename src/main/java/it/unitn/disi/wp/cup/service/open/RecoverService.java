@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 public class RecoverService {
 
     private static final Logger LOGGER = Logger.getLogger(RecoverService.class.getName());
-    private static final int PASSWORD_LENGTH = 20;
+    private static final int PASSWORD_LENGTH = 15;
 
     private PersonDAO personDAO = null;
 

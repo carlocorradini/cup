@@ -1,4 +1,4 @@
-package it.unitn.disi.wp.cup.converter;
+package it.unitn.disi.wp.cup.jstl.converter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -17,11 +17,12 @@ import java.util.Date;
  */
 @FacesConverter(value = LocalDateConverter.ID)
 public final class LocalDateConverter extends DateTimeConverter {
-    public static final String ID = "it.unitn.disi.wp.cup.converter.LocalDateConverter";
+
+    public static final String ID = "it.unitn.disi.wp.cup.jstl.converter.LocalDateConverter";
 
     @Override
-    public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String value) {
-        Object o = super.getAsObject(facesContext, uiComponent, value);
+    public Object getAsObject(FacesContext context, UIComponent component, String value) {
+        Object o = super.getAsObject(context, component, value);
 
         if (o == null)
             return null;
@@ -35,14 +36,14 @@ public final class LocalDateConverter extends DateTimeConverter {
     }
 
     @Override
-    public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object value) {
+    public String getAsString(FacesContext context, UIComponent component, Object value) {
         if (value == null)
-            return super.getAsString(facesContext, uiComponent, value);
+            return super.getAsString(context, component, value);
 
         if (value instanceof LocalDate) {
             LocalDate localDate = (LocalDate) value;
             Instant instant = localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
-            return super.getAsString(facesContext, uiComponent, Date.from(instant));
+            return super.getAsString(context, component, Date.from(instant));
         } else {
             throw new IllegalArgumentException(String.format("Value %s is not an instanceof LocalDate", value));
         }

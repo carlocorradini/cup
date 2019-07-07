@@ -11,6 +11,12 @@ import java.util.List;
  * @author Carlo Corradini
  */
 public class Person {
+
+    /**
+     * The 'fake' id of a {@link Person person}
+     */
+    public static final Long NOT_A_VALID_ID = -1L;
+
     private Long id;
     private String email;
     private String password;
@@ -19,11 +25,27 @@ public class Person {
     private PersonSex sex;
     private String fiscalCode;
     private LocalDate birthDate;
-    private City bithCity;
+    private City birthCity;
     private City city;
     private PersonAvatar avatar;
     private List<DoctorVisit> doctorVisits;
     private List<PersonAvatar> avatarHistory;
+
+    @Override
+    public boolean equals(Object obj) {
+        Person person;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        person = (Person) obj;
+        return id.equals(person.id);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        return prime + ((id == null) ? 0 : id.hashCode());
+    }
 
     /**
      * Return the id of the Person
@@ -210,17 +232,17 @@ public class Person {
      *
      * @return Person birth city
      */
-    public City getBithCity() {
-        return bithCity;
+    public City getBirthCity() {
+        return birthCity;
     }
 
     /**
      * Set the birth city of the Person
      *
-     * @param bithCity Person birth city
+     * @param birthCity Person birth city
      */
-    public void setBithCity(City bithCity) {
-        this.bithCity = bithCity;
+    public void setBirthCity(City birthCity) {
+        this.birthCity = birthCity;
     }
 
     /**
