@@ -1,6 +1,6 @@
 /* === UTILS === */
 .logo {
-    background-image: url("#{resource['default:images/favicon/android-chrome-192x192.png']}");
+    background-image: url("#{resource['_default:images/favicon/android-chrome-192x192.png']}");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-color: transparent;
@@ -8,15 +8,15 @@
 }
 
 .logo.large {
-    background-image: url("#{resource['default:images/favicon/android-chrome-512x512.png']}");
+    background-image: url("#{resource['_default:images/favicon/android-chrome-512x512.png']}");
 }
 
 .logo.medium {
-    background-image: url("#{resource['default:images/favicon/android-chrome-192x192.png']}");
+    background-image: url("#{resource['_default:images/favicon/android-chrome-192x192.png']}");
 }
 
 .logo.small {
-    background-image: url("#{resource['default:images/favicon/android-chrome-96x96.png']}");
+    background-image: url("#{resource['_default:images/favicon/android-chrome-96x96.png']}");
 }
 
 .hidden {
