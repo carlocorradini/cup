@@ -2,12 +2,17 @@
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:ldc="http://cup.it/jstl/localDateConverter"
 >
     <ui:define name="title">#{i18n["common.patients"]}</ui:define>
+
+    <ui:define name="js">
+        <h:outputScript library="_default"
+                        name="js/patients.js"
+                        target="body"/>
+    </ui:define>
 
     <ui:define name="content">
         <ui:fragment rendered="#{not empty doctor.authDoctor}">
@@ -59,15 +64,39 @@
                                         #{p.fiscalCode}
                                     </div>
                                 </div>
-                                <h:link outcome="/dashboard/doctor/patient/index"
-                                        styleClass="ui bottom attached inverted red button">
-                                    <f:param name="patientId" value="#{p.id}"/>
 
+                                <button class="ui bottom attached inverted red button personal-card-button"
+                                        data-patient-id="#{p.id}"
+                                >
                                     <i class="heartbeat icon"/>
                                     #{i18n["common.personalCard"]}
-                                </h:link>
+                                </button>
                             </div>
                         </ui:repeat>
+                    </div>
+
+                    <div class="ui longer modal" id="personal-card-modal">
+                        <div class="header">
+                            Profile Picture
+                        </div>
+                        <div class="scrolling image content">
+                            <div class="ui medium image">
+                                <h:graphicImage library="_default"
+                                                name="#{person.authPerson.avatar.nameAsResource}"
+                                                alt="Avatar"
+                                />
+                            </div>
+                            <div class="description">
+                                <div class="ui header">Modal Header</div>
+                                <p>This is an example of expanded content that will cause the modal's dimmer to scroll</p>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <div class="ui primary approve button">
+                                Proceed
+                                <i class="right chevron icon"/>
+                            </div>
+                        </div>
                     </div>
                 </c:otherwise>
             </c:choose>

@@ -61,6 +61,15 @@ public final class I18nBean implements Serializable {
     }
 
     /**
+     * Return the default Locale of the Application
+     *
+     * @return Default Locale
+     */
+    public Locale getDefaultLocale() {
+        return FacesContext.getCurrentInstance().getApplication().getDefaultLocale();
+    }
+
+    /**
      * Return the list of supported languages
      *
      * @return The list of languages
@@ -68,7 +77,7 @@ public final class I18nBean implements Serializable {
     public List<Locale> getSupportedLocale() {
         Iterator<Locale> iterator = FacesContext.getCurrentInstance().getApplication().getSupportedLocales();
         List<Locale> list = IteratorUtils.toList(iterator);
-        list.add(FacesContext.getCurrentInstance().getApplication().getDefaultLocale());
+        list.add(getDefaultLocale());
         return list;
     }
 

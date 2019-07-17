@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -94,7 +93,7 @@ public class PersonService {
                 String avatarName = String.format("%d_%s", person.getId(), new SimpleDateFormat("dd-MM-yy_HH-mm-ss").format(new Date()));
                 String avatarNameWithExt = avatarName + AppConfig.getConfigAvatarExtension();
 
-                file = new File(FilenameUtils.separatorsToUnix(servletContext.getRealPath("/") + "assets/default/1_0" + AppConfig.getConfigAvatarPath() + avatarNameWithExt));
+                file = new File(FilenameUtils.separatorsToUnix(servletContext.getRealPath("/") + "assets/_default" + AppConfig.getConfigAvatarPath() + avatarNameWithExt));
                 FileUtils.copyInputStreamToFile(new ByteArrayInputStream(avatar.toByteArray()), file);
 
                 // Save a Backup file only if the @{link AppConfig::getConfigAvatarBackupPath Backup Path} is valid

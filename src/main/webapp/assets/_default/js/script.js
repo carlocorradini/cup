@@ -4,31 +4,24 @@ const $window = $(window);
 const $document = $(document);
 
 // === PAGE FULLY LOADED ===
-function windowLoaded() {
+$window.on("load", function () {
     // Hide Preloader
     $(".preloader")
         .delay(350)
         .fadeOut("slow");
-}
+});
 
 // === PAGE READY ===
-function documentReady() {
+$document.ready(function () {
     // Hide Noscript
     $("noscript").hide();
 
     // Enable Dropdown
     $(".ui.dropdown").dropdown();
 
-    // Enable Tab
-    $(".menu .item").tab();
-
     // Enable Sidebar Functionality
     sidebarConfig();
-}
-
-// === START ===
-$window.on("load", windowLoaded);
-$document.ready(documentReady);
+});
 
 function sidebarConfig() {
     const sidebar = {
@@ -45,12 +38,6 @@ function sidebarConfig() {
     };
     const maxFileSize = parseInt(sidebar.avatar.input.data("max-size"), 10);
     let newAvatar = null;
-
-    //todo REMOVE THIS!!!
-    sidebar.sidebar
-        .sidebar("setting", "transition", "overlay")
-        .sidebar("toggle");
-
 
     // Enable Sidebar
     sidebar.button.click(function () {
