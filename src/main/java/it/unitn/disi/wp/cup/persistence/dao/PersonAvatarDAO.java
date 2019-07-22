@@ -33,10 +33,10 @@ public interface PersonAvatarDAO extends DAO<PersonAvatar, Long> {
 
     /**
      * Return the {@link List} of all {@link PersonAvatar} of the Person given its {@code personId id}
-     * The {@link List} represent the Avatar history of the [@link {@link PersonAvatar}]
+     * The {@link List} represent the Avatar history of the {@link PersonAvatar}
      *
      * @param personId The Person ID to get the Avatars
-     * @return A {@link List} of all [@link {@link PersonAvatar}] of the [@link {@link PersonAvatar}]
+     * @return A {@link List} of all {@link PersonAvatar} of the [@link {@link PersonAvatar}]
      * @throws DAOException If an error occurred during the information retrieving
      */
     public List<PersonAvatar> getAllByPersonId(Long personId) throws DAOException;

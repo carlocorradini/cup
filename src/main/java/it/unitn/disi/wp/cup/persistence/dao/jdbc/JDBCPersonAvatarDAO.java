@@ -24,7 +24,7 @@ public class JDBCPersonAvatarDAO extends JDBCDAO<PersonAvatar, Long> implements 
     private static final String SQL_INSERT = "INSERT INTO person_avatar(person_id, name) VALUES(?, ?)";
     private static final String SQL_GET_CURRENT_BY_PERSON_ID_ = "WITH history AS (SELECT * FROM person_avatar WHERE person_id = ?)" +
             " SELECT * FROM history WHERE history.upload = (SELECT MAX(upload) AS max_upload FROM history) LIMIT 1";
-    private static final String SQL_GET_ALL_BY_PERSON_ID = "SELECT * FROM person_avatar WHERE person_id = ? ORDER BY upload ASC";
+    private static final String SQL_GET_ALL_BY_PERSON_ID = "SELECT * FROM person_avatar WHERE person_id = ? ORDER BY upload DESC";
 
     /**
      * The default constructor of the class

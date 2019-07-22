@@ -1,4 +1,5 @@
 /* === UTILS === */
+/* Logo */
 .logo {
     background-image: url("#{resource['_default:images/favicon/android-chrome-192x192.png']}");
     background-size: 100% 100%;
@@ -19,14 +20,41 @@
     background-image: url("#{resource['_default:images/favicon/android-chrome-96x96.png']}");
 }
 
+/* Person Avatar */
+.person-avatar {
+    object-fit: cover;
+}
+
+.person-avatar.large {
+    width: 288px !important;
+    height: 288px !important;
+}
+
+.person-avatar.medium {
+    width: 192px !important;
+    height: 192px !important;
+}
+
+.person-avatar.small {
+    width: 96px !important;
+    height: 96px !important;
+}
+
+/* Hidden */
 .hidden {
     display: none !important;
 }
 
+/* Text Overflow */
 .text-overflow-ellipsis {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+/* Text Strong */
+.text-strong {
+    font-weight: bold;
 }
 
 /* === STRUCTURE === */
@@ -183,7 +211,6 @@ nav.sidebar .avatar .avatar-preview > img {
     width: 100%;
     height: 100%;
     border-radius: 100%;
-    object-fit: cover;
 }
 
 /* Name & Surname */
@@ -828,17 +855,3 @@ footer.footer .footer-right .made-with-love:hover span:nth-of-type(3) {
 }
 
 /* === PATIENTS === */
-#doctor-patient img.person-avatar {
-    width: 100%;
-    max-width: 300px;
-    height: 100%;
-    max-height: 300px;
-    object-fit: cover;
-}
-
-/* === PATIENTS === */
-#doctor-patients img.person-avatar {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-}

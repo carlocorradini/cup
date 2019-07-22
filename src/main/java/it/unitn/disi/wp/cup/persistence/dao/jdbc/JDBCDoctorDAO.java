@@ -1,7 +1,6 @@
 package it.unitn.disi.wp.cup.persistence.dao.jdbc;
 
 import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
-import it.unitn.disi.wp.cup.persistence.dao.DoctorVisitDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
@@ -42,18 +41,14 @@ public class JDBCDoctorDAO extends JDBCDAO<Doctor, Long> implements DoctorDAO {
     @Override
     public Doctor setAndGetDAO(ResultSet rs) throws DAOException {
         Doctor doctor;
-        DoctorVisitDAO doctorVisitDAO;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
 
         try {
-            doctorVisitDAO = DAO_FACTORY.getDAO(DoctorVisitDAO.class);
-
             doctor = new Doctor();
 
             doctor.setId(rs.getLong("id"));
             doctor.setPatients(getPatientsByDoctorId(doctor.getId()));
-            doctor.setDoctorVisits(doctorVisitDAO.getAllByDoctorId(doctor.getId()));
-        } catch (SQLException | DAOFactoryException ex) {
+        } catch (SQLException ex) {
             throw new DAOException("Impossible to set Doctor by ResultSet", ex);
         }
         return doctor;

@@ -1,14 +1,7 @@
 package it.unitn.disi.wp.cup.bean.dao;
 
-import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
-import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
-import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
-import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
-import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.util.AuthUtil;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -17,8 +10,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Doctor Bean

@@ -10,7 +10,6 @@ import java.util.List;
 public class Doctor {
     private Long id;
     private List<Person> patients;
-    private List<DoctorVisit> doctorVisits;
 
     @Override
     public boolean equals(Object obj) {
@@ -62,23 +61,5 @@ public class Doctor {
      */
     public void setPatients(List<Person> patients) {
         this.patients = patients;
-    }
-
-    /**
-     * Return the {@link List list} of the visits
-     *
-     * @return Doctor visits
-     */
-    public List<DoctorVisit> getDoctorVisits() {
-        return doctorVisits;
-    }
-
-    /**
-     * Set the Doctor visits {@link List list}
-     *
-     * @param doctorVisits The {@link List list} of visits
-     */
-    public void setDoctorVisits(List<DoctorVisit> doctorVisits) {
-        this.doctorVisits = doctorVisits;
     }
 }

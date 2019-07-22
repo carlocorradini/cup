@@ -31,6 +31,22 @@ public class PersonAvatar {
     private String name;
     private OffsetDateTime upload;
 
+    @Override
+    public boolean equals(Object obj) {
+        PersonAvatar personAvatar;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        personAvatar = (PersonAvatar) obj;
+        return id.equals(personAvatar.id);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        return prime + ((id == null) ? 0 : id.hashCode());
+    }
+
     /**
      * Return the id of the Person Avatar
      *

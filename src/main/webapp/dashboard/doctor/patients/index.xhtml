@@ -4,11 +4,15 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ldc="http://cup.it/jstl/localDateConverter"
->
+        xmlns:ltc="http://cup.it/jstl/localTimeConverter">
     <ui:define name="title">#{i18n["common.patients"]}</ui:define>
 
     <ui:define name="js">
+        <h:outputScript library="semantic-ui"
+                        name="js/tablesort.js"
+                        target="body"/>
         <h:outputScript library="_default"
                         name="js/patients.js"
                         target="body"/>
@@ -44,7 +48,7 @@
                                     <h:graphicImage library="_default"
                                                     name="#{p.avatar.nameAsResource}"
                                                     alt="Avatar"
-                                                    styleClass="bordered right floated tiny ui rounded image person-avatar"
+                                                    styleClass="ui image bordered right floated rounded person-avatar small"
                                     />
                                     <div class="header">#{p.fullNameCapitalized}</div>
                                     <div class="meta">
@@ -72,31 +76,146 @@
                                     #{i18n["common.personalCard"]}
                                 </button>
                             </div>
-                        </ui:repeat>
-                    </div>
 
-                    <div class="ui longer modal" id="personal-card-modal">
-                        <div class="header">
-                            Profile Picture
-                        </div>
-                        <div class="scrolling image content">
-                            <div class="ui medium image">
-                                <h:graphicImage library="_default"
-                                                name="#{person.authPerson.avatar.nameAsResource}"
-                                                alt="Avatar"
-                                />
+                            <div class="ui longer modal" id="personal-card-modal-#{p.id}">
+                                <div class="header">
+                                    #{p.fullNameCapitalized}
+                                </div>
+                                <div class="scrolling image content">
+                                    <h:graphicImage library="_default"
+                                                    name="#{p.avatar.nameAsResource}"
+                                                    alt="Avatar"
+                                                    styleClass="ui image rounded bordered person-avatar medium"
+                                    />
+                                    <div class="description">
+                                        <div class="ui styled accordion">
+                                            <div class="active title">
+                                                <i class="dropdown icon"/>
+                                                #{i18n["common.personalInformation"]}
+                                            </div>
+                                            <div class="active content">
+                                                <table class="ui very basic celled table">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="text-strong">#{i18n["common.id"]}</td>
+                                                        <td>#{p.id}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-strong">#{i18n["common.name"]}</td>
+                                                        <td>#{p.nameCapitalized}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-strong">#{i18n["common.surname"]}</td>
+                                                        <td>#{p.surnameCapitalized}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-strong">#{i18n["common.sex"]}</td>
+                                                        <td>#{p.sex.sex}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-strong">#{i18n["common.fiscalCode"]}</td>
+                                                        <td>#{p.fiscalCode}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-strong">#{i18n["common.birthDate"]}</td>
+                                                        <td>
+                                                            <h:outputText value="#{p.birthDate}">
+                                                                <ldc:convertLocalDate type="date" dateStyle="default"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-strong">#{i18n["common.birthCity"]}</td>
+                                                        <td>#{p.birthCity.nameCapitalized}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-strong">#{i18n["common.domicile"]}</td>
+                                                        <td>#{p.city.nameCapitalized}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div class="title">
+                                                <i class="dropdown icon"/>
+                                                #{i18n["common.exams"]}
+                                            </div>
+                                            <div class="content">
+                                                <ui:fragment rendered="#{empty p.exams}">
+                                                    <div class="ui icon message">
+                                                        <i class="info circle icon"/>
+                                                        <div class="content">
+                                                            <div class="header">
+                                                                #{i18n["dashboard.doctor.patients.patient.exam.empty.message"]}
+                                                            </div>
+                                                            <p>#{i18n["dashboard.doctor.patients.patient.exam.empty.subMessage"]}</p>
+                                                        </div>
+                                                    </div>
+                                                </ui:fragment>
+                                                <h:dataTable rendered="#{not empty p.exams}"
+                                                             value="#{p.exams}"
+                                                             var="pe"
+                                                             styleClass="ui celled striped sortable table">
+                                                    <h:column>
+                                                        <f:facet name="header">#{i18n["common.id"]}</f:facet>
+                                                        #{pe.id}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">Data</f:facet>
+                                                        <h:outputText value="#{pe.date.toLocalDate()}">
+                                                            <ldc:convertLocalDate type="date" dateStyle="default"/>
+                                                        </h:outputText>
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">Ora</f:facet>
+                                                        <h:outputText value="#{pe.date.toLocalTime()}">
+                                                            <ltc:convertTimeDate type="time" dateStyle="default"/>
+                                                        </h:outputText>
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">Specialist ID</f:facet>
+                                                        #{pe.specialistId}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header">Report</f:facet>
+                                                        <ui:fragment rendered="#{empty pe.report}">
+
+                                                        </ui:fragment>
+                                                        <ui:fragment rendered="#{not empty pe.report}">
+                                                            #{pe.report.content}
+                                                        </ui:fragment>
+                                                    </h:column>
+                                                </h:dataTable>
+                                            </div>
+
+                                            <div class="title">
+                                                <i class="dropdown icon"/>
+                                                Prescrizioni
+                                            </div>
+                                            <div class="content">
+                                                TEST
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="actions">
+                                    <div class="ui three buttons">
+                                        <div class="ui olive right labeled icon button">
+                                            Prescrivi farmaco
+                                            <i class="right chevron icon"/>
+                                        </div>
+                                        <div class="ui blue right labeled icon button">
+                                            prenota esame
+                                            <i class="right chevron icon"/>
+                                        </div>
+                                        <div class="ui red right labeled icon cancel button">
+                                            #{i18n["common.close"]}
+                                            <i class="window close icon"/>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="description">
-                                <div class="ui header">Modal Header</div>
-                                <p>This is an example of expanded content that will cause the modal's dimmer to scroll</p>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            <div class="ui primary approve button">
-                                Proceed
-                                <i class="right chevron icon"/>
-                            </div>
-                        </div>
+                        </ui:repeat>
                     </div>
                 </c:otherwise>
             </c:choose>

@@ -14,7 +14,7 @@ import java.util.Date;
  * @author Carlo Corradini
  */
 @FacesConverter(value = LocalTimeConverter.ID)
-public class LocalTimeConverter extends DateTimeConverter {
+public final class LocalTimeConverter extends DateTimeConverter {
 
     public static final String ID = "it.unitn.disi.wp.cup.jstl.converter.LocalTimeConverter";
 

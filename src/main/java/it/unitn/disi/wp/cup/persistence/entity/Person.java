@@ -12,11 +12,6 @@ import java.util.List;
  */
 public class Person {
 
-    /**
-     * The 'fake' id of a {@link Person person}
-     */
-    public static final Long NOT_A_VALID_ID = -1L;
-
     private Long id;
     private String email;
     private String password;
@@ -28,8 +23,8 @@ public class Person {
     private City birthCity;
     private City city;
     private PersonAvatar avatar;
-    private List<DoctorVisit> doctorVisits;
     private List<PersonAvatar> avatarHistory;
+    private List<PrescriptionExam> exams;
 
     @Override
     public boolean equals(Object obj) {
@@ -281,19 +276,6 @@ public class Person {
         this.avatar = avatar;
     }
 
-    public List<DoctorVisit> getDoctorVisits() {
-        return doctorVisits;
-    }
-
-    /**
-     * Set the visits of the Person
-     *
-     * @param doctorVisits Person doctor visits
-     */
-    public void setDoctorVisits(List<DoctorVisit> doctorVisits) {
-        this.doctorVisits = doctorVisits;
-    }
-
     /**
      * Return the avatar history of the Person
      *
@@ -310,5 +292,23 @@ public class Person {
      */
     public void setAvatarHistory(List<PersonAvatar> avatarHistory) {
         this.avatarHistory = avatarHistory;
+    }
+
+    /**
+     * Return the exams of the Person
+     *
+     * @return Person exams
+     */
+    public List<PrescriptionExam> getExams() {
+        return exams;
+    }
+
+    /**
+     * Set the exams of the Person
+     *
+     * @param exams Person exams
+     */
+    public void setExams(List<PrescriptionExam> exams) {
+        this.exams = exams;
     }
 }
