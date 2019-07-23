@@ -2,6 +2,8 @@ package it.unitn.disi.wp.cup.persistence.entity;
 
 import it.unitn.disi.wp.cup.config.AppConfig;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
@@ -108,6 +110,28 @@ public class PersonAvatar {
      */
     public OffsetDateTime getUpload() {
         return upload;
+    }
+
+    /**
+     * Return the {@code upload} as a {@link LocalDate date}
+     *
+     * @return {@code upload} as a {@link LocalDate date}
+     */
+    public LocalDate getUploadDate() {
+        if (upload != null)
+            return upload.toLocalDate();
+        return null;
+    }
+
+    /**
+     * Return the {@code upload} as a {@link LocalTime time}
+     *
+     * @return {@code upload} as a {@link LocalTime time}
+     */
+    public LocalTime getUploadTime() {
+        if (upload != null)
+            return upload.toLocalTime();
+        return null;
     }
 
     /**

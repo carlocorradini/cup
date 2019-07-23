@@ -43,6 +43,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
         PersonSexDAO personSexDAO;
         CityDAO cityDAO;
         PrescriptionExamDAO prescriptionExamDAO;
+        PrescriptionMedicineDAO prescriptionMedicineDAO;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
 
         try {
@@ -50,6 +51,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
             personSexDAO = DAO_FACTORY.getDAO(PersonSexDAO.class);
             cityDAO = DAO_FACTORY.getDAO(CityDAO.class);
             prescriptionExamDAO = DAO_FACTORY.getDAO(PrescriptionExamDAO.class);
+            prescriptionMedicineDAO = DAO_FACTORY.getDAO(PrescriptionMedicineDAO.class);
 
             person = new Person();
 
@@ -66,6 +68,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
             person.setAvatar(PersonAvatarUtil.checkPersonAvatar(personAvatarDAO.getCurrentByPersonId(person.getId()), person.getId(), person.getSex()));
             person.setAvatarHistory(personAvatarDAO.getAllByPersonId(person.getId()));
             person.setExams(prescriptionExamDAO.getAllByPersonId(person.getId()));
+            person.setMedicines(prescriptionMedicineDAO.getAllByPersonId(person.getId()));
         } catch (SQLException | DAOFactoryException ex) {
             throw new DAOException("Impossible to set Person by ResultSet", ex);
         }

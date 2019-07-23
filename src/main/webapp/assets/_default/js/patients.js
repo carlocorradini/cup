@@ -8,20 +8,39 @@ $(document).ready(() => {
 
 function personalCardConfig() {
     const personalCard = {
-        button: $("#doctor-patients .personal-card-button"),
-        modal_id_pattern: "#personal-card-modal-{1}"
+        button: $("#doctor-patients .personal-card-modal-button"),
+        modalIdPattern: "#personal-card-modal-{1}",
+        report: {
+            modalClass: ".report-modal",
+            buttonIdPattern: "#report-modal-button-{1}"
+        }
     };
 
     personalCard.button.click(function () {
         const patientId = $(this).data("patient-id");
-        const $modal = $(window.UTIL.STRING.format(personalCard.modal_id_pattern, patientId));
+        const $modalPersonalCard = $(window.UTIL.STRING.format(personalCard.modalIdPattern, patientId));
 
-        if ($modal.length) {
-            // Valid patient Id & Modal
-            $modal.find(".ui.accordion").accordion();
-            $modal.find(".ui.table.sortable").tablesort();
-            $modal.modal({
-                inverted: true
+        if ($modalPersonalCard.length) {
+            // --- Valid patient Id & Modal
+            // Enable Accordion
+            $modalPersonalCard.find(".ui.accordion").accordion();
+            // Enable Table Sorting
+            $modalPersonalCard.find(".ui.table.sortable").tablesort();
+            // Enable Report Modal on Top of Personal Card Modal
+            $(personalCard.report.modalClass).each(function (index, element) {
+                $(element).modal({
+                    allowMultiple: true,
+                    inverted: true,
+                    onShow: function () {
+                    },
+                    onHide: function () {
+                    }
+                }).modal("attach events", window.UTIL.STRING.format(personalCard.report.buttonIdPattern, $(element).data("report-id")), "show");
+            });
+            // Open Personal Card Modal
+            $modalPersonalCard.modal({
+                allowMultiple: true,
+                inverted: false
             }).modal("show");
         }
     });

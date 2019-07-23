@@ -1,7 +1,6 @@
 package it.unitn.disi.wp.cup.persistence.dao;
 
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
-import it.unitn.disi.wp.cup.persistence.entity.PersonAvatar;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 

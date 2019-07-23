@@ -25,6 +25,7 @@ public class Person {
     private PersonAvatar avatar;
     private List<PersonAvatar> avatarHistory;
     private List<PrescriptionExam> exams;
+    private List<PrescriptionMedicine> medicines;
 
     @Override
     public boolean equals(Object obj) {
@@ -310,5 +311,23 @@ public class Person {
      */
     public void setExams(List<PrescriptionExam> exams) {
         this.exams = exams;
+    }
+
+    /**
+     * Return the medicines of the Person
+     *
+     * @return Person medicines
+     */
+    public List<PrescriptionMedicine> getMedicines() {
+        return medicines;
+    }
+
+    /**
+     * Set the medicines of the Person
+     *
+     * @param medicines Person medicines
+     */
+    public void setMedicines(List<PrescriptionMedicine> medicines) {
+        this.medicines = medicines;
     }
 }

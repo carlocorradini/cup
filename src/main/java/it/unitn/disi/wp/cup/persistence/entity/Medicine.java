@@ -1,64 +1,64 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
 /**
- * Entity Exam
+ * Entity Medicine
  *
  * @author Carlo Corradini
  */
-public class Exam {
+public class Medicine {
     private Long id;
     private String name;
     private Float price;
 
     /**
-     * Return the id of the Exam
+     * Return the id of the Medicine
      *
-     * @return Exam id
+     * @return Medicine id
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * Set the Exam id
+     * Set the id of the Medicine
      *
-     * @param id Exam id
+     * @param id Medicine id
      */
     public void setId(Long id) {
         this.id = id;
     }
 
     /**
-     * Return the name of the Exam
+     * Return the name of the Medicine
      *
-     * @return Exam name
+     * @return Medicine name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Set the name of the Exam
+     * Set the name of the Medicine
      *
-     * @param name Exam name
+     * @param name Medicine name
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Return the price of the Exam
+     * Return the price of the Medicine
      *
-     * @return Exam price
+     * @return Medicine price
      */
     public Float getPrice() {
         return price;
     }
 
     /**
-     * Set the price of the Exam
+     * Set the price of the Medicine
      *
-     * @param price Exam price
+     * @param price Medicine price
      */
     public void setPrice(Float price) {
         this.price = price;

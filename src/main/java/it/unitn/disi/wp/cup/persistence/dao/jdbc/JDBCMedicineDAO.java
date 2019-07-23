@@ -1,25 +1,25 @@
 package it.unitn.disi.wp.cup.persistence.dao.jdbc;
 
-import it.unitn.disi.wp.cup.persistence.dao.ExamDAO;
+import it.unitn.disi.wp.cup.persistence.dao.MedicineDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
-import it.unitn.disi.wp.cup.persistence.entity.Exam;
+import it.unitn.disi.wp.cup.persistence.entity.Medicine;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * JDBC implementation of {@link Exam} interface
+ * JDBC implementation of {@link Medicine} interface
  *
  * @author Carlo Corradini
  */
-public class JDBCExamDAO extends JDBCDAO<Exam, Long> implements ExamDAO {
+public class JDBCMedicineDAO extends JDBCDAO<Medicine, Long> implements MedicineDAO {
 
-    private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM exam";
-    private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM exam WHERE id = ? LIMIT 1";
-    private static final String SQL_GET_ALL = "SELECT * FROM exam";
+    private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM medicine";
+    private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM medicine WHERE id = ? LIMIT 1";
+    private static final String SQL_GET_ALL = "SELECT * FROM medicine";
 
     /**
      * The default constructor of the class
@@ -27,29 +27,29 @@ public class JDBCExamDAO extends JDBCDAO<Exam, Long> implements ExamDAO {
      * @param connection The Connection to the persistence system
      * @param daoFactory The DAOFactory to get DAOs
      */
-    public JDBCExamDAO(Connection connection, DAOFactory daoFactory) {
+    public JDBCMedicineDAO(Connection connection, DAOFactory daoFactory) {
         super(connection, daoFactory);
     }
 
     @Override
-    public Exam setAndGetDAO(ResultSet rs) throws DAOException {
-        Exam exam;
+    public Medicine setAndGetDAO(ResultSet rs) throws DAOException {
+        Medicine medicine;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
 
         try {
-            exam = new Exam();
+            medicine = new Medicine();
 
-            exam.setId(rs.getLong("id"));
-            exam.setName(rs.getString("name"));
-            exam.setPrice(rs.getFloat("price"));
+            medicine.setId(rs.getLong("id"));
+            medicine.setName(rs.getString("name"));
+            medicine.setPrice(rs.getFloat("price"));
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to set Exam by ResultSet", ex);
+            throw new DAOException("Impossible to set Medicine by ResultSet", ex);
         }
-        return exam;
+        return medicine;
     }
 
     /**
-     * Return the number of {@link Exam exams} stored in the persistence system
+     * Return the number of {@link Medicine medicines} stored in the persistence system
      *
      * @return The number of records present in the persistence system
      * @throws DAOException If an error occurred during the information retrieving
@@ -65,22 +65,22 @@ public class JDBCExamDAO extends JDBCDAO<Exam, Long> implements ExamDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to count Exam", ex);
+            throw new DAOException("Impossible to count Medicine", ex);
         }
 
         return count;
     }
 
     /**
-     * Return the {@link Exam exam} with the primary key equals to {@code primaryKey}
+     * Return the {@link Medicine medicine} with the primary key equals to {@code primaryKey}
      *
      * @param primaryKey The primary key used to obtain the obj instance
-     * @return The {@link Exam exam} with {@code primaryKey}
+     * @return The {@link Medicine medicine} with {@code primaryKey}
      * @throws DAOException If an error occurred during the information retrieving
      */
     @Override
-    public Exam getByPrimaryKey(Long primaryKey) throws DAOException {
-        Exam exam = null;
+    public Medicine getByPrimaryKey(Long primaryKey) throws DAOException {
+        Medicine medicine = null;
         if (primaryKey == null)
             throw new DAOException("Primary key is null");
 
@@ -88,36 +88,36 @@ public class JDBCExamDAO extends JDBCDAO<Exam, Long> implements ExamDAO {
             pStmt.setLong(1, primaryKey);
             try (ResultSet rs = pStmt.executeQuery()) {
                 if (rs.next()) {
-                    exam = setAndGetDAO(rs);
+                    medicine = setAndGetDAO(rs);
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get Exam for the passed primary key", ex);
+            throw new DAOException("Impossible to get Medicine for the passed primary key", ex);
         }
 
-        return exam;
+        return medicine;
     }
 
     /**
-     * Return a list of all {@link Exam exams} in the persistence system
+     * Return a list of all {@link Medicine medicines} in the persistence system
      *
-     * @return A list of all saved {@link Exam exams} in the persistence system
+     * @return A list of all saved {@link Medicine medicines} in the persistence system
      * @throws DAOException If an error occurred during the information retrieving
      */
     @Override
-    public List<Exam> getAll() throws DAOException {
-        List<Exam> exams = new ArrayList<>();
+    public List<Medicine> getAll() throws DAOException {
+        List<Medicine> medicines = new ArrayList<>();
 
         try (Statement stmt = CONNECTION.createStatement()) {
             try (ResultSet rs = stmt.executeQuery(SQL_GET_ALL)) {
                 while (rs.next()) {
-                    exams.add(setAndGetDAO(rs));
+                    medicines.add(setAndGetDAO(rs));
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the list of Exams", ex);
+            throw new DAOException("Impossible to get the list of Medicines", ex);
         }
 
-        return exams;
+        return medicines;
     }
 }

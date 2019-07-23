@@ -52,8 +52,8 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             prescriptionExam.setPersonId(rs.getLong("person_id"));
             prescriptionExam.setDoctorId(rs.getLong("doctor_id"));
             prescriptionExam.setSpecialistId(rs.getLong("doctor_specialist_id"));
-            prescriptionExam.setDate(rs.getObject("prescription_date", OffsetDateTime.class));
-            prescriptionExam.setDateRegistration(rs.getObject("prescription_date_registration", OffsetDateTime.class));
+            prescriptionExam.setDateTime(rs.getObject("prescription_date", OffsetDateTime.class));
+            prescriptionExam.setDateTimeRegistration(rs.getObject("prescription_date_registration", OffsetDateTime.class));
             prescriptionExam.setExam(examDAO.getByPrimaryKey(rs.getLong("exam_id")));
             prescriptionExam.setReport(reportDAO.getByPrimaryKey(rs.getLong("report_id")));
         } catch (SQLException | DAOFactoryException ex) {
