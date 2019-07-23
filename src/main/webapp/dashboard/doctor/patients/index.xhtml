@@ -332,10 +332,14 @@
                                         </ui:fragment>
                                         <ui:fragment rendered="#{not empty pe.report.exams}">
                                             <h4>#{i18n["common.exams.suggested"]}</h4>
-                                            <div class="ui bulleted list">
-                                                <ui:repeat value="#{pe.report.exams}" var="re">
-                                                    <div class="item">#{re.name}</div>
-                                                </ui:repeat>
+                                            <div class="ui list">
+                                                <div class="item">
+                                                    <div class="ui bulleted list">
+                                                        <ui:repeat value="#{pe.report.exams}" var="re">
+                                                            <div class="item">#{re.name}</div>
+                                                        </ui:repeat>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </ui:fragment>
 
@@ -354,10 +358,14 @@
                                         </ui:fragment>
                                         <ui:fragment rendered="#{not empty pe.report.medicines}">
                                             <h4>#{i18n["common.medicines.suggested"]}</h4>
-                                            <div class="ui bulleted list">
-                                                <ui:repeat value="#{pe.report.medicines}" var="rm">
-                                                    <div class="item">#{rm.name}</div>
-                                                </ui:repeat>
+                                            <div class="ui list">
+                                                <div class="item">
+                                                    <div class="ui bulleted list">
+                                                        <ui:repeat value="#{pe.report.medicines}" var="rm">
+                                                            <div class="item">#{rm.name}</div>
+                                                        </ui:repeat>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </ui:fragment>
                                     </div>
