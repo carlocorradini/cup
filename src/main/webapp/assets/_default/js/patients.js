@@ -30,6 +30,7 @@ function personalCardConfig() {
             $(personalCard.report.modalClass).each(function (index, element) {
                 $(element).modal({
                     allowMultiple: true,
+                    closable: false,
                     inverted: true,
                     onShow: function () {
                     },
@@ -40,6 +41,7 @@ function personalCardConfig() {
             // Open Personal Card Modal
             $modalPersonalCard.modal({
                 allowMultiple: true,
+                closable: false,
                 inverted: false
             }).modal("show");
         }

@@ -258,16 +258,71 @@
                                                 </table>
                                             </ui:fragment>
                                         </div>
+
+                                        <div class="title">
+                                            <i class="dropdown icon"/>
+                                            #{i18n["common.timeline"]}
+                                        </div>
+                                        <div class="content">
+                                            <ui:fragment rendered="#{empty p.avatarHistory}">
+                                                <div class="ui icon message">
+                                                    <i class="info circle icon"/>
+                                                    <div class="content">
+                                                        <div class="header">
+                                                            #{i18n["dashboard.doctor.patients.patient.timeline.empty.message"]}
+                                                        </div>
+                                                        <p>#{i18n["dashboard.doctor.patients.patient.timeline.empty.subMessage"]}</p>
+                                                    </div>
+                                                </div>
+                                            </ui:fragment>
+
+                                            <ui:fragment rendered="#{not empty p.avatarHistory}">
+                                                <table class="ui very basic striped sortable celled table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#{i18n["common.image"]}</th>
+                                                        <th>#{i18n["common.date"]}</th>
+                                                        <th>#{i18n["common.hour"]}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <ui:repeat value="#{p.avatarHistory}" var="pah">
+                                                        <tr>
+                                                            <td>
+                                                                <h:graphicImage library="_default"
+                                                                                name="#{pah.nameAsResource}"
+                                                                                alt="Avatar"
+                                                                                styleClass="ui image bordered rounded person-avatar tiny"
+                                                                />
+                                                            </td>
+                                                            <td>
+                                                                <h:outputText value="#{pah.uploadDate}">
+                                                                    <ldc:convertLocalDate type="date"
+                                                                                          dateStyle="default"/>
+                                                                </h:outputText>
+                                                            </td>
+                                                            <td>
+                                                                <h:outputText value="#{pah.uploadTime}">
+                                                                    <ltc:convertTimeDate type="time"
+                                                                                         dateStyle="default"/>
+                                                                </h:outputText>
+                                                            </td>
+                                                        </tr>
+                                                    </ui:repeat>
+                                                    </tbody>
+                                                </table>
+                                            </ui:fragment>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="actions">
                                 <div class="ui two buttons">
-                                    <div class="ui olive right labeled icon button">
+                                    <div class="ui green right labeled icon button">
                                         Prescrivi farmaco
                                         <i class="right chevron icon"/>
                                     </div>
-                                    <div class="ui blue right labeled icon button">
+                                    <div class="ui teal right labeled icon button">
                                         prenota esame
                                         <i class="right chevron icon"/>
                                     </div>
@@ -284,7 +339,12 @@
                                      data-report-id="#{pe.report.id}"
                                 >
                                     <i class="red close icon"/>
-                                    <div class="header">#{i18n["common.report"]} #{pe.report.id}</div>
+                                    <div class="header">
+                                        <span class="ui large label">
+                                            #{i18n["common.report"]}
+                                            <span class="detail">#{pe.report.id}</span>
+                                        </span>
+                                    </div>
                                     <div class="scrolling content">
                                         <table class="ui celled table">
                                             <thead>

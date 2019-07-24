@@ -40,6 +40,16 @@
     height: 96px !important;
 }
 
+.person-avatar.tiny {
+    width: 64px !important;
+    height: 64px !important;
+}
+
+.person-avatar.mini {
+    width: 48px !important;
+    height: 48px !important;
+}
+
 /* Hidden */
 .hidden {
     display: none !important;
