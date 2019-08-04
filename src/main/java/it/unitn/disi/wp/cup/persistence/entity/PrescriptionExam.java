@@ -1,8 +1,8 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 
 /**
  * Entity Prescription Exam
@@ -14,8 +14,8 @@ public class PrescriptionExam {
     private Long personId;
     private Long doctorId;
     private Long specialistId;
-    private OffsetDateTime dateTime;
-    private OffsetDateTime dateTimeRegistration;
+    private LocalDateTime dateTime;
+    private LocalDateTime dateTimeRegistration;
     private Exam exam;
     private Report report;
 
@@ -96,7 +96,7 @@ public class PrescriptionExam {
      *
      * @return Prescription Exam Date and Time
      */
-    public OffsetDateTime getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
@@ -127,7 +127,7 @@ public class PrescriptionExam {
      *
      * @param dateTime Prescription Exam Date and Time
      */
-    public void setDateTime(OffsetDateTime dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -136,7 +136,7 @@ public class PrescriptionExam {
      *
      * @return Prescription Exam Registration Date and Time
      */
-    public OffsetDateTime getDateTimeRegistration() {
+    public LocalDateTime getDateTimeRegistration() {
         return dateTimeRegistration;
     }
 
@@ -167,7 +167,7 @@ public class PrescriptionExam {
      *
      * @param dateTimeRegistration Prescription Exam Registration Date and Time
      */
-    public void setDateTimeRegistration(OffsetDateTime dateTimeRegistration) {
+    public void setDateTimeRegistration(LocalDateTime dateTimeRegistration) {
         this.dateTimeRegistration = dateTimeRegistration;
     }
 

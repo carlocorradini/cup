@@ -7,16 +7,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 
 /**
  * Internalization i18n
  *
  * @author Carlo Corradini
  */
-@ManagedBean(name = "i18nBean")
+@Named("i18nBean")
 @SessionScoped
 public final class I18nBean implements Serializable {
 

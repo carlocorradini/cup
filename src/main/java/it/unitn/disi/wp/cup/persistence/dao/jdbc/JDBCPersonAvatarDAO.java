@@ -7,7 +7,7 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
 import it.unitn.disi.wp.cup.persistence.entity.PersonAvatar;
 
 import java.sql.*;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class JDBCPersonAvatarDAO extends JDBCDAO<PersonAvatar, Long> implements 
             personAvatar.setId(rs.getLong("id"));
             personAvatar.setPersonId(rs.getLong("person_id"));
             personAvatar.setName(rs.getString("name"));
-            personAvatar.setUpload(rs.getObject("upload", OffsetDateTime.class));
+            personAvatar.setUpload(rs.getObject("upload", LocalDateTime.class));
         } catch (SQLException ex) {
             throw new DAOException("Impossible to set PersonAvatar by ResultSet", ex);
         }

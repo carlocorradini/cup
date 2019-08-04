@@ -12,7 +12,7 @@ import it.unitn.disi.wp.cup.persistence.entity.Medicine;
 import it.unitn.disi.wp.cup.persistence.entity.Report;
 
 import java.sql.*;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class JDBCReportDAO extends JDBCDAO<Report, Long> implements ReportDAO {
             report = new Report();
 
             report.setId(rs.getLong("id"));
-            report.setDateTime(rs.getObject("report_date", OffsetDateTime.class));
+            report.setDateTime(rs.getObject("report_date", LocalDateTime.class));
             report.setContent(rs.getString("content"));
             report.setExams(getReportExamsByReportId(report.getId()));
             report.setMedicines(getReportMedicineByReportId(report.getId()));

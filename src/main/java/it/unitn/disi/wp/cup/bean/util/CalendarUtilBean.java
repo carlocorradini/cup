@@ -2,18 +2,19 @@ package it.unitn.disi.wp.cup.bean.util;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
+
 import it.unitn.disi.wp.cup.util.CalendarUtil;
 
 /**
  * Permits the access to web pages of the Calendar Util
  *
- * @see CalendarUtil
  * @author Carlo Corradini
+ * @see CalendarUtil
  */
-@ManagedBean(name = "calendar")
+@Named("calendar")
 @RequestScoped
 public final class CalendarUtilBean extends CalendarUtil implements Serializable {
 

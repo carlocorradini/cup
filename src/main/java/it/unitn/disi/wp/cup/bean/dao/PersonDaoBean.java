@@ -4,10 +4,10 @@ import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @author Carlo Corradini
  * @see Person
  */
-@ManagedBean(name = "person")
+@Named("person")
 @RequestScoped
 public final class PersonDaoBean implements Serializable {
 

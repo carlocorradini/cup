@@ -1,10 +1,7 @@
 package it.unitn.disi.wp.cup.persistence.dao.factory;
 
 import it.unitn.disi.wp.cup.persistence.dao.DAO;
-import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
-import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
-import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAOFactory;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;

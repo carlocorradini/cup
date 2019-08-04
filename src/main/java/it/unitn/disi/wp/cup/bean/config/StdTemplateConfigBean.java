@@ -1,10 +1,11 @@
 package it.unitn.disi.wp.cup.bean.config;
 
 import java.io.Serializable;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 
 import it.unitn.disi.wp.cup.config.StdTemplateConfig;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 /**
  * Permits the access to web pages of the Standard Template Configuration
@@ -12,7 +13,7 @@ import it.unitn.disi.wp.cup.config.StdTemplateConfig;
  * @author Carlo Corradini
  * @see StdTemplateConfig
  */
-@ManagedBean(name = "stdTemplate")
+@Named("stdTemplate")
 @ApplicationScoped
 public final class StdTemplateConfigBean implements Serializable {
 

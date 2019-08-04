@@ -1,18 +1,15 @@
 package it.unitn.disi.wp.cup.persistence.dao.jdbc;
 
-import it.unitn.disi.wp.cup.persistence.dao.ExamDAO;
 import it.unitn.disi.wp.cup.persistence.dao.MedicineDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PrescriptionMedicineDAO;
-import it.unitn.disi.wp.cup.persistence.dao.ReportDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
-import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
 
 import java.sql.*;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +48,7 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
             prescriptionMedicine.setId(rs.getLong("id"));
             prescriptionMedicine.setPersonId(rs.getLong("person_id"));
             prescriptionMedicine.setDoctorId(rs.getLong("doctor_id"));
-            prescriptionMedicine.setDateTime(rs.getObject("prescription_date", OffsetDateTime.class));
+            prescriptionMedicine.setDateTime(rs.getObject("prescription_date", LocalDateTime.class));
             prescriptionMedicine.setMedicine(medicineDAO.getByPrimaryKey(rs.getLong("medicine_id")));
             prescriptionMedicine.setQuantity(rs.getShort("quantity"));
         } catch (SQLException | DAOFactoryException ex) {

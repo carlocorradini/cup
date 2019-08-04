@@ -1,8 +1,8 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Report {
     private Long id;
-    private OffsetDateTime dateTime;
+    private LocalDateTime dateTime;
     private String content;
     private List<Exam> exams;
     private List<Medicine> medicines;
@@ -40,7 +40,7 @@ public class Report {
      *
      * @return Report Date and Time
      */
-    public OffsetDateTime getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
@@ -71,7 +71,7 @@ public class Report {
      *
      * @param dateTime Report Date and Time
      */
-    public void setDateTime(OffsetDateTime dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

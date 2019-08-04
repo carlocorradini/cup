@@ -10,7 +10,7 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 
 import java.sql.*;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +52,8 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             prescriptionExam.setPersonId(rs.getLong("person_id"));
             prescriptionExam.setDoctorId(rs.getLong("doctor_id"));
             prescriptionExam.setSpecialistId(rs.getLong("doctor_specialist_id"));
-            prescriptionExam.setDateTime(rs.getObject("prescription_date", OffsetDateTime.class));
-            prescriptionExam.setDateTimeRegistration(rs.getObject("prescription_date_registration", OffsetDateTime.class));
+            prescriptionExam.setDateTime(rs.getObject("prescription_date", LocalDateTime.class));
+            prescriptionExam.setDateTimeRegistration(rs.getObject("prescription_date_registration", LocalDateTime.class));
             prescriptionExam.setExam(examDAO.getByPrimaryKey(rs.getLong("exam_id")));
             prescriptionExam.setReport(reportDAO.getByPrimaryKey(rs.getLong("report_id")));
         } catch (SQLException | DAOFactoryException ex) {

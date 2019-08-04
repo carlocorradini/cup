@@ -2,8 +2,8 @@ package it.unitn.disi.wp.cup.bean.config;
 
 import it.unitn.disi.wp.cup.config.AppConfig;
 
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author Carlo Corradini
  * @see AppConfig
  */
-@ManagedBean(name = "app")
+@Named("app")
 @ApplicationScoped
 public final class AppConfigBean implements Serializable {
     private static final long serialVersionUID = 7987302702812972518L;

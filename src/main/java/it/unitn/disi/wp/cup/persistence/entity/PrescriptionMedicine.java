@@ -1,8 +1,8 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 
 /**
  * Entity Prescription Medicine
@@ -13,7 +13,7 @@ public class PrescriptionMedicine {
     private Long id;
     private Long personId;
     private Long DoctorId;
-    private OffsetDateTime dateTime;
+    private LocalDateTime dateTime;
     private Medicine medicine;
     private Short quantity;
 
@@ -76,7 +76,7 @@ public class PrescriptionMedicine {
      *
      * @return Prescription Medicine Date and Time
      */
-    public OffsetDateTime getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
@@ -107,7 +107,7 @@ public class PrescriptionMedicine {
      *
      * @param dateTime Prescription Medicine Date and Time
      */
-    public void setDateTime(OffsetDateTime dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

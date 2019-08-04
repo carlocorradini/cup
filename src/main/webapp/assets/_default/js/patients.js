@@ -33,8 +33,10 @@ function personalCardConfig() {
                     closable: false,
                     inverted: true,
                     onShow: function () {
+                        $modalPersonalCard.addClass("disabled");
                     },
                     onHide: function () {
+                        $modalPersonalCard.removeClass("disabled");
                     }
                 }).modal("attach events", window.UTIL.STRING.format(personalCard.report.buttonIdPattern, $(element).data("report-id")), "show");
             });

@@ -3,8 +3,8 @@ package it.unitn.disi.wp.cup.persistence.entity;
 import it.unitn.disi.wp.cup.config.AppConfig;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.util.Map;
 
 /**
@@ -31,7 +31,7 @@ public class PersonAvatar {
     private Long id;
     private Long personId;
     private String name;
-    private OffsetDateTime upload;
+    private LocalDateTime upload;
 
     @Override
     public boolean equals(Object obj) {
@@ -108,7 +108,7 @@ public class PersonAvatar {
      *
      * @return OffsetDateTime Person Avatar
      */
-    public OffsetDateTime getUpload() {
+    public LocalDateTime getUpload() {
         return upload;
     }
 
@@ -139,7 +139,7 @@ public class PersonAvatar {
      *
      * @param upload OffsetDateTime of the Person Avatar
      */
-    public void setUpload(OffsetDateTime upload) {
+    public void setUpload(LocalDateTime upload) {
         this.upload = upload;
     }
 

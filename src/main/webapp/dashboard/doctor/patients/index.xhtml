@@ -2,10 +2,9 @@
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:ldc="http://cup.it/jstl/localDateConverter"
-        xmlns:ltc="http://cup.it/jstl/localTimeConverter">
+        xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{i18n["common.patients"]}</ui:define>
 
     <ui:define name="js">
@@ -28,7 +27,7 @@
             <div class="ui divider"></div>
 
             <c:choose>
-                <c:when test="#{empty doctor.authDoctor.patients}">
+                <c:when test="#{empty doctor.patients}">
                     <div class="ui icon floating message">
                         <i class="info circle icon"/>
                         <div class="content">
@@ -42,7 +41,7 @@
                 <c:otherwise>
                     <!-- PATIENT CARD -->
                     <div class="ui cards centered" id="doctor-patients">
-                        <ui:repeat value="#{doctor.authDoctor.patients}" var="p">
+                        <ui:repeat value="#{doctor.patients}" var="p">
                             <div class="ui raised card">
                                 <div class="content">
                                     <h:graphicImage library="_default"
@@ -60,7 +59,7 @@
                                     <div class="meta">
                                         <i class="birthday cake icon"/>
                                         <h:outputText value="#{p.birthDate}">
-                                            <ldc:convertLocalDate type="date" dateStyle="default"/>
+                                            <f:convertDateTime type="localDate"/>
                                         </h:outputText>
                                     </div>
                                     <div class="meta">
@@ -80,7 +79,7 @@
                     </div>
 
                     <!-- PATIENT PERSONAL CARD MODAL -->
-                    <ui:repeat value="#{doctor.authDoctor.patients}" var="p">
+                    <ui:repeat value="#{doctor.patients}" var="p">
                         <div class="ui longer modal" id="personal-card-modal-#{p.id}">
                             <i class="red close icon"/>
                             <div class="header">
@@ -125,7 +124,7 @@
                                                     <td class="text-strong">#{i18n["common.birthDate"]}</td>
                                                     <td>
                                                         <h:outputText value="#{p.birthDate}">
-                                                            <ldc:convertLocalDate type="date" dateStyle="default"/>
+                                                            <f:convertDateTime type="localDate"/>
                                                         </h:outputText>
                                                     </td>
                                                 </tr>
@@ -174,14 +173,12 @@
                                                             <td>#{pe.exam.name}</td>
                                                             <td>
                                                                 <h:outputText value="#{pe.date}">
-                                                                    <ldc:convertLocalDate type="date"
-                                                                                          dateStyle="default"/>
+                                                                    <f:convertDateTime type="localDate"/>
                                                                 </h:outputText>
                                                             </td>
                                                             <td>
                                                                 <h:outputText value="#{pe.time}">
-                                                                    <ltc:convertTimeDate type="time"
-                                                                                         dateStyle="default"/>
+                                                                    <f:convertDateTime type="localTime"/>
                                                                 </h:outputText>
                                                             </td>
                                                             <td class="#{empty pe.report ? 'disabled' : 'positive'}">
@@ -239,14 +236,12 @@
                                                             <td>#{pm.medicine.name}</td>
                                                             <td>
                                                                 <h:outputText value="#{pm.date}">
-                                                                    <ldc:convertLocalDate type="date"
-                                                                                          dateStyle="default"/>
+                                                                    <f:convertDateTime type="localDate"/>
                                                                 </h:outputText>
                                                             </td>
                                                             <td>
                                                                 <h:outputText value="#{pm.time}">
-                                                                    <ltc:convertTimeDate type="time"
-                                                                                         dateStyle="default"/>
+                                                                    <f:convertDateTime type="localTime"/>
                                                                 </h:outputText>
                                                             </td>
                                                             <td>
@@ -277,9 +272,9 @@
                                             </ui:fragment>
 
                                             <ui:fragment rendered="#{not empty p.avatarHistory}">
-                                                <table class="ui very basic striped sortable celled table">
+                                                <table class="ui very basic sortable celled table">
                                                     <thead>
-                                                    <tr>
+                                                    <tr class="center aligned">
                                                         <th>#{i18n["common.image"]}</th>
                                                         <th>#{i18n["common.date"]}</th>
                                                         <th>#{i18n["common.hour"]}</th>
@@ -287,24 +282,29 @@
                                                     </thead>
                                                     <tbody>
                                                     <ui:repeat value="#{p.avatarHistory}" var="pah">
-                                                        <tr>
+                                                        <tr class="center aligned #{pah eq p.avatar ? 'text-strong' : 'disabled'}">
                                                             <td>
                                                                 <h:graphicImage library="_default"
                                                                                 name="#{pah.nameAsResource}"
                                                                                 alt="Avatar"
-                                                                                styleClass="ui image bordered rounded person-avatar tiny"
+                                                                                styleClass="ui image centered bordered rounded person-avatar tiny middle aligned"
                                                                 />
+                                                                &#160;
+                                                                <ui:fragment rendered="#{pah eq p.avatar}">
+                                                                    <i class="checkmark green icon"/>
+                                                                </ui:fragment>
+                                                                <ui:fragment rendered="#{pah ne p.avatar}">
+                                                                    <i class="icon"/>
+                                                                </ui:fragment>
                                                             </td>
                                                             <td>
                                                                 <h:outputText value="#{pah.uploadDate}">
-                                                                    <ldc:convertLocalDate type="date"
-                                                                                          dateStyle="default"/>
+                                                                    <f:convertDateTime type="localDate"/>
                                                                 </h:outputText>
                                                             </td>
                                                             <td>
                                                                 <h:outputText value="#{pah.uploadTime}">
-                                                                    <ltc:convertTimeDate type="time"
-                                                                                         dateStyle="default"/>
+                                                                    <f:convertDateTime type="localTime"/>
                                                                 </h:outputText>
                                                             </td>
                                                         </tr>
@@ -332,7 +332,7 @@
                     </ui:repeat>
 
                     <!-- PATIENT REPORT MODAL -->
-                    <ui:repeat value="#{doctor.authDoctor.patients}" var="p">
+                    <ui:repeat value="#{doctor.patients}" var="p">
                         <ui:repeat value="#{p.exams}" var="pe">
                             <ui:fragment rendered="#{not empty pe.report}">
                                 <div class="ui small modal report-modal"
@@ -362,14 +362,12 @@
                                                 <td>#{pe.specialistId}</td>
                                                 <td>
                                                     <h:outputText value="#{pe.report.date}">
-                                                        <ldc:convertLocalDate type="date"
-                                                                              dateStyle="default"/>
+                                                        <f:convertDateTime type="localDate"/>
                                                     </h:outputText>
                                                 </td>
                                                 <td>
                                                     <h:outputText value="#{pe.report.time}">
-                                                        <ltc:convertTimeDate type="time"
-                                                                             dateStyle="default"/>
+                                                        <f:convertDateTime type="localTime"/>
                                                     </h:outputText>
                                                 </td>
                                                 <td>#{pe.report.content}</td>

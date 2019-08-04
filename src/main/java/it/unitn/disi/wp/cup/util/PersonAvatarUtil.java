@@ -4,6 +4,7 @@ import it.unitn.disi.wp.cup.persistence.entity.PersonAvatar;
 import it.unitn.disi.wp.cup.persistence.entity.PersonSex;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 /**
@@ -26,7 +27,7 @@ public final class PersonAvatarUtil {
             personAvatar = new PersonAvatar();
             personAvatar.setId(PersonAvatar.NOT_A_VALID_ID);
             personAvatar.setPersonId(personId);
-            personAvatar.setUpload(OffsetDateTime.now());
+            personAvatar.setUpload(LocalDateTime.now());
             personAvatar.setName(PersonAvatar.DEFAULT_AVATARS.get(personSex.getSex()));
         }
 
