@@ -1,0 +1,85 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Prescizione medicina</ui:define>
+
+    <ui:define name="content">
+        <ui:fragment rendered="#{not empty doctor.authDoctor}">
+            <h2 class="ui center aligned icon header">
+                <i class="pills icon"/>
+                Prescrizione Farmaco
+            </h2>
+
+            <div class="ui divider"></div>
+
+            <form class="ui form">
+                <div class="field">
+                    <label>Paziente</label>
+                    <div class="ui floating dropdown labeled icon button">
+                        <i class="user icon"/>
+                        <span class="text">Patient</span>
+                        <div class="menu">
+                            <div class="ui icon search input">
+                                <i class="search icon"/>
+                                <input type="text" placeholder="Cerca utenti..."/>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="header">
+                                <i class="tags icon"/>
+                                Tag Label
+                            </div>
+                            <div class="scrolling menu">
+                                <ui:repeat value="#{doctor.patients}" var="p">
+                                    <div class="item" data-value="#{p.fiscalCode}">
+                                        <h:graphicImage library="_default"
+                                                        name="#{p.avatar.nameAsResource}"
+                                                        alt="Avatar"
+                                                        style="width: 2em; height: 2em;"
+                                                        styleClass="ui image bordered rounded person-avatar middle aligned"
+                                        />
+                                        <span>#{p.fullNameCapitalized} | <span class="text-light">#{p.fiscalCode}</span></span>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>#{i18n["common.medicine"]}</label>
+                    <div class="ui floating dropdown labeled icon button">
+                        <i class="pills icon"/>
+                        <span class="text">#{i18n["common.medicine"]}</span>
+                        <div class="menu">
+                            <div class="ui icon search input">
+                                <i class="search icon"/>
+                                <input type="text" placeholder="Cerca utenti..." name="medicine"/>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="header">
+                                <i class="tags icon"/>
+                                Tag Label
+                            </div>
+                            <div class="scrolling menu">
+                                <ui:repeat value="#{medicine.medicines}" var="m">
+                                    <div class="item" data-value="#{m.id}">
+                                        #{m.name}
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Quantità</label>
+                    <input type="number" min="1" max="10" name="quantity"/>
+                </div>
+            </form>
+
+        </ui:fragment>
+    </ui:define>
+
+</ui:composition>

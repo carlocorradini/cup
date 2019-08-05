@@ -67,6 +67,11 @@
     font-weight: bold;
 }
 
+/* Text Light */
+.text-light {
+    font-weight: lighter;
+}
+
 /* Modal Disabled */
 .ui.modal.disabled {
     pointer-events: none;
