@@ -25,5 +25,19 @@ window.UTIL = {
                 return args[index];
             });
         }
+    },
+    NUMBER: {
+        /**
+         * Given a {@code n} value che if it's a Number
+         * @example
+         *  isNumber(23.4);
+         *  isNumber(7);
+         * @param n The value to check
+         * @returns {boolean} True if {@code n} is a Number, false otherwise
+         * @author Carlo Corradini
+         */
+        isNumber: function (n) {
+            return n !== null && n !== undefined && !isNaN(+n) && isFinite(n);
+        }
     }
 };

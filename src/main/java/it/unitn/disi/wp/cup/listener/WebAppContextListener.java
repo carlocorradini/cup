@@ -29,6 +29,7 @@ public class WebAppContextListener implements ServletContextListener {
             AuthConfig.load();
             AppConfig.load();
             EmailConfig.load();
+            PrescriptionConfig.load();
             JDBCDAOFactory.configure(DatabaseConfig.getDriver(), DatabaseConfig.getUrl());
             AuthUtil.configure(JDBCDAOFactory.getInstance());
             EmailUtil.configure();

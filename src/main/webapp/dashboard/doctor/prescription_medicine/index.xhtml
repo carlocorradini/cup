@@ -5,6 +5,12 @@
         xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">Prescizione medicina</ui:define>
 
+    <ui:define name="js">
+        <h:outputScript library="_default"
+                        name="js/prescription_medicine.js"
+                        target="body"/>
+    </ui:define>
+
     <ui:define name="content">
         <ui:fragment rendered="#{not empty doctor.authDoctor}">
             <h2 class="ui center aligned icon header">
@@ -14,10 +20,15 @@
 
             <div class="ui divider"></div>
 
-            <form class="ui form">
+            <form class="ui large form"
+                  id="prescription-medicine-form"
+                  action="#"
+                  method="post"
+            >
                 <div class="field">
                     <label>Paziente</label>
-                    <div class="ui floating dropdown labeled icon button">
+                    <div class="ui floating dropdown labeled icon button large"
+                         id="prescription-medicine-patient-dropdown">
                         <i class="user icon"/>
                         <span class="text">Patient</span>
                         <div class="menu">
@@ -26,13 +37,9 @@
                                 <input type="text" placeholder="Cerca utenti..."/>
                             </div>
                             <div class="divider"></div>
-                            <div class="header">
-                                <i class="tags icon"/>
-                                Tag Label
-                            </div>
                             <div class="scrolling menu">
                                 <ui:repeat value="#{doctor.patients}" var="p">
-                                    <div class="item" data-value="#{p.fiscalCode}">
+                                    <div class="item" data-value="#{p.id}">
                                         <h:graphicImage library="_default"
                                                         name="#{p.avatar.nameAsResource}"
                                                         alt="Avatar"
@@ -49,19 +56,16 @@
 
                 <div class="field">
                     <label>#{i18n["common.medicine"]}</label>
-                    <div class="ui floating dropdown labeled icon button">
+                    <div class="ui floating dropdown labeled icon button large"
+                         id="prescription-medicine-medicine-dropdown">
                         <i class="pills icon"/>
                         <span class="text">#{i18n["common.medicine"]}</span>
                         <div class="menu">
                             <div class="ui icon search input">
                                 <i class="search icon"/>
-                                <input type="text" placeholder="Cerca utenti..." name="medicine"/>
+                                <input type="text" placeholder="Cerca utenti..."/>
                             </div>
                             <div class="divider"></div>
-                            <div class="header">
-                                <i class="tags icon"/>
-                                Tag Label
-                            </div>
                             <div class="scrolling menu">
                                 <ui:repeat value="#{medicine.medicines}" var="m">
                                     <div class="item" data-value="#{m.id}">
@@ -75,7 +79,38 @@
 
                 <div class="field">
                     <label>Quantità</label>
-                    <input type="number" min="1" max="10" name="quantity"/>
+                    <div class="ui labeled input">
+                        <div class="ui label">
+                            <i class="hashtag icon fitted"/>
+                        </div>
+                        <input type="number" id="prescription-medicine-quantity-input"
+                               min="#{prescription.medicineMinQuantity}" max="#{prescription.medicineMaxQuantity}"/>
+                    </div>
+                </div>
+
+                <div class="ui blue fluid big button submit" tabindex="0" id="prescription-medicine-button">
+                    <i class="send icon"/>
+                    #{i18n['common.signIn']}
+                </div>
+
+                <div class="ui icon success message medium">
+                    <i class="checkmark icon"/>
+                    <div class="content">
+                        <div class="header">
+                            Prescrizione completata
+                        </div>
+                        <p>La prescrizione è stata effettuata correttamente</p>
+                    </div>
+                </div>
+
+                <div class="ui icon warning message medium">
+                    <i class="exclamation triangle icon"/>
+                    <div class="content">
+                        <div class="header">
+                            Ricontrolla i dai
+                        </div>
+                        <p>Ricontrolla i dati e verifica di averli inseriti correttamente</p>
+                    </div>
                 </div>
             </form>
 

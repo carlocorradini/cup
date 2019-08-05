@@ -14,13 +14,13 @@ import java.util.List;
 public interface PersonAvatarDAO extends DAO<PersonAvatar, Long> {
 
     /**
-     * Insert a new {@code PersonAvatar} into the persistence system
+     * Add a new {@code PersonAvatar} into the persistence system
      *
-     * @param personAvatar The {@link PersonAvatar} to insert
+     * @param personAvatar The {@link PersonAvatar} to add
      * @return The primary key of the inserted Person Avatar
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public Long insert(PersonAvatar personAvatar) throws DAOException;
+    public Long add(PersonAvatar personAvatar) throws DAOException;
 
     /**
      * Return the last {@link PersonAvatar} of the {@link Person} with {@code personId id}

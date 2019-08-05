@@ -21,7 +21,7 @@ public class JDBCPersonAvatarDAO extends JDBCDAO<PersonAvatar, Long> implements 
     private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM person_avatar";
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM person_avatar WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM person_avatar";
-    private static final String SQL_INSERT = "INSERT INTO person_avatar(person_id, name) VALUES(?, ?)";
+    private static final String SQL_ADD = "INSERT INTO person_avatar(person_id, name) VALUES(?, ?)";
     private static final String SQL_GET_CURRENT_BY_PERSON_ID_ = "WITH history AS (SELECT * FROM person_avatar WHERE person_id = ?)" +
             " SELECT * FROM history WHERE history.upload = (SELECT MAX(upload) AS max_upload FROM history) LIMIT 1";
     private static final String SQL_GET_ALL_BY_PERSON_ID = "SELECT * FROM person_avatar WHERE person_id = ? ORDER BY upload DESC";
@@ -127,12 +127,12 @@ public class JDBCPersonAvatarDAO extends JDBCDAO<PersonAvatar, Long> implements 
     }
 
     @Override
-    public Long insert(PersonAvatar personAvatar) throws DAOException {
+    public Long add(PersonAvatar personAvatar) throws DAOException {
         Long toRtn = null;
         if (personAvatar == null)
             throw new DAOException("Person Avatar is mandatory");
 
-        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_ADD, Statement.RETURN_GENERATED_KEYS)) {
             pStmt.setLong(1, personAvatar.getPersonId());
             pStmt.setString(2, personAvatar.getName());
 

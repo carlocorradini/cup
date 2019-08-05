@@ -21,4 +21,13 @@ public interface PrescriptionMedicineDAO extends DAO<PrescriptionMedicine, Long>
      * @throws DAOException If an error occurred during the information retrieving
      */
     public List<PrescriptionMedicine> getAllByPersonId(Long personId) throws DAOException;
+
+    /**
+     * Add a new {@code PrescriptionMedicine} into the persistence system
+     *
+     * @param prescriptionMedicine The {@link PrescriptionMedicine} to add
+     * @return The primary key of the inserted {@link PrescriptionMedicine}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    public Long add(PrescriptionMedicine prescriptionMedicine) throws DAOException;
 }

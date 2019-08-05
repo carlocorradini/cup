@@ -75,6 +75,16 @@ public abstract class Config {
     }
 
     /**
+     * Return the short associated with the key
+     *
+     * @param key Configuration key
+     * @return The short value
+     */
+    protected short getShort(String key) {
+        return config.getShort(formatter(key));
+    }
+
+    /**
      * Return the List associated with the key.
      * The list must be delimited by {@value ConfigLoader#LIST_DELIMITER delimiter}
      *

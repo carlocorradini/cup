@@ -23,6 +23,7 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM prescription_medicine WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM prescription_medicine";
     private static final String SQL_GET_ALL_BY_PERSON_ID = "SELECT * FROM prescription_medicine WHERE person_id = ? ORDER BY prescription_date DESC";
+    private static final String SQL_ADD = "INSERT INTO prescription_medicine(person_id, doctor_id, medicine_id, quantity) VALUES (?, ?, ?, ?)";
 
     /**
      * The default constructor of the class
@@ -148,5 +149,30 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
         }
 
         return medicines;
+    }
+
+    @Override
+    public Long add(PrescriptionMedicine prescriptionMedicine) throws DAOException {
+        Long toRtn = null;
+        if (prescriptionMedicine == null)
+            throw new DAOException("Prescription Medicine is mandatory");
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_ADD, Statement.RETURN_GENERATED_KEYS)) {
+            pStmt.setLong(1, prescriptionMedicine.getPersonId());
+            pStmt.setLong(2, prescriptionMedicine.getDoctorId());
+            pStmt.setLong(3, prescriptionMedicine.getMedicine().getId());
+            pStmt.setShort(4, prescriptionMedicine.getQuantity());
+
+            if (pStmt.executeUpdate() == 1) {
+                ResultSet rs = pStmt.getGeneratedKeys();
+                if (rs.next()) {
+                    toRtn = rs.getLong(1);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to add the Prescription Medicine", ex);
+        }
+
+        return toRtn;
     }
 }

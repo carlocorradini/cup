@@ -16,8 +16,8 @@ $document.ready(function () {
     // Hide Noscript
     $("noscript").hide();
 
-    // Enable Dropdown
-    $(".ui.dropdown").dropdown();
+    // Enable Dropdown in the Header
+    $("header.header").find(".ui.dropdown").dropdown();
 
     // Enable Sidebar Functionality
     sidebarConfig();

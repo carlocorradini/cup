@@ -104,18 +104,18 @@ public class PersonService {
 
                 personAvatar.setPersonId(person.getId());
                 personAvatar.setName(avatarName);
-                personAvatar.setId(personAvatarDAO.insert(personAvatar));
+                // Add the new Avatar & set the corresponding id
+                personAvatar.setId(personAvatarDAO.add(personAvatar));
 
                 if (personAvatar.getId() != null) {
+                    // Added successfully
+                    // I Need to Update the Person in the Session Scope
                     person.setAvatar(personAvatar);
-                    if (personDAO.update(person)) {
-                        // I Need to Update the Person in the Session Scope
-                        person.setAvatarHistory(personAvatarDAO.getAllByPersonId(person.getId()));
-                        message.setError(JsonMessage.ERROR_NO_ERROR);
-                    }
+                    person.setAvatarHistory(personAvatarDAO.getAllByPersonId(person.getId()));
+                    message.setError(JsonMessage.ERROR_NO_ERROR);
                 }
             } catch (IOException | DAOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "Unable to change Person Avatar", ex);
             }
         }
 
