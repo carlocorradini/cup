@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
 
-    <!-- === BASICS === -->
+    <!-- === INFORMATION === -->
     <display-name>CUP</display-name>
     <description>Centrale Unica Prenotazioni</description>
     <welcome-file-list>

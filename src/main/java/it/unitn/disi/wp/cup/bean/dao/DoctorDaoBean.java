@@ -1,11 +1,15 @@
 package it.unitn.disi.wp.cup.bean.dao;
 
 import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
+import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
+import it.unitn.disi.wp.cup.persistence.dao.PrescriptionMedicineDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
+import it.unitn.disi.wp.cup.persistence.entity.Medicine;
+import it.unitn.disi.wp.cup.persistence.entity.Exam;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 
 import javax.annotation.PostConstruct;
@@ -31,6 +35,8 @@ import java.util.logging.Logger;
 public final class DoctorDaoBean implements Serializable {
     private static final long serialVersionUID = -4028930644505062207L;
     private static final Logger LOGGER = Logger.getLogger(DoctorDaoBean.class.getName());
+    private PrescriptionMedicineDAO prescriptionMedicineDAO = null;
+    private PrescriptionExamDAO prescriptionExamDAO = null;
     private Doctor authDoctor = null;
     private List<Person> patients = Collections.emptyList();
 
@@ -47,11 +53,13 @@ public final class DoctorDaoBean implements Serializable {
             if (authDoctor != null) {
                 try {
                     doctorDAO = DAOFactory.getDAOFactory().getDAO(DoctorDAO.class);
+                    prescriptionMedicineDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionMedicineDAO.class);
+                    prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
                     patients = doctorDAO.getPatientsByDoctorId(authDoctor.getId());
                 } catch (DAOFactoryException ex) {
-                    LOGGER.log(Level.SEVERE, "Unable to get Doctor DAO", ex);
+                    LOGGER.log(Level.SEVERE, "Unable to get DAO Factory", ex);
                 } catch (DAOException ex) {
-                    LOGGER.log(Level.SEVERE, "Unable to get Patients", ex);
+                    LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
                 }
             }
         }
@@ -73,6 +81,44 @@ public final class DoctorDaoBean implements Serializable {
      */
     public List<Person> getPatients() {
         return patients;
+    }
+
+    /**
+     * Return the Number of {@link Medicine medicines} prescribed by the Authenticated {@link Doctor doctor}
+     *
+     * @return Number of {@link Medicine medicines} prescribed
+     */
+    public long getPrescriptionMedicineCount() {
+        long count = 0L;
+
+        if (authDoctor != null) {
+            try {
+                count = prescriptionMedicineDAO.getCountByDoctorId(authDoctor.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to count the Prescription Medicine", ex);
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * Return the Number of {@link Exam exams} prescribed by the Authenticated {@link Doctor doctor}
+     *
+     * @return Number of {@link Exam exams} prescribed
+     */
+    public Long getPrescriptionExamCount() {
+        long count = 0L;
+
+        if (authDoctor != null) {
+            try {
+                count = prescriptionExamDAO.getCountByDoctorId(authDoctor.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to count the Prescription Exam", ex);
+            }
+        }
+
+        return count;
     }
 
 }

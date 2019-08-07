@@ -32,9 +32,9 @@
                         <i class="info circle icon"/>
                         <div class="content">
                             <div class="header">
-                                #{i18n["dashboard.doctor.patients.empty.message"]}
+                                #{i18n["doctor.patients.empty.message"]}
                             </div>
-                            <p>#{i18n["dashboard.doctor.patients.empty.subMessage"]}</p>
+                            <p>#{i18n["doctor.patients.empty.subMessage"]}</p>
                         </div>
                     </div>
                 </c:when>
@@ -150,9 +150,9 @@
                                                     <i class="info circle icon"/>
                                                     <div class="content">
                                                         <div class="header">
-                                                            #{i18n["dashboard.doctor.patients.patient.exam.empty.message"]}
+                                                            #{i18n["doctor.patients.patient.exam.empty.message"]}
                                                         </div>
-                                                        <p>#{i18n["dashboard.doctor.patients.patient.exam.empty.subMessage"]}</p>
+                                                        <p>#{i18n["doctor.patients.patient.exam.empty.subMessage"]}</p>
                                                     </div>
                                                 </div>
                                             </ui:fragment>
@@ -172,14 +172,24 @@
                                                         <tr>
                                                             <td>#{pe.exam.name}</td>
                                                             <td>
-                                                                <h:outputText value="#{pe.date}">
-                                                                    <f:convertDateTime type="localDate"/>
-                                                                </h:outputText>
+                                                                <ui:fragment rendered="#{empty pe.date}">
+                                                                    -
+                                                                </ui:fragment>
+                                                                <ui:fragment rendered="#{not empty pe.date}">
+                                                                    <h:outputText value="#{pe.date}">
+                                                                        <f:convertDateTime type="localDate"/>
+                                                                    </h:outputText>
+                                                                </ui:fragment>
                                                             </td>
                                                             <td>
-                                                                <h:outputText value="#{pe.time}">
-                                                                    <f:convertDateTime type="localTime"/>
-                                                                </h:outputText>
+                                                                <ui:fragment rendered="#{empty pe.time}">
+                                                                    -
+                                                                </ui:fragment>
+                                                                <ui:fragment rendered="#{not empty pe.time}">
+                                                                    <h:outputText value="#{pe.time}">
+                                                                        <f:convertDateTime type="localTime"/>
+                                                                    </h:outputText>
+                                                                </ui:fragment>
                                                             </td>
                                                             <td class="#{empty pe.report ? 'disabled' : 'positive'}">
                                                                 <ui:fragment rendered="#{empty pe.report}">
@@ -213,9 +223,9 @@
                                                     <i class="info circle icon"/>
                                                     <div class="content">
                                                         <div class="header">
-                                                            #{i18n["dashboard.doctor.patients.patient.prescription.empty.message"]}
+                                                            #{i18n["doctor.patients.patient.prescription.empty.message"]}
                                                         </div>
-                                                        <p>#{i18n["dashboard.doctor.patients.patient.prescription.empty.subMessage"]}</p>
+                                                        <p>#{i18n["doctor.patients.patient.prescription.empty.subMessage"]}</p>
                                                     </div>
                                                 </div>
                                             </ui:fragment>
@@ -264,9 +274,9 @@
                                                     <i class="info circle icon"/>
                                                     <div class="content">
                                                         <div class="header">
-                                                            #{i18n["dashboard.doctor.patients.patient.timeline.empty.message"]}
+                                                            #{i18n["doctor.patients.patient.timeline.empty.message"]}
                                                         </div>
-                                                        <p>#{i18n["dashboard.doctor.patients.patient.timeline.empty.subMessage"]}</p>
+                                                        <p>#{i18n["doctor.patients.patient.timeline.empty.subMessage"]}</p>
                                                     </div>
                                                 </div>
                                             </ui:fragment>
@@ -318,14 +328,18 @@
                             </div>
                             <div class="actions">
                                 <div class="ui two buttons">
-                                    <div class="ui green right labeled icon button">
-                                        Prescrivi farmaco
+                                    <h:link styleClass="ui green right labeled icon button"
+                                            outcome="/dashboard/doctor/prescription_medicine/index">
+                                        <f:param name="patientId" value="#{p.id}"/>
+                                        #{i18n["common.prescribeMedicine"]}
                                         <i class="right chevron icon"/>
-                                    </div>
-                                    <div class="ui teal right labeled icon button">
-                                        prenota esame
+                                    </h:link>
+                                    <h:link styleClass="ui teal right labeled icon button"
+                                            outcome="/dashboard/doctor/prescription_exam/index">
+                                        <f:param name="patientId" value="#{p.id}"/>
+                                        #{i18n["common.prescribeExam"]}
                                         <i class="right chevron icon"/>
-                                    </div>
+                                    </h:link>
                                 </div>
                             </div>
                         </div>
@@ -382,9 +396,9 @@
                                                 <i class="info circle icon"/>
                                                 <div class="content">
                                                     <div class="header">
-                                                        #{i18n["dashboard.doctor.patients.patient.report.exam.empty.message"]}
+                                                        #{i18n["doctor.patients.patient.report.exam.empty.message"]}
                                                     </div>
-                                                    <p>#{i18n["dashboard.doctor.patients.patient.report.exam.empty.subMessage"]}</p>
+                                                    <p>#{i18n["doctor.patients.patient.report.exam.empty.subMessage"]}</p>
                                                 </div>
                                             </div>
                                         </ui:fragment>
@@ -408,9 +422,9 @@
                                                 <i class="info circle icon"/>
                                                 <div class="content">
                                                     <div class="header">
-                                                        #{i18n["dashboard.doctor.patients.patient.report.medicine.empty.message"]}
+                                                        #{i18n["doctor.patients.patient.report.medicine.empty.message"]}
                                                     </div>
-                                                    <p>#{i18n["dashboard.doctor.patients.patient.report.medicine.empty.subMessage"]}</p>
+                                                    <p>#{i18n["doctor.patients.patient.report.medicine.empty.subMessage"]}</p>
                                                 </div>
                                             </div>
                                         </ui:fragment>

@@ -10,6 +10,7 @@ import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,7 @@ public class JDBCDoctorDAO extends JDBCDAO<Doctor, Long> implements DoctorDAO {
             doctor = new Doctor();
 
             doctor.setId(rs.getLong("id"));
+            doctor.setSince(rs.getObject("since", LocalDateTime.class));
             doctor.setPatients(getPatientsByDoctorId(doctor.getId()));
         } catch (SQLException ex) {
             throw new DAOException("Impossible to set Doctor by ResultSet", ex);

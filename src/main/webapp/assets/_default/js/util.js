@@ -39,5 +39,61 @@ window.UTIL = {
         isNumber: function (n) {
             return n !== null && n !== undefined && !isNaN(+n) && isFinite(n);
         }
+    },
+    URL: {
+        /**
+         * Return an object populated with GET URL parameters
+         *  The default URL to parse is {@code window.location}
+         *  An optional URL to parse can be passed as function parameter
+         *  If a parameter has a value -> value
+         *  If a parameter has no value -> true
+         *  If a parameter does not exists -> undefined
+         * @example
+         *  getParams().color -> red
+         *  getParams().noValue -> true
+         *  getParams().noExists -> undefined
+         * @param url An optional url to parse
+         * @author Carlo Corradini
+         */
+        getParams: function (url) {
+            let queryString = url ? url.split("?")[1] : window.location.search.slice(1);
+            let params = {};
+
+            if (queryString) {
+                queryString = queryString.split("#")[0];
+                const arr = queryString.split("&");
+
+                for (let i = 0; i < arr.length; i++) {
+                    let a = arr[i].split("=");
+                    let paramName = a[0];
+                    let paramValue = typeof (a[1]) === "undefined" ? true : a[1];
+
+                    if (typeof paramValue === "string") paramValue = paramValue.toLowerCase();
+
+                    if (paramName.match(/\[(\d+)?\]$/)) {
+                        const key = paramName.replace(/\[(\d+)?\]/, "");
+                        if (!params[key]) params[key] = [];
+
+                        if (paramName.match(/\[\d+\]$/)) {
+                            const index = /\[(\d+)\]/.exec(paramName)[1];
+                            params[key][index] = paramValue;
+                        } else {
+                            params[key].push(paramValue);
+                        }
+                    } else {
+                        if (!params[paramName]) {
+                            params[paramName] = paramValue;
+                        } else if (params[paramName] && typeof params[paramName] === "string") {
+                            params[paramName] = [params[paramName]];
+                            params[paramName].push(paramValue);
+                        } else {
+                            params[paramName].push(paramValue);
+                        }
+                    }
+                }
+            }
+
+            return params;
+        }
     }
 };

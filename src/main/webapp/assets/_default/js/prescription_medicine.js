@@ -19,6 +19,7 @@ function prescriptionMedicineConfig() {
         medicineId: null,
         quantity: null
     };
+    const patientId = window.UTIL.URL.getParams().patientId;
 
     pMedicine.$form.submit(function () {
         return false;
@@ -30,6 +31,10 @@ function prescriptionMedicineConfig() {
             prescription.patientId = value;
         }
     });
+    // Set the Default Patient if present
+    if (window.UTIL.NUMBER.isNumber(patientId)) {
+        pMedicine.$dropdownPatient.dropdown("set selected", patientId);
+    }
 
     pMedicine.$dropdownMedicine.dropdown({
         clearable: true,
@@ -47,8 +52,7 @@ function prescriptionMedicineConfig() {
 
     pMedicine.$button.click(function () {
         if (UTIL.NUMBER.isNumber(prescription.patientId) && UTIL.NUMBER.isNumber(prescription.medicineId) && UTIL.NUMBER.isNumber(prescription.quantity)) {
-            pMedicine.$form.addClass("loading");
-            pMedicine.$form.removeClass("warning success");
+            pMedicine.$form.removeClass("warning success").addClass("loading");
 
             $.ajax({
                 type: "POST",

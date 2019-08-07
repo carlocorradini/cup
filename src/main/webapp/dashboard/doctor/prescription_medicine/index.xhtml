@@ -2,8 +2,9 @@
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
         xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Prescizione medicina</ui:define>
+    <ui:define name="title">#{i18n["common.prescriptionMedicine"]}</ui:define>
 
     <ui:define name="js">
         <h:outputScript library="_default"
@@ -15,104 +16,140 @@
         <ui:fragment rendered="#{not empty doctor.authDoctor}">
             <h2 class="ui center aligned icon header">
                 <i class="pills icon"/>
-                Prescrizione Farmaco
+                #{i18n["common.prescriptionMedicine"]}
             </h2>
 
             <div class="ui divider"></div>
 
-            <form class="ui large form"
-                  id="prescription-medicine-form"
-                  action="#"
-                  method="post"
-            >
-                <div class="field">
-                    <label>Paziente</label>
-                    <div class="ui floating dropdown labeled icon button large"
-                         id="prescription-medicine-patient-dropdown">
-                        <i class="user icon"/>
-                        <span class="text">Patient</span>
-                        <div class="menu">
-                            <div class="ui icon search input">
-                                <i class="search icon"/>
-                                <input type="text" placeholder="Cerca utenti..."/>
+            <c:choose>
+                <c:when test="#{empty doctor.patients}">
+                    <div class="ui icon floating message">
+                        <i class="info circle icon"/>
+                        <div class="content">
+                            <div class="header">
+                                #{i18n["doctor.patients.empty.message"]}
                             </div>
-                            <div class="divider"></div>
-                            <div class="scrolling menu">
-                                <ui:repeat value="#{doctor.patients}" var="p">
-                                    <div class="item" data-value="#{p.id}">
-                                        <h:graphicImage library="_default"
-                                                        name="#{p.avatar.nameAsResource}"
-                                                        alt="Avatar"
-                                                        style="width: 2em; height: 2em;"
-                                                        styleClass="ui image bordered rounded person-avatar middle aligned"
-                                        />
-                                        <span>#{p.fullNameCapitalized} | <span class="text-light">#{p.fiscalCode}</span></span>
+                            <p>#{i18n["doctor.patients.empty.subMessage"]}</p>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <form class="ui large form"
+                          id="prescription-medicine-form"
+                          action="#"
+                          method="post"
+                    >
+                        <div class="field">
+                            <label>#{i18n["common.patient"]}</label>
+                            <div class="ui floating dropdown labeled icon button fluid large"
+                                 id="prescription-medicine-patient-dropdown">
+                                <i class="user icon"/>
+                                <span class="text full-width">#{i18n["prescription.medicine.choose.patient"]}</span>
+                                <div class="menu">
+                                    <div class="header">
+                                        #{i18n["prescription.medicine.searchPatient"]}
                                     </div>
-                                </ui:repeat>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label>#{i18n["common.medicine"]}</label>
-                    <div class="ui floating dropdown labeled icon button large"
-                         id="prescription-medicine-medicine-dropdown">
-                        <i class="pills icon"/>
-                        <span class="text">#{i18n["common.medicine"]}</span>
-                        <div class="menu">
-                            <div class="ui icon search input">
-                                <i class="search icon"/>
-                                <input type="text" placeholder="Cerca utenti..."/>
-                            </div>
-                            <div class="divider"></div>
-                            <div class="scrolling menu">
-                                <ui:repeat value="#{medicine.medicines}" var="m">
-                                    <div class="item" data-value="#{m.id}">
-                                        #{m.name}
+                                    <div class="ui icon search input">
+                                        <i class="search icon"/>
+                                        <input type="text" placeholder="#{i18n['common.search']}..."/>
                                     </div>
-                                </ui:repeat>
+                                    <div class="divider"></div>
+                                    <div class="header">
+                                        <i class="filter icon"/>
+                                        #{i18n["prescription.medicine.filter.patient"]}
+                                    </div>
+                                    <div class="scrolling menu">
+                                        <ui:repeat value="#{doctor.patients}" var="p">
+                                            <div class="item" data-value="#{p.id}">
+                                                <h:graphicImage library="_default"
+                                                                name="#{p.avatar.nameAsResource}"
+                                                                alt="Avatar"
+                                                                style="width: 2em; height: 2em;"
+                                                                styleClass="ui image bordered rounded person-avatar middle aligned"
+                                                />
+                                                #{p.fullNameCapitalized}
+                                                <span class="text-light text-right">#{p.fiscalCode}</span>
+                                            </div>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="field">
-                    <label>Quantità</label>
-                    <div class="ui labeled input">
-                        <div class="ui label">
-                            <i class="hashtag icon fitted"/>
+                        <div class="field">
+                            <label>#{i18n["common.medicine"]}</label>
+                            <div class="ui floating dropdown labeled icon button fluid large"
+                                 id="prescription-medicine-medicine-dropdown">
+                                <i class="pills icon"/>
+                                <span class="text full-width">#{i18n["prescription.medicine.choose.medicine"]}</span>
+                                <div class="menu">
+                                    <div class="header">
+                                        #{i18n["prescription.medicine.searchMedicine"]}
+                                    </div>
+                                    <div class="ui icon search input">
+                                        <i class="search icon"/>
+                                        <input type="text" placeholder="#{i18n['common.search']}..."/>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="header">
+                                        <i class="filter icon"/>
+                                        #{i18n["prescription.medicine.filter.medicine"]}
+                                    </div>
+                                    <div class="scrolling menu">
+                                        <ui:repeat value="#{medicine.medicines}" var="m">
+                                            <div class="item" data-value="#{m.id}">
+                                                <span class="ui empty circular label #{['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink'].get(m.id % 10)}"/>
+                                                #{m.name}
+                                                <span class="text-light text-right">#{m.id}</span>
+                                            </div>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <input type="number" id="prescription-medicine-quantity-input"
-                               min="#{prescription.medicineMinQuantity}" max="#{prescription.medicineMaxQuantity}"/>
-                    </div>
-                </div>
 
-                <div class="ui blue fluid big button submit" tabindex="0" id="prescription-medicine-button">
-                    <i class="send icon"/>
-                    #{i18n['common.signIn']}
-                </div>
-
-                <div class="ui icon success message medium">
-                    <i class="checkmark icon"/>
-                    <div class="content">
-                        <div class="header">
-                            Prescrizione completata
+                        <div class="field">
+                            <label>#{i18n["common.quantity"]}</label>
+                            <div class="ui labeled input fluid">
+                                <div class="ui label">
+                                    <i class="hashtag icon fitted"/>
+                                </div>
+                                <input type="number" id="prescription-medicine-quantity-input"
+                                       placeholder="#{i18n['prescription.medicine.choose.quantity']}"
+                                       min="#{prescription.medicineMinQuantity}"
+                                       max="#{prescription.medicineMaxQuantity}"/>
+                            </div>
                         </div>
-                        <p>La prescrizione è stata effettuata correttamente</p>
-                    </div>
-                </div>
 
-                <div class="ui icon warning message medium">
-                    <i class="exclamation triangle icon"/>
-                    <div class="content">
-                        <div class="header">
-                            Ricontrolla i dai
+                        <div class="ui blue fluid big button submit" tabindex="0" id="prescription-medicine-button">
+                            <i class="syringe icon"/>
+                            #{i18n["common.prescribe"]}
                         </div>
-                        <p>Ricontrolla i dati e verifica di averli inseriti correttamente</p>
-                    </div>
-                </div>
-            </form>
+
+                        <div class="ui icon success message medium">
+                            <i class="checkmark icon"/>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n["prescription.medicine.success.message"]}
+                                </div>
+                                <p>#{i18n["prescription.medicine.success.subMessage"]}</p>
+                            </div>
+                        </div>
+
+                        <div class="ui icon warning message medium">
+                            <i class="exclamation triangle icon"/>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n["prescription.medicine.warning.message"]}
+                                </div>
+                                <p>#{i18n["prescription.medicine.warning.subMessage"]}</p>
+                            </div>
+                        </div>
+                    </form>
+                </c:otherwise>
+            </c:choose>
+
+            <div class="ui divider"></div>
 
         </ui:fragment>
     </ui:define>

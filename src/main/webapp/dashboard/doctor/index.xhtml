@@ -1,42 +1,98 @@
 <ui:composition
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:fn="http://java.sun.com/jsp/jstl/functions"
         xmlns:ui="http://java.sun.com/jsf/facelets"
 >
-    <ui:define name="title"></ui:define>
+    <ui:define name="title">#{i18n["common.dashboard.doctor"]}</ui:define>
 
     <ui:define name="content">
         <ui:fragment rendered="#{not empty doctor.authDoctor}">
 
             <h2 class="ui center aligned icon header">
-                <i class="circular users icon"/>
-                {}
+                <i class="user md icon"/>
+                #{person.authPerson.fullNameCapitalized}
+                <br/>
+                <span class="text-smaller-33 text-light">
+                <h:outputText value="#{doctor.authDoctor.sinceDate}">
+                    <f:convertDateTime type="localDate"/>
+                </h:outputText>
+                </span>
             </h2>
 
-            <div class="ui four statistics">
-                <div class="statistic"></div>
+            <div class="ui divider"></div>
+
+            <div class="ui three statistics">
                 <div class="statistic">
-                    <div class="value">
-                        #{fn:length(doctor.authDoctor.patients)}
-                    </div>
                     <div class="label">
                         #{i18n["common.patients"]}
                     </div>
+                    <div class="value">
+                        #{fn:length(doctor.patients)}
+                    </div>
                 </div>
                 <div class="statistic">
-                    <div class="value">
-                        #{fn:length(doctor.authDoctor.doctorVisits)}
-                    </div>
                     <div class="label">
-                        #{i18n["common.visits"]}
+                        #{i18n["common.prescribedMedicine"]}
+                    </div>
+                    <div class="value">
+                        #{doctor.prescriptionMedicineCount}
                     </div>
                 </div>
-                <div class="statistic"></div>
+                <div class="statistic">
+                    <div class="label">
+                        #{i18n["common.prescribedExam"]}
+                    </div>
+                    <div class="value">
+                        #{doctor.prescriptionExamCount}
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <div class="ui centered cards">
+                <h:link outcome="/dashboard/doctor/patients/index" styleClass="raised link card">
+                    <div class="image">
+                        <h:graphicImage styleClass="ui image"
+                                        library="_default"
+                                        name="/images/category/group.svg"
+                                        alt="#{i18n['common.patients']}"
+                        />
+                    </div>
+                    <div class="extra center aligned">
+                        #{fn:toUpperCase(i18n["common.patients"])}
+                    </div>
+                </h:link>
+                <h:link outcome="/dashboard/doctor/prescription_medicine/index" styleClass="raised link card">
+                    <div class="image">
+                        <h:graphicImage styleClass="ui image"
+                                        library="_default"
+                                        name="/images/category/pills.svg"
+                                        alt="#{i18n['common.medicine']}"
+                        />
+                    </div>
+                    <div class="extra center aligned">
+                        #{fn:toUpperCase(i18n["common.prescriptionMedicine"])}
+                    </div>
+                </h:link>
+                <h:link outcome="/dashboard/doctor/prescription_exam/index" styleClass="raised link card">
+                    <div class="image">
+                        <h:graphicImage styleClass="ui image"
+                                        library="_default"
+                                        name="/images/category/doctor.svg"
+                                        alt="#{i18n['common.exam']}"
+                        />
+                    </div>
+                    <div class="extra center aligned">
+                        #{fn:toUpperCase(i18n["common.prescriptionExam"])}
+                    </div>
+                </h:link>
             </div>
 
             <div class="ui divider"></div>
         </ui:fragment>
     </ui:define>
-
 </ui:composition>

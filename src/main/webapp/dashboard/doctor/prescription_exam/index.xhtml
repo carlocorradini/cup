@@ -1,0 +1,144 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">#{i18n["common.prescriptionExam"]}</ui:define>
+
+    <ui:define name="js">
+        <h:outputScript library="_default"
+                        name="js/prescription_exam.js"
+                        target="body"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <ui:fragment rendered="#{not empty doctor.authDoctor}">
+            <h2 class="ui center aligned icon header">
+                <i class="user md icon"/>
+                #{i18n["common.prescriptionExam"]}
+            </h2>
+
+            <div class="ui divider"></div>
+
+            <c:choose>
+                <c:when test="#{empty doctor.patients}">
+                    <div class="ui icon floating message">
+                        <i class="info circle icon"/>
+                        <div class="content">
+                            <div class="header">
+                                #{i18n["doctor.patients.empty.message"]}
+                            </div>
+                            <p>#{i18n["doctor.patients.empty.subMessage"]}</p>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <form class="ui large form"
+                          id="prescription-exam-form"
+                          action="#"
+                          method="post"
+                    >
+                        <div class="field">
+                            <label>#{i18n["common.patient"]}</label>
+                            <div class="ui floating dropdown labeled icon button fluid large"
+                                 id="prescription-exam-patient-dropdown">
+                                <i class="user icon"/>
+                                <span class="text full-width">#{i18n["prescription.exam.choose.patient"]}</span>
+                                <div class="menu">
+                                    <div class="header">
+                                        #{i18n["prescription.exam.searchPatient"]}
+                                    </div>
+                                    <div class="ui icon search input">
+                                        <i class="search icon"/>
+                                        <input type="text" placeholder="#{i18n['common.search']}..."/>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="header">
+                                        <i class="filter icon"/>
+                                        #{i18n["prescription.exam.filter.patient"]}
+                                    </div>
+                                    <div class="scrolling menu">
+                                        <ui:repeat value="#{doctor.patients}" var="p">
+                                            <div class="item" data-value="#{p.id}">
+                                                <h:graphicImage library="_default"
+                                                                name="#{p.avatar.nameAsResource}"
+                                                                alt="Avatar"
+                                                                style="width: 2em; height: 2em;"
+                                                                styleClass="ui image bordered rounded person-avatar middle aligned"
+                                                />
+                                                #{p.fullNameCapitalized}
+                                                <span class="text-light text-right">#{p.fiscalCode}</span>
+                                            </div>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>#{i18n["common.exam"]}</label>
+                            <div class="ui floating dropdown labeled icon button fluid large"
+                                 id="prescription-exam-exam-dropdown">
+                                <i class="pills icon"/>
+                                <span class="text full-width">#{i18n["prescription.exam.choose.exam"]}</span>
+                                <div class="menu">
+                                    <div class="header">
+                                        #{i18n["prescription.exam.searchExam"]}
+                                    </div>
+                                    <div class="ui icon search input">
+                                        <i class="search icon"/>
+                                        <input type="text" placeholder="#{i18n['common.search']}..."/>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="header">
+                                        <i class="filter icon"/>
+                                        #{i18n["prescription.exam.filter.exam"]}
+                                    </div>
+                                    <div class="scrolling menu">
+                                        <ui:repeat value="#{exam.exams}" var="e">
+                                            <div class="item" data-value="#{e.id}">
+                                                <span class="ui empty circular label #{['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink'].get(e.id % 10)}"/>
+                                                #{e.name}
+                                                <span class="text-light text-right">#{e.id}</span>
+                                            </div>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui blue fluid big button submit" tabindex="0" id="prescription-exam-button">
+                            <i class="syringe icon"/>
+                            #{i18n["common.prescribe"]}
+                        </div>
+
+                        <div class="ui icon success message medium">
+                            <i class="checkmark icon"/>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n["prescription.exam.success.message"]}
+                                </div>
+                                <p>#{i18n["prescription.exam.success.subMessage"]}</p>
+                            </div>
+                        </div>
+
+                        <div class="ui icon warning message medium">
+                            <i class="exclamation triangle icon"/>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n["prescription.exam.warning.message"]}
+                                </div>
+                                <p>#{i18n["prescription.exam.warning.subMessage"]}</p>
+                            </div>
+                        </div>
+                    </form>
+                </c:otherwise>
+            </c:choose>
+
+            <div class="ui divider"></div>
+
+        </ui:fragment>
+    </ui:define>
+
+</ui:composition>

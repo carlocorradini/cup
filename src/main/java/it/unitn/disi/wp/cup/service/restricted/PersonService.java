@@ -2,7 +2,6 @@ package it.unitn.disi.wp.cup.service.restricted;
 
 import it.unitn.disi.wp.cup.config.AppConfig;
 import it.unitn.disi.wp.cup.persistence.dao.PersonAvatarDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
@@ -40,7 +39,6 @@ public class PersonService {
     private static final Logger LOGGER = Logger.getLogger(PersonService.class.getName());
 
     private Person person = null;
-    private PersonDAO personDAO = null;
     private PersonAvatarDAO personAvatarDAO = null;
 
     @Context
@@ -53,7 +51,6 @@ public class PersonService {
         if (servletContext != null) {
             try {
                 person = AuthUtil.getAuthPerson(request);
-                personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
                 personAvatarDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonAvatarDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
@@ -109,7 +106,7 @@ public class PersonService {
 
                 if (personAvatar.getId() != null) {
                     // Added successfully
-                    // I Need to Update the Person in the Session Scope
+                    // Update the Person in the Session Scope
                     person.setAvatar(personAvatar);
                     person.setAvatarHistory(personAvatarDAO.getAllByPersonId(person.getId()));
                     message.setError(JsonMessage.ERROR_NO_ERROR);

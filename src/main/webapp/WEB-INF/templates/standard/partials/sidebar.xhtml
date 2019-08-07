@@ -52,8 +52,8 @@
             </h4>
 
             <div class="item">
-                <div class="ui input">
-                    <input type="text" placeholder="Search..."/>
+                <div class="ui input disabled">
+                    <input type="text" placeholder="#{i18n['common.search']}..."/>
                 </div>
             </div>
 
@@ -61,7 +61,14 @@
                     styleClass="item"
             >
                 <i class="th icon"/>
-                #{i18n["dashboard.dashboard"]}
+                #{i18n["common.dashboard.personal"]}
+            </h:link>
+            <h:link outcome="/dashboard/doctor/index"
+                    styleClass="item"
+                    rendered="#{not empty doctor.authDoctor}"
+            >
+                <i class="user md icon"/>
+                #{i18n["common.dashboard.doctor"]}
             </h:link>
 
             <div class="item">
@@ -80,19 +87,18 @@
                     <div class="menu">
                         <h:link outcome="/dashboard/doctor/patients/index"
                                 styleClass="item">
-                            Lista
+                            <span class="ui red empty circular label"/>
+                            #{i18n["common.list"]}
                         </h:link>
-                    </div>
-                    <div class="menu">
                         <h:link outcome="/dashboard/doctor/prescription_medicine/index"
                                 styleClass="item">
-                            Prescrivi farmaco
+                            <span class="ui yellow empty circular label"/>
+                            #{i18n["common.prescriptionMedicine"]}
                         </h:link>
-                    </div>
-                    <div class="menu">
                         <h:link outcome="/dashboard/doctor/prescription_exam/index"
                                 styleClass="item">
-                            Prescrivi esame
+                            <span class="ui green empty circular label"/>
+                            #{i18n["common.prescriptionExam"]}
                         </h:link>
                     </div>
                 </div>

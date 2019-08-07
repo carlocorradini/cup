@@ -128,9 +128,9 @@ public class JDBCPersonAvatarDAO extends JDBCDAO<PersonAvatar, Long> implements 
 
     @Override
     public Long add(PersonAvatar personAvatar) throws DAOException {
-        Long toRtn = null;
+        Long id = null;
         if (personAvatar == null)
-            throw new DAOException("Person Avatar is mandatory");
+            throw new DAOException("Person Avatar is mandatory", new NullPointerException());
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_ADD, Statement.RETURN_GENERATED_KEYS)) {
             pStmt.setLong(1, personAvatar.getPersonId());
@@ -139,21 +139,21 @@ public class JDBCPersonAvatarDAO extends JDBCDAO<PersonAvatar, Long> implements 
             if (pStmt.executeUpdate() == 1) {
                 ResultSet rs = pStmt.getGeneratedKeys();
                 if (rs.next()) {
-                    toRtn = rs.getLong(1);
+                    id = rs.getLong(1);
                 }
             }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to add the Person Avatar", ex);
         }
 
-        return toRtn;
+        return id;
     }
 
     @Override
     public PersonAvatar getCurrentByPersonId(Long personId) throws DAOException {
         PersonAvatar personAvatar = null;
         if (personId == null)
-            throw new DAOException("Person id is mandatory");
+            throw new DAOException("Person id is mandatory", new NullPointerException());
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_CURRENT_BY_PERSON_ID_)) {
             pStmt.setLong(1, personId);
@@ -173,7 +173,7 @@ public class JDBCPersonAvatarDAO extends JDBCDAO<PersonAvatar, Long> implements 
     public List<PersonAvatar> getAllByPersonId(Long personId) throws DAOException {
         List<PersonAvatar> avatars = new ArrayList<>();
         if (personId == null)
-            throw new DAOException("Person id is mandatory");
+            throw new DAOException("Person id is mandatory", new NullPointerException());
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_BY_PERSON_ID)) {
             pStmt.setLong(1, personId);

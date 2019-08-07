@@ -34,6 +34,7 @@ public final class MedicineDaoBean implements Serializable {
     @PostConstruct
     public void init() {
         MedicineDAO medicineDAO;
+
         try {
             medicineDAO = DAOFactory.getDAOFactory().getDAO(MedicineDAO.class);
             medicines = medicineDAO.getAll();
@@ -45,7 +46,7 @@ public final class MedicineDaoBean implements Serializable {
     }
 
     /**
-     * Return the List of Medicines available for the prescription
+     * Return the List of available Medicines for the prescription
      *
      * @return The List of Medicines
      */

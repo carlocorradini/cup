@@ -7,5 +7,5 @@ import it.unitn.disi.wp.cup.persistence.entity.Medicine;
  *
  * @author Carlo Corradini
  */
-public interface MedicineDAO extends DAO<Medicine, Long>{
+public interface MedicineDAO extends DAO<Medicine, Long> {
 }

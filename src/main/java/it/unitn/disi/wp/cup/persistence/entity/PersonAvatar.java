@@ -104,9 +104,9 @@ public class PersonAvatar {
     }
 
     /**
-     * Return the OffsetDateTime of the Person Avatar
+     * Return the DateTime of the Person Avatar
      *
-     * @return OffsetDateTime Person Avatar
+     * @return DateTime Person Avatar
      */
     public LocalDateTime getUpload() {
         return upload;
@@ -135,9 +135,9 @@ public class PersonAvatar {
     }
 
     /**
-     * Set the OffsetDateTime of the Person Avatar
+     * Set the DateTime of the Person Avatar
      *
-     * @param upload OffsetDateTime of the Person Avatar
+     * @param upload DateTime of the Person Avatar
      */
     public void setUpload(LocalDateTime upload) {
         this.upload = upload;

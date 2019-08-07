@@ -2,6 +2,11 @@ package it.unitn.disi.wp.cup.model.prescription;
 
 import it.unitn.disi.wp.cup.config.PrescriptionConfig;
 
+/**
+ * Prescription Medicine Model
+ *
+ * @author Carlo Corradini
+ */
 public class PrescriptionMedicineModel implements Prescription {
     private long patientId;
     private long medicineId;
@@ -13,26 +18,56 @@ public class PrescriptionMedicineModel implements Prescription {
         quantity = 0;
     }
 
+    /**
+     * Return the Patient id
+     *
+     * @return patient id
+     */
     public long getPatientId() {
         return patientId;
     }
 
+    /**
+     * Set the Patient id
+     *
+     * @param patientId Patient id
+     */
     public void setPatientId(long patientId) {
         this.patientId = patientId;
     }
 
+    /**
+     * Return the Medicine id
+     *
+     * @return Medicine id
+     */
     public long getMedicineId() {
         return medicineId;
     }
 
+    /**
+     * Set the Medicine id
+     *
+     * @param medicineId Medicine id
+     */
     public void setMedicineId(long medicineId) {
         this.medicineId = medicineId;
     }
 
+    /**
+     * Return the Prescription Medicine quantity
+     *
+     * @return Prescription Medicine quantity
+     */
     public short getQuantity() {
         return quantity;
     }
 
+    /**
+     * Set the Prescription Medicine quantity
+     *
+     * @param quantity Prescription Medicine quantity
+     */
     public void setQuantity(short quantity) {
         this.quantity = quantity;
     }

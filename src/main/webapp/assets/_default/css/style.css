@@ -55,21 +55,47 @@
     display: none !important;
 }
 
-/* Text Overflow */
+/* Text  */
 .text-overflow-ellipsis {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-/* Text Strong */
 .text-strong {
     font-weight: bold;
 }
 
-/* Text Light */
 .text-light {
     font-weight: lighter;
+}
+
+.text-left {
+    float: left;
+}
+
+.text-right {
+    float: right;
+}
+
+.text-smaller-25 {
+    font-size: 75%;
+}
+
+.text-smaller-33 {
+    font-size: 67%;
+}
+
+.text-smaller-50 {
+    font-size: 50%;
+}
+
+.text-smaller-66 {
+    font-size: 34%;
+}
+
+.text-smaller-75 {
+    font-size: 25%;
 }
 
 /* Modal Disabled */
@@ -101,6 +127,11 @@
     -ms-transform: translate(0%, -50%);
     transform: translate(0%, -50%);
     z-index: 2;
+}
+
+/* Structural */
+.full-width {
+    width: 100%;
 }
 
 /* === STRUCTURE === */
@@ -903,4 +934,20 @@ footer.footer .footer-right .made-with-love:hover span:nth-of-type(3) {
 /* === PATIENTS === */
 div[id^=personal-card-modal-].ui.modal.disabled:after {
     content: "\01F6AB";
+}
+
+/* === PRESCRIPTION MEDICINE === */
+#prescription-medicine-form {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    margin: 5px auto;
+}
+
+/* === PRESCRIPTION EXAM === */
+#prescription-exam-form {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    margin: 5px auto;
 }

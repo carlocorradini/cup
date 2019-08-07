@@ -1,6 +1,8 @@
 package it.unitn.disi.wp.cup.persistence.dao;
 
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
+import it.unitn.disi.wp.cup.persistence.entity.Doctor;
+import it.unitn.disi.wp.cup.persistence.entity.Medicine;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
 
@@ -30,4 +32,20 @@ public interface PrescriptionMedicineDAO extends DAO<PrescriptionMedicine, Long>
      * @throws DAOException If an error occurred during the information retrieving
      */
     public Long add(PrescriptionMedicine prescriptionMedicine) throws DAOException;
+
+    /**
+     * Return the Number of {@link Medicine medicines} prescribed for a {@link Person person} given its {@code personId id}
+     *
+     * @return The number of {@link Medicine medicines} prescribed for a {@link Person person}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    public Long getCountByPersonId(Long personId) throws DAOException;
+
+    /**
+     * Return the Number of {@link Medicine medicines} prescribed by a {@link Doctor doctor} given its {@code doctorId id}
+     *
+     * @return The number of {@link Medicine medicines} prescribed by a {@link Doctor doctor}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    public Long getCountByDoctorId(Long doctorId) throws DAOException;
 }

@@ -3,6 +3,8 @@ package it.unitn.disi.wp.cup.persistence.dao;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
+import it.unitn.disi.wp.cup.persistence.entity.Exam;
+import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 
 import java.util.List;
 
@@ -21,4 +23,29 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @throws DAOException If an error occurred during the information retrieving
      */
     public List<PrescriptionExam> getAllByPersonId(Long personId) throws DAOException;
+
+    /**
+     * Add a new {@code prescriptionExam} into the persistence system
+     *
+     * @param prescriptionExam The {@link PrescriptionExam} to add
+     * @return The primary key of the inserted {@link PrescriptionExam}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    public Long add(PrescriptionExam prescriptionExam) throws DAOException;
+
+    /**
+     * Return the Number of {@link Exam exams} prescribed for a {@link Person person} given its {@code personId id}
+     *
+     * @return The number of {@link Exam exams} prescribed for a {@link Person person}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    public Long getCountByPersonId(Long personId) throws DAOException;
+
+    /**
+     * Return the Number of {@link Exam exams} prescribed by a {@link Doctor doctor} given its {@code doctorId id}
+     *
+     * @return The number of {@link Exam exams} prescribed by a {@link Doctor doctor}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    public Long getCountByDoctorId(Long doctorId) throws DAOException;
 }

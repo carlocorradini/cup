@@ -1,17 +1,12 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
+import it.unitn.disi.wp.cup.model.prescription.PrescriptionExamModel;
 import it.unitn.disi.wp.cup.model.prescription.PrescriptionMedicineModel;
-import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
-import it.unitn.disi.wp.cup.persistence.dao.MedicineDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PrescriptionMedicineDAO;
+import it.unitn.disi.wp.cup.persistence.dao.*;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
-import it.unitn.disi.wp.cup.persistence.entity.Doctor;
-import it.unitn.disi.wp.cup.persistence.entity.Medicine;
-import it.unitn.disi.wp.cup.persistence.entity.Person;
-import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
+import it.unitn.disi.wp.cup.persistence.entity.*;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 import it.unitn.disi.wp.cup.util.obj.JsonMessage;
 
@@ -28,6 +23,8 @@ import java.util.logging.Logger;
 
 /**
  * Services for Authenticated Doctor
+ *
+ * @author Carlo Corradini
  */
 @Path("doctor")
 public class DoctorService {
@@ -37,7 +34,9 @@ public class DoctorService {
     private DoctorDAO doctorDAO = null;
     private PersonDAO personDAO = null;
     private MedicineDAO medicineDAO = null;
+    private ExamDAO examDAO = null;
     private PrescriptionMedicineDAO prescriptionMedicineDAO = null;
+    private PrescriptionExamDAO prescriptionExamDAO = null;
 
     @Context
     private HttpServletRequest request;
@@ -52,13 +51,22 @@ public class DoctorService {
                 doctorDAO = DAOFactory.getDAOFactory(servletContext).getDAO(DoctorDAO.class);
                 personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
                 medicineDAO = DAOFactory.getDAOFactory(servletContext).getDAO(MedicineDAO.class);
+                examDAO = DAOFactory.getDAOFactory(servletContext).getDAO(ExamDAO.class);
                 prescriptionMedicineDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionMedicineDAO.class);
+                prescriptionExamDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionExamDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
             }
         }
     }
 
+    /**
+     * Given a valid {@link PrescriptionMedicineModel} and the Authenticated {@link Doctor doctor}
+     * add the Prescription Medicine to the Persistence System
+     *
+     * @param prescriptionMedicineModel The Medicine Prescription Model to add
+     * @return A JSON @{code {@link JsonMessage message}}
+     */
     @POST
     @Path("prescription_medicine")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -90,6 +98,49 @@ public class DoctorService {
                 }
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to Prescribe a Medicine", ex);
+            }
+        }
+
+        return message.toJsonString();
+    }
+
+    /**
+     * Given a valid {@link PrescriptionExamModel} and the Authenticated {@link Doctor doctor}
+     * add the Prescription Exam to the Persistence System
+     *
+     * @param prescriptionExamModel The Exam Prescription Model to add
+     * @return A JSON @{code {@link JsonMessage message}}
+     */
+    @POST
+    @Path("prescription_exam")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String prescriptionExam(PrescriptionExamModel prescriptionExamModel) {
+        JsonMessage message = new JsonMessage();
+        PrescriptionExam prescriptionExam = new PrescriptionExam();
+        Person patient;
+        Exam exam;
+
+        if (doctor != null && prescriptionExamModel.isValid()) {
+            try {
+                if (doctor.equals(doctorDAO.getDoctorByPatientId(prescriptionExamModel.getPatientId()))
+                        && (patient = personDAO.getByPrimaryKey(prescriptionExamModel.getPatientId())) != null
+                        && (exam = examDAO.getByPrimaryKey(prescriptionExamModel.getExamId())) != null) {
+                    // The Authenticated Doctor is the Doctor of the Patient
+                    //  and The Patient exists
+                    //  and The Exam exists
+                    prescriptionExam.setPersonId(patient.getId());
+                    prescriptionExam.setDoctorId(doctor.getId());
+                    prescriptionExam.setExam(exam);
+
+                    // Add the new Prescription Exam
+                    if (prescriptionExamDAO.add(prescriptionExam) != null) {
+                        // Added successfully
+                        message.setError(JsonMessage.ERROR_NO_ERROR);
+                    }
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to Prescribe an Exam", ex);
             }
         }
 
