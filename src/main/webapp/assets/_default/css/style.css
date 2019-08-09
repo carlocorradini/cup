@@ -951,3 +951,11 @@ div[id^=personal-card-modal-].ui.modal.disabled:after {
     max-width: 600px;
     margin: 5px auto;
 }
+
+/* === DASHBOARD PERSON === */
+/* Media Query */
+@media only screen and (max-width: 768px) {
+    #dashboard-person-tab .item span {
+        display: none;
+    }
+}

@@ -1,13 +1,17 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
 import it.unitn.disi.wp.cup.config.AppConfig;
+import it.unitn.disi.wp.cup.config.AuthConfig;
 import it.unitn.disi.wp.cup.persistence.dao.PersonAvatarDAO;
+import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PersonAvatar;
 import it.unitn.disi.wp.cup.util.AuthUtil;
+import it.unitn.disi.wp.cup.util.CryptUtil;
+import it.unitn.disi.wp.cup.util.EmailUtil;
 import it.unitn.disi.wp.cup.util.obj.JsonMessage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -39,6 +43,7 @@ public class PersonService {
     private static final Logger LOGGER = Logger.getLogger(PersonService.class.getName());
 
     private Person person = null;
+    private PersonDAO personDAO = null;
     private PersonAvatarDAO personAvatarDAO = null;
 
     @Context
@@ -51,6 +56,7 @@ public class PersonService {
         if (servletContext != null) {
             try {
                 person = AuthUtil.getAuthPerson(request);
+                personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
                 personAvatarDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonAvatarDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
@@ -64,7 +70,7 @@ public class PersonService {
      *
      * @param avatarInputStream The Avatar Image InputStream
      * @param avatarDetail      The Avatar Image Details
-     * @return A JSON @{code {@link JsonMessage message}}
+     * @return A JSON @{code {@link JsonMessage message}
      */
     @POST
     @Path("avatar")
@@ -113,6 +119,57 @@ public class PersonService {
                 }
             } catch (IOException | DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to change Person Avatar", ex);
+            }
+        }
+
+        return message.toJsonString();
+    }
+
+    /**
+     * Update the password of the Authenticated {@link Person person}
+     * given the {@code oldPassword Old Password} for security check
+     * and the {@code newPassword New Password} to change with
+     *
+     * @param oldPassword The {@link Person person} old password to check for security
+     * @param newPassword The {@link Person person} new password to change with
+     * @return A JSON @{code {@link JsonMessage message}
+     */
+    @POST
+    @Path("password")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String changePassword(@FormParam("oldPassword") String oldPassword,
+                                 @FormParam("newPassword") String newPassword) {
+        JsonMessage message = new JsonMessage();
+
+        if (person != null && personDAO != null && oldPassword != null && newPassword != null) {
+            try {
+                // Passwords exists
+                if (oldPassword.length() >= AuthConfig.getPasswordMinLength()
+                        && oldPassword.length() <= AuthConfig.getPasswordMaxLength()
+                        && newPassword.length() >= AuthConfig.getPasswordMinLength()
+                        && newPassword.length() <= AuthConfig.getPasswordMaxLength()) {
+                    // Lengths are correct
+                    if (CryptUtil.validate(oldPassword, person.getPassword())) {
+                        // Old Password match with the current Password
+                        // Change the Password with the new one
+                        person.setPassword(CryptUtil.hashPassword(newPassword));
+                        if (personDAO.update(person)) {
+                            message.setError(JsonMessage.ERROR_NO_ERROR);
+                            EmailUtil.send(person.getEmail(),
+                                    AppConfig.getName().toUpperCase() + " Password Changed",
+                                    "Your password has been successfully changed.\nNew Password: " + newPassword);
+                        } else {
+                            message.setError(JsonMessage.ERROR_UNKNOWN);
+                        }
+                    } else {
+                        message.setError(JsonMessage.ERROR_AUTHENTICATION);
+                    }
+                } else {
+                    message.setError(JsonMessage.ERROR_PASSWORD_LENGTH);
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to change Person Password", ex);
             }
         }
 

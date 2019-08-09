@@ -72,13 +72,23 @@
             </h:link>
 
             <div class="item">
-                <div class="header">Esami</div>
+                <div class="header">#{i18n["common.services"]}</div>
                 <div class="menu">
-                    <a class="item">
-                        Risultati
-                        <div class="ui label">3</div>
-                    </a>
-                    <a class="item">prenotazioni</a>
+                    <h:link outcome="/dashboard/private/report/index"
+                            styleClass="item">
+                        #{i18n["common.reports"]}
+                        <span class="ui red label">4</span>
+                    </h:link>
+                    <h:link outcome="/dashboard/private/exam/index"
+                            styleClass="item">
+                        <span class="ui yellow empty circular label"/>
+                        #{i18n["common.exams"]}
+                    </h:link>
+                    <h:link outcome="/dashboard/private/prescription/index"
+                            styleClass="item">
+                        <span class="ui green empty circular label"/>
+                        #{i18n["common.prescriptions"]}
+                    </h:link>
                 </div>
             </div>
             <ui:fragment rendered="#{not empty doctor.authDoctor}">

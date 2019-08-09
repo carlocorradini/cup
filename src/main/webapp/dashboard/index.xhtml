@@ -2,7 +2,10 @@
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+>
     <ui:define name="title">#{i18n["common.dashboard.personal"]}</ui:define>
 
     <ui:define name="content">
@@ -19,7 +22,15 @@
 
             <div class="ui divider"></div>
 
-            <div class="ui two statistics">
+            <div class="ui three statistics">
+                <div class="statistic">
+                    <div class="label">
+                        #{i18n["common.reports"]}
+                    </div>
+                    <div class="value">
+                        #{4}
+                    </div>
+                </div>
                 <div class="statistic">
                     <div class="label">
                         #{i18n["common.prescribedMedicine"]}
@@ -39,6 +50,303 @@
             </div>
 
             <div class="ui divider"></div>
+
+            <div class="ui top attached tabular menu" id="dashboard-person-tab">
+                <a class="item active" data-tab="first">
+                    <i class="address card outline icon"/>
+                    <span>#{i18n["common.personalInformation"]}</span>
+                </a>
+                <a class="item" data-tab="second">
+                    <i class="shield alternate icon"/>
+                    <span>#{i18n["common.security"]}</span>
+                </a>
+                <a class="item" data-tab="third">
+                    <i class="compass outline icon"/>
+                    <span>#{i18n["common.services"]}</span>
+                </a>
+            </div>
+            <div class="ui bottom attached tab segment active" data-tab="first">
+                <table class="ui very basic celled table">
+                    <tbody>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.id"]}</td>
+                        <td>#{person.authPerson.id}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.name"]}</td>
+                        <td>#{person.authPerson.nameCapitalized}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.surname"]}</td>
+                        <td>#{person.authPerson.surnameCapitalized}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.sex"]}</td>
+                        <td>#{person.authPerson.sex.sex}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.fiscalCode"]}</td>
+                        <td>#{person.authPerson.fiscalCode}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.birthDate"]}</td>
+                        <td>
+                            <h:outputText value="#{person.authPerson.birthDate}">
+                                <f:convertDateTime type="localDate"/>
+                            </h:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.birthCity"]}</td>
+                        <td>#{person.authPerson.birthCity.nameCapitalized}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.domicile"]}</td>
+                        <td>#{person.authPerson.city.nameCapitalized}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="second">
+                <div class="ui tag large label">#{i18n["common.passwordChange"]}</div>
+                <br/><br/>
+                <form class="ui medium form"
+                      id="dashboard-person-form"
+                      action="#"
+                      method="post"
+                >
+                    <div class="field">
+                        <label>#{i18n["common.passwordOld"]}</label>
+                        <div class="ui labeled input fluid">
+                            <div class="ui label">
+                                <i class="clipboard check fitted icon"/>
+                            </div>
+                            <input type="password"
+                                   name="oldPassword"
+                                   placeholder="#{i18n['common.passwordOld']}"
+                                   required=""
+                                   autocomplete="off"
+                                   spellcheck="false"
+                                   minlength="#{auth.passwordMinLength}"
+                                   maxlength="#{auth.passwordMaxLength}"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>#{i18n["common.passwordNew"]}</label>
+                        <div class="ui labeled input fluid">
+                            <div class="ui label">
+                                <i class="lock fitted icon"/>
+                            </div>
+                            <input type="password"
+                                   name="newPassword"
+                                   placeholder="#{i18n['common.passwordNew']}"
+                                   required=""
+                                   autocomplete="off"
+                                   spellcheck="false"
+                                   minlength="#{auth.passwordMinLength}"
+                                   maxlength="#{auth.passwordMaxLength}"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>#{i18n["common.passwordNewRepeat"]}</label>
+                        <div class="ui labeled input fluid">
+                            <div class="ui label">
+                                <i class="lock fitted icon"/>
+                            </div>
+                            <input type="password"
+                                   name="newPasswordRepeat"
+                                   placeholder="#{i18n['common.passwordNewRepeat']}"
+                                   required=""
+                                   autocomplete="off"
+                                   spellcheck="false"
+                                   minlength="#{auth.passwordMinLength}"
+                                   maxlength="#{auth.passwordMaxLength}"
+                            />
+                        </div>
+                    </div>
+
+                    <button class="ui blue fluid medium button" type="submit">
+                        <i class="power off icon"/>
+                        #{i18n["common.change"]}
+                    </button>
+
+                    <div class="ui error message"></div>
+
+                    <div class="ui icon message medium success">
+                        <i class="checkmark icon"/>
+                        <div class="content">
+                            <div class="header">
+                                #{i18n["dashboard.person.changePassword.success.message"]}
+                            </div>
+                            <p>#{i18n["dashboard.person.changePassword.success.subMessage"]}</p>
+                        </div>
+                    </div>
+
+                    <div class="ui icon warning message medium">
+                        <i class="exclamation triangle icon"/>
+                        <div class="content">
+                            <div class="header">
+                                #{i18n["dashboard.person.changePassword.error.message"]}
+                            </div>
+                            <p>
+                                #{i18n["dashboard.person.changePassword.error.subMessage"]}
+                                <span id="dashboard-person-error-old-password" class="hidden">
+                                    <br/>
+                                    #{i18n["dashboard.person.changePassword.error.oldPassword.message"]}
+                                </span>
+                                <br/>
+                                #{i18n["common.errorCode"]}: <span id="dashboard-person-error-code"/>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="third">
+                <div class="ui centered cards">
+                    <h:link outcome="/dashboard/private/report/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/report.svg"
+                                            alt="#{i18n['common.report']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.reports"])}
+                        </div>
+                    </h:link>
+                    <h:link outcome="/dashboard/private/exam/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/doctor.svg"
+                                            alt="#{i18n['common.doctor']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.exams"])}
+                        </div>
+                    </h:link>
+                    <h:link outcome="/dashboard/private/prescription/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/pills.svg"
+                                            alt="#{i18n['common.medicine']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.prescriptions"])}
+                        </div>
+                    </h:link>
+                </div>
+            </div>
         </ui:fragment>
+    </ui:define>
+
+    <ui:define name="js-injected">
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function () {
+                const dashboard = {
+                    $tab: $("#dashboard-person-tab").find(".item"),
+                    $form: $("#dashboard-person-form"),
+                    $errorCode: $("#dashboard-person-error-code"),
+                    $errorOldPassword: $("#dashboard-person-error-old-password")
+                };
+
+                dashboard.$tab.tab();
+
+                dashboard.$form.form({
+                    fields: {
+                        oldPassword: {
+                            identifier: "oldPassword",
+                            rules: [
+                                {
+                                    type: "empty",
+                                    prompt: "#{i18n['signin.password.required']}"
+                                },
+                                {
+                                    type: "minLength[#{auth.passwordMinLength}]",
+                                    prompt: "#{i18n['signin.password.minLength']}"
+                                },
+                                {
+                                    type: "maxLength[#{auth.passwordMaxLength}]",
+                                    prompt: "#{i18n['signin.password.maxLength']}"
+                                }
+                            ]
+                        },
+                        newPassword: {
+                            identifier: "newPassword",
+                            rules: [
+                                {
+                                    type: "empty",
+                                    prompt: "#{i18n['signin.password.required']}"
+                                },
+                                {
+                                    type: "minLength[#{auth.passwordMinLength}]",
+                                    prompt: "#{i18n['signin.password.minLength']}"
+                                },
+                                {
+                                    type: "maxLength[#{auth.passwordMaxLength}]",
+                                    prompt: "#{i18n['signin.password.maxLength']}"
+                                }
+                            ]
+                        },
+                        newPasswordRepeat: {
+                            identifier: "newPasswordRepeat",
+                            rules: [
+                                {
+                                    type: "empty",
+                                    prompt: "#{i18n['signin.password.required']}"
+                                },
+                                {
+                                    type: "minLength[#{auth.passwordMinLength}]",
+                                    prompt: "#{i18n['signin.password.minLength']}"
+                                },
+                                {
+                                    type: "maxLength[#{auth.passwordMaxLength}]",
+                                    prompt: "#{i18n['signin.password.maxLength']}"
+                                },
+                                {
+                                    type: "match[newPassword]",
+                                    prompt: "#{i18n['dashboard.person.newPasswordRepeat.match']}"
+                                }
+                            ]
+                        }
+                    },
+                    onSuccess: function () {
+                        dashboard.$form.removeClass("success warning").addClass("loading");
+
+                        $.ajax({
+                            type: "POST",
+                            url: window.CONTEXT_PATH + "/service/restricted/person/password",
+                            data: dashboard.$form.serialize(),
+                            success: function (data) {
+                                dashboard.$form.removeClass("loading");
+                                if (data.error === 0)
+                                    dashboard.$form.addClass("success");
+                                else {
+                                    dashboard.$errorCode.html(data.error);
+                                    if (data.error === 2)
+                                        dashboard.$errorOldPassword.removeClass("hidden");
+                                    else
+                                        dashboard.$errorOldPassword.addClass("hidden");
+                                    dashboard.$form.addClass("warning");
+                                }
+                            },
+                            error: function () {
+                                console.error("Unable to change Person password")
+                            }
+                        });
+
+                        return false;
+                    },
+                });
+            });
+        </script>
     </ui:define>
 </ui:composition>

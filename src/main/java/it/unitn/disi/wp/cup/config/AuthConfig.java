@@ -91,4 +91,32 @@ public final class AuthConfig extends Config {
         }
         return instance.getInt("cookie.remember.maxAge");
     }
+
+    /**
+     * Return the Password Min Length
+     *
+     * @return Password Min Length
+     */
+    public static int getPasswordMinLength() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Password Min Length", ex);
+        }
+        return instance.getInt("password.minLength");
+    }
+
+    /**
+     * Return the Password Max Length
+     *
+     * @return Password Max Length
+     */
+    public static int getPasswordMaxLength() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Password Max Length", ex);
+        }
+        return instance.getInt("password.maxLength");
+    }
 }

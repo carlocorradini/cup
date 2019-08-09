@@ -55,6 +55,8 @@
                                             required=""
                                             autocomplete="off"
                                             spellcheck="false"
+                                            minlength="#{auth.passwordMinLength}"
+                                            maxlength="#{auth.passwordMaxLength}"
                                     />
                                     <i class="lock icon"/>
                                 </div>
@@ -155,12 +157,12 @@
                                     prompt: "#{i18n['signin.password.required']}"
                                 },
                                 {
-                                    type: "minLength[8]",
+                                    type: "minLength[#{auth.passwordMinLength}]",
                                     prompt:
                                         "#{i18n['signin.password.minLength']}"
                                 },
                                 {
-                                    type: "maxLength[25]",
+                                    type: "maxLength[#{auth.passwordMaxLength}]",
                                     prompt:
                                         "#{i18n['signin.password.maxLength']}"
                                 }

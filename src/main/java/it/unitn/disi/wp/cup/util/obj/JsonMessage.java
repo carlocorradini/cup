@@ -12,6 +12,7 @@ public final class JsonMessage {
     public static final int ERROR_NO_ERROR = 0;
     public static final int ERROR_MESSAGE_NOT_INITIALIZED = 1;
     public static final int ERROR_AUTHENTICATION = 2;
+    public static final int ERROR_PASSWORD_LENGTH = 3;
     public static final int ERROR_UNKNOWN = 256;
 
     private int error;
