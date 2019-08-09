@@ -1,5 +1,6 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
+import it.unitn.disi.wp.cup.config.AppConfig;
 import it.unitn.disi.wp.cup.model.prescription.PrescriptionExamModel;
 import it.unitn.disi.wp.cup.model.prescription.PrescriptionMedicineModel;
 import it.unitn.disi.wp.cup.persistence.dao.*;
@@ -8,6 +9,7 @@ import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.*;
 import it.unitn.disi.wp.cup.util.AuthUtil;
+import it.unitn.disi.wp.cup.util.EmailUtil;
 import it.unitn.disi.wp.cup.util.obj.JsonMessage;
 
 import javax.servlet.ServletContext;
@@ -94,6 +96,9 @@ public class DoctorService {
                     if (prescriptionMedicineDAO.add(prescriptionMedicine) != null) {
                         // Added successfully
                         message.setError(JsonMessage.ERROR_NO_ERROR);
+                        EmailUtil.send(patient.getEmail(),
+                                AppConfig.getName().toUpperCase() + " Prescription Medicine",
+                                "A new Medicine Prescription has been added.\nMedicine: " + medicine.getName() + "\nQuantity: " + prescriptionMedicineModel.getQuantity());
                     }
                 }
             } catch (DAOException ex) {
@@ -137,6 +142,9 @@ public class DoctorService {
                     if (prescriptionExamDAO.add(prescriptionExam) != null) {
                         // Added successfully
                         message.setError(JsonMessage.ERROR_NO_ERROR);
+                        EmailUtil.send(patient.getEmail(),
+                                AppConfig.getName().toUpperCase() + " Prescription Exam",
+                                "A new Exam has been added.\nExam: " + exam.getName() + "\nPlease contact us at " + AppConfig.getInfoPhone() + " to arrange a meeting.");
                     }
                 }
             } catch (DAOException ex) {
