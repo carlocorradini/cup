@@ -24,6 +24,7 @@ public final class AuthFilter implements Filter {
 
     private static final boolean DEBUG = true;
     private FilterConfig filterConfig = null;
+    private boolean authenticated = false;
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -62,6 +63,8 @@ public final class AuthFilter implements Filter {
             person = AuthUtil.getAuthPerson(req);
             if (person == null) {
                 resp.sendRedirect(resp.encodeRedirectURL(req.getServletContext().getContextPath() + "/signin/index.xhtml"));
+            } else {
+                authenticated = true;
             }
         }
     }
@@ -89,11 +92,13 @@ public final class AuthFilter implements Filter {
 
         doBeforeProcessing(servletRequest, servletResponse);
 
-        try {
-            filterChain.doFilter(servletRequest, servletResponse);
-        } catch (IOException | ServletException | RuntimeException ex) {
-            problem = ex;
-            servletRequest.getServletContext().log("Impossible to propagate to the next filter", ex);
+        if (authenticated) {
+            try {
+                filterChain.doFilter(servletRequest, servletResponse);
+            } catch (IOException | ServletException | RuntimeException ex) {
+                problem = ex;
+                servletRequest.getServletContext().log("Impossible to propagate to the next filter", ex);
+            }
         }
 
         doAfterProcessing(servletRequest, servletResponse);

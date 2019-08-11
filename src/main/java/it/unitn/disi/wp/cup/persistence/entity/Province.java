@@ -13,6 +13,22 @@ public class Province {
     private String nameShort;
     private Region region;
 
+    @Override
+    public boolean equals(Object obj) {
+        Province province;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        province = (Province) obj;
+        return id.equals(province.id);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        return prime + ((id == null) ? 0 : id.hashCode());
+    }
+
     /**
      * Return the id of the Province
      *

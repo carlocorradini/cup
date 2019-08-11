@@ -61,6 +61,10 @@
                     <span>#{i18n["common.security"]}</span>
                 </a>
                 <a class="item" data-tab="third">
+                    <i class="user md icon"/>
+                    <span>#{i18n["common.doctor"]}</span>
+                </a>
+                <a class="item" data-tab="fourth">
                     <i class="compass outline icon"/>
                     <span>#{i18n["common.services"]}</span>
                 </a>
@@ -111,7 +115,7 @@
                 <div class="ui tag large label">#{i18n["common.passwordChange"]}</div>
                 <br/><br/>
                 <form class="ui medium form"
-                      id="dashboard-person-form"
+                      id="dashboard-person-password-form"
                       action="#"
                       method="post"
                 >
@@ -194,18 +198,142 @@
                             </div>
                             <p>
                                 #{i18n["dashboard.person.changePassword.error.subMessage"]}
-                                <span id="dashboard-person-error-old-password" class="hidden">
+                                <span id="dashboard-person-password-error-old-password" class="hidden">
                                     <br/>
                                     #{i18n["dashboard.person.changePassword.error.oldPassword.message"]}
                                 </span>
                                 <br/>
-                                #{i18n["common.errorCode"]}: <span id="dashboard-person-error-code"/>
+                                #{i18n["common.errorCode"]}: <span id="dashboard-person-password-error-code"/>
                             </p>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="ui bottom attached tab segment" data-tab="third">
+                <div class="ui two column stackable center aligned grid">
+                    <div class="ui vertical divider"></div>
+                    <div class="middle aligned row">
+                        <div class="column">
+                            <ui:fragment rendered="#{empty person.doctor}">
+                                <div class="ui icon floating message">
+                                    <i class="info circle icon"/>
+                                    <div class="content">
+                                        <div class="header">
+                                            #{i18n["dashboard.person.doctor.empty.message"]}
+                                        </div>
+                                        <p>#{i18n["dashboard.person.doctor.empty.subMessage"]}</p>
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{not empty person.doctor}">
+                                <div class="ui card centered">
+                                    <div class="image">
+                                        <h:graphicImage styleClass="ui image centered person-avatar medium"
+                                                        library="_default"
+                                                        name="#{person.doctor.avatar.nameAsResource}"
+                                                        alt="Avatar"
+                                        />
+                                    </div>
+                                    <div class="content">
+                                        <div class="header">#{person.doctor.fullNameCapitalized}</div>
+                                        <div class="meta">
+                                            <div class="date">
+                                                #{i18n["common.since"]}
+                                                <h:outputText value="#{person.doctorSince}">
+                                                    <f:convertDateTime type="localDate"/>
+                                                </h:outputText>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="extra content">
+                                        <span class="meta"><i class="hashtag icon"/> #{person.doctor.id}</span>
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                        </div>
+                        <div class="column">
+                            <div class="ui tag large label">#{i18n["common.doctorChange"]}</div>
+                            <br/>
+                            <br/>
+
+                            <form class="ui form"
+                                  id="dashboard-person-doctor-form"
+                                  action="#"
+                                  method="post"
+                            >
+                                <div class="field">
+                                    <label>#{i18n["common.doctors"]}</label>
+                                    <div class="ui floating dropdown labeled icon button fluid large"
+                                         id="dashboard-person-doctor-dropdown">
+                                        <i class="user md icon"/>
+                                        <span class="text full-width">#{i18n["dashboard.person.doctor.choose"]}</span>
+                                        <div class="menu">
+                                            <div class="header">
+                                                #{i18n["dashboard.person.doctor.searchDoctor"]}
+                                            </div>
+                                            <div class="ui icon search input">
+                                                <i class="search icon"/>
+                                                <input type="text" placeholder="#{i18n['common.search']}..."/>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="header">
+                                                <i class="filter icon"/>
+                                                #{i18n["dashboard.person.doctor.filter"]}
+                                            </div>
+                                            <div class="scrolling menu">
+                                                <ui:repeat value="#{person.doctors}" var="d">
+                                                    <ui:fragment rendered="#{d ne person.doctor}">
+                                                        <div class="item" data-value="#{d.id}">
+                                                            <h:graphicImage library="_default"
+                                                                            name="#{d.avatar.nameAsResource}"
+                                                                            alt="Avatar"
+                                                                            style="width: 2em; height: 2em;"
+                                                                            styleClass="ui image bordered rounded person-avatar middle aligned"
+                                                            />
+                                                            #{d.fullNameCapitalized}
+                                                            <span class="text-light text-right">#{d.id}</span>
+                                                        </div>
+                                                    </ui:fragment>
+                                                </ui:repeat>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="ui blue fluid medium button" type="submit">
+                                    <i class="exchange icon"/>
+                                    #{i18n["common.change"]}
+                                </button>
+
+                                <div class="ui error message"></div>
+
+                                <div class="ui icon message medium success">
+                                    <i class="checkmark icon"/>
+                                    <div class="content">
+                                        <div class="header">
+                                            #{i18n["dashboard.person.changePassword.success.message"]}
+                                        </div>
+                                        <p>#{i18n["dashboard.person.changePassword.success.subMessage"]}</p>
+                                    </div>
+                                </div>
+
+                                <div class="ui icon warning message medium">
+                                    <i class="exclamation triangle icon"/>
+                                    <div class="content">
+                                        <div class="header">
+                                            #{i18n["dashboard.person.changePassword.error.message"]}
+                                        </div>
+                                        <p>
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="fourth">
                 <div class="ui centered cards">
                     <h:link outcome="/dashboard/private/report/index" styleClass="raised link card">
                         <div class="image">
@@ -253,14 +381,23 @@
             document.addEventListener("DOMContentLoaded", function () {
                 const dashboard = {
                     $tab: $("#dashboard-person-tab").find(".item"),
-                    $form: $("#dashboard-person-form"),
-                    $errorCode: $("#dashboard-person-error-code"),
-                    $errorOldPassword: $("#dashboard-person-error-old-password")
+                    password: {
+                        $form: $("#dashboard-person-password-form"),
+                        $errorCode: $("#dashboard-person-password-error-code"),
+                        $errorOldPassword: $("#dashboard-person-password-error-old-password")
+                    },
+                    doctor: {
+                        $form: $("#dashboard-person-doctor-form"),
+                        $dropdown: $("#dashboard-person-doctor-dropdown")
+                    }
                 };
+                let doctorId = null;
 
+                // ENABLE TAB
                 dashboard.$tab.tab();
 
-                dashboard.$form.form({
+                // PASSWORD TAB
+                dashboard.password.$form.form({
                     fields: {
                         oldPassword: {
                             identifier: "oldPassword",
@@ -319,23 +456,23 @@
                         }
                     },
                     onSuccess: function () {
-                        dashboard.$form.removeClass("success warning").addClass("loading");
+                        dashboard.password.$form.removeClass("success warning").addClass("loading");
 
                         $.ajax({
                             type: "POST",
                             url: window.CONTEXT_PATH + "/service/restricted/person/password",
-                            data: dashboard.$form.serialize(),
+                            data: dashboard.password.$form.serialize(),
                             success: function (data) {
-                                dashboard.$form.removeClass("loading");
+                                dashboard.password.$form.removeClass("loading");
                                 if (data.error === 0)
-                                    dashboard.$form.addClass("success");
+                                    dashboard.password.$form.addClass("success");
                                 else {
-                                    dashboard.$errorCode.html(data.error);
+                                    dashboard.password.$errorCode.html(data.error);
                                     if (data.error === 2)
-                                        dashboard.$errorOldPassword.removeClass("hidden");
+                                        dashboard.password.$errorOldPassword.removeClass("hidden");
                                     else
-                                        dashboard.$errorOldPassword.addClass("hidden");
-                                    dashboard.$form.addClass("warning");
+                                        dashboard.password.$errorOldPassword.addClass("hidden");
+                                    dashboard.password.$form.addClass("warning");
                                 }
                             },
                             error: function () {
@@ -345,6 +482,44 @@
 
                         return false;
                     },
+                });
+
+                // DOCTOR TAB
+                dashboard.doctor.$dropdown.dropdown({
+                    clearable: true,
+                    onChange: function (value, text, $item) {
+                        doctorId = value;
+                    }
+                });
+
+                dashboard.doctor.$form.submit(function () {
+                    if (UTIL.NUMBER.isNumber(doctorId)) {
+                        dashboard.doctor.$form.removeClass("warning success").addClass("loading");
+
+                        $.ajax({
+                            type: "POST",
+                            url: window.CONTEXT_PATH + "/service/restricted/person/doctor",
+                            data: {
+                                doctorId: doctorId
+                            },
+                            success: function (data) {
+                                dashboard.doctor.$form.removeClass("loading");
+                                if (data.error === 0)
+                                    dashboard.doctor.$form.addClass("success");
+                                else
+                                    dashboard.doctor.$form.addClass("warning");
+                            }
+                            ,
+                            error: function () {
+                                console.error("Unable to change Person Doctor");
+                            }
+                        })
+                        ;
+                    } else {
+                        dashboard.doctor.$form.removeClass("success").addClass("warning");
+                    }
+
+                    return false;
                 });
             });
         </script>

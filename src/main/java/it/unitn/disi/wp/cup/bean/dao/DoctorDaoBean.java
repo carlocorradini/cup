@@ -55,6 +55,7 @@ public final class DoctorDaoBean implements Serializable {
                     doctorDAO = DAOFactory.getDAOFactory().getDAO(DoctorDAO.class);
                     prescriptionMedicineDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionMedicineDAO.class);
                     prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
+
                     patients = doctorDAO.getPatientsByDoctorId(authDoctor.getId());
                 } catch (DAOFactoryException ex) {
                     LOGGER.log(Level.SEVERE, "Unable to get DAO Factory", ex);

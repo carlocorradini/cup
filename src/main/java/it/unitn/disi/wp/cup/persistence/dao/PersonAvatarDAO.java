@@ -20,7 +20,7 @@ public interface PersonAvatarDAO extends DAO<PersonAvatar, Long> {
      * @return The primary key of the inserted Person Avatar
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public Long add(PersonAvatar personAvatar) throws DAOException;
+    Long add(PersonAvatar personAvatar) throws DAOException;
 
     /**
      * Return the last {@link PersonAvatar} of the {@link Person} with {@code personId id}
@@ -29,7 +29,7 @@ public interface PersonAvatarDAO extends DAO<PersonAvatar, Long> {
      * @return The last used {@link PersonAvatar avatar}, null if the {@link Person person} has no avatar
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public PersonAvatar getCurrentByPersonId(Long personId) throws DAOException;
+    PersonAvatar getCurrentByPersonId(Long personId) throws DAOException;
 
     /**
      * Return the {@link List} of all {@link PersonAvatar} of the Person given its {@code personId id}
@@ -39,5 +39,5 @@ public interface PersonAvatarDAO extends DAO<PersonAvatar, Long> {
      * @return A {@link List} of all {@link PersonAvatar} of the [@link {@link PersonAvatar}]
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public List<PersonAvatar> getAllByPersonId(Long personId) throws DAOException;
+    List<PersonAvatar> getAllByPersonId(Long personId) throws DAOException;
 }

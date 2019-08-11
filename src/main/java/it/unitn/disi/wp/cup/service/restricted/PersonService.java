@@ -1,12 +1,15 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
+import com.sun.faces.util.Json;
 import it.unitn.disi.wp.cup.config.AppConfig;
 import it.unitn.disi.wp.cup.config.AuthConfig;
+import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonAvatarDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
+import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PersonAvatar;
 import it.unitn.disi.wp.cup.util.AuthUtil;
@@ -15,6 +18,7 @@ import it.unitn.disi.wp.cup.util.EmailUtil;
 import it.unitn.disi.wp.cup.util.obj.JsonMessage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.imgscalr.Scalr;
@@ -44,6 +48,7 @@ public class PersonService {
 
     private Person person = null;
     private PersonDAO personDAO = null;
+    private DoctorDAO doctorDAO = null;
     private PersonAvatarDAO personAvatarDAO = null;
 
     @Context
@@ -57,6 +62,7 @@ public class PersonService {
             try {
                 person = AuthUtil.getAuthPerson(request);
                 personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
+                doctorDAO = DAOFactory.getDAOFactory(servletContext).getDAO(DoctorDAO.class);
                 personAvatarDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonAvatarDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
@@ -143,8 +149,8 @@ public class PersonService {
         JsonMessage message = new JsonMessage();
 
         if (person != null && personDAO != null && oldPassword != null && newPassword != null) {
+            // Passwords exists
             try {
-                // Passwords exists
                 if (oldPassword.length() >= AuthConfig.getPasswordMinLength()
                         && oldPassword.length() <= AuthConfig.getPasswordMaxLength()
                         && newPassword.length() >= AuthConfig.getPasswordMinLength()
@@ -170,6 +176,48 @@ public class PersonService {
                 }
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to change Person Password", ex);
+            }
+        }
+
+        return message.toJsonString();
+    }
+
+    @POST
+    @Path("doctor")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String changeDoctor(@FormParam("doctorId") Long doctorId) {
+        JsonMessage message = new JsonMessage();
+        Doctor doctor;
+        Person doctorAsPerson;
+        Pair<Long, Long> record;
+
+        if (person != null && doctorDAO != null && doctorId != null) {
+            // Doctor Id exists
+            try {
+                if ((doctor = doctorDAO.getByPrimaryKey(doctorId)) != null
+                        && (doctorAsPerson = personDAO.getByPrimaryKey(doctorId)) != null
+                        && !person.equals(doctorAsPerson)) {
+                    // Doctor Exists
+                    if (!doctorDAO.getHistoryByPatientId(person.getId()).contains(doctor)) {
+                        // The Doctor has not been already a Doctor of the person
+                        if (doctorAsPerson.getCity().getProvince().equals(person.getCity().getProvince())) {
+                            // Province is the same as the Authenticated Person
+                            record = doctorDAO.addPatient(doctorId, person.getId());
+                            if (record != null) {
+                                message.setError(JsonMessage.ERROR_NO_ERROR);
+                            }
+                        } else {
+                            message.setError(JsonMessage.ERROR_PROVINCE);
+                        }
+                    } else {
+                        message.setError(JsonMessage.ERROR_HISTORY);
+                    }
+                } else {
+                    message.setError(JsonMessage.ERROR_INVALID_ID);
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to change Person Doctor", ex);
             }
         }
 

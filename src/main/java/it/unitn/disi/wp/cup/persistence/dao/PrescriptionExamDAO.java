@@ -22,7 +22,7 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @return A {@link List} of all {@link PrescriptionExam exams} of the {@link Person}
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public List<PrescriptionExam> getAllByPersonId(Long personId) throws DAOException;
+    List<PrescriptionExam> getAllByPersonId(Long personId) throws DAOException;
 
     /**
      * Add a new {@code prescriptionExam} into the persistence system
@@ -31,7 +31,7 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @return The primary key of the inserted {@link PrescriptionExam}
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public Long add(PrescriptionExam prescriptionExam) throws DAOException;
+    Long add(PrescriptionExam prescriptionExam) throws DAOException;
 
     /**
      * Return the Number of {@link Exam exams} prescribed for a {@link Person person} given its {@code personId id}
@@ -39,7 +39,7 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @return The number of {@link Exam exams} prescribed for a {@link Person person}
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public Long getCountByPersonId(Long personId) throws DAOException;
+    Long getCountByPersonId(Long personId) throws DAOException;
 
     /**
      * Return the Number of {@link Exam exams} prescribed by a {@link Doctor doctor} given its {@code doctorId id}
@@ -47,5 +47,5 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @return The number of {@link Exam exams} prescribed by a {@link Doctor doctor}
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public Long getCountByDoctorId(Long doctorId) throws DAOException;
+    Long getCountByDoctorId(Long doctorId) throws DAOException;
 }

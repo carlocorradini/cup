@@ -22,7 +22,7 @@ public interface PrescriptionMedicineDAO extends DAO<PrescriptionMedicine, Long>
      * @return A {@link List} of all {@link PrescriptionMedicine medicines} of the {@link Person}
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public List<PrescriptionMedicine> getAllByPersonId(Long personId) throws DAOException;
+    List<PrescriptionMedicine> getAllByPersonId(Long personId) throws DAOException;
 
     /**
      * Add a new {@code PrescriptionMedicine} into the persistence system
@@ -31,7 +31,7 @@ public interface PrescriptionMedicineDAO extends DAO<PrescriptionMedicine, Long>
      * @return The primary key of the inserted {@link PrescriptionMedicine}
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public Long add(PrescriptionMedicine prescriptionMedicine) throws DAOException;
+    Long add(PrescriptionMedicine prescriptionMedicine) throws DAOException;
 
     /**
      * Return the Number of {@link Medicine medicines} prescribed for a {@link Person person} given its {@code personId id}
@@ -39,7 +39,7 @@ public interface PrescriptionMedicineDAO extends DAO<PrescriptionMedicine, Long>
      * @return The number of {@link Medicine medicines} prescribed for a {@link Person person}
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public Long getCountByPersonId(Long personId) throws DAOException;
+    Long getCountByPersonId(Long personId) throws DAOException;
 
     /**
      * Return the Number of {@link Medicine medicines} prescribed by a {@link Doctor doctor} given its {@code doctorId id}
@@ -47,5 +47,5 @@ public interface PrescriptionMedicineDAO extends DAO<PrescriptionMedicine, Long>
      * @return The number of {@link Medicine medicines} prescribed by a {@link Doctor doctor}
      * @throws DAOException If an error occurred during the information retrieving
      */
-    public Long getCountByDoctorId(Long doctorId) throws DAOException;
+    Long getCountByDoctorId(Long doctorId) throws DAOException;
 }
