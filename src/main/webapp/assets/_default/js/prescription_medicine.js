@@ -34,6 +34,7 @@ function prescriptionMedicineConfig() {
     // Set the Default Patient if present
     if (window.UTIL.NUMBER.isNumber(patientId)) {
         pMedicine.$dropdownPatient.dropdown("set selected", patientId);
+        prescription.patientId = patientId;
     }
 
     pMedicine.$dropdownMedicine.dropdown({

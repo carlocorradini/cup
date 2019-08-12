@@ -32,6 +32,7 @@ function prescriptionExamConfig() {
     // Set the Default Patient if present
     if (window.UTIL.NUMBER.isNumber(patientId)) {
         pExam.$dropdownPatient.dropdown("set selected", patientId);
+        prescription.patientId = patientId;
     }
 
     pExam.$dropdownExam.dropdown({
