@@ -1,9 +1,6 @@
 package it.unitn.disi.wp.cup.bean.dao;
 
-import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PrescriptionMedicineDAO;
+import it.unitn.disi.wp.cup.persistence.dao.*;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
@@ -36,6 +33,7 @@ public final class PersonDaoBean implements Serializable {
     private static final long serialVersionUID = -4058980644509062209L;
     private static final Logger LOGGER = Logger.getLogger(PersonDaoBean.class.getName());
     private DoctorDAO doctorDAO = null;
+    private PersonAvatarDAO personAvatarDAO = null;
     private PrescriptionMedicineDAO prescriptionMedicineDAO = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
     private Person authPerson = null;
@@ -56,6 +54,7 @@ public final class PersonDaoBean implements Serializable {
                 try {
                     personDAO = DAOFactory.getDAOFactory().getDAO(PersonDAO.class);
                     doctorDAO = DAOFactory.getDAOFactory().getDAO(DoctorDAO.class);
+                    personAvatarDAO = DAOFactory.getDAOFactory().getDAO(PersonAvatarDAO.class);
                     prescriptionMedicineDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionMedicineDAO.class);
                     prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
 
@@ -132,6 +131,63 @@ public final class PersonDaoBean implements Serializable {
     }
 
     /**
+     * Return the {@link List list} of all {@link PersonAvatar avatars} that the {@link Person person} used
+     *
+     * @return The {@link List list} of {@link PersonAvatar avatars}
+     */
+    public List<PersonAvatar> getAvatarHistory() {
+        List<PersonAvatar> history = Collections.emptyList();
+
+        if (authPerson != null && personAvatarDAO != null) {
+            try {
+                history = personAvatarDAO.getAllByPersonId(authPerson.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the List of Avatar History fot the authenticated Person");
+            }
+        }
+
+        return history;
+    }
+
+    /**
+     * Return the {@link List list} of all {@link PrescriptionMedicine prescribed} {@link Medicine medicines} for the authenticated {@link Person person}
+     *
+     * @return The {@link List list} of prescribed {@link Medicine medicines}
+     */
+    public List<PrescriptionMedicine> getPrescribedMedicines() {
+        List<PrescriptionMedicine> medicines = Collections.emptyList();
+
+        if (authPerson != null && prescriptionMedicineDAO != null) {
+            try {
+                medicines = prescriptionMedicineDAO.getAllByPersonId(authPerson.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the List of Prescribed Medicines for the authenticated Person");
+            }
+        }
+
+        return medicines;
+    }
+
+    /**
+     * Return the {@link List list} of all {@link PrescriptionExam prescribed} {@link Exam exams} for the authenticated {@link Person person}
+     *
+     * @return The {@link List list} of prescribed {@link Exam exams}
+     */
+    public List<PrescriptionExam> getPrescribedExams() {
+        List<PrescriptionExam> exams = Collections.emptyList();
+
+        if (authPerson != null && prescriptionExamDAO != null) {
+            try {
+                exams = prescriptionExamDAO.getAllByPersonId(authPerson.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the List of Prescribed Exams for the authenticated Person");
+            }
+        }
+
+        return exams;
+    }
+
+    /**
      * Return the Number of {@link Medicine medicines} prescribed for the Authenticated {@link Person person}
      *
      * @return Number of {@link Medicine medicines} prescribed
@@ -139,7 +195,7 @@ public final class PersonDaoBean implements Serializable {
     public long getPrescriptionMedicineCount() {
         long count = 0L;
 
-        if (authPerson != null) {
+        if (authPerson != null && prescriptionMedicineDAO != null) {
             try {
                 count = prescriptionMedicineDAO.getCountByPersonId(authPerson.getId());
             } catch (DAOException ex) {
@@ -158,7 +214,7 @@ public final class PersonDaoBean implements Serializable {
     public Long getPrescriptionExamCount() {
         long count = 0L;
 
-        if (authPerson != null) {
+        if (authPerson != null && prescriptionExamDAO != null) {
             try {
                 count = prescriptionExamDAO.getCountByPersonId(authPerson.getId());
             } catch (DAOException ex) {

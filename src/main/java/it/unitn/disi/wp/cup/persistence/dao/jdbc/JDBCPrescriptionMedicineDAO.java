@@ -54,6 +54,7 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
             prescriptionMedicine.setDateTime(rs.getObject("prescription_date", LocalDateTime.class));
             prescriptionMedicine.setMedicine(medicineDAO.getByPrimaryKey(rs.getLong("medicine_id")));
             prescriptionMedicine.setQuantity(rs.getShort("quantity"));
+            prescriptionMedicine.setPaid(rs.getBoolean("paid"));
         } catch (SQLException | DAOFactoryException ex) {
             throw new DAOException("Impossible to set Prescription Medicine by ResultSet", ex);
         }

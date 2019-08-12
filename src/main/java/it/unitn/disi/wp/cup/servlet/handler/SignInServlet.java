@@ -30,7 +30,7 @@ public final class SignInServlet extends HttpServlet {
             req.setAttribute(AUTH_ERROR, true);
             req.getRequestDispatcher("/signin/index.xhtml").forward(req, resp);
         } else {
-            resp.sendRedirect(resp.encodeRedirectURL(super.getServletContext().getContextPath() + "/dashboard/index.xhtml"));
+            resp.sendRedirect(resp.encodeRedirectURL(super.getServletContext().getContextPath() + "/dashboard/private/index.xhtml"));
         }
     }
 }

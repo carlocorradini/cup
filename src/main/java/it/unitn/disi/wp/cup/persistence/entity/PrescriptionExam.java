@@ -18,6 +18,7 @@ public class PrescriptionExam {
     private LocalDateTime dateTimeRegistration;
     private Exam exam;
     private Report report;
+    private Boolean paid;
 
     /**
      * Return the id of the Prescription Exam
@@ -205,5 +206,23 @@ public class PrescriptionExam {
      */
     public void setReport(Report report) {
         this.report = report;
+    }
+
+    /**
+     * Return if the {@link PrescriptionExam prescription} has been paid
+     *
+     * @return True if paid, false otherwise
+     */
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    /**
+     * Set if the {@link PrescriptionExam prescription} has been paid
+     *
+     * @param paid True if paid, false otherwise
+     */
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
     }
 }

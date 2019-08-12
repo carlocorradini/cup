@@ -8,6 +8,13 @@
 >
     <ui:define name="title">#{i18n["common.dashboard.personal"]}</ui:define>
 
+    <ui:define name="js">
+        <h:outputScript library="semantic-ui"
+                        name="js/tablesort.js"
+                        target="body"/>
+    </ui:define>
+
+
     <ui:define name="content">
         <ui:fragment rendered="#{not empty person.authPerson}">
 
@@ -52,24 +59,28 @@
             <div class="ui divider"></div>
 
             <div class="ui top attached tabular menu" id="dashboard-person-tab">
-                <a class="item active" data-tab="first">
+                <a class="item active" data-tab="personal-information">
                     <i class="address card outline icon"/>
                     <span>#{i18n["common.personalInformation"]}</span>
                 </a>
-                <a class="item" data-tab="second">
+                <a class="item" data-tab="security">
                     <i class="shield alternate icon"/>
                     <span>#{i18n["common.security"]}</span>
                 </a>
-                <a class="item" data-tab="third">
+                <a class="item" data-tab="doctor">
                     <i class="user md icon"/>
                     <span>#{i18n["common.doctor"]}</span>
                 </a>
-                <a class="item" data-tab="fourth">
+                <a class="item" data-tab="timeline">
+                    <i class="clock outline icon"/>
+                    <span>#{i18n["common.timeline"]}</span>
+                </a>
+                <a class="item" data-tab="services">
                     <i class="compass outline icon"/>
                     <span>#{i18n["common.services"]}</span>
                 </a>
             </div>
-            <div class="ui bottom attached tab segment active" data-tab="first">
+            <div class="ui bottom attached tab segment active" data-tab="personal-information">
                 <table class="ui very basic celled table">
                     <tbody>
                     <tr>
@@ -111,7 +122,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="ui bottom attached tab segment" data-tab="second">
+            <div class="ui bottom attached tab segment" data-tab="security">
                 <div class="ui tag large label">#{i18n["common.passwordChange"]}</div>
                 <br/><br/>
                 <form class="ui medium form"
@@ -209,9 +220,9 @@
                     </div>
                 </form>
             </div>
-            <div class="ui bottom attached tab segment" data-tab="third">
-                <div class="ui two column stackable center aligned grid">
-                    <div class="ui vertical divider"></div>
+            <div class="ui bottom attached tab segment" data-tab="doctor">
+                <div class="ui two column stackable grid">
+                    <div class="ui vertical divider"><i class="certificate icon"/></div>
                     <div class="middle aligned row">
                         <div class="column">
                             <ui:fragment rendered="#{empty person.doctor}">
@@ -252,88 +263,162 @@
                             </ui:fragment>
                         </div>
                         <div class="column">
-                            <div class="ui tag large label">#{i18n["common.doctorChange"]}</div>
-                            <br/>
-                            <br/>
-
-                            <form class="ui form"
-                                  id="dashboard-person-doctor-form"
-                                  action="#"
-                                  method="post"
-                            >
-                                <div class="field">
-                                    <label>#{i18n["common.doctors"]}</label>
-                                    <div class="ui floating dropdown labeled icon button fluid large"
-                                         id="dashboard-person-doctor-dropdown">
-                                        <i class="user md icon"/>
-                                        <span class="text full-width">#{i18n["dashboard.person.doctor.choose"]}</span>
-                                        <div class="menu">
-                                            <div class="header">
-                                                #{i18n["dashboard.person.doctor.searchDoctor"]}
-                                            </div>
-                                            <div class="ui icon search input">
-                                                <i class="search icon"/>
-                                                <input type="text" placeholder="#{i18n['common.search']}..."/>
-                                            </div>
-                                            <div class="divider"></div>
-                                            <div class="header">
-                                                <i class="filter icon"/>
-                                                #{i18n["dashboard.person.doctor.filter"]}
-                                            </div>
-                                            <div class="scrolling menu">
-                                                <ui:repeat value="#{person.doctors}" var="d">
-                                                    <ui:fragment rendered="#{d ne person.doctor}">
-                                                        <div class="item" data-value="#{d.id}">
-                                                            <h:graphicImage library="_default"
-                                                                            name="#{d.avatar.nameAsResource}"
-                                                                            alt="Avatar"
-                                                                            style="width: 2em; height: 2em;"
-                                                                            styleClass="ui image bordered rounded person-avatar middle aligned"
-                                                            />
-                                                            #{d.fullNameCapitalized}
-                                                            <span class="text-light text-right">#{d.id}</span>
-                                                        </div>
-                                                    </ui:fragment>
-                                                </ui:repeat>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button class="ui blue fluid medium button" type="submit">
-                                    <i class="exchange icon"/>
-                                    #{i18n["common.change"]}
-                                </button>
-
-                                <div class="ui error message"></div>
-
-                                <div class="ui icon message medium success">
-                                    <i class="checkmark icon"/>
+                            <ui:fragment rendered="#{empty person.doctors}">
+                                <div class="ui icon floating message">
+                                    <i class="info circle icon"/>
                                     <div class="content">
                                         <div class="header">
-                                            #{i18n["dashboard.person.changePassword.success.message"]}
+                                            #{i18n["dashboard.person.doctor.doctors.empty.message"]}
                                         </div>
-                                        <p>#{i18n["dashboard.person.changePassword.success.subMessage"]}</p>
+                                        <p>#{i18n["dashboard.person.doctor.doctors.empty.subMessage"]}</p>
                                     </div>
                                 </div>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{not empty person.doctors}">
+                                <div class="ui tag large label">#{i18n["common.doctorChange"]}</div>
+                                <br/>
+                                <br/>
 
-                                <div class="ui icon warning message medium">
-                                    <i class="exclamation triangle icon"/>
-                                    <div class="content">
-                                        <div class="header">
-                                            #{i18n["dashboard.person.changePassword.error.message"]}
+                                <form class="ui large form"
+                                      id="dashboard-person-doctor-form"
+                                      action="#"
+                                      method="post"
+                                >
+                                    <div class="field">
+                                        <label>#{i18n["common.doctors"]}</label>
+                                        <div class="ui floating dropdown labeled icon button fluid large"
+                                             id="dashboard-person-doctor-dropdown">
+                                            <i class="user md icon"/>
+                                            <span class="text full-width">#{i18n["dashboard.person.doctor.choose"]}</span>
+                                            <div class="menu">
+                                                <div class="header">
+                                                    #{i18n["dashboard.person.doctor.searchDoctor"]}
+                                                </div>
+                                                <div class="ui icon search input">
+                                                    <i class="search icon"/>
+                                                    <input type="text" placeholder="#{i18n['common.search']}..."/>
+                                                </div>
+                                                <div class="divider"></div>
+                                                <div class="header">
+                                                    <i class="filter icon"/>
+                                                    #{i18n["dashboard.person.doctor.filter"]}
+                                                </div>
+                                                <div class="scrolling menu">
+                                                    <ui:repeat value="#{person.doctors}" var="d">
+                                                        <ui:fragment rendered="#{d ne person.doctor}">
+                                                            <div class="item" data-value="#{d.id}">
+                                                                <h:graphicImage library="_default"
+                                                                                name="#{d.avatar.nameAsResource}"
+                                                                                alt="Avatar"
+                                                                                style="width: 2em; height: 2em;"
+                                                                                styleClass="ui image bordered rounded person-avatar middle aligned"
+                                                                />
+                                                                #{d.fullNameCapitalized}
+                                                                <span class="text-light text-right">#{d.id}</span>
+                                                            </div>
+                                                        </ui:fragment>
+                                                    </ui:repeat>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <p>
-
-                                        </p>
                                     </div>
-                                </div>
-                            </form>
+
+                                    <button class="ui blue fluid medium button" type="submit">
+                                        <i class="exchange icon"/>
+                                        #{i18n["common.change"]}
+                                    </button>
+
+                                    <div class="ui error message"></div>
+
+                                    <div class="ui icon message medium success">
+                                        <i class="checkmark icon"/>
+                                        <div class="content">
+                                            <div class="header">
+                                                #{i18n["dashboard.person.doctor.succes.message"]}
+                                            </div>
+                                            <p> #{i18n["dashboard.person.doctor.succes.subMessage"]}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui icon warning message medium">
+                                        <i class="exclamation triangle icon"/>
+                                        <div class="content">
+                                            <div class="header">
+                                                #{i18n["dashboard.person.doctor.error.message"]}
+                                            </div>
+                                            <p>
+                                                #{i18n["dashboard.person.doctor.error.subMessage"]}
+                                                <span id="dashboard-person-doctor-error-history" class="hidden">
+                                                    <br/>
+                                                    #{i18n["dashboard.person.doctor.error.history.message"]}
+                                                </span>
+                                                <br/>
+                                                #{i18n["common.errorCode"]}:
+                                                <span id="dashboard-person-doctor-error-code"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </ui:fragment>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="ui bottom attached tab segment" data-tab="fourth">
+            <div class="ui bottom attached tab segment" data-tab="timeline">
+                <ui:fragment rendered="#{empty person.avatarHistory}">
+                    <div class="ui icon message">
+                        <i class="info circle icon"/>
+                        <div class="content">
+                            <div class="header">
+                                #{i18n["dashboard.person.timeline.empty.message"]}
+                            </div>
+                            <p>#{i18n["dashboard.person.timeline.empty.subMessage"]}</p>
+                        </div>
+                    </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{not empty person.avatarHistory}">
+                    <table class="ui very basic sortable celled table" id="dashboard-person-timeline-table">
+                        <thead>
+                        <tr class="center aligned">
+                            <th>#{i18n["common.image"]}</th>
+                            <th>#{i18n["common.date"]}</th>
+                            <th>#{i18n["common.hour"]}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{person.avatarHistory}" var="pah">
+                            <tr class="center aligned #{pah eq person.authPerson.avatar ? 'text-strong' : 'disabled'}">
+                                <td>
+                                    <h:graphicImage library="_default"
+                                                    name="#{pah.nameAsResource}"
+                                                    alt="Avatar"
+                                                    styleClass="ui image centered bordered rounded person-avatar tiny middle aligned"
+                                    />
+                                    &#160;
+                                    <ui:fragment rendered="#{pah eq person.authPerson.avatar}">
+                                        <i class="checkmark green icon"/>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{pah ne person.authPerson.avatar}">
+                                        <i class="icon"/>
+                                    </ui:fragment>
+                                </td>
+                                <td>
+                                    <h:outputText value="#{pah.uploadDate}">
+                                        <f:convertDateTime type="localDate"/>
+                                    </h:outputText>
+                                </td>
+                                <td>
+                                    <h:outputText value="#{pah.uploadTime}">
+                                        <f:convertDateTime type="localTime"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
+                </ui:fragment>
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="services">
                 <div class="ui centered cards">
                     <h:link outcome="/dashboard/private/report/index" styleClass="raised link card">
                         <div class="image">
@@ -381,6 +466,9 @@
             document.addEventListener("DOMContentLoaded", function () {
                 const dashboard = {
                     $tab: $("#dashboard-person-tab").find(".item"),
+                    timeline: {
+                        $table: $("#dashboard-person-timeline-table")
+                    },
                     password: {
                         $form: $("#dashboard-person-password-form"),
                         $errorCode: $("#dashboard-person-password-error-code"),
@@ -388,13 +476,18 @@
                     },
                     doctor: {
                         $form: $("#dashboard-person-doctor-form"),
-                        $dropdown: $("#dashboard-person-doctor-dropdown")
+                        $dropdown: $("#dashboard-person-doctor-dropdown"),
+                        $errorCode: $("#dashboard-person-doctor-error-code"),
+                        $errorHistory: $("#dashboard-person-doctor-error-history")
                     }
                 };
                 let doctorId = null;
 
                 // ENABLE TAB
                 dashboard.$tab.tab();
+
+                // ENABLE TIMELINE SORTABLE TAB
+                dashboard.timeline.$table.tablesort();
 
                 // PASSWORD TAB
                 dashboard.password.$form.form({
@@ -506,10 +599,15 @@
                                 dashboard.doctor.$form.removeClass("loading");
                                 if (data.error === 0)
                                     dashboard.doctor.$form.addClass("success");
-                                else
+                                else {
+                                    dashboard.doctor.$errorCode.html(data.error);
+                                    if (data.error === 6)
+                                        dashboard.doctor.$errorHistory.removeClass("hidden");
+                                    else
+                                        dashboard.doctor.$errorHistory.addClass("hidden");
                                     dashboard.doctor.$form.addClass("warning");
-                            }
-                            ,
+                                }
+                            },
                             error: function () {
                                 console.error("Unable to change Person Doctor");
                             }

@@ -59,6 +59,7 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             prescriptionExam.setDateTimeRegistration(rs.getObject("prescription_date_registration", LocalDateTime.class));
             prescriptionExam.setExam(examDAO.getByPrimaryKey(rs.getLong("exam_id")));
             prescriptionExam.setReport(reportDAO.getByPrimaryKey(rs.getLong("report_id")));
+            prescriptionExam.setPaid(rs.getBoolean("paid"));
         } catch (SQLException | DAOFactoryException ex) {
             throw new DAOException("Impossible to set Prescription Exam by ResultSet", ex);
         }

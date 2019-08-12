@@ -17,11 +17,12 @@ import javax.servlet.http.HttpServletResponse;
  * @author Carlo Corradini
  */
 @WebFilter(
-        urlPatterns = {"/dashboard/*", "/service/restricted/*"},
+        urlPatterns = {"/dashboard/private/*", "/service/restricted/person/*"},
         dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD}
 )
-public final class AuthFilter implements Filter {
+public final class PersonAuthFilter implements Filter {
 
+    private static final String NAME = "PersonAuthFilter";
     private static final boolean DEBUG = true;
     private FilterConfig filterConfig = null;
     private boolean authenticated = false;
@@ -31,7 +32,7 @@ public final class AuthFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (DEBUG) {
-                log("AuthFilter:Init filter");
+                log(NAME + ":Init filter");
             }
         }
     }
@@ -53,7 +54,7 @@ public final class AuthFilter implements Filter {
         HttpServletResponse resp;
         Person person;
         if (DEBUG) {
-            log("AuthFilter:DoBeforeProcessing");
+            log(NAME + "DoBeforeProcessing");
         }
 
         if (servletRequest instanceof HttpServletRequest) {
@@ -79,7 +80,7 @@ public final class AuthFilter implements Filter {
      */
     private void doAfterProcessing(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException, ServletException {
         if (DEBUG) {
-            log("AuthFilter:DoAfterProcessing");
+            log(NAME + ":DoAfterProcessing");
         }
     }
 
@@ -87,7 +88,7 @@ public final class AuthFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         Throwable problem = null;
         if (DEBUG) {
-            log("AuthFilter:doFilter()");
+            log(NAME + ":doFilter()");
         }
 
         doBeforeProcessing(servletRequest, servletResponse);
@@ -146,7 +147,7 @@ public final class AuthFilter implements Filter {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("AuthFilter(");
+        StringBuilder sb = new StringBuilder(NAME + "(");
         if (filterConfig == null) {
             sb.append(")");
         } else {

@@ -16,6 +16,7 @@ public class PrescriptionMedicine {
     private LocalDateTime dateTime;
     private Medicine medicine;
     private Short quantity;
+    private Boolean paid;
 
     /**
      * Return the id of the Prescription Medicine
@@ -145,5 +146,23 @@ public class PrescriptionMedicine {
      */
     public void setQuantity(Short quantity) {
         this.quantity = quantity;
+    }
+
+    /**
+     * Return if the {@link PrescriptionMedicine prescription} has been paid
+     *
+     * @return True if paid, false otherwise
+     */
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    /**
+     * Set if the {@link PrescriptionMedicine prescription} has been paid
+     *
+     * @param paid True if paid, false otherwise
+     */
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
     }
 }

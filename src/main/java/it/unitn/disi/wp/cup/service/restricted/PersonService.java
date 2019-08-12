@@ -1,6 +1,5 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
-import com.sun.faces.util.Json;
 import it.unitn.disi.wp.cup.config.AppConfig;
 import it.unitn.disi.wp.cup.config.AuthConfig;
 import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
