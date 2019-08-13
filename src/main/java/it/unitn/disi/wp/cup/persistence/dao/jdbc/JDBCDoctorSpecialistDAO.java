@@ -1,0 +1,123 @@
+package it.unitn.disi.wp.cup.persistence.dao.jdbc;
+
+import it.unitn.disi.wp.cup.persistence.dao.DoctorSpecialistDAO;
+import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
+import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
+import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
+import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
+
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * JDBC implementation of {@link DoctorSpecialist} interface
+ *
+ * @author Carlo Corradini
+ */
+public class JDBCDoctorSpecialistDAO extends JDBCDAO<DoctorSpecialist, Long> implements DoctorSpecialistDAO {
+    private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM doctor_specialist";
+    private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM doctor_specialist WHERE id = ? LIMIT 1";
+    private static final String SQL_GET_ALL = "SELECT * FROM doctor_specialist";
+
+    /**
+     * The default constructor of the class
+     *
+     * @param connection The Connection to the persistence system
+     * @param daoFactory The DAOFactory to get DAOs
+     */
+    public JDBCDoctorSpecialistDAO(Connection connection, DAOFactory daoFactory) {
+        super(connection, daoFactory);
+    }
+
+    @Override
+    public DoctorSpecialist setAndGetDAO(ResultSet rs) throws DAOException {
+        DoctorSpecialist doctorSpecialist;
+        if (rs == null) throw new DAOException("ResultSet cannot be null");
+
+        try {
+            doctorSpecialist = new DoctorSpecialist();
+
+            doctorSpecialist.setId(rs.getLong("id"));
+            doctorSpecialist.setSince(rs.getObject("since", LocalDateTime.class));
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to set DoctorSpecialist by ResultSet", ex);
+        }
+        return doctorSpecialist;
+    }
+
+    /**
+     * Return the number of {@link DoctorSpecialist doctorSpecialist} stored in the persistence system
+     *
+     * @return The number of records present in the persistence system
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    @Override
+    public Long getCount() throws DAOException {
+        long count = 0L;
+
+        try (Statement stmt = CONNECTION.createStatement()) {
+            try (ResultSet rs = stmt.executeQuery(SQL_GET_COUNT)) {
+                if (rs.next()) {
+                    count = rs.getLong(1);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to count DoctorSpecialist", ex);
+        }
+
+        return count;
+    }
+
+    /**
+     * Return the {@link DoctorSpecialist doctorSpecialist} with the primary key equals to {@code primaryKey}
+     *
+     * @param primaryKey The primary key used to obtain the obj instance
+     * @return The {@link DoctorSpecialist doctorSpecialist} with {@code primaryKey}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    @Override
+    public DoctorSpecialist getByPrimaryKey(Long primaryKey) throws DAOException {
+        DoctorSpecialist doctorSpecialist = null;
+
+        if (primaryKey == null)
+            throw new DAOException("Primary key is null");
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_BY_PRIMARY_KEY)) {
+            pStmt.setLong(1, primaryKey);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                if (rs.next()) {
+                    doctorSpecialist = setAndGetDAO(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get DoctorSpecialist for the passed primary key", ex);
+        }
+
+        return doctorSpecialist;
+    }
+
+    /**
+     * Return a list of all {@link DoctorSpecialist doctorSpecialist} in the persistence system
+     *
+     * @return A list of all saved {@link DoctorSpecialist doctorSpecialist} in the persistence system
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    @Override
+    public List<DoctorSpecialist> getAll() throws DAOException {
+        List<DoctorSpecialist> specialists = new ArrayList<>();
+
+        try (Statement stmt = CONNECTION.createStatement()) {
+            try (ResultSet rs = stmt.executeQuery(SQL_GET_ALL)) {
+                while (rs.next()) {
+                    specialists.add(setAndGetDAO(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the list of Specialist", ex);
+        }
+
+        return specialists;
+    }
+}

@@ -7,6 +7,9 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAOFactory;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 import it.unitn.disi.wp.cup.util.EmailUtil;
+import it.unitn.disi.wp.cup.util.pdf.PDFUtil;
+import it.unitn.disi.wp.cup.util.pdf.PrescriptionExamPDFUtil;
+import it.unitn.disi.wp.cup.util.pdf.PrescriptionMedicinePDFUtil;
 
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
@@ -33,6 +36,9 @@ public class WebAppContextListener implements ServletContextListener {
             JDBCDAOFactory.configure(DatabaseConfig.getDriver(), DatabaseConfig.getUrl());
             AuthUtil.configure(JDBCDAOFactory.getInstance());
             EmailUtil.configure();
+            PDFUtil.configure(sce.getServletContext());
+            PrescriptionMedicinePDFUtil.configure(JDBCDAOFactory.getInstance());
+            PrescriptionExamPDFUtil.configure(JDBCDAOFactory.getInstance());
             /* END Load Configuration */
             sce.getServletContext().setAttribute(DAOFactory.DAO_FACTORY, JDBCDAOFactory.getInstance());
         } catch (DAOFactoryException | ConfigException | NullPointerException ex) {

@@ -21,6 +21,7 @@ import java.util.logging.Logger;
  * @author Carlo Corradini
  */
 public final class AuthUtil {
+
     private static final Logger LOGGER = Logger.getLogger(AuthUtil.class.getName());
     private static PersonDAO personDAO = null;
     private static DoctorDAO doctorDAO = null;
@@ -38,12 +39,13 @@ public final class AuthUtil {
             personDAO = daoFactory.getDAO(PersonDAO.class);
             doctorDAO = daoFactory.getDAO(DoctorDAO.class);
         } catch (DAOFactoryException | NullPointerException ex) {
-            LOGGER.log(Level.SEVERE, "Unable to get DAOFactory", ex);
+            LOGGER.log(Level.SEVERE, "Unable to get from DAOFactory", ex);
         }
     }
 
     private static void isConfigured() throws NullPointerException {
-        if (personDAO == null) throw new NullPointerException("PersonDAO cannot be null");
+        if (personDAO == null || doctorDAO == null)
+            throw new NullPointerException("PersonDAO or DoctorDAO cannot be null");
     }
 
     /**

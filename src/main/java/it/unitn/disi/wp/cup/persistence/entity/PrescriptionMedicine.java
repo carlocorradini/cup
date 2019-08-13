@@ -165,4 +165,16 @@ public class PrescriptionMedicine {
     public void setPaid(Boolean paid) {
         this.paid = paid;
     }
+
+    /**
+     * Return the amount of cents to pay for the {@link PrescriptionMedicine Prescription Medicine}
+     *
+     * @return The amount of cents to pay
+     */
+    public Integer getTotalToPay() {
+        if (quantity == null || medicine == null) {
+            return 0;
+        }
+        return quantity * medicine.getPrice();
+    }
 }

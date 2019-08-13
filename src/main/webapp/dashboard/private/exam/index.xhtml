@@ -1,0 +1,227 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <ui:define name="title">#{i18n["common.prescribedExam"]}</ui:define>
+
+    <ui:define name="js">
+        <h:outputScript library="semantic-ui"
+                        name="js/tablesort.js"
+                        target="body"/>
+        <h:outputScript library="_default"
+                        name="js/prescribed_exam.js"
+                        target="body"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <ui:fragment rendered="#{not empty person.authPerson}">
+
+            <h2 class="ui center aligned icon header">
+                <i class="user md icon"/>
+                #{i18n["common.prescribedExam"]}
+                <br/>
+                <span class="text-smaller-33 text-light">
+                    #{person.prescriptionExamCount}
+                </span>
+            </h2>
+
+            <div class="ui divider"></div>
+
+            <ui:fragment rendered="#{empty person.prescribedExams}">
+                <div class="ui icon message">
+                    <i class="info circle icon"/>
+                    <div class="content">
+                        <div class="header">
+                            #{i18n["prescribed.exam.empty.message"]}
+                        </div>
+                        <p>#{i18n["prescribed.exam.empty.subMessage"]}</p>
+                    </div>
+                </div>
+            </ui:fragment>
+            <ui:fragment rendered="#{not empty person.prescribedExams}">
+                <table class="ui celled striped sortable table" id="prescribed-exam-table">
+                    <thead>
+                    <tr>
+                        <th>#{i18n["common.exam"]}</th>
+                        <th>#{i18n["common.date"]}</th>
+                        <th>#{i18n["common.hour"]}</th>
+                        <th>#{i18n["common.report"]}</th>
+                        <th>#{i18n["common.paid"]}</th>
+                        <th>
+                            <i class="file pdf outline icon"/> #{i18n["prescribed.medicine.download"]}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{person.prescribedExams}" var="pe">
+                        <tr>
+                            <td>#{pe.exam.name}</td>
+                            <td>
+                                <ui:fragment rendered="#{empty pe.date}">
+                                    -
+                                </ui:fragment>
+                                <ui:fragment rendered="#{not empty pe.date}">
+                                    <h:outputText value="#{pe.date}">
+                                        <f:convertDateTime type="localDate"/>
+                                    </h:outputText>
+                                </ui:fragment>
+                            </td>
+                            <td>
+                                <ui:fragment rendered="#{empty pe.time}">
+                                    -
+                                </ui:fragment>
+                                <ui:fragment rendered="#{not empty pe.time}">
+                                    <h:outputText value="#{pe.time}">
+                                        <f:convertDateTime type="localTime"/>
+                                    </h:outputText>
+                                </ui:fragment>
+                            </td>
+                            <td class="#{empty pe.report ? 'disabled' : 'positive'}">
+                                <ui:fragment rendered="#{empty pe.report}">
+                                    <i class="icon close"/>
+                                    #{i18n["common.noReport"]}
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{not empty pe.report}">
+                                    <button class="ui fluid button"
+                                            id="prescribed-exam-report-modal-button-#{pe.report.id}"
+                                    >
+                                        <i class="shuffle icon"/>
+                                        #{i18n["common.view"]}
+                                    </button>
+                                </ui:fragment>
+                            </td>
+                            <td class="center aligned">
+                                <ui:fragment rendered="#{pe.paid}">
+                                    <i class="checkmark green icon"/>
+                                    <span class="hidden">true</span>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{!pe.paid}">
+                                    <i class="close red icon"/>
+                                    <span class="hidden">false</span>
+                                </ui:fragment>
+                            </td>
+                            <td>
+                                <a href="#{request.contextPath}/service/restricted/person/downloadPrescriptionExam/#{pe.id}"
+                                   class="ui fluid labeled icon button"
+                                   target="_blank"
+                                >
+                                    <i class="arrow circle down icon"/>
+                                    #{i18n["common.download"]}
+                                </a>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                    </tbody>
+                </table>
+
+                <!--  REPORT MODAL -->
+                <div id="prescribed-exam-report-modal-container">
+                    <ui:repeat value="#{person.prescribedExams}" var="pe">
+                        <ui:fragment rendered="#{not empty pe.report}">
+                            <div class="ui small modal report-modal"
+                                 data-report-id="#{pe.report.id}"
+                            >
+                                <i class="red close icon"/>
+                                <div class="header">
+                                <span class="ui large label">
+                                    #{i18n["common.report"]}
+                                    <span class="detail">#{pe.report.id}</span>
+                                </span>
+                                </div>
+                                <div class="scrolling content">
+                                    <table class="ui celled table">
+                                        <thead>
+                                        <tr>
+                                            <th>#{i18n["common.id"]}</th>
+                                            <th>#{i18n["common.id"]} #{i18n["common.specialist"]}</th>
+                                            <th>#{i18n["common.date"]}</th>
+                                            <th>#{i18n["common.hour"]}</th>
+                                            <th>#{i18n["common.content"]}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>#{pe.report.id}</td>
+                                            <td>#{pe.specialistId}</td>
+                                            <td>
+                                                <h:outputText value="#{pe.report.date}">
+                                                    <f:convertDateTime type="localDate"/>
+                                                </h:outputText>
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{pe.report.time}">
+                                                    <f:convertDateTime type="localTime"/>
+                                                </h:outputText>
+                                            </td>
+                                            <td>#{pe.report.content}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="ui divider"></div>
+
+                                    <ui:fragment rendered="#{empty pe.report.exams}">
+                                        <div class="ui icon message">
+                                            <i class="info circle icon"/>
+                                            <div class="content">
+                                                <div class="header">
+                                                    #{i18n["prescribed.exam.report.exam.empty.message"]}
+                                                </div>
+                                                <p>#{i18n["prescribed.exam.report.exam.empty.subMessage"]}</p>
+                                            </div>
+                                        </div>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{not empty pe.report.exams}">
+                                        <h4>#{i18n["common.exams.suggested"]}</h4>
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <div class="ui bulleted list">
+                                                    <ui:repeat value="#{pe.report.exams}" var="re">
+                                                        <div class="item">#{re.name}</div>
+                                                    </ui:repeat>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ui:fragment>
+
+                                    <div class="ui divider"></div>
+
+                                    <ui:fragment rendered="#{empty pe.report.medicines}">
+                                        <div class="ui icon message">
+                                            <i class="info circle icon"/>
+                                            <div class="content">
+                                                <div class="header">
+                                                    #{i18n["prescribed.exam.report.medicine.empty.message"]}
+                                                </div>
+                                                <p>#{i18n["prescribed.exam.report.medicine.empty.subMessage"]}</p>
+                                            </div>
+                                        </div>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{not empty pe.report.medicines}">
+                                        <h4>#{i18n["common.medicines.suggested"]}</h4>
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <div class="ui bulleted list">
+                                                    <ui:repeat value="#{pe.report.medicines}" var="rm">
+                                                        <div class="item">#{rm.name}</div>
+                                                    </ui:repeat>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ui:fragment>
+                                </div>
+                            </div>
+                        </ui:fragment>
+                    </ui:repeat>
+                </div>
+
+            </ui:fragment>
+
+            <div class="ui divider"></div>
+        </ui:fragment>
+    </ui:define>
+</ui:composition>

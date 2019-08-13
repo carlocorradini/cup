@@ -8,7 +8,7 @@ package it.unitn.disi.wp.cup.persistence.entity;
 public class Medicine {
     private Long id;
     private String name;
-    private Float price;
+    private Short price;
 
     /**
      * Return the id of the Medicine
@@ -51,7 +51,7 @@ public class Medicine {
      *
      * @return Medicine price
      */
-    public Float getPrice() {
+    public Short getPrice() {
         return price;
     }
 
@@ -60,7 +60,7 @@ public class Medicine {
      *
      * @param price Medicine price
      */
-    public void setPrice(Float price) {
+    public void setPrice(Short price) {
         this.price = price;
     }
 }

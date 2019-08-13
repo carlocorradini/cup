@@ -2,6 +2,7 @@
 
 const $window = $(window);
 const $document = $(document);
+const SHOW_PAGE_TIMEOUT = 5000;
 
 // === PAGE FULLY LOADED ===
 $window.on("load", function () {
@@ -15,6 +16,13 @@ $window.on("load", function () {
 $document.ready(function () {
     // Hide Noscript
     $("noscript").hide();
+    // Hide Preloader after SHOW_PAGE_TIMEOUT milliseconds
+    setTimeout(function () {
+
+        $(".preloader")
+            .delay(350)
+            .fadeOut("slow");
+    }, SHOW_PAGE_TIMEOUT);
 
     // Enable Dropdown in the Header
     $("header.header").find(".ui.dropdown").dropdown();

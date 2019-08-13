@@ -8,7 +8,7 @@ package it.unitn.disi.wp.cup.persistence.entity;
 public class Exam {
     private Long id;
     private String name;
-    private Float price;
+    private Short price;
 
     /**
      * Return the id of the Exam
@@ -51,7 +51,7 @@ public class Exam {
      *
      * @return Exam price
      */
-    public Float getPrice() {
+    public Short getPrice() {
         return price;
     }
 
@@ -60,7 +60,7 @@ public class Exam {
      *
      * @param price Exam price
      */
-    public void setPrice(Float price) {
+    public void setPrice(Short price) {
         this.price = price;
     }
 }

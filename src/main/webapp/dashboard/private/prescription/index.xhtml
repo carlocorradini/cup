@@ -50,6 +50,7 @@
                         <th>#{i18n["common.hour"]}</th>
                         <th>#{i18n["common.quantity"]}</th>
                         <th>#{i18n["common.paid"]}</th>
+                        <th><i class="file pdf outline icon"/> #{i18n["prescribed.medicine.download"]}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -69,7 +70,7 @@
                             <td>
                                 #{pm.quantity}
                             </td>
-                            <td>
+                            <td class="center aligned">
                                 <ui:fragment rendered="#{pm.paid}">
                                     <i class="checkmark green icon"/>
                                     <span class="hidden">true</span>
@@ -78,6 +79,15 @@
                                     <i class="close red icon"/>
                                     <span class="hidden">false</span>
                                 </ui:fragment>
+                            </td>
+                            <td>
+                                <a href="#{request.contextPath}/service/restricted/person/downloadPrescriptionMedicine/#{pm.id}"
+                                   class="ui fluid labeled icon button"
+                                   target="_blank"
+                                >
+                                    <i class="arrow circle down icon"/>
+                                    #{i18n["common.download"]}
+                                </a>
                             </td>
                         </tr>
                     </ui:repeat>

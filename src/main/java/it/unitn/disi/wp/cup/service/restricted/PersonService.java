@@ -2,19 +2,22 @@ package it.unitn.disi.wp.cup.service.restricted;
 
 import it.unitn.disi.wp.cup.config.AppConfig;
 import it.unitn.disi.wp.cup.config.AuthConfig;
-import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PersonAvatarDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
+import it.unitn.disi.wp.cup.persistence.dao.*;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
+import it.unitn.disi.wp.cup.persistence.entity.Province;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PersonAvatar;
+import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
+import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 import it.unitn.disi.wp.cup.util.CryptUtil;
 import it.unitn.disi.wp.cup.util.EmailUtil;
 import it.unitn.disi.wp.cup.util.obj.JsonMessage;
+import it.unitn.disi.wp.cup.util.pdf.PrescriptionMedicinePDFUtil;
+import it.unitn.disi.wp.cup.util.pdf.PrescriptionExamPDFUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -49,6 +53,8 @@ public class PersonService {
     private PersonDAO personDAO = null;
     private DoctorDAO doctorDAO = null;
     private PersonAvatarDAO personAvatarDAO = null;
+    private PrescriptionMedicineDAO prescriptionMedicineDAO = null;
+    private PrescriptionExamDAO prescriptionExamDAO = null;
 
     @Context
     private HttpServletRequest request;
@@ -63,6 +69,8 @@ public class PersonService {
                 personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
                 doctorDAO = DAOFactory.getDAOFactory(servletContext).getDAO(DoctorDAO.class);
                 personAvatarDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonAvatarDAO.class);
+                prescriptionMedicineDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionMedicineDAO.class);
+                prescriptionExamDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionExamDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
             }
@@ -181,6 +189,16 @@ public class PersonService {
         return message.toJsonString();
     }
 
+    /**
+     * Permits the Authenticated {@link Person person} to change it's {@link Doctor doctor}
+     * given the {@code doctorId}.
+     * The {@link Doctor doctor} must live in the same {@link Province province} as the
+     * authenticated {@link Person person}.
+     * The {@link Doctor doctor} may not have already been the Doctor of the Authenticated {@link Person person}
+     *
+     * @param doctorId The {@link Doctor doctor} id
+     * @return A JSON @{code {@link JsonMessage message}
+     */
     @POST
     @Path("doctor")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -221,5 +239,93 @@ public class PersonService {
         }
 
         return message.toJsonString();
+    }
+
+    /**
+     * Given a {@link PrescriptionMedicine prescriptionMedicine} id generate a {@link PrescriptionMedicinePDFUtil PDF}.
+     * The {@link PrescriptionMedicine prescription} must be a valid {@link PrescriptionMedicine prescriptionMedicine}
+     * and must belong to the Authenticated {@link Person person}
+     *
+     * @param prescriptionId The {@link PrescriptionMedicine prescriptionMedicine} id
+     * @return The generated {@link PrescriptionMedicine prescriptionMedicine} PDF
+     */
+    @GET
+    @Path("downloadPrescriptionMedicine/{id}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response downloadPrescriptionMedicine(@PathParam("id") Long prescriptionId) {
+        Response.ResponseBuilder response;
+        PrescriptionMedicine prescriptionMedicine;
+
+        if (person == null) {
+            // Unauthorized Person
+            response = Response.status(Response.Status.UNAUTHORIZED);
+        } else if (prescriptionId == null) {
+            // The Prescription Id is missing
+            response = Response.status(Response.Status.BAD_REQUEST);
+        } else {
+            try {
+                if ((prescriptionMedicine = prescriptionMedicineDAO.getByPrimaryKey(prescriptionId)) == null) {
+                    // The Prescription Id is invalid
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                } else if (!person.getId().equals(prescriptionMedicine.getPersonId())) {
+                    // The Prescription not belong to the authenticated person
+                    response = Response.status(Response.Status.UNAUTHORIZED);
+                } else {
+                    // ALL CORRECT, generate the PDF
+                    response = Response
+                            .ok(PrescriptionMedicinePDFUtil.generate(prescriptionMedicine).toByteArray())
+                            .header("content-disposition", "attachment; filename = Prescription_Medicine_" + prescriptionMedicine.getId() + ".pdf");
+                }
+            } catch (DAOException | NullPointerException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to serve the Prescription Medicine PDF", ex);
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return response.build();
+    }
+
+    /**
+     * Given a {@link PrescriptionExam prescriptionExam} id generate a {@link PrescriptionExamPDFUtil PDF}.
+     * The {@link PrescriptionExam prescription} must be a valid {@link PrescriptionExam prescriptionExam}
+     * and must belong to the Authenticated {@link Person person}
+     *
+     * @param prescriptionId The {@link PrescriptionExam prescriptionExam} id
+     * @return The generated {@link PrescriptionExam prescriptionExam} PDF
+     */
+    @GET
+    @Path("downloadPrescriptionExam/{id}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response downloadPrescriptionExam(@PathParam("id") Long prescriptionId) {
+        Response.ResponseBuilder response;
+        PrescriptionExam prescriptionExam;
+
+        if (person == null) {
+            // Unauthorized Person
+            response = Response.status(Response.Status.UNAUTHORIZED);
+        } else if (prescriptionId == null) {
+            // The Prescription Id is missing
+            response = Response.status(Response.Status.BAD_REQUEST);
+        } else {
+            try {
+                if ((prescriptionExam = prescriptionExamDAO.getByPrimaryKey(prescriptionId)) == null) {
+                    // The Prescription Id is invalid
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                } else if (!person.getId().equals(prescriptionExam.getPersonId())) {
+                    // The Prescription not belong to the authenticated person
+                    response = Response.status(Response.Status.UNAUTHORIZED);
+                } else {
+                    // ALL CORRECT, generate the PDF
+                    response = Response
+                            .ok(PrescriptionExamPDFUtil.generate(prescriptionExam).toByteArray())
+                            .header("content-disposition", "attachment; filename = Prescription_Exam_" + prescriptionExam.getId() + ".pdf");
+                }
+            } catch (DAOException | NullPointerException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to serve the Prescription Exam PDF", ex);
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return response.build();
     }
 }

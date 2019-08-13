@@ -1,5 +1,6 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
+import com.alibaba.fastjson.JSON;
 import it.unitn.disi.wp.cup.config.AppConfig;
 import it.unitn.disi.wp.cup.model.prescription.PrescriptionExamModel;
 import it.unitn.disi.wp.cup.model.prescription.PrescriptionMedicineModel;
