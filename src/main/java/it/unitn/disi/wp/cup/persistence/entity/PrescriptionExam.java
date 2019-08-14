@@ -19,6 +19,7 @@ public class PrescriptionExam {
     private Exam exam;
     private Report report;
     private Boolean paid;
+    private Boolean read;
 
     /**
      * Return the id of the Prescription Exam
@@ -224,5 +225,23 @@ public class PrescriptionExam {
      */
     public void setPaid(Boolean paid) {
         this.paid = paid;
+    }
+
+    /**
+     * Return if the {@link PrescriptionExam prescription} has been read
+     *
+     * @return True if read, false otherwise
+     */
+    public Boolean getRead() {
+        return read;
+    }
+
+    /**
+     * Set if the {@link PrescriptionExam prescription} has been read
+     *
+     * @param read True if read, false otherwise
+     */
+    public void setRead(Boolean read) {
+        this.read = read;
     }
 }

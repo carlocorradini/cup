@@ -5,6 +5,7 @@ import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.Exam;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
+import it.unitn.disi.wp.cup.persistence.entity.Report;
 
 import java.util.List;
 
@@ -23,6 +24,26 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @throws DAOException If an error occurred during the information retrieving
      */
     List<PrescriptionExam> getAllByPersonId(Long personId) throws DAOException;
+
+    /**
+     * Return the {@link List} of all {@link PrescriptionExam} with a {@link Report report} that has not been read
+     * by the {@link Person person}
+     *
+     * @param personId The {@link Person person} id
+     * @return The {@link List} of {@link PrescriptionExam} with a {@link Report report} that has not been read
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    List<PrescriptionExam> getAllNotReadByPersonId(Long personId) throws DAOException;
+
+    /**
+     * Return the Number of {@link PrescriptionExam} with a {@link Report report} that has not been read
+     * by the {@link Person person}
+     *
+     * @param personId The {@link Person person} id
+     * @return The number of {@link PrescriptionExam exams} with a {@link Report report} that has not been read
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    Long getCountNotReadByPersonId(Long personId) throws DAOException;
 
     /**
      * Add a new {@code prescriptionExam} into the persistence system
