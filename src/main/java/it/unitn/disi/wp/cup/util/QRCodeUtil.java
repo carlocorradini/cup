@@ -51,7 +51,7 @@ public final class QRCodeUtil {
         // Set Hints
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-        hints.put(EncodeHintType.MARGIN, 0);
+        hints.put(EncodeHintType.MARGIN, 1);
 
         try {
             // Create QR Code

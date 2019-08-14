@@ -224,4 +224,18 @@ public final class PersonDaoBean implements Serializable {
 
         return count;
     }
+
+    public List<PrescriptionExam> getPrescriptionExamNotRead() {
+        List<PrescriptionExam> exams = Collections.emptyList();
+
+        if(authPerson != null && prescriptionExamDAO != null) {
+            try {
+                exams = prescriptionExamDAO.getAllNotReadByPersonId(authPerson.getId());
+            } catch (DAOException ex) {
+
+            }
+        }
+
+        return exams;
+    }
 }
