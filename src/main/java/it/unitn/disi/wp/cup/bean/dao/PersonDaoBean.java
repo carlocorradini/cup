@@ -225,14 +225,40 @@ public final class PersonDaoBean implements Serializable {
         return count;
     }
 
+    /**
+     * Return the Number of {@link PrescriptionExam exams} with {@link Report report} prescribed
+     * for the Authenticated {@link Person person} that has not been read
+     *
+     * @return Number of {@link Exam exams} with {@link Report report} that has not been read
+     */
+    public Long getPrescriptionExamNotReadCount() {
+        long count = 0L;
+
+        if (authPerson != null && prescriptionExamDAO != null) {
+            try {
+                count = prescriptionExamDAO.getCountNotReadByPersonId(authPerson.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to count the Prescription Exam that has not been read", ex);
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * Return the {@link List list} of {@link PrescriptionExam prescription Exam} with {@link Report report}
+     * that the authenticated {@link Person} has not read
+     *
+     * @return The {@link List list} of {@link PrescriptionExam} that has not been read
+     */
     public List<PrescriptionExam> getPrescriptionExamNotRead() {
         List<PrescriptionExam> exams = Collections.emptyList();
 
-        if(authPerson != null && prescriptionExamDAO != null) {
+        if (authPerson != null && prescriptionExamDAO != null) {
             try {
                 exams = prescriptionExamDAO.getAllNotReadByPersonId(authPerson.getId());
             } catch (DAOException ex) {
-
+                LOGGER.log(Level.SEVERE, "Unable to get the List of Prescribed Exam that has not been read by the authenticated Person");
             }
         }
 

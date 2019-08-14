@@ -76,8 +76,8 @@
                 <div class="menu">
                     <h:link outcome="/dashboard/private/report/index"
                             styleClass="item">
-                        #{i18n["common.reports"]}
-                        <span class="ui red label">4</span>
+                        #{i18n["common.reportsNew"]}
+                        <span class="ui red label">#{person.prescriptionExamNotReadCount}</span>
                     </h:link>
                     <h:link outcome="/dashboard/private/exam/index"
                             styleClass="item">
