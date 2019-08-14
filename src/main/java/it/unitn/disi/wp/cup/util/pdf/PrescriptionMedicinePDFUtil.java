@@ -1,5 +1,6 @@
 package it.unitn.disi.wp.cup.util.pdf;
 
+import com.alibaba.fastjson.JSON;
 import com.google.zxing.qrcode.encoder.QRCode;
 import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
@@ -9,15 +10,22 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
+import it.unitn.disi.wp.cup.util.ImageUtil;
 import it.unitn.disi.wp.cup.util.QRCodeUtil;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -98,16 +106,120 @@ public final class PrescriptionMedicinePDFUtil {
             throw new NullPointerException("Person, Doctor and PrescriptionMedicine are mandatory fields");
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PDDocument document = PDFUtil.getBaseDocument("Prescrizione N° " + prescriptionMedicine.getId(), "Prescrizione di " + person.getFiscalCode());
+        PDPage page = document.getPage(0);
         PDPageContentStream contentStream;
 
         try {
+            String title = "Ricetta Farmaceutica";
+            PDFont font = PDType1Font.HELVETICA;
+            PDFont fontBold = PDType1Font.HELVETICA_BOLD;
+            int fontSize = 14;
+
             contentStream = new PDPageContentStream(document, document.getPage(0));
 
-            PDImageXObject image = JPEGFactory.createFromImage(document, QRCodeUtil.generate("https://www.google.it"));
-            contentStream.drawImage(image, 70, 250);
+            PDImageXObject qrCode = JPEGFactory.createFromImage(document, QRCodeUtil.generate(JSON.toJSONString(prescriptionMedicine)));
+            PDImageXObject logo = JPEGFactory.createFromImage(document, ImageUtil.getLOGO());
+            contentStream.drawImage(qrCode, 30, 670, 100, 100);
+            contentStream.drawImage(logo, 480, 670, 100, 100);
+
+            contentStream.beginText();
+            contentStream.setFont(font, 20);
+            contentStream.setNonStrokingColor(new Color(231, 68, 35));
+            contentStream.newLineAtOffset(220, 750);
+            contentStream.showText(title);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(Color.GRAY);
+            contentStream.newLineAtOffset(480, 10);
+            contentStream.showText("MEDICO: ");
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.newLineAtOffset(150, 680);
+            contentStream.showText("MEDICO: ");
+            contentStream.setFont(font, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.showText("" + doctor.getFullNameCapitalized());
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.newLineAtOffset(150, 660);
+            contentStream.showText("IDENTIFICATIVO MEDICO: ");
+            contentStream.setFont(font, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.showText("" + doctor.getId());
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.newLineAtOffset(150, 640);
+            contentStream.showText("CODICE FISCALE PAZIENTE: ");
+            contentStream.setFont(font, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.showText("" + person.getFiscalCode());
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.newLineAtOffset(150, 620);
+            contentStream.showText("DATA PRESCRIZIONE: ");
+            contentStream.setFont(font, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.showText("" + prescriptionMedicine.getDateTime().toLocalDate());
+            contentStream.endText();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.ITALY);
+            String f = formatter.format(prescriptionMedicine.getDateTime().toLocalTime());
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.newLineAtOffset(150, 600);
+            contentStream.showText("ORA PRESCRIZIONE: ");
+            contentStream.setFont(font, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.showText("" + f);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.newLineAtOffset(150, 580);
+            contentStream.showText("IDENTIFICATIVO PRESCRIZIONE: ");
+            contentStream.setFont(font, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.showText("" + prescriptionMedicine.getId());
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.newLineAtOffset(150, 560);
+            contentStream.showText("DESCRIZIONE FARMACO: ");
+            contentStream.setFont(font, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.showText("" + prescriptionMedicine.getMedicine().getName());
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.newLineAtOffset(150, 540);
+            contentStream.showText("QUANTITÀ FARMACO: ");
+            contentStream.setFont(font, fontSize);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.showText("" + prescriptionMedicine.getQuantity());
+            contentStream.endText();
+
 
             contentStream.close();
-
             document.save(output);
             document.close();
         } catch (IOException ex) {
