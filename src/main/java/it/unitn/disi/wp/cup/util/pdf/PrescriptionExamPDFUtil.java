@@ -116,11 +116,6 @@ public final class PrescriptionExamPDFUtil {
             contentStream.showText("Devi Pagare: " + prescriptionExam.getExam().getPrice());
             contentStream.endText();
 
-            PDImageXObject image = PDImageXObject.createFromFileByContent(PDFUtil.getLOGO(), document);
-            PDPageContentStream contents = new PDPageContentStream(document, document.getPage(0));
-            contents.drawImage(image, 70, 250);
-
-            contents.close();
             contentStream.close();
 
             document.save(output);

@@ -1,5 +1,6 @@
 package it.unitn.disi.wp.cup.util.pdf;
 
+import com.google.zxing.qrcode.encoder.QRCode;
 import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
@@ -8,9 +9,11 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
+import it.unitn.disi.wp.cup.util.QRCodeUtil;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.io.ByteArrayOutputStream;
@@ -99,20 +102,10 @@ public final class PrescriptionMedicinePDFUtil {
 
         try {
             contentStream = new PDPageContentStream(document, document.getPage(0));
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
-            contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(25, 1000);
-            contentStream.showText("Hello " + person.getFullNameCapitalized());
-            contentStream.newLine();
-            contentStream.showText("Devi Pagare: " + prescriptionMedicine.getTotalToPay());
-            contentStream.endText();
 
-            PDImageXObject image = PDImageXObject.createFromFileByContent(PDFUtil.getLOGO(), document);
-            PDPageContentStream contents = new PDPageContentStream(document, document.getPage(0));
-            contents.drawImage(image, 70, 250);
+            PDImageXObject image = JPEGFactory.createFromImage(document, QRCodeUtil.generate("https://www.google.it"));
+            contentStream.drawImage(image, 70, 250);
 
-            contents.close();
             contentStream.close();
 
             document.save(output);

@@ -1,13 +1,9 @@
 package it.unitn.disi.wp.cup.util.pdf;
 
 import it.unitn.disi.wp.cup.config.AppConfig;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
-
-import javax.servlet.ServletContext;
-import java.io.File;
 
 /**
  * Basic Util class for creating Basic {@link PDDocument PDF} with information
@@ -15,27 +11,6 @@ import java.io.File;
  * @author Carlo Corradini
  */
 public final class PDFUtil {
-
-    private static File LOGO;
-
-    /**
-     * Configure the class
-     *
-     * @param servletContext The {@link ServletContext} get information from
-     * @throws NullPointerException If servletContext is null
-     */
-    public static void configure(final ServletContext servletContext) throws NullPointerException {
-        if (servletContext == null)
-            throw new NullPointerException("ServletContext cannot be null");
-
-        LOGO = new File(FilenameUtils.separatorsToUnix(servletContext.getRealPath("/") + "assets/_default/images/favicon/android-chrome-512x512.png"));
-    }
-
-    private static void isConfigured() throws NullPointerException {
-        if (LOGO == null)
-            throw new NullPointerException("LOGO cannot be null");
-    }
-
     /**
      * Return a {@link PDDocument PDF} with information attached to it.
      *
@@ -98,14 +73,5 @@ public final class PDFUtil {
      */
     public static PDDocument getBaseDocument() {
         return getBaseDocument("", "", "");
-    }
-
-    /**
-     * Return the {@link File file} representing the Logo of the Application
-     *
-     * @return The Logo of the Application
-     */
-    public static File getLOGO() {
-        return LOGO;
     }
 }
