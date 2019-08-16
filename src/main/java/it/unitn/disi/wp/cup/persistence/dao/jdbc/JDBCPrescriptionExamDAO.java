@@ -29,6 +29,7 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
     private static final String SQL_ADD = "INSERT INTO prescription_exam(person_id, doctor_id, exam_id) VALUES (?, ?, ?)";
     private static final String SQL_GET_COUNT_BY_PERSON_ID = "SELECT COUNT(*) FROM prescription_exam WHERE person_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_id = ?";
+    private static final String SQL_UPDATE = "UPDATE prescription_exam SET doctor_specialist_id = ?, report_id = ?, prescription_date = ?, paid = ?, read = ? WHERE id = ?";
 
     /**
      * The default constructor of the class
@@ -264,5 +265,37 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
         }
 
         return count;
+    }
+
+    @Override
+    public boolean update(PrescriptionExam prescriptionExam) throws DAOException {
+        boolean updated = false;
+        if (prescriptionExam == null)
+            throw new DAOException("Prescription Exam is mandatory", new NullPointerException("Prescription Exam is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_UPDATE)) {
+            pStmt.setLong(1, prescriptionExam.getSpecialistId());
+            if (prescriptionExam.getReport() != null) {
+                pStmt.setLong(2, prescriptionExam.getReport().getId());
+            } else {
+                pStmt.setNull(2, Types.BIGINT);
+            }
+            if (prescriptionExam.getDateTime() != null) {
+                pStmt.setObject(3, prescriptionExam.getDateTime());
+            } else {
+                pStmt.setNull(3, Types.TIMESTAMP);
+            }
+            pStmt.setBoolean(4, prescriptionExam.getPaid());
+            pStmt.setBoolean(5, prescriptionExam.getRead());
+            pStmt.setLong(6, prescriptionExam.getId());
+
+            if (pStmt.executeUpdate() == 1) {
+                updated = true;
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to update the Prescription Exam", ex);
+        }
+
+        return updated;
     }
 }

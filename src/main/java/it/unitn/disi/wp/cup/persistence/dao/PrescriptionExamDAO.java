@@ -69,4 +69,13 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @throws DAOException If an error occurred during the information retrieving
      */
     Long getCountByDoctorId(Long doctorId) throws DAOException;
+
+    /**
+     * Update a {@link PrescriptionExam prescriptionExam} from the Database and return if updated
+     *
+     * @param prescriptionExam The prescriptionExam to update
+     * @return true if the {@link PrescriptionExam} has been updated, false otherwise
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    boolean update(PrescriptionExam prescriptionExam) throws DAOException;
 }

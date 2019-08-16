@@ -172,7 +172,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
 
     @Override
     public boolean update(Person person) throws DAOException {
-        boolean toRtn = false;
+        boolean updated = false;
         if (person == null)
             throw new DAOException("Person is a mandatory field", new NullPointerException("Person is null"));
 
@@ -188,12 +188,13 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
             pStmt.setLong(9, person.getCity().getId());
             pStmt.setLong(10, person.getId());
 
-            if (pStmt.executeUpdate() == 1)
-                toRtn = true;
+            if (pStmt.executeUpdate() == 1) {
+                updated = true;
+            }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to update the Person", ex);
         }
 
-        return toRtn;
+        return updated;
     }
 }

@@ -95,5 +95,21 @@ window.UTIL = {
 
             return params;
         }
+    },
+    ARRAY: {
+        /**
+         * Remove the {@code item} from the {@code array}.
+         * If the {@code item} is not present in the {@code array} nothing will be touched.
+         *
+         * @param array The array to remove item from
+         * @param item The item to remove from the array
+         */
+        remove: function (array, item) {
+            const index = array.indexOf(item);
+
+            if (index > -1) {
+                array.splice(index, 1);
+            }
+        }
     }
 };

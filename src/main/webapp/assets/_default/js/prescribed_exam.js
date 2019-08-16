@@ -16,6 +16,7 @@ function prescribedExamConfig() {
         }
     };
 
+    // Enable Sorting
     pExam.$table.tablesort();
 
     // Enable Report Modal

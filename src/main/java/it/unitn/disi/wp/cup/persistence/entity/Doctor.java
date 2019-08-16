@@ -1,8 +1,6 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -56,30 +54,6 @@ public class Doctor {
      */
     public LocalDateTime getSince() {
         return since;
-    }
-
-    /**
-     * Return the {@code since} as a {@link LocalDate date}
-     *
-     * @return {@code since} as a {@link LocalDate date}
-     */
-    public LocalDate getSinceDate() {
-        if (since != null) {
-            return since.toLocalDate();
-        }
-        return null;
-    }
-
-    /**
-     * Return the {@code since} as a {@link LocalTime time}
-     *
-     * @return {@code since} as a {@link LocalTime time}
-     */
-    public LocalTime getSinceTime() {
-        if (since != null) {
-            return since.toLocalTime();
-        }
-        return null;
     }
 
     /**

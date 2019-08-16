@@ -60,21 +60,21 @@
                         <tr>
                             <td>#{pe.exam.name}</td>
                             <td>
-                                <ui:fragment rendered="#{empty pe.date}">
+                                <ui:fragment rendered="#{empty pe.dateTime}">
                                     -
                                 </ui:fragment>
-                                <ui:fragment rendered="#{not empty pe.date}">
-                                    <h:outputText value="#{pe.date}">
+                                <ui:fragment rendered="#{not empty pe.dateTime}">
+                                    <h:outputText value="#{pe.dateTime}">
                                         <f:convertDateTime type="localDate"/>
                                     </h:outputText>
                                 </ui:fragment>
                             </td>
                             <td>
-                                <ui:fragment rendered="#{empty pe.time}">
+                                <ui:fragment rendered="#{empty pe.dateTime}">
                                     -
                                 </ui:fragment>
-                                <ui:fragment rendered="#{not empty pe.time}">
-                                    <h:outputText value="#{pe.time}">
+                                <ui:fragment rendered="#{not empty pe.dateTime}">
+                                    <h:outputText value="#{pe.dateTime}">
                                         <f:convertDateTime type="localTime"/>
                                     </h:outputText>
                                 </ui:fragment>
@@ -148,12 +148,12 @@
                                             <td>#{pe.report.id}</td>
                                             <td>#{pe.specialistId}</td>
                                             <td>
-                                                <h:outputText value="#{pe.report.date}">
+                                                <h:outputText value="#{pe.report.dateTime}">
                                                     <f:convertDateTime type="localDate"/>
                                                 </h:outputText>
                                             </td>
                                             <td>
-                                                <h:outputText value="#{pe.report.time}">
+                                                <h:outputText value="#{pe.report.dateTime}">
                                                     <f:convertDateTime type="localTime"/>
                                                 </h:outputText>
                                             </td>
