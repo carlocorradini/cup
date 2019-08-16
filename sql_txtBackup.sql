@@ -2,6 +2,14 @@
 /*-------------------- CREATING DATABASE --------------------*/
 /*-----------------------------------------------------------*/
 
+CREATE DATABASE cup WITH 
+	OWNER = postgres
+	ENCODING = 'UTF8'
+	LC_COLLATE = 'Italian_Italy.1252'
+	LC_CTYPE = 'Italian_Italy.1252'
+	TABLESPACE = pg_default
+	CONNECTION LIMIT = -1;
+
 CREATE TABLE region (
 	id		BIGSERIAL,
 	name		varchar(100)    NOT NULL,
@@ -119,7 +127,6 @@ CREATE TABLE is_patient (
 	CHECK (person_id != doctor_id)
 );
 	
-
 CREATE TABLE prescription_exam (
 	id		BIGSERIAL,
 	person_id	BIGINT		NOT NULL,
@@ -128,6 +135,7 @@ CREATE TABLE prescription_exam (
 	report_id	BIGINT				UNIQUE,
 	doctor_specialist_id		BIGINT,
 	paid 		BOOLEAN		NOT NULL	DEFAULT FALSE,
+	read		BOOLEAN		NOT NULL	DEFAULT FALSE,
 	prescription_date		timestamp(6)
 					without time
 					zone				DEFAULT CURRENT_TIMESTAMP,
@@ -139,6 +147,7 @@ CREATE TABLE prescription_exam (
 	FOREIGN KEY (exam_id) REFERENCES exam(id),
 	FOREIGN KEY (report_id) REFERENCES report(id),
 	FOREIGN KEY (doctor_specialist_id) REFERENCES doctor_specialist(id)
+	
 );
 
 CREATE TABLE prescription_medicine (
@@ -9626,7 +9635,7 @@ INSERT INTO person(name, surname, email, password, sex, birth_date, birth_city_i
 	('Francesco', 'Papetti', 'web.prj.cup+2@gmail.com', '$2a$15$IE8g3G0YAmLBq3wMGMzVM.qoV4oz5mmGgzuvtiiFE/PNiwQJslaZ2', 'M', '1985-04-24', 2600, 'PPTFNC85D24A794G', 2600),
 	('Federica', 'Papetti', 'web.prj.cup+3@gmail.com', '$2a$15$EV.SRQ.x.lsoioDL1NGNF.WCBVQpXgbcs2x3Sncs4lPQ72z3qkb7S', 'F', '1980-04-24', 2600, 'PPTFRC80D64A794T', 2600),
 	('Giacomo', 'Papetti', 'web.prj.cup+4@gmail.com', '$2a$15$2Af3pS/kvRGPDmHfRAzbI.PWQ8qeU5tKBMQRzMmK/wj/aQvKHMjwa', 'M', '2005-04-24', 2600, 'PPTGCM05D24A794K', 2600),
-	('Alessandra', 'Mandorla', 'web.prj.cup+5@gmail.com', '$2a$15$EV.SRQ.x.lsoioDL1NGNF.WCBVQpXgbcs2x3Sncs4lPQ72z3qkb7S', 'F', '1979-01-01', 2600, 'MNDLSN79A41A794K', 2600),
+	('Alessandra', 'Mandorla', 'web.prj.cup+5@gmail.com', '$2a$15$lJYrN6LMvyNwV.BZGm.QYOSe0Xzsym6/R944BhLMNRCDb9Fr85tOe', 'F', '1979-01-01', 2600, 'MNDLSN79A41A794K', 2600),
 	('Barbara', 'Mandorla', 'web.prj.cup+6@gmail.com', '$2a$15$l/4mFDu8qx97RkEAf68UM.aW7a0/EjOJHhc1o/lgP1oqY2kbBQXqS', 'F', '1979-01-01', 2600, 'MNDBBR79A41A794S', 2600),
 	('Gianni', 'Mandorla', 'web.prj.cup+7@gmail.com', '$2a$15$UACkzDfIB7ZRymBUnsiYL.2C9u6w/bMZI8GCUZYbwEiWV5qhenwaG', 'M', '1930-01-01', 2600, 'MNDGNN30A01A794Q', 2600),
 	('Aldo', 'Mandorla', 'web.prj.cup+8@gmail.com', '$2a$15$0.myMBrmZwwZhwEqEkMAC.72v.q6XSUiyAsR5xk4qTRjfSMJs5uHe', 'M', '1938-12-17', 2600, 'MNDLDA38T17A794I', 2600), /* <- Miraxh T. */
@@ -9638,40 +9647,40 @@ INSERT INTO person(name, surname, email, password, sex, birth_date, birth_city_i
 	('Marco', 'Lombardi', 'web.prj.cup+16@gmail.com', '$2a$15$gbS8KofKXfM3qsXq52xmdek.0aajNPE.06j.E/hT0zsqbbJ6pjZOy', 'M', '1999-05-29', 7323, 'LMBMRC99E29L378O', 7323),
 	('Diego', 'Lombardi', 'web.prj.cup+17@gmail.com', '$2a$15$4maaEJXj82Lb55g29gfUQOXKcWlCPPaUvf9wJlD960g0wBSFSSLgG', 'M', '2002-01-09', 7323, 'LMBDGI02A09L378H', 7323),
 	('Elisa', 'Potrich', 'web.prj.cup+18@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1996-10-02', 7323, 'PTRLSE92B56L378O', 7323),
-	('Enrico', 'Cosi', 'web.prj.cup+19@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1964-06-16', 7323, 'CSONRC64H16L378X', 7323),
-	('Giacomo', 'Rossetti', 'web.prj.cup+20@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1950-12-18', 7323, 'RSSGCM50T18L378W', 7323),
-	('Martina', 'Bosco', 'web.prj.cup+21@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1972-08-08', 7323, 'BSCMTN73M48L378L', 7323), /* <- Luca S. */
-	('Javier Paolo', 'Pala', 'web.prj.cup+22@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1994-11-04', 7323, 'PLAJRP94S04L378H', 7323),
-	('Zara', 'Camicia', 'web.prj.cup+23@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1969-05-06', 7323, 'CMCZRA69E46L378V', 7323),
-	('Marcello', 'Rigotti', 'web.prj.cup+24@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1975-02-04', 7323, 'RGTMCL75B04L378B', 7323),
-	('Lorenzo', 'Rigotti', 'web.prj.cup+25@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1972-09-28', 7323, 'RGTLNZ72P28L378P', 7323),
-	('Gianni', 'Gregori', 'web.prj.cup+26@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1962-09-23', 7323, 'GRGGNN62P23L378D', 7323),
-	('Giselle', 'Smitch', 'web.prj.cup+27@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1838-02-11', 7323, 'SMTGLL68L63L378N', 7323),
-	('Max', 'Dellai', 'web.prj.cup+28@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1996-10-02', 7323, 'DLLMXA83B11L378W', 7323),
-	('Antonio', 'Dellai', 'web.prj.cup+29@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1946-09-14', 7323, 'DLLNTN46P14L378E', 7323),
-	('Matteo', 'Dellai', 'web.prj.cup+30@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1968-05-10', 7323, 'DLLMTT68E10L378P', 7323), /* <- Carlo C. */
-	('Mattea', 'Vesto', 'web.prj.cup+31@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1987-10-17', 7323, 'VSTMTT87R57L378F', 7323),
-	('Gian Vittorio', 'Dal Prà', 'web.prj.cup+32@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1996-10-02', 7323, 'DLPGVT70L11L378S', 7317),
-	('Fabio', 'Dal Prà', 'web.prj.cup+33@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '2006-11-23', 7323, 'DLPFBA06S23L378U', 7317),
-	('Susanna', 'Dal Prà', 'web.prj.cup+34@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1979-07-15', 7323, 'DLPSNN79L55L378I', 7317),
-	('Giulia', 'Bicetti', 'web.prj.cup+35@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1974-11-06', 7323, 'BCTGLI74S46L378A', 7317),
-	('Ginevra', 'Bicetti', 'web.prj.cup+36@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1993-07-25', 7323, 'BCTGVR93L65L378K', 7317),
-	('Viviana', 'Aldrighetti', 'web.prj.cup+37@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '2003-02-19', 7323, 'LDRVVN03B59L378D', 7317),
-	('Tonio', 'Aldrighetti', 'web.prj.cup+38@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1950-02-02', 7323, 'LDRTNO50B02L378A', 7317),
-	('Agnese', 'Cappelletti', 'web.prj.cup+39@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1972-12-16', 7323, 'CPPGNS72T56L378I', 7317),
-	('Marta', 'Ginossa', 'web.prj.cup+40@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1974-09-26', 7317, 'GNSMRT74P66L174V', 7317),
-	('Valentina', 'Franchi', 'web.prj.cup+41@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1992-07-21', 7317, 'FRNVNT92L61L174O', 7317), /* <- Grigore A. */
+	('Enrico', 'Cosi', 'web.prj.cup+19@gmail.com', '$2a$15$LYfSkrhpOol9n4JvCcLYAeSn8.c/iBo96M53ENfkXlJBNxAXmWmTK', 'M', '1964-06-16', 7323, 'CSONRC64H16L378X', 7323),
+	('Giacomo', 'Rossetti', 'web.prj.cup+20@gmail.com', '$2a$15$KC9ATuxG0OHeRhYJ6XgRFOjz8yHNavv.66/N1RmQI5P.EO6to2eCS', 'M', '1950-12-18', 7323, 'RSSGCM50T18L378W', 7323),
+	('Martina', 'Bosco', 'web.prj.cup+21@gmail.com', '$2a$15$i5q/B3SkyY34kovp6X3aruaOFIQFo8xgIOUNA0jRNHwfPM3WDl3t6', 'F', '1972-08-08', 7323, 'BSCMTN73M48L378L', 7323), /* <- Luca S. */
+	('Javier Paolo', 'Pala', 'web.prj.cup+22@gmail.com', '$2a$15$Yn.8bGTo2dGinSbKZxMVlOLTfA7/jZKfedjs3otXrZyprEYU8x9CO', 'M', '1994-11-04', 7323, 'PLAJRP94S04L378H', 7323),
+	('Zara', 'Camicia', 'web.prj.cup+23@gmail.com', '$2a$15$ZxrE1z4balS.BOwKKwtZoOmlQCjuQ/BZDXXj0ptAuedg.bRDBsC4m', 'F', '1969-05-06', 7323, 'CMCZRA69E46L378V', 7323),
+	('Marcello', 'Rigotti', 'web.prj.cup+24@gmail.com', '$2a$15$L31hXdBFmdJ63LDfbOKcKeO.d6uf6BosiLaLG.03dXH1k2MLIfkgu', 'M', '1975-02-04', 7323, 'RGTMCL75B04L378B', 7323),
+	('Lorenzo', 'Rigotti', 'web.prj.cup+25@gmail.com', '$2a$15$Nb1iU7aOYDxQuD4fUQNyweFmnFfi4I0rfRBcOQhGFtM.h2Wtk7QBq', 'M', '1972-09-28', 7323, 'RGTLNZ72P28L378P', 7323),
+	('Gianni', 'Gregori', 'web.prj.cup+26@gmail.com', '$2a$15$RUqjzS1eEEsosap4h8EwFuNkM5ePxE7k/qxTenzVtn2m2DvVpen7S', 'M', '1962-09-23', 7323, 'GRGGNN62P23L378D', 7323),
+	('Giselle', 'Smitch', 'web.prj.cup+27@gmail.com', '$2a$15$jXNTuqUl/gHNVLJb1FefQuWTrrOjV3C9yIuber8AKAdfZvLEYl3fC', 'F', '1838-02-11', 7323, 'SMTGLL68L63L378N', 7323),
+	('Max', 'Dellai', 'web.prj.cup+28@gmail.com', '$2a$15$qMOLdKGtg3eUzRId5uNt8uiX2tApTP0I3EjZHGHqe4uB94seeGZYi', 'M', '1996-10-02', 7323, 'DLLMXA83B11L378W', 7323),
+	('Antonio', 'Dellai', 'web.prj.cup+29@gmail.com', '$2a$15$vEYD2bmkcfP5qYUlAU6Y8OAcEH5Irottai/MMXZdHeRkhJ.MaU31m', 'M', '1946-09-14', 7323, 'DLLNTN46P14L378E', 7323),
+	('Matteo', 'Dellai', 'web.prj.cup+30@gmail.com', '$2a$15$K1Wap3h9cHotidJvxCrlSOMApx9llF8pJFyOPgV.29dYWCKNA4.Dy', 'M', '1968-05-10', 7323, 'DLLMTT68E10L378P', 7323), /* <- Carlo C. */
+	('Mattea', 'Vesto', 'web.prj.cup+31@gmail.com', '$2a$15$MLC2bjHsbL8hdWn0P5ro5eJjTOml7jEk7a/AmydBFMPgrtmvrSw9C', 'F', '1987-10-17', 7323, 'VSTMTT87R57L378F', 7323),
+	('Gian Vittorio', 'Dal Prà', 'web.prj.cup+32@gmail.com', '$2a$15$97YkoSapBmnkNwNgrnZfL.mOn66pdsFGSoVX3fxJ7690oJtB6cKPC', 'M', '1996-10-02', 7323, 'DLPGVT70L11L378S', 7317),
+	('Fabio', 'Dal Prà', 'web.prj.cup+33@gmail.com', '$2a$15$XTu5MwwWkbjHJ6WLcFv7p.Rl0VBApFDVNmSh.V4LfKPAszX6E3AfS', 'M', '2006-11-23', 7323, 'DLPFBA06S23L378U', 7317),
+	('Susanna', 'Dal Prà', 'web.prj.cup+34@gmail.com', '$2a$15$QMm.jfRlS2PFNPWVbXq38e9UGvWfLJSJhI6Mn82a0R3CAzBhj9ivy', 'F', '1979-07-15', 7323, 'DLPSNN79L55L378I', 7317),
+	('Giulia', 'Bicetti', 'web.prj.cup+35@gmail.com', '$2a$15$X4ZzeicjICF8btsR4yh6Du2zNXxM0AmQ2aF0Be1US/fd.w7Ra1puO', 'F', '1974-11-06', 7323, 'BCTGLI74S46L378A', 7317),
+	('Ginevra', 'Bicetti', 'web.prj.cup+36@gmail.com', '$2a$15$boKwFqxH9xQuB0NJ1QXuA.CfwsAfANs.4qPRIh70j9njAWlVgIVmu', 'F', '1993-07-25', 7323, 'BCTGVR93L65L378K', 7317),
+	('Viviana', 'Aldrighetti', 'web.prj.cup+37@gmail.com', '$2a$15$4cZGDRIIgJPrBHQef2xH3u0.zfBF0dEkLk7vUQrtfqoXWeV9YVcae', 'F', '2003-02-19', 7323, 'LDRVVN03B59L378D', 7317),
+	('Tonio', 'Aldrighetti', 'web.prj.cup+38@gmail.com', '$2a$15$ECZ4WV07RpCmK3FwjbKCouvUfQBes1lp4pRn2tFoKJ5qQgL/KAYbW', 'M', '1950-02-02', 7323, 'LDRTNO50B02L378A', 7317),
+	('Agnese', 'Cappelletti', 'web.prj.cup+39@gmail.com', '$2a$15$iPV3i9fHdxzvhdsyVMC5mOaIJAdZxre9iOB9Wqsi3dQeiXEmDpj6S', 'F', '1972-12-16', 7323, 'CPPGNS72T56L378I', 7317),
+	('Marta', 'Ginossa', 'web.prj.cup+40@gmail.com', '$2a$15$eN/tdPbcPkXI8Sy7F27KceoSVWZpRWefbrhk09UdQ9dEwdW9WW7EK', 'F', '1974-09-26', 7317, 'GNSMRT74P66L174V', 7317),
+	('Valentina', 'Franchi', 'web.prj.cup+41@gmail.com', '$2a$15$20Nj7biQJKcy7rgMKn3tC.ZGAmT2OYbfGekT.SoyNpdasLVrs0gKK', 'F', '1992-07-21', 7317, 'FRNVNT92L61L174O', 7317), /* <- Grigore A. */
 	/* minions TIONE */ -- 10 su 10
-	('Martina', 'Franchi', 'web.prj.cup+42@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1996-10-02', 7317, 'FRNMTN95T55L174S', 7317),
-	('Cristina', 'Franchi', 'web.prj.cup+43@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '2000-04-09', 7317, 'FRNCST00D49L174N', 7317),
-	('Aldo', 'Franchi', 'web.prj.cup+44@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1968-07-15', 7317, 'FRNLDA68L15L174G', 7317),
-	('Ivan', 'Bonetti', 'web.prj.cup+45@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1998-07-07', 7317, 'BNTVNI98L07L174X', 7317),
-	('Viola', 'Bonetti', 'web.prj.cup+46@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1992-09-17', 7317, 'BNTVLI92P57L174F', 7317),
-	('Massimo', 'Bonetti', 'web.prj.cup+47@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1975-12-17', 7317, 'BNTMSM75T17L174O', 7317),
-	('Nicola', 'Maucione', 'web.prj.cup+48@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1993-07-28', 7317, 'MCNNCL93L28L174P', 7317),
-	('Ilaria', 'Colombo', 'web.prj.cup+49@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1995-11-17', 7317, 'CLMLRI95S57L174S', 7317),
-	('Rosa', 'Franca', 'web.prj.cup+50@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1987-11-12', 7317, 'FRNRSO87S52L174M', 7317),
-	('Bignotti', 'Beatrice', 'web.prj.cup+51@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '2005-12-12', 7317, 'BGNBRC05T52L174Q', 7317); /* <- Ayoub S. */
+	('Martina', 'Franchi', 'web.prj.cup+42@gmail.com', '$2a$15$er7xDvI5xHRiufdHdi1p2ez3xehBrL67uec0mpA6lWMb7wMRwjXXe', 'F', '1996-10-02', 7317, 'FRNMTN95T55L174S', 7317),
+	('Cristina', 'Franchi', 'web.prj.cup+43@gmail.com', '$2a$15$A3NY.Lx9Jvt9QtUxeDUo3.e4Is.RoqmNzDRDktSfosgsuDu29r2am', 'F', '2000-04-09', 7317, 'FRNCST00D49L174N', 7317),
+	('Aldo', 'Franchi', 'web.prj.cup+44@gmail.com', '$2a$15$3Tl8N1.QaPGvsDIBXMPhQOQkOi739DCsGgt0LR0023/jvSgPjJyDK', 'M', '1968-07-15', 7317, 'FRNLDA68L15L174G', 7317),
+	('Ivan', 'Bonetti', 'web.prj.cup+45@gmail.com', '$2a$15$eNH0P47sBqYliOd2PQgiQOnJGfyTWWFKfbQ/Quwtqylipq9kkBK.S', 'M', '1998-07-07', 7317, 'BNTVNI98L07L174X', 7317),
+	('Viola', 'Bonetti', 'web.prj.cup+46@gmail.com', '$2a$15$owA23kZQfVJQ9WsRHiSmRuU8f2G3Gh6gKSQQtgJGzv0PX21D6UhjS', 'F', '1992-09-17', 7317, 'BNTVLI92P57L174F', 7317),
+	('Massimo', 'Bonetti', 'web.prj.cup+47@gmail.com', '$2a$15$KZY9XQiBum6kVvpHcRNPxeGLcKOrak.ckKbb9oeQRTpJtYXdar66q', 'M', '1975-12-17', 7317, 'BNTMSM75T17L174O', 7317),
+	('Nicola', 'Maucione', 'web.prj.cup+48@gmail.com', '$2a$15$ldEa28cfEaiwcbN5Ag3vnewry8g1mNSlhXvkCs7zws47X.worwpa.', 'M', '1993-07-28', 7317, 'MCNNCL93L28L174P', 7317),
+	('Ilaria', 'Colombo', 'web.prj.cup+49@gmail.com', '$2a$15$QvCV3QeSYff7zM81Jn8IGehCCBN1DDBQ/ZOYrAee8Y4oJMu/HtBPi', 'F', '1995-11-17', 7317, 'CLMLRI95S57L174S', 7317),
+	('Rosa', 'Franca', 'web.prj.cup+50@gmail.com', '$2a$15$raSSubVpByzmkz5rlpUe5..RJ7bewa/h2s18EbgB2HSSR5o3tnmA6', 'F', '1987-11-12', 7317, 'FRNRSO87S52L174M', 7317),
+	('Bignotti', 'Beatrice', 'web.prj.cup+51@gmail.com', '$2a$15$wLCO/POGNA21oU7YoCT6tunqN79uP5ceApoVbFjrsNvzJi6a.9Ouu', 'F', '2005-12-12', 7317, 'BGNBRC05T52L174Q', 7317); /* <- Ayoub S. */
 
 INSERT INTO doctor(id) VALUES
 	((SELECT id FROM person WHERE fiscal_code='CRRCRL98T24L378T')), /* 10 pazienti */
