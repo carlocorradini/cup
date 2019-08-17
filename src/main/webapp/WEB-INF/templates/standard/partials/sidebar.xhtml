@@ -70,9 +70,15 @@
                 <i class="user md icon"/>
                 #{i18n["common.dashboard.doctor"]}
             </h:link>
+            <h:link outcome="/dashboard/specialist/index"
+                    styleClass="item"
+                    rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
+                <i class="street view icon"/>
+                #{i18n["common.dashboard.specialist"]}
+            </h:link>
 
             <div class="item">
-                <div class="header">#{i18n["common.services"]}</div>
+                <div class="header">#{i18n["common.personal"]}</div>
                 <div class="menu">
                     <h:link outcome="/dashboard/private/report/index"
                             styleClass="item">
@@ -91,14 +97,15 @@
                     </h:link>
                 </div>
             </div>
+
             <ui:fragment rendered="#{not empty doctor.authDoctor}">
                 <div class="item">
-                    <div class="header">#{i18n["common.patients"]}</div>
+                    <div class="header">#{i18n["common.doctor"]}</div>
                     <div class="menu">
                         <h:link outcome="/dashboard/doctor/patients/index"
                                 styleClass="item">
                             <span class="ui red empty circular label"/>
-                            #{i18n["common.list"]}
+                            #{i18n["common.patients"]}
                         </h:link>
                         <h:link outcome="/dashboard/doctor/prescription_medicine/index"
                                 styleClass="item">
@@ -110,6 +117,14 @@
                             <span class="ui green empty circular label"/>
                             #{i18n["common.prescriptionExam"]}
                         </h:link>
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
+                <div class="item">
+                    <div class="header">#{i18n["common.specialist"]}</div>
+                    <div class="menu">
                     </div>
                 </div>
             </ui:fragment>

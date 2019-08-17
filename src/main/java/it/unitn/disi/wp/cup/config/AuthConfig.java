@@ -65,6 +65,20 @@ public final class AuthConfig extends Config {
     }
 
     /**
+     * Return the session name of the authenticated Doctor Specialist
+     *
+     * @return Session Doctor Specialist name
+     */
+    public static String getSessionDoctorSpecialistName() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Session Doctor Specialist Name", ex);
+        }
+        return instance.getString("session.doctorSpecialist.name");
+    }
+
+    /**
      * Return the Cookie Remember Name
      *
      * @return Cookie Remember Name

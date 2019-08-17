@@ -1,26 +1,28 @@
+
 package it.unitn.disi.wp.cup.filter;
 
-import it.unitn.disi.wp.cup.persistence.entity.Doctor;
+import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 
+import java.io.IOException;
+import java.util.logging.Logger;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
- * Filter that check if the doctor is authenticated (and authorized)
+ * Filter that check if the person is authenticated (and authorized)
  *
  * @author Carlo Corradini
  */
 @WebFilter(
-        urlPatterns = {"/dashboard/doctor/*", "/service/restricted/doctor/*"},
+        urlPatterns = {"/dashboard/private/*", "/service/restricted/person/*"},
         dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD}
 )
-public final class DoctorAuthFilter implements Filter {
-    private static final String NAME = "DoctorAuthFilter";
+public final class PersonFilter implements Filter {
+
+    private static final String NAME = "PersonFilter";
     private static final boolean DEBUG = true;
     private FilterConfig filterConfig = null;
     private boolean authenticated = false;
@@ -50,7 +52,7 @@ public final class DoctorAuthFilter implements Filter {
     private void doBeforeProcessing(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException, ServletException {
         HttpServletRequest req;
         HttpServletResponse resp;
-        Doctor doctor;
+        Person person;
         if (DEBUG) {
             log(NAME + "DoBeforeProcessing");
         }
@@ -59,8 +61,8 @@ public final class DoctorAuthFilter implements Filter {
             req = (HttpServletRequest) servletRequest;
             resp = (HttpServletResponse) servletResponse;
 
-            doctor = AuthUtil.getAuthDoctor(req);
-            if (doctor == null) {
+            person = AuthUtil.getAuthPerson(req);
+            if (person == null) {
                 resp.sendRedirect(resp.encodeRedirectURL(req.getServletContext().getContextPath() + "/signin/index.xhtml"));
             } else {
                 authenticated = true;

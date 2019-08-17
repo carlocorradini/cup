@@ -41,7 +41,7 @@ function reportsConfig() {
     reports.$readCheckboxes.checkbox({
         onChecked: function () {
             const id = $(this).data("exam-id");
-            if (UTIL.NUMBER.isNumber(id) && !examsRead.includes(id)) {
+            if (window.UTIL.NUMBER.isNumber(id) && !examsRead.includes(id)) {
                 examsRead.push(id);
             }
             reports.snackbar.$counter.html(examsRead.length);
@@ -52,8 +52,8 @@ function reportsConfig() {
         },
         onUnchecked: function () {
             const id = $(this).data("exam-id");
-            if (UTIL.NUMBER.isNumber(id) && examsRead.includes(id)) {
-                UTIL.ARRAY.remove(examsRead, id);
+            if (window.UTIL.NUMBER.isNumber(id) && examsRead.includes(id)) {
+                window.UTIL.ARRAY.remove(examsRead, id);
             }
             reports.snackbar.$counter.html(examsRead.length);
             if (examsRead.length === 0) {
@@ -78,8 +78,8 @@ function reportsConfig() {
                     // Add disabled class to table rows with corresponding id
                     for (let i = 0; i < data.ids.length; ++i) {
                         const id = data.ids[i];
-                        if (UTIL.NUMBER.isNumber(id)) {
-                            UTIL.ARRAY.remove(examsRead, id);
+                        if (window.UTIL.NUMBER.isNumber(id)) {
+                            window.UTIL.ARRAY.remove(examsRead, id);
                             reports.$table.find('tbody tr[data-exam-id="' + id + '"]').addClass("disabled positive");
                         }
                     }

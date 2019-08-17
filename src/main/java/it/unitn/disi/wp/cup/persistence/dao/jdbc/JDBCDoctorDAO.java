@@ -144,7 +144,7 @@ public class JDBCDoctorDAO extends JDBCDAO<Doctor, Long> implements DoctorDAO {
         List<Person> patients = new ArrayList<>();
         PersonDAO personDAO;
         if (doctorId == null)
-            throw new DAOException("Doctor Id is a mandatory field", new NullPointerException("Doctor Id is null"));
+            throw new DAOException("Doctor Id is mandatory", new NullPointerException("Doctor Id is null"));
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_PATIENTS)) {
             pStmt.setLong(1, doctorId);
@@ -166,7 +166,7 @@ public class JDBCDoctorDAO extends JDBCDAO<Doctor, Long> implements DoctorDAO {
     public Doctor getDoctorByPatientId(Long patientId) throws DAOException {
         Doctor doctor = null;
         if (patientId == null)
-            throw new DAOException("Patient Id is a mandatory field", new NullPointerException("Patient Id is null"));
+            throw new DAOException("Patient Id is mandatory", new NullPointerException("Patient Id is null"));
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_BY_PATIENT_ID)) {
             pStmt.setLong(1, patientId);

@@ -1042,3 +1042,11 @@ div[id^=personal-card-modal-].ui.modal.disabled:after {
         display: none;
     }
 }
+
+/* === DASHBOARD DOCTOR SPECIALIST === */
+/* Media Query */
+@media only screen and (max-width: 768px) {
+    #dashboard-doctor-specialist-tab .item span {
+        display: none;
+    }
+}
