@@ -16,7 +16,10 @@ import java.util.logging.Logger;
  * @author Carlo Corradini
  */
 @WebFilter(
-        urlPatterns = {"/dashboard/doctor/*", "/service/restricted/doctor/*"},
+        urlPatterns = {"/dashboard/doctor/*",
+                "/service/restricted/doctor/*",
+                "/service/restricted/medical/*"
+        },
         dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD}
 )
 public final class DoctorFilter implements Filter {
@@ -98,16 +101,16 @@ public final class DoctorFilter implements Filter {
                 problem = ex;
                 servletRequest.getServletContext().log("Impossible to propagate to the next filter", ex);
             }
-        }
 
-        doAfterProcessing(servletRequest, servletResponse);
+            doAfterProcessing(servletRequest, servletResponse);
 
-        if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
-            }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
+            if (problem != null) {
+                if (problem instanceof ServletException) {
+                    throw (ServletException) problem;
+                }
+                if (problem instanceof IOException) {
+                    throw (IOException) problem;
+                }
             }
         }
     }

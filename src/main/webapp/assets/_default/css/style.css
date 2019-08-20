@@ -1050,3 +1050,8 @@ div[id^=personal-card-modal-].ui.modal.disabled:after {
         display: none;
     }
 }
+
+/* === SPECIALIST VISIT ASSIGNED === */
+div[id=visit-assigned-patient-modal].ui.modal.disabled:after {
+    content: "\01F6AB";
+}

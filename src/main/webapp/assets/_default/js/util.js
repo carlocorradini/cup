@@ -111,5 +111,22 @@ window.UTIL = {
                 array.splice(index, 1);
             }
         }
+    },
+    JSF: {
+        /**
+         * Return a correctly formatted JSF URL given {@code library} and relative {@code url}.
+         *  If {@code library} is null | undefined or {@code url} is null | undefined the returned URL is undefined.
+         *
+         * @param library The JSF resource library
+         * @param url The relative URL of the resource
+         * @returns {string|undefined} The correctly formatted JSF URL for resources
+         */
+        resourceURL: function (library, url) {
+            if (library === null || library === undefined
+                || url === null || url === undefined) {
+                return undefined;
+            }
+            return UTIL.STRING.format("{1}/javax.faces.resource{2}.xhtml?ln={3}", window.CONTEXT_PATH, url, library);
+        }
     }
 };

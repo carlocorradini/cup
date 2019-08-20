@@ -27,10 +27,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.imgscalr.Scalr;
-import org.jboss.weld.util.collections.ArraySet;
 
 import javax.imageio.ImageIO;
-import javax.print.attribute.standard.Media;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -95,7 +93,6 @@ public class PersonService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String changeAvatar(
-            @DefaultValue("true") @FormDataParam("enabled") boolean enabled,
             @FormDataParam("avatar") InputStream avatarInputStream,
             @FormDataParam("avatar") FormDataContentDisposition avatarDetail) {
 

@@ -72,7 +72,7 @@ public final class DoctorSpecialistDaoBean implements Serializable {
      *
      * @return The {@link List list} of all assigned {@link PrescriptionExam}
      */
-    public List<PrescriptionExam> getAllAssignedPrescriptionExam() {
+    public List<PrescriptionExam> getAssignedPrescriptionExam() {
         List<PrescriptionExam> exams = Collections.emptyList();
 
         if (authDoctorSpecialist != null && prescriptionExamDAO != null) {
@@ -92,7 +92,7 @@ public final class DoctorSpecialistDaoBean implements Serializable {
      *
      * @return The {@link List list} of all assigned but never performed {@link PrescriptionExam Prescription Exam}
      */
-    public List<PrescriptionExam> getAllAssignedToDoPrescriptionExam() {
+    public List<PrescriptionExam> getAssignedToDoPrescriptionExam() {
         List<PrescriptionExam> exams = Collections.emptyList();
 
         if (authDoctorSpecialist != null && prescriptionExamDAO != null) {

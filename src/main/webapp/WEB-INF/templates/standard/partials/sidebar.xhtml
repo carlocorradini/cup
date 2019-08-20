@@ -41,7 +41,7 @@
                     <h:graphicImage id="sidebar-avatar-image"
                                     styleClass="person-avatar"
                                     library="_default"
-                                    name="#{person.authPerson.avatar.nameAsResource}"
+                                    name="#{person.avatar.nameAsResource}"
                                     alt="Avatar"
                     />
                 </div>
@@ -87,13 +87,13 @@
                     </h:link>
                     <h:link outcome="/dashboard/private/exam/index"
                             styleClass="item">
-                        <span class="ui yellow empty circular label"/>
                         #{i18n["common.exams"]}
+                        <span class="ui yellow empty circular label"/>
                     </h:link>
                     <h:link outcome="/dashboard/private/prescription/index"
                             styleClass="item">
-                        <span class="ui green empty circular label"/>
                         #{i18n["common.prescriptions"]}
+                        <span class="ui green empty circular label"/>
                     </h:link>
                 </div>
             </div>
@@ -104,18 +104,18 @@
                     <div class="menu">
                         <h:link outcome="/dashboard/doctor/patients/index"
                                 styleClass="item">
-                            <span class="ui red empty circular label"/>
                             #{i18n["common.patients"]}
+                            <span class="ui red empty circular label"/>
                         </h:link>
                         <h:link outcome="/dashboard/doctor/prescription_medicine/index"
                                 styleClass="item">
-                            <span class="ui yellow empty circular label"/>
                             #{i18n["common.prescriptionMedicine"]}
+                            <span class="ui yellow empty circular label"/>
                         </h:link>
                         <h:link outcome="/dashboard/doctor/prescription_exam/index"
                                 styleClass="item">
-                            <span class="ui green empty circular label"/>
                             #{i18n["common.prescriptionExam"]}
+                            <span class="ui green empty circular label"/>
                         </h:link>
                     </div>
                 </div>
@@ -125,6 +125,11 @@
                 <div class="item">
                     <div class="header">#{i18n["common.specialist"]}</div>
                     <div class="menu">
+                        <h:link outcome="/dashboard/specialist/visit_assigned/index"
+                                styleClass="item">
+                            #{i18n["common.assignedVisits"]}
+                            <span class="ui red label">#{doctorSpecialist.assignedToDoPrescriptionExamCount}</span>
+                        </h:link>
                     </div>
                 </div>
             </ui:fragment>

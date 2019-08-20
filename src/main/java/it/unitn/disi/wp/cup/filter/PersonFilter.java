@@ -100,16 +100,16 @@ public final class PersonFilter implements Filter {
                 problem = ex;
                 servletRequest.getServletContext().log("Impossible to propagate to the next filter", ex);
             }
-        }
 
-        doAfterProcessing(servletRequest, servletResponse);
+            doAfterProcessing(servletRequest, servletResponse);
 
-        if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
-            }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
+            if (problem != null) {
+                if (problem instanceof ServletException) {
+                    throw (ServletException) problem;
+                }
+                if (problem instanceof IOException) {
+                    throw (IOException) problem;
+                }
             }
         }
     }
