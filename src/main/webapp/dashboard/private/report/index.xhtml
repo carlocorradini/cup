@@ -147,7 +147,6 @@
                                             <th>#{i18n["common.id"]} #{i18n["common.specialist"]}</th>
                                             <th>#{i18n["common.date"]}</th>
                                             <th>#{i18n["common.hour"]}</th>
-                                            <th>#{i18n["common.content"]}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -164,6 +163,18 @@
                                                     <f:convertDateTime type="localTime"/>
                                                 </h:outputText>
                                             </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="ui celled table">
+                                        <thead>
+                                        <tr>
+                                            <th>#{i18n["common.content"]}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
                                             <td>#{pe.report.content}</td>
                                         </tr>
                                         </tbody>
