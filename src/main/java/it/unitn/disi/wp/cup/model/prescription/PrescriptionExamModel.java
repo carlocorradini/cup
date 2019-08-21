@@ -5,7 +5,7 @@ package it.unitn.disi.wp.cup.model.prescription;
  *
  * @author Carlo Corradini
  */
-public class PrescriptionExamModel implements Prescription {
+public class PrescriptionExamModel implements PrescriptionModel {
     private long patientId;
     private long examId;
 

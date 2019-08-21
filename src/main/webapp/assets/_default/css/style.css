@@ -129,6 +129,37 @@
     z-index: 2;
 }
 
+/* Form Disabled */
+.ui.form.disabled {
+    pointer-events: none;
+}
+
+.ui.form.disabled:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, .8);
+    z-index: 1;
+}
+
+.ui.form.disabled:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    font-weight: bold;
+    font-size: 1.9em;
+    text-align: center;
+    -webkit-transform: translate(0%, -50%);
+    -ms-transform: translate(0%, -50%);
+    transform: translate(0%, -50%);
+    z-index: 2;
+}
+
 /* Structural */
 .full-width {
     width: 100%;
@@ -1054,4 +1085,7 @@ div[id^=personal-card-modal-].ui.modal.disabled:after {
 /* === SPECIALIST VISIT ASSIGNED === */
 div[id=visit-assigned-patient-modal].ui.modal.disabled:after {
     content: "\01F6AB";
+}
+form[id=write-report-form].ui.form.disabled.success:after {
+    content: "\02705";
 }

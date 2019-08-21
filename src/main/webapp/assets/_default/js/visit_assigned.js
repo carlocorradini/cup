@@ -66,11 +66,13 @@ function visitAssignedConfig() {
             $id: $("#doctor-id"),
             $fullName: $("#doctor-full-name"),
             $fullNameHeader: $("#doctor-full-name-header"),
+            $province: $("#doctor-province"),
             $avatar: $("#doctor-avatar")
         },
         writeReport: {
             $modal: $("#visit-assigned-write-report-modal"),
             $button: $("#visit-assigned-table button.write-report-modal-button"),
+            $form: $("#write-report-form"),
             patient: {
                 urlPattern: window.CONTEXT_PATH + "/service/restricted/medical/patient/{1}",
                 $fullName: $("#write-report-patient-full-name"),
@@ -78,11 +80,19 @@ function visitAssignedConfig() {
                 $avatar: $("#write-report-patient-avatar")
             },
             data: {
-                $content: $("#write-report-data-content"),
+                $content: $("textarea#write-report-data-content"),
+                $contentLength: $("span#write-report-data-content-length"),
                 $examsDropdown: $("#write-report-data-exams"),
                 $medicinesDropdown: $("#write-report-data-medicines")
             }
         }
+    };
+    // The Object that represent a new Report
+    const newReport = {
+        prescriptionId: undefined,
+        content: undefined,
+        exams: [],
+        medicines: []
     };
 
     // Set Moment correct Locale
@@ -105,7 +115,10 @@ function visitAssignedConfig() {
         clearable: true,
         allowAdditions: false
     });
-
+    // Count chars
+    visit.writeReport.data.$content.on("keyup", function () {
+        visit.writeReport.data.$contentLength.html(visit.writeReport.data.$content.attr("maxLength") - this.value.length);
+    });
     // Triggers Modal
     visit.writeReport.$button.click(function () {
         const $button = $(this);
@@ -115,20 +128,103 @@ function visitAssignedConfig() {
         if (window.UTIL.NUMBER.isNumber(prescriptionId)
             && window.UTIL.NUMBER.isNumber(patientId)) {
             $button.addClass("loading");
-            $.ajax({
-                type: "GET",
-                url: window.UTIL.STRING.format(visit.writeReport.patient.urlPattern, patientId),
-                success: function (data) {
-                    populateWriteReportModal(visit.writeReport, data);
-                    visit.writeReport.$modal.modal("show");
-                    $button.removeClass("loading");
-                },
-                error: function () {
-                    console.error("Unable to get Patient");
-                }
-            });
+
+            if (prescriptionId !== newReport.prescriptionId) {
+                // DO ALL only if the last Prescription Id is different
+                // Save prescriptionId into new Report obj
+                newReport.prescriptionId = prescriptionId;
+                // Reset the Modal
+                visit.writeReport.$form.removeClass("disabled success warning");
+                visit.writeReport.data.$content.val("");
+                visit.writeReport.data.$contentLength.html(visit.writeReport.data.$content.attr("maxLength"));
+                visit.writeReport.data.$examsDropdown.dropdown("refresh");
+                visit.writeReport.data.$examsDropdown.dropdown("clear");
+                visit.writeReport.data.$medicinesDropdown.dropdown("refresh");
+                visit.writeReport.data.$medicinesDropdown.dropdown("clear");
+
+                $.ajax({
+                    type: "GET",
+                    url: window.UTIL.STRING.format(visit.writeReport.patient.urlPattern, patientId),
+                    success: function (data) {
+                        populateWriteReportModal(visit.writeReport, data);
+                    },
+                    error: function () {
+                        console.error("Unable to get Patient");
+                    }
+                });
+            }
+
+            visit.writeReport.$modal.modal("show");
+            $button.removeClass("loading");
         } else {
             throw "Prescription Id or Patient Id is not a Number";
+        }
+    });
+
+    // Form
+    visit.writeReport.$form.form({
+        fields: {
+            content: {
+                identifier: "content",
+                rules: [
+                    {
+                        type: "empty",
+                        prompt: visit.i18n.newReport.empty
+                    },
+                    {
+                        type: `minLength[${visit.writeReport.data.$content.attr("minlength")}]`,
+                        prompt: visit.i18n.newReport.minLength
+                    },
+                    {
+                        type: `maxLength[${visit.writeReport.data.$content.attr("maxlength")}]`,
+                        prompt: visit.i18n.newReport.maxLength
+                    }
+                ]
+            }
+        },
+        onSuccess: function () {
+            // Show Loading
+            visit.writeReport.$form.removeClass("warning success").addClass("loading");
+
+            // Reset
+            newReport.exams = [];
+            newReport.medicines = [];
+            // Dropdown Values
+            const examsArray = visit.writeReport.data.$examsDropdown.dropdown("get value").split(",");
+            const medicinesArray = visit.writeReport.data.$medicinesDropdown.dropdown("get value").split(",");
+
+            // Set newReport obj template
+            if (examsArray.length !== 0 && examsArray[0] !== "") {
+                newReport.exams = examsArray;
+            }
+            if (medicinesArray.length !== 0 && medicinesArray[0] !== "") {
+                newReport.medicines = medicinesArray;
+            }
+            newReport.content = visit.writeReport.data.$content.val();
+
+            // Send newReport
+            $.ajax({
+                type: "POST",
+                url: window.CONTEXT_PATH + "/service/restricted/specialist/report",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(newReport),
+                success: function (data) {
+                    visit.writeReport.$form.removeClass("loading");
+                    if (data.error === 0) {
+                        // Added successfully
+                        visit.writeReport.$form.addClass("disabled success");
+                        // Unused row
+                        visit.$table.find(`tr[data-prescription-id="${newReport.prescriptionId}"]`).addClass("disabled positive");
+                    } else
+                        visit.writeReport.$form.addClass("warning");
+                },
+                error: function () {
+                    console.error("Unable to write a Report");
+                }
+            });
+
+            return false;
         }
     });
 
@@ -226,6 +322,7 @@ function populateDoctorModal(doctorTemplate, doctor) {
         doctorTemplate.$id.html(doctor.id);
         doctorTemplate.$fullName.html(doctor.fullNameCapitalized);
         doctorTemplate.$fullNameHeader.html(doctor.fullNameCapitalized);
+        doctorTemplate.$province.html(doctor.city.province.nameLongCapitalized);
         doctorTemplate.$avatar.attr("src", window.UTIL.JSF.resourceURL("_default", doctor.avatar.nameAsResource));
     }
 }

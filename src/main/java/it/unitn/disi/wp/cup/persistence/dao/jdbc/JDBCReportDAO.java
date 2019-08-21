@@ -10,6 +10,7 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
 import it.unitn.disi.wp.cup.persistence.entity.Exam;
 import it.unitn.disi.wp.cup.persistence.entity.Medicine;
 import it.unitn.disi.wp.cup.persistence.entity.Report;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -25,6 +26,9 @@ public class JDBCReportDAO extends JDBCDAO<Report, Long> implements ReportDAO {
     private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM report";
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM report WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM report";
+    private static final String SQL_ADD_REPORT = "INSERT INTO report(content) VALUES (?)";
+    private static final String SQL_ADD_REPORT_EXAM = "INSERT INTO report_exam(report_id, exam_id) VALUES (?, ?)";
+    private static final String SQL_ADD_REPORT_MEDICINE = "INSERT INTO report_medicine(report_id, medicine_id) VALUES (?, ?)";
     private static final String SQL_GET_REPORT_EXAMS_BY_REPORT_ID = "SELECT * FROM report_exam WHERE report_id = ?";
     private static final String SQL_GET_REPORT_MEDICINES_BY_REPORT_ID = "SELECT * FROM report_medicine WHERE report_id = ?";
 
@@ -130,6 +134,111 @@ public class JDBCReportDAO extends JDBCDAO<Report, Long> implements ReportDAO {
         return reports;
     }
 
+    @Override
+    public Long add(Report report) throws DAOException {
+        Long id = null;
+        Long _id;
+        Pair<Long, Long> reportExam;
+        Pair<Long, Long> reportMedicine;
+        if (report == null)
+            throw new DAOException("Report is mandatory", new NullPointerException("Report is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_ADD_REPORT, Statement.RETURN_GENERATED_KEYS)) {
+            pStmt.setString(1, report.getContent());
+
+            if (pStmt.executeUpdate() == 1) {
+                ResultSet rs = pStmt.getGeneratedKeys();
+                if (rs.next()) {
+                    // Added successfully
+                    _id = rs.getLong(1);
+                    // Add suggested Exam
+                    for (Exam exam : report.getExams()) {
+                        if (addExam(_id, exam.getId()) == null) {
+                            throw new DAOException("Error while adding suggested Exam for Report");
+                        }
+                    }
+                    // Add suggested Medicine
+                    for (Medicine medicine : report.getMedicines()) {
+                        if (addMedicine(_id, medicine.getId()) == null) {
+                            throw new DAOException("Error while adding suggested Medicine for Report");
+                        }
+                    }
+
+                    // ADDED Successfully
+                    id = _id;
+                }
+            }
+        } catch (SQLException | DAOException ex) {
+            throw new DAOException("Impossible to add the Report", ex);
+        }
+
+        return id;
+    }
+
+    /**
+     * Add the suggested {@link Exam exam} identified by {@code examId}
+     * to the corresponding {@link Report report} identified by {@code reportId}
+     *
+     * @param reportId The {@link Report report} id
+     * @param examId   The {@link Exam exam} id
+     * @return A {@link Pair pair} representing the tuple primary key of the {@link Report report} and {@link Exam exam}
+     * <Report Id, Exam Id>
+     * @throws DAOException if an error occurred during the information retrieving
+     */
+    private Pair<Long, Long> addExam(Long reportId, Long examId) throws DAOException {
+        Pair<Long, Long> reportExam = null;
+        if (reportId == null || examId == null)
+            throw new DAOException("Report Id and Exam Id are mandatory", new NullPointerException("Report Id or Exam id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_ADD_REPORT_EXAM, Statement.RETURN_GENERATED_KEYS)) {
+            pStmt.setLong(1, reportId);
+            pStmt.setLong(2, examId);
+
+            if (pStmt.executeUpdate() == 1) {
+                ResultSet rs = pStmt.getGeneratedKeys();
+                if (rs.next()) {
+                    reportExam = Pair.of(rs.getLong(1), rs.getLong(2));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to add the Report Exam", ex);
+        }
+
+        return reportExam;
+    }
+
+    /**
+     * Add the suggested {@link Medicine medicine} identified by {@code medicineId}
+     * to the corresponding {@link Report report} identified by {@code reportId}
+     *
+     * @param reportId   The {@link Report report} id
+     * @param medicineId The {@link Medicine medicine} id
+     * @return A {@link Pair pair} representing the tuple primary key of the {@link Report report} and {@link Medicine medicine}
+     * <Report Id, Medicine Id>
+     * @throws DAOException if an error occurred during the information retrieving
+     */
+    private Pair<Long, Long> addMedicine(Long reportId, Long medicineId) throws DAOException, SQLException {
+        Pair<Long, Long> reportMedicine = null;
+        if (reportId == null || medicineId == null)
+            throw new DAOException("Report Id and Medicine Id are mandatory", new NullPointerException("Report Id or Medicine id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_ADD_REPORT_MEDICINE, Statement.RETURN_GENERATED_KEYS)) {
+            pStmt.setLong(1, reportId);
+            pStmt.setLong(2, medicineId);
+
+            if (pStmt.executeUpdate() == 1) {
+                ResultSet rs = pStmt.getGeneratedKeys();
+                if (rs.next()) {
+                    reportMedicine = Pair.of(rs.getLong(1), rs.getLong(2));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to add the Report Medicine", ex);
+        }
+
+        return reportMedicine;
+    }
+
     /**
      * Return the List of suggested {@link Exam exams} for the {@link Report report} with {@code reportId id}
      *
@@ -148,7 +257,7 @@ public class JDBCReportDAO extends JDBCDAO<Report, Long> implements ReportDAO {
             pStmt.setLong(1, reportId);
 
             try (ResultSet rs = pStmt.executeQuery()) {
-                if (rs.next()) {
+                while (rs.next()) {
                     exams.add(examDAO.getByPrimaryKey(rs.getLong("exam_id")));
                 }
             }
@@ -177,7 +286,7 @@ public class JDBCReportDAO extends JDBCDAO<Report, Long> implements ReportDAO {
             pStmt.setLong(1, reportId);
 
             try (ResultSet rs = pStmt.executeQuery()) {
-                if (rs.next()) {
+                while (rs.next()) {
                     medicines.add(medicineDAO.getByPrimaryKey(rs.getLong("medicine_id")));
                 }
             }

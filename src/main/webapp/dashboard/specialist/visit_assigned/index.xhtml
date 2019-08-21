@@ -43,8 +43,13 @@
             <ui:fragment rendered="#{not empty doctorSpecialist.assignedToDoPrescriptionExam}">
                 <div id="visit-assigned-i18n"
                      data-i18n="{
-                        &quot;noReport&quot;: &quot;#{i18n['common.noReport']}&quot;,
-                        &quot;view&quot;: &quot;#{i18n['common.view']}&quot;
+                         &quot;noReport&quot;: &quot;#{i18n['common.noReport']}&quot;,
+                         &quot;view&quot;: &quot;#{i18n['common.view']}&quot;,
+                         &quot;newReport&quot;: {
+                              &quot;empty&quot;: &quot;#{i18n['visit.assigned.newReport.content.empty']}&quot;,
+                              &quot;minLength&quot;: &quot;#{i18n['visit.assigned.newReport.content.minLength']}&quot;,
+                              &quot;maxLength&quot;: &quot;#{i18n['visit.assigned.newReport.content.maxLength']}&quot;
+                         }
                     }"
                 ></div>
 
@@ -62,7 +67,7 @@
                     </thead>
                     <tbody>
                     <ui:repeat value="#{doctorSpecialist.assignedToDoPrescriptionExam}" var="pe">
-                        <tr>
+                        <tr data-prescription-id="#{pe.id}">
                             <td>#{pe.id}</td>
                             <td>#{pe.exam.name}</td>
                             <td>
@@ -114,12 +119,11 @@
                     </div>
                     <div class="scrolling content">
                         <form class="ui large form"
-                              action="#"
-                              method="post"
+                              id="write-report-form"
                         >
-                            <div class="disabled field">
+                            <div class="field">
                                 <label>#{i18n["common.patient"]}</label>
-                                <div class="ui floating dropdown labeled icon button fluid large">
+                                <div class="ui floating dropdown labeled icon button fluid large disabled">
                                     <i class="user icon"/>
                                     <span class="text full-width">
                                         <img id="write-report-patient-avatar"
@@ -134,15 +138,27 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label>#{i18n["common.content"]}</label>
-                                <textarea id="write-report-data-content" placeholder="#{i18n['common.content']}"/>
+                                <label for="write-report-data-content">#{i18n["common.content"]}</label>
+                                <textarea id="write-report-data-content"
+                                          placeholder="#{i18n['common.content']}"
+                                          name="content"
+                                          required=""
+                                          autocomplete="on"
+                                          minlength="#{prescription.examReportMinLength}"
+                                          maxlength="#{prescription.examReportMaxLength}"
+                                />
+                                <p class="text-light text-smaller-25">
+                                    <span id="write-report-data-content-length"/>
+                                    &#160;
+                                    #{i18n["visit.assigned.characterCount"]}
+                                </p>
                             </div>
                             <div class="field">
-                                <label>#{i18n["common.exam.suggested"]}</label>
+                                <label>#{i18n["common.exams.suggested"]}</label>
                                 <div class="ui fluid multiple search selection dropdown" id="write-report-data-exams">
                                     <input type="hidden"/>
                                     <i class="dropdown icon"/>
-                                    <div class="default text">#{i18n["common.exam.suggested"]}</div>
+                                    <div class="default text">#{i18n["common.exams.suggested"]}</div>
                                     <div class="menu">
                                         <ui:repeat value="#{exam.exams}" var="e">
                                             <div class="item" data-value="#{e.id}">
@@ -155,11 +171,12 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label>#{i18n["common.medicine.suggested"]}</label>
-                                <div class="ui fluid multiple search selection dropdown" id="write-report-data-medicines">
+                                <label>#{i18n["common.medicines.suggested"]}</label>
+                                <div class="ui fluid multiple search selection dropdown"
+                                     id="write-report-data-medicines">
                                     <input type="hidden"/>
                                     <i class="dropdown icon"/>
-                                    <div class="default text">#{i18n["common.medicine.suggested"]}</div>
+                                    <div class="default text">#{i18n["common.medicines.suggested"]}</div>
                                     <div class="menu">
                                         <ui:repeat value="#{medicine.medicines}" var="m">
                                             <div class="item" data-value="#{m.id}">
@@ -169,6 +186,33 @@
                                             </div>
                                         </ui:repeat>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="ui blue fluid big button submit" tabindex="0">
+                                <i class="chevron circle up icon"/>
+                                #{i18n["common.send"]}
+                            </div>
+
+                            <div class="ui error message"></div>
+
+                            <div class="ui icon success message medium" style="z-index: 3;">
+                                <i class="checkmark icon"/>
+                                <div class="content">
+                                    <div class="header">
+                                        #{i18n["visit.assigned.addReport.success.message"]}
+                                    </div>
+                                    <p>#{i18n["visit.assigned.addReport.success.subMessage"]}</p>
+                                </div>
+                            </div>
+
+                            <div class="ui icon warning message medium">
+                                <i class="exclamation triangle icon"/>
+                                <div class="content">
+                                    <div class="header">
+                                        #{i18n["visit.assigned.addReport.error.message"]}
+                                    </div>
+                                    <p>#{i18n["visit.assigned.addReport.error.subMessage"]}</p>
                                 </div>
                             </div>
                         </form>
@@ -191,6 +235,10 @@
                             </div>
                             <div class="content">
                                 <div class="header"><span id="doctor-full-name"/></div>
+                                <div class="meta">
+                                    <i class="dot circle outline fitted icon"/>
+                                    <span id="doctor-province"/>
+                                </div>
                             </div>
                             <div class="extra content">
                                 <span class="meta"><i class="hashtag icon"/> <span id="doctor-id"/></span>

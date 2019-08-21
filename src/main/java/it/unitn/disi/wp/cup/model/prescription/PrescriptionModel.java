@@ -5,7 +5,7 @@ package it.unitn.disi.wp.cup.model.prescription;
  *
  * @author Carlo Corradini
  */
-public interface Prescription {
+public interface PrescriptionModel {
     /**
      * Return true if the Prescription Model is Valid
      *

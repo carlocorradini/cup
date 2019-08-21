@@ -17,8 +17,7 @@ import java.util.logging.Logger;
  */
 @WebFilter(
         urlPatterns = {"/dashboard/specialist/*",
-                "/service/restricted/specialist/*",
-                "/service/restricted/medical/*"
+                "/service/restricted/specialist/*"
         },
         dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD}
 )
