@@ -46,7 +46,7 @@ function visitAssignedConfig() {
                 $idSpecialist: $("span#patient-report-specialist-id"),
                 $date: $("span#patient-report-date"),
                 $time: $("span#patient-report-time"),
-                $content: $("span#patient-report-content"),
+                $content: $("textarea#patient-report-content"),
                 exam: {
                     $emptyMessage: $("#patient-report-exam-empty"),
                     $container: $("#patient-report-exam-container"),
@@ -449,7 +449,7 @@ function populatePatientReportModal(patientReportTemplate, report) {
         patientReportTemplate.$idSpecialist.html(report.specialistId);
         patientReportTemplate.$date.html(moment(report.dateTime).format("ll"));
         patientReportTemplate.$time.html(moment(report.dateTime).format("LTS"));
-        patientReportTemplate.$content.html(report.content);
+        patientReportTemplate.$content.val(report.content);
 
         if (report.exams.length === 0) {
             // Empty Exams

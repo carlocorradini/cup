@@ -395,7 +395,17 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td>#{pe.report.content}</td>
+                                                <td>
+                                                    <div class="ui form">
+                                                        <div class="field">
+                                                        <textarea autocomplete="off"
+                                                                  readonly=""
+                                                        >
+                                                            #{pe.report.content}
+                                                        </textarea>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
