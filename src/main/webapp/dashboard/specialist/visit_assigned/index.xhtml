@@ -15,6 +15,9 @@
                         name="js/moment.js"
                         target="body"/>
         <h:outputScript library="_default"
+                        name="js/visit_creator.js"
+                        target="body"/>
+        <h:outputScript library="_default"
                         name="js/visit_assigned.js"
                         target="body"/>
     </ui:define>
@@ -46,6 +49,7 @@
                          &quot;noReport&quot;: &quot;#{i18n['common.noReport']}&quot;,
                          &quot;view&quot;: &quot;#{i18n['common.view']}&quot;,
                          &quot;newReport&quot;: {
+                              &quot;unpaid&quot;: &quot;#{i18n['visit.assigned.newReport.unpaid']}&quot;,
                               &quot;empty&quot;: &quot;#{i18n['visit.assigned.newReport.content.empty']}&quot;,
                               &quot;minLength&quot;: &quot;#{i18n['visit.assigned.newReport.content.minLength']}&quot;,
                               &quot;maxLength&quot;: &quot;#{i18n['visit.assigned.newReport.content.maxLength']}&quot;
@@ -160,7 +164,7 @@
                             <div class="field">
                                 <label>#{i18n["common.paid"]}</label>
                                 <div class="ui fluid toggle checkbox" id="write-report-data-paid">
-                                    <input type="checkbox" tabindex="0" class="hidden"/>
+                                    <input type="checkbox" tabindex="0" class="hidden" name="paid"/>
                                     <label data-paid="#{i18n['common.paid']}"
                                            data-paid-not="#{i18n['common.paidNot']}">
                                         #{i18n["common.paidNot"]}

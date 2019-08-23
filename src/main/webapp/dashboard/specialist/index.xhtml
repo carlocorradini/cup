@@ -4,6 +4,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 >
     <ui:define name="title">#{i18n["common.dashboard.specialist"]}</ui:define>
 
@@ -98,6 +99,32 @@
             </div>
 
             <div class="ui bottom attached tab segment" data-tab="services">
+                <div class="ui centered cards">
+                    <h:link outcome="/dashboard/specialist/visit_assigned/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/report.svg"
+                                            alt="#{i18n['common.report']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.reports"])}
+                        </div>
+                    </h:link>
+                    <h:link outcome="/dashboard/specialist/visit_all/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/doctor.svg"
+                                            alt="#{i18n['common.doctor']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.exams"])}
+                        </div>
+                    </h:link>
+                </div>
             </div>
 
             <div class="ui divider"></div>

@@ -15,6 +15,9 @@
                         name="js/moment.js"
                         target="body"/>
         <h:outputScript library="_default"
+                        name="js/visit_creator.js"
+                        target="body"/>
+        <h:outputScript library="_default"
                         name="js/visit_all_assigned.js"
                         target="body"/>
     </ui:define>
@@ -44,12 +47,7 @@
                 <div id="visit-assigned-i18n"
                      data-i18n="{
                          &quot;noReport&quot;: &quot;#{i18n['common.noReport']}&quot;,
-                         &quot;view&quot;: &quot;#{i18n['common.view']}&quot;,
-                         &quot;newReport&quot;: {
-                              &quot;empty&quot;: &quot;#{i18n['visit.assigned.newReport.content.empty']}&quot;,
-                              &quot;minLength&quot;: &quot;#{i18n['visit.assigned.newReport.content.minLength']}&quot;,
-                              &quot;maxLength&quot;: &quot;#{i18n['visit.assigned.newReport.content.maxLength']}&quot;
-                         }
+                         &quot;view&quot;: &quot;#{i18n['common.view']}&quot;
                     }"
                 ></div>
 
@@ -103,7 +101,7 @@
                                     #{i18n["common.noReport"]}
                                 </ui:fragment>
                                 <ui:fragment rendered="#{not empty pe.report}">
-                                    <button class="ui fluid labeled yellow icon button wiew-report-modal-button"
+                                    <button class="ui fluid labeled yellow icon button view-report-modal-button"
                                             data-prescription-id="#{pe.id}"
                                             data-patient-id="#{pe.personId}"
                                     >
@@ -116,104 +114,6 @@
                     </ui:repeat>
                     </tbody>
                 </table>
-
-                <!-- REPORT MODAL -->
-                <div class="ui small modal" id="visit-assigned-view-report-modal">
-                    <i class="red close icon"/>
-                    <div class="header">
-                        <span class="ui large label">
-                            #{i18n["common.report"]}
-                            <span class="detail" id="view-report-id-header"/>
-                        </span>
-                    </div>
-                    <div class="scrolling content">
-                        <table class="ui celled table">
-                            <thead>
-                            <tr>
-                                <th>#{i18n["common.id"]}</th>
-                                <th>#{i18n["common.id"]} #{i18n["common.specialist"]}</th>
-                                <th>#{i18n["common.date"]}</th>
-                                <th>#{i18n["common.hour"]}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><span id="view-report-id"/></td>
-                                <td><span id="view-report-specialist-id"/></td>
-                                <td><span id="view-report-date"/></td>
-                                <td><span id="view-report-time"/></td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <table class="ui celled table">
-                            <thead>
-                            <tr>
-                                <th>#{i18n["common.content"]}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <div class="ui form">
-                                        <div class="field">
-                                            <textarea id="view-report-content"
-                                                      autocomplete="off"
-                                                      readonly=""
-                                            />
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="ui divider"></div>
-
-                        <!-- SUGGESTED EXAMS -->
-                        <div class="ui icon message" id="view-report-exam-empty">
-                            <i class="info circle icon"/>
-                            <div class="content">
-                                <div class="header">
-                                    #{i18n["doctor.patients.patient.report.exam.empty.message"]}
-                                </div>
-                                <p>#{i18n["doctor.patients.patient.report.exam.empty.subMessage"]}</p>
-                            </div>
-                        </div>
-                        <div id="view-report-exam-container">
-                            <h4>#{i18n["common.exams.suggested"]}</h4>
-                            <div class="ui list">
-                                <div class="item">
-                                    <div class="ui bulleted list" id="view-report-exam-list">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!---->
-                        <div class="ui divider"></div>
-
-                        <!-- SUGGESTED MEDICINES -->
-                        <div class="ui icon message" id="view-report-medicine-empty">
-                            <i class="info circle icon"/>
-                            <div class="content">
-                                <div class="header">
-                                    #{i18n["doctor.patients.patient.report.medicine.empty.message"]}
-                                </div>
-                                <p>#{i18n["doctor.patients.patient.report.medicine.empty.subMessage"]}</p>
-                            </div>
-                        </div>
-                        <div id="view-report-medicine-container">
-                            <h4>#{i18n["common.medicines.suggested"]}</h4>
-                            <div class="ui list">
-                                <div class="item">
-                                    <div class="ui bulleted list" id="view-report-medicine-list">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- DOCTOR MODAL -->
                 <div class="ui longer modal" id="visit-assigned-doctor-modal">

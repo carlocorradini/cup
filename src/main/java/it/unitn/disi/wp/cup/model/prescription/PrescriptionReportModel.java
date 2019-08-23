@@ -124,6 +124,7 @@ public class PrescriptionReportModel implements PrescriptionModel {
     @Override
     public boolean isValid() {
         return prescriptionId != 0L && !content.isEmpty()
+                && paid
                 && content.length() >= PrescriptionConfig.getExamReportContentMinLength()
                 && content.length() <= PrescriptionConfig.getExamReportContentMaxLength();
     }

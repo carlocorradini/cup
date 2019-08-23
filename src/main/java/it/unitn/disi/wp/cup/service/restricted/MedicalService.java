@@ -3,12 +3,14 @@ package it.unitn.disi.wp.cup.service.restricted;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
+import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
+import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 
 import javax.servlet.ServletContext;
@@ -35,6 +37,7 @@ public class MedicalService {
     private Doctor authDoctor = null;
     private DoctorSpecialist authDoctorSpecialist = null;
     private PersonDAO personDAO = null;
+    private PrescriptionExamDAO prescriptionExamDAO = null;
 
     @Context
     private HttpServletRequest request;
@@ -49,6 +52,7 @@ public class MedicalService {
                 authDoctorSpecialist = AuthUtil.getAuthDoctorSpecialist(request);
 
                 personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
+                prescriptionExamDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionExamDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
             }
@@ -60,12 +64,51 @@ public class MedicalService {
     }
 
     /**
-     * Return the {@link Person patient} as a {@link JSON} type given its id.
+     * Return the {@link PrescriptionExam Prescription Exam} as {@link JSON} given its id
+     *
+     * @param prescriptionid The {@link PrescriptionExam Prescription Exam} id
+     * @return The {@link PrescriptionExam Prescription Exam} as {@link JSON}
+     */
+    @GET
+    @Path("prescription_exam/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPrescriptionExamById(@PathParam("id") Long prescriptionid) {
+        Response.ResponseBuilder response;
+        PrescriptionExam prescriptionExam;
+
+        if (!isAuthenticated()) {
+            // Unauthorized
+            response = Response.status(Response.Status.UNAUTHORIZED);
+        } else if (prescriptionid == null) {
+            // Prescription Id is missing
+            response = Response.status(Response.Status.BAD_REQUEST);
+        } else {
+            try {
+                if ((prescriptionExam = prescriptionExamDAO.getByPrimaryKey(prescriptionid)) == null) {
+                    // Prescription Id is invalid
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                } else {
+                    // ALL CORRECT, set the Prescription Exam entity
+                    response = Response
+                            .ok()
+                            .entity(JSON.toJSONString(prescriptionExam));
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to return the Prescription Exam given its id", ex);
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return response.build();
+    }
+
+    /**
+     * Return the {@link Person patient} as {@link JSON} given its id.
      * It's available only for authenticated and qualified users.
      * The password is removed for security.
      *
      * @param patientId The {@link Person id}
-     * @return The {@link Person person} as a {@link JSON} type
+     * @return The {@link Person person} as {@link JSON}
      */
     @GET
     @Path("patient/{id}")
