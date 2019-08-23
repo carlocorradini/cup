@@ -18,5 +18,5 @@ function dashboardDoctorSpecialistConfig() {
     dashboard.$tab.tab();
 
     // QUALIFICATION TAB
-    dashboard.qualification.$table.tablesort();
+    dashboard.qualification.$table.DataTable();
 }

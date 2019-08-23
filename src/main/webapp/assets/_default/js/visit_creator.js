@@ -110,8 +110,8 @@ window.visit_creator = {
             // Set moment correct locale
             window.moment.locale(window.navigator.userLanguage || window.navigator.language);
 
-            // Enable table sorting
-            v.$table.tablesort();
+            // Enable Datatable
+            v.$table.DataTable();
 
             // === DOCTOR ===
             // Modal
@@ -151,10 +151,10 @@ window.visit_creator = {
             v.patient.$accordion.accordion({
                 animateChildren: false
             });
-            // Table Sorting
-            v.patient.exams.$table.tablesort();
-            v.patient.medicines.$table.tablesort();
-            v.patient.timeline.$table.tablesort();
+            // Table Datatable
+            v.patient.exams.$table.DataTable();
+            v.patient.medicines.$table.DataTable();
+            v.patient.timeline.$table.DataTable();
             // Populate
             v.patient.$button.click(function () {
                 const $button = $(this);

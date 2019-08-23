@@ -25,8 +25,8 @@ function reportsConfig() {
 
     const examsRead = [];
 
-    // Enable Sorting
-    reports.$table.tablesort();
+    // Enable Datatable
+    reports.$table.DataTable();
 
     // Enable Report Modal
     reports.report.$modalContainer.find(reports.report.modalClass).each(function (index, element) {

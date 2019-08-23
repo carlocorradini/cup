@@ -9,8 +9,8 @@
     <ui:define name="title">#{i18n["common.dashboard.personal"]}</ui:define>
 
     <ui:define name="js">
-        <h:outputScript library="semantic-ui"
-                        name="js/tablesort.js"
+        <h:outputScript library="datatables"
+                        name="js/datatables.min.js"
                         target="body"/>
     </ui:define>
 
@@ -486,8 +486,8 @@
                 // ENABLE TAB
                 dashboard.$tab.tab();
 
-                // ENABLE TIMELINE SORTABLE TAB
-                dashboard.timeline.$table.tablesort();
+                // ENABLE TIMELINE DATATABLE
+                dashboard.timeline.$table.DataTable();
 
                 // PASSWORD TAB
                 dashboard.password.$form.form({
