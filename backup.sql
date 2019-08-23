@@ -37,6 +37,7 @@ CREATE TABLE city (
 
 CREATE TABLE report (
 	id		BIGSERIAL,
+	content		varchar(255)	NOT NULL,
 	report_date	timestamp(6)
 			without time
 			zone		NOT NULL	DEFAULT CURRENT_TIMESTAMP,
@@ -138,7 +139,7 @@ CREATE TABLE prescription_exam (
 	read		BOOLEAN		NOT NULL	DEFAULT FALSE,
 	prescription_date		timestamp(6)
 					without time
-					zone				DEFAULT CURRENT_TIMESTAMP,
+					zone,
 	prescription_date_registration	timestamp(6)
 					without time
 					zone		NOT NULL	DEFAULT CURRENT_TIMESTAMP,
@@ -147,7 +148,6 @@ CREATE TABLE prescription_exam (
 	FOREIGN KEY (exam_id) REFERENCES exam(id),
 	FOREIGN KEY (report_id) REFERENCES report(id),
 	FOREIGN KEY (doctor_specialist_id) REFERENCES doctor_specialist(id)
-	
 );
 
 CREATE TABLE prescription_medicine (
@@ -177,7 +177,16 @@ CREATE TABLE person_avatar (
 	FOREIGN KEY (person_id) REFERENCES person(id)
 );
 
-
+CREATE TABLE exam_qualification (
+	doctor_specialist_id	BIGINT	NOT NULL,
+	exam_id			BIGINT	NOT NULL,
+	since		timestamp(6)
+			without time
+			zone		NOT NULL	DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (doctor_specialist_id, exam_id),
+	FOREIGN KEY (doctor_specialist_id) REFERENCES doctor_specialist(id),
+	FOREIGN KEY (exam_id) REFERENCES exam(id)
+);
 
 /*-----------------------------------------------------------*/
 /*------------------- POPULATING DATABASE -------------------*/
@@ -9627,6 +9636,7 @@ INSERT INTO person(name, surname, email, password, sex, birth_date, birth_city_i
 	('Elisa', 'Ciraldo', 'elisa.ciraldo@studenti.unitn.it', '$2a$15$8pPu1Pc1.oNVYitaiyaTtOq5EOnGxZIhHKWJE8V6VNQYd517pVJa2', 'F', '1998-09-09', 6408, 'CRLLSE98P49B202R', 7323),
 	('Elisa', 'Lunari', 'elisa.lunari@studenti.unitn.it', '$2a$15$T36cjd10tY/4dpCXu9mbCezzmOx.YvmWZ3.jqGu8MJyxpGOPk72jq', 'F', '1998-10-12', 3593, 'LNRLSE98R52F205S', 2600),
 	('Paolo', 'Feroni', 'pablofero96@gmail.com', '$2a$15$XE/K8NGotwu9pBSPmXHavOyLu9LatLaavh.txgEx9PqQRRTyxZwgS', 'M', '1996-02-11', 7963, 'FRNPLA96B11L781D', 7963),
+	('Salvatore', 'Aranzulla', 'web.prj.cup+god@gmail.com', '$2a$15$LDYDFOrLPJ7i1mCfT.MOl.zDvOpmbQxQ2M3c6n5NUUpQPVqcpZtlm', 'M', '1990-02-24', 6414, 'RNZSVT90B24C351H', 6414),
 	/* minions BERGAMO */ -- 11 su 10
 	('Luca', 'Minuti', 'web.prj.cup+9@gmail.com', '$2a$15$w40fLlB.ixHecW2ib2WnaO2QF3EtkOUDROMeeiN.2QYoEBYomVtD.', 'M', '1969-07-06', 2600, 'MNTLCU69L06A794D', 2600),
 	('Sara', 'Broletti', 'web.prj.cup+10@gmail.com', '$2a$15$3P.htSEDGik5vuZW.VuH3Og9VjUhAyoWXTiKiYviynuFG4zZ0xkfC', 'F', '1972-06-04', 2848, 'SRABLT72H44B157W', 2600),
@@ -9680,7 +9690,7 @@ INSERT INTO person(name, surname, email, password, sex, birth_date, birth_city_i
 	('Nicola', 'Maucione', 'web.prj.cup+48@gmail.com', '$2a$15$ldEa28cfEaiwcbN5Ag3vnewry8g1mNSlhXvkCs7zws47X.worwpa.', 'M', '1993-07-28', 7317, 'MCNNCL93L28L174P', 7317),
 	('Ilaria', 'Colombo', 'web.prj.cup+49@gmail.com', '$2a$15$QvCV3QeSYff7zM81Jn8IGehCCBN1DDBQ/ZOYrAee8Y4oJMu/HtBPi', 'F', '1995-11-17', 7317, 'CLMLRI95S57L174S', 7317),
 	('Rosa', 'Franca', 'web.prj.cup+50@gmail.com', '$2a$15$raSSubVpByzmkz5rlpUe5..RJ7bewa/h2s18EbgB2HSSR5o3tnmA6', 'F', '1987-11-12', 7317, 'FRNRSO87S52L174M', 7317),
-	('Bignotti', 'Beatrice', 'web.prj.cup+51@gmail.com', '$2a$15$wLCO/POGNA21oU7YoCT6tunqN79uP5ceApoVbFjrsNvzJi6a.9Ouu', 'F', '2005-12-12', 7317, 'BGNBRC05T52L174Q', 7317); /* <- Ayoub S. */
+	('Beatrice', 'Bignotti', 'web.prj.cup+51@gmail.com', '$2a$15$wLCO/POGNA21oU7YoCT6tunqN79uP5ceApoVbFjrsNvzJi6a.9Ouu', 'F', '2005-12-12', 7317, 'BGNBRC05T52L174Q', 7317); /* <- Ayoub S. */
 
 INSERT INTO doctor(id) VALUES
 	((SELECT id FROM person WHERE fiscal_code='CRRCRL98T24L378T')), /* 10 pazienti */
@@ -9691,7 +9701,8 @@ INSERT INTO doctor(id) VALUES
 
 INSERT INTO doctor_specialist(id) VALUES
 	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I')),
-	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'));
+	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'));
 
 INSERT INTO is_patient(person_id, doctor_id) VALUES
 	((SELECT id FROM person WHERE fiscal_code='CRLLSE98P49B202R'),(SELECT id FROM person WHERE fiscal_code='CRRCRL98T24L378T')),
@@ -9746,3 +9757,79 @@ INSERT INTO is_patient(person_id, doctor_id) VALUES
 	((SELECT id FROM person WHERE fiscal_code='CPPGNS72T56L378I'),(SELECT id FROM person WHERE fiscal_code='NDRGGR98R12E472H')),
 	((SELECT id FROM person WHERE fiscal_code='GNSMRT74P66L174V'),(SELECT id FROM person WHERE fiscal_code='NDRGGR98R12E472H')),
 	((SELECT id FROM person WHERE fiscal_code='FRNVNT92L61L174O'),(SELECT id FROM person WHERE fiscal_code='NDRGGR98R12E472H'));
+
+INSERT INTO exam_qualification(doctor_specialist_id, exam_id) VALUES
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con reazione polimerasica a catena')),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con ibridazione sonde non radiomarcate')),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con ibridazione sonde radiomarcate')),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con reverse dot blot')),				/* Alice */
+	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'),	(SELECT id FROM exam WHERE name='Virus epatite B (HBV) Anticorpi Hbeag')),
+	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'),	(SELECT id FROM exam WHERE name='Virus epatite B (HBV) Antigeni Hbeag')),					/* Paolo */
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di amniociti')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di cellule o tessuti')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di fibroblasti')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di linee cellulari stabilizzate con virus')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di linee linfocitarie stabilizzate con virus o interleuchina'));	/* Aranzulla */
+
+INSERT INTO person_avatar(person_id, name) VALUES
+	((SELECT id FROM person WHERE fiscal_code='CRRCRL98T24L378T'), '1_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SNTLCU96R02L781V'), '2_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SGHYBA97M28L174X'), '3_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='TRZMXH98B14A794Q'), '4_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='NDRGGR98R12E472H'), '5_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'), '6_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='CRLLSE98P49B202R'), '7_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LNRLSE98R52F205S'), '8_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'), '9_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'), '10_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PLAJRP94S04L378H'), '32_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='CMCZRA69E46L378V'), '33_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='RGTMCL75B04L378B'), '34_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='RGTLNZ72P28L378P'), '35_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='GRGGNN62P23L378D'), '36_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SMTGLL68L63L378N'), '37_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLLMXA83B11L378W'), '38_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLLNTN46P14L378E'), '39_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLLMTT68E10L378P'), '40_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SNTRRT59E01F205H'), '22_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SNTSMN89R21L781G'), '23_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LMBTZN58C65L781W'), '24_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='RLNNLC00H55L378I'), '25_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LMBMRC99E29L378O'), '26_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LMBDGI02A09L378H'), '27_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PTRLSE92B56L378O'), '28_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='CSONRC64H16L378X'), '29_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='RSSGCM50T18L378W'), '30_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BSCMTN73M48L378L'), '31_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNMTN95T55L174S'), '52_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNCST00D49L174N'), '53_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNLDA68L15L174G'), '54_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BNTVNI98L07L174X'), '55_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BNTVLI92P57L174F'), '56_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BNTMSM75T17L174O'), '57_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MCNNCL93L28L174P'), '58_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='CLMLRI95S57L174S'), '59_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNRSO87S52L174M'), '60_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BGNBRC05T52L174Q'), '61_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCU69L06A794D'), '11_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SRABLT72H44B157W'), '12_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNTLSE02B51A794L'), '13_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PPTGCR60D24A794Y'), '14_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PPTFNC85D24A794G'), '15_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PPTFRC80D64A794T'), '16_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PPTGCM05D24A794K'), '17_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNDLSN79A41A794K'), '18_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNDBBR79A41A794S'), '19_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNDGNN30A01A794Q'), '20_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNDLDA38T17A794I'), '21_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='VSTMTT87R57L378F'), '41_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLPGVT70L11L378S'), '42_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLPFBA06S23L378U'), '43_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLPSNN79L55L378I'), '44_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BCTGLI74S46L378A'), '45_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BCTGVR93L65L378K'), '46_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LDRVVN03B59L378D'), '47_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LDRTNO50B02L378A'), '48_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='CPPGNS72T56L378I'), '49_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='GNSMRT74P66L174V'), '50_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNVNT92L61L174O'), '51_23-08-19_10-51-39');
