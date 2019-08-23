@@ -525,6 +525,131 @@ a.cc-btn.cc-dismiss:hover {
     background-color: rgb(35, 122, 252) !important;
 }
 
+/* === TIMEOUT === */
+.timeout-container {
+    display: block;
+    margin: 5px auto;
+}
+
+.timeout-container .header {
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+    font-size: 7em;
+    padding: 50px;
+    text-align: center;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+    color: #2c2c2c;
+    letter-spacing: 0.05em;
+    text-shadow: 4px 4px 0 #d5d5d5, 7px 7px 0 rgba(0, 0, 0, 0.2);
+}
+
+.timeout-container .header .text {
+    display: block;
+    width: min-content;
+    margin: 0 auto;
+}
+
+.timeout-container .frame {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    border-radius: 2px;
+    box-shadow: 4px 8px 16px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: #ffffff;
+    color: #333333;
+}
+
+.timeout-container .frame .center {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.timeout-container .frame .center .circles {
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    transform-style: preserve-3d;
+    animation: timeout-circle-spin 5s linear infinite;
+}
+
+.timeout-container .frame .center .circle {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(50, 100, 200, 0.2);
+    border-radius: 50%;
+}
+
+.timeout-container .frame .center .circle:nth-child(2) {
+    transform: rotateY(30deg);
+}
+
+.timeout-container .frame .center .circle:nth-child(3) {
+    transform: rotateY(60deg);
+}
+
+.timeout-container .frame .center .circle:nth-child(4) {
+    transform: rotateY(90deg);
+}
+
+.timeout-container .frame .center .circle:nth-child(5) {
+    transform: rotateY(120deg);
+}
+
+.timeout-container .frame .center .circle:nth-child(6) {
+    transform: rotateY(150deg);
+}
+
+.timeout-container .frame .center .circle:nth-child(7) {
+    transform: rotateY(180deg);
+}
+
+.timeout-container .frame .center .circle:nth-child(8) {
+    transform: rotateY(210deg);
+}
+
+.timeout-container .frame .center .circle:nth-child(9) {
+    transform: rotateY(250deg);
+}
+
+@keyframes timeout-circle-spin {
+    0% {
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+    25% {
+        transform: rotateX(90deg) rotateY(100deg) rotateZ(45deg);
+    }
+    50% {
+        transform: rotateX(180deg) rotateY(200deg) rotateZ(90deg);
+    }
+    75% {
+        transform: rotateX(270deg) rotateY(300deg) rotateZ(45deg);
+    }
+    100% {
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+}
+
+/* Media Query */
+@media only screen and (max-width: 768px) {
+    .timeout-container .header {
+        padding: 0;
+        font-size: 6em;
+    }
+}
+
+@media only screen and (max-width: 481px) {
+    .timeout-container .header {
+        font-size: 4em;
+    }
+}
+
 /* === FOOTER === */
 /* Structure */
 footer.footer {
@@ -1086,6 +1211,7 @@ div[id^=personal-card-modal-].ui.modal.disabled:after {
 div[id=visit-assigned-patient-modal].ui.modal.disabled:after {
     content: "\01F6AB";
 }
+
 form[id=write-report-form].ui.form.disabled.success:after {
     content: "\02705";
 }

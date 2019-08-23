@@ -140,6 +140,11 @@ public class DoctorSpecialistService {
                     // ADD Report & SET matching with corresponding Prescription Exam
                     report.setId(reportDAO.add(report));
                     prescriptionExam.setReport(report);
+                    // Set Paid only if not paidF
+                    if (!prescriptionExam.getPaid() && prescriptionReportModel.isPaid()) {
+                        prescriptionExam.setPaid(true);
+                    }
+
 
                     // UPDATE Prescription Exam
                     if (report.getId() != null && prescriptionExamDAO.update(prescriptionExam)) {
@@ -155,6 +160,7 @@ public class DoctorSpecialistService {
                                 + "\nReport Date: " + report.getDateTime().toLocalDate()
                                 + "\nReport Time: " + report.getDateTime().toLocalTime()
                                 + "\nSpecialist Id: " + doctorSpecialist.getId()
+                                + "\nPaid: " + prescriptionExam.getPaid()
                                 + "\nReport Content: "
                                 + "\n============================"
                                 + "\n" + report.getContent()

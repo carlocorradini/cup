@@ -11,11 +11,13 @@ function prescriptionExamConfig() {
         $form: $("#prescription-exam-form"),
         $dropdownPatient: $("#prescription-exam-patient-dropdown"),
         $dropdownExam: $("#prescription-exam-exam-dropdown"),
+        $checkboxPaid: $("#prescription-exam-paid-checkbox"),
         $button: $("#prescription-exam-button")
     };
     const prescription = {
         patientId: null,
-        examId: null
+        examId: null,
+        paid: false
     };
     const patientId = window.UTIL.URL.getParams().patientId;
 
@@ -34,11 +36,24 @@ function prescriptionExamConfig() {
         pExam.$dropdownPatient.dropdown("set selected", patientId);
         prescription.patientId = patientId;
     }
-
+    // Exams dropdown
     pExam.$dropdownExam.dropdown({
         clearable: true,
         onChange: function (value, text, $item) {
             prescription.examId = value;
+        }
+    });
+    // Paid checkbox
+    pExam.$checkboxPaid.checkbox({
+        onChecked: function () {
+            const label = pExam.$checkboxPaid.find("label");
+            label.html(label.data("paid"));
+            prescription.paid = true;
+        },
+        onUnchecked: function () {
+            const label = pExam.$checkboxPaid.find("label");
+            label.html(label.data("paid-not"));
+            prescription.paid = false;
         }
     });
 

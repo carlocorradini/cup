@@ -5,7 +5,7 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
 >
-    <ui:define name="title">#{i18n["common.assignedVisits"]}</ui:define>
+    <ui:define name="title">#{i18n["common.total.assignedVisits"]}</ui:define>
 
     <ui:define name="js">
         <h:outputScript library="semantic-ui"
@@ -15,20 +15,20 @@
                         name="js/moment.js"
                         target="body"/>
         <h:outputScript library="_default"
-                        name="js/visit_assigned.js"
+                        name="js/visit_all_assigned.js"
                         target="body"/>
     </ui:define>
 
     <ui:define name="content">
         <ui:fragment rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
             <h2 class="ui center aligned icon header">
-                <i class="clipboard icon"/>
-                #{i18n["common.assignedVisits"]}
+                <i class="clipboard check icon"/>
+                #{i18n["common.total.assignedVisits"]}
             </h2>
 
             <div class="ui divider"></div>
 
-            <ui:fragment rendered="#{empty doctorSpecialist.assignedToDoPrescriptionExam}">
+            <ui:fragment rendered="#{empty doctorSpecialist.assignedPrescriptionExam}">
                 <div class="ui icon message">
                     <i class="info circle icon"/>
                     <div class="content">
@@ -40,7 +40,7 @@
                 </div>
             </ui:fragment>
 
-            <ui:fragment rendered="#{not empty doctorSpecialist.assignedToDoPrescriptionExam}">
+            <ui:fragment rendered="#{not empty doctorSpecialist.assignedPrescriptionExam}">
                 <div id="visit-assigned-i18n"
                      data-i18n="{
                          &quot;noReport&quot;: &quot;#{i18n['common.noReport']}&quot;,
@@ -66,7 +66,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <ui:repeat value="#{doctorSpecialist.assignedToDoPrescriptionExam}" var="pe">
+                    <ui:repeat value="#{doctorSpecialist.assignedPrescriptionExam}" var="pe">
                         <tr data-prescription-id="#{pe.id}">
                             <td>#{pe.id}</td>
                             <td>#{pe.exam.name}</td>
@@ -97,135 +97,121 @@
                                     #{i18n["common.patient"]}
                                 </button>
                             </td>
-                            <td>
-                                <button class="ui fluid labeled green icon button write-report-modal-button"
-                                        data-prescription-id="#{pe.id}"
-                                        data-patient-id="#{pe.personId}"
-                                >
-                                    <i class="clipboard check icon"/>
-                                    #{i18n["common.writeReport"]}
-                                </button>
+                            <td class="#{empty pe.report ? 'disabled' : ''}">
+                                <ui:fragment rendered="#{empty pe.report}">
+                                    <i class="icon close"/>
+                                    #{i18n["common.noReport"]}
+                                </ui:fragment>
+                                <ui:fragment rendered="#{not empty pe.report}">
+                                    <button class="ui fluid labeled yellow icon button wiew-report-modal-button"
+                                            data-prescription-id="#{pe.id}"
+                                            data-patient-id="#{pe.personId}"
+                                    >
+                                        <i class="clipboard check icon"/>
+                                        #{i18n["common.view"]}
+                                    </button>
+                                </ui:fragment>
                             </td>
                         </tr>
                     </ui:repeat>
                     </tbody>
                 </table>
 
-                <!-- WRITE REPORT MODAL -->
-                <div class="ui longer modal" id="visit-assigned-write-report-modal">
+                <!-- REPORT MODAL -->
+                <div class="ui small modal" id="visit-assigned-view-report-modal">
                     <i class="red close icon"/>
                     <div class="header">
-                        #{i18n["common.writeReport"]}
+                        <span class="ui large label">
+                            #{i18n["common.report"]}
+                            <span class="detail" id="view-report-id-header"/>
+                        </span>
                     </div>
                     <div class="scrolling content">
-                        <form class="ui large form"
-                              id="write-report-form"
-                        >
-                            <div class="ui icon success message medium" style="z-index: 3;">
-                                <i class="checkmark icon"/>
-                                <div class="content">
-                                    <div class="header">
-                                        #{i18n["visit.assigned.addReport.success.message"]}
-                                    </div>
-                                    <p>#{i18n["visit.assigned.addReport.success.subMessage"]}</p>
-                                </div>
-                            </div>
+                        <table class="ui celled table">
+                            <thead>
+                            <tr>
+                                <th>#{i18n["common.id"]}</th>
+                                <th>#{i18n["common.id"]} #{i18n["common.specialist"]}</th>
+                                <th>#{i18n["common.date"]}</th>
+                                <th>#{i18n["common.hour"]}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><span id="view-report-id"/></td>
+                                <td><span id="view-report-specialist-id"/></td>
+                                <td><span id="view-report-date"/></td>
+                                <td><span id="view-report-time"/></td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                            <div class="ui icon warning message medium">
-                                <i class="exclamation triangle icon"/>
-                                <div class="content">
-                                    <div class="header">
-                                        #{i18n["visit.assigned.addReport.error.message"]}
+                        <table class="ui celled table">
+                            <thead>
+                            <tr>
+                                <th>#{i18n["common.content"]}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="ui form">
+                                        <div class="field">
+                                            <textarea id="view-report-content"
+                                                      autocomplete="off"
+                                                      readonly=""
+                                            />
+                                        </div>
                                     </div>
-                                    <p>#{i18n["visit.assigned.addReport.error.subMessage"]}</p>
-                                </div>
-                            </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                            <div class="field">
-                                <label>#{i18n["common.patient"]}</label>
-                                <div class="ui floating dropdown labeled icon button fluid large disabled">
-                                    <i class="user icon"/>
-                                    <span class="text full-width">
-                                        <img id="write-report-patient-avatar"
-                                             src=""
-                                             style="width: 2em; height: 2em;"
-                                             class="ui image bordered rounded person-avatar middle aligned"
-                                             alt="Avatar"
-                                        />
-                                        <span id="write-report-patient-full-name"/>
-                                        <span id="write-report-patient-fiscal-code" class="text-light text-right"/>
-                                    </span>
+                        <div class="ui divider"></div>
+
+                        <!-- SUGGESTED EXAMS -->
+                        <div class="ui icon message" id="view-report-exam-empty">
+                            <i class="info circle icon"/>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n["doctor.patients.patient.report.exam.empty.message"]}
                                 </div>
+                                <p>#{i18n["doctor.patients.patient.report.exam.empty.subMessage"]}</p>
                             </div>
-                            <div class="field">
-                                <label>#{i18n["common.paid"]}</label>
-                                <div class="ui fluid toggle checkbox" id="write-report-data-paid">
-                                    <input type="checkbox" tabindex="0" class="hidden"/>
-                                    <label data-paid="#{i18n['common.paid']}"
-                                           data-paid-not="#{i18n['common.paidNot']}">
-                                        #{i18n["common.paidNot"]}
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label for="write-report-data-content">#{i18n["common.content"]}</label>
-                                <textarea id="write-report-data-content"
-                                          placeholder="#{i18n['common.content']}"
-                                          name="content"
-                                          required=""
-                                          autocomplete="on"
-                                          minlength="#{prescription.examReportMinLength}"
-                                          maxlength="#{prescription.examReportMaxLength}"
-                                />
-                                <p class="text-light text-smaller-25">
-                                    <span id="write-report-data-content-length"/>
-                                    &#160;
-                                    #{i18n["visit.assigned.characterCount"]}
-                                </p>
-                            </div>
-                            <div class="field">
-                                <label>#{i18n["common.exams.suggested"]}</label>
-                                <div class="ui fluid multiple search selection dropdown" id="write-report-data-exams">
-                                    <input type="hidden"/>
-                                    <i class="dropdown icon"/>
-                                    <div class="default text">#{i18n["common.exams.suggested"]}</div>
-                                    <div class="menu">
-                                        <ui:repeat value="#{exam.exams}" var="e">
-                                            <div class="item" data-value="#{e.id}">
-                                                <span class="ui empty circular label #{['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink'].get(e.id % 10)}"/>
-                                                #{e.name}
-                                                <span class="text-light text-right">#{e.id}</span>
-                                            </div>
-                                        </ui:repeat>
+                        </div>
+                        <div id="view-report-exam-container">
+                            <h4>#{i18n["common.exams.suggested"]}</h4>
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="ui bulleted list" id="view-report-exam-list">
                                     </div>
                                 </div>
                             </div>
-                            <div class="field">
-                                <label>#{i18n["common.medicines.suggested"]}</label>
-                                <div class="ui fluid multiple search selection dropdown"
-                                     id="write-report-data-medicines">
-                                    <input type="hidden"/>
-                                    <i class="dropdown icon"/>
-                                    <div class="default text">#{i18n["common.medicines.suggested"]}</div>
-                                    <div class="menu">
-                                        <ui:repeat value="#{medicine.medicines}" var="m">
-                                            <div class="item" data-value="#{m.id}">
-                                                <span class="ui empty circular label #{['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink'].get(m.id % 10)}"/>
-                                                #{m.name}
-                                                <span class="text-light text-right">#{m.id}</span>
-                                            </div>
-                                        </ui:repeat>
+                        </div>
+
+                        <!---->
+                        <div class="ui divider"></div>
+
+                        <!-- SUGGESTED MEDICINES -->
+                        <div class="ui icon message" id="view-report-medicine-empty">
+                            <i class="info circle icon"/>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n["doctor.patients.patient.report.medicine.empty.message"]}
+                                </div>
+                                <p>#{i18n["doctor.patients.patient.report.medicine.empty.subMessage"]}</p>
+                            </div>
+                        </div>
+                        <div id="view-report-medicine-container">
+                            <h4>#{i18n["common.medicines.suggested"]}</h4>
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="ui bulleted list" id="view-report-medicine-list">
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="ui blue fluid big button submit" tabindex="0">
-                                <i class="chevron circle up icon"/>
-                                #{i18n["common.send"]}
-                            </div>
-
-                            <div class="ui error message"></div>
-                        </form>
+                        </div>
                     </div>
                 </div>
 

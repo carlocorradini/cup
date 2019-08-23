@@ -137,6 +137,7 @@ public class DoctorService {
                     prescriptionExam.setPersonId(patient.getId());
                     prescriptionExam.setDoctorId(doctor.getId());
                     prescriptionExam.setExam(exam);
+                    prescriptionExam.setPaid(prescriptionExamModel.isPaid());
 
                     // Add the new Prescription Exam
                     if (prescriptionExamDAO.add(prescriptionExam) != null) {
@@ -144,7 +145,10 @@ public class DoctorService {
                         message.setError(JsonMessage.ERROR_NO_ERROR);
                         EmailUtil.send(patient.getEmail(),
                                 AppConfig.getName().toUpperCase() + " Prescription Exam",
-                                "A new Exam has been added.\nExam: " + exam.getName() + "\nPlease contact us at " + AppConfig.getInfoPhone() + " to arrange a meeting.");
+                                "A new Exam has been added." +
+                                        "\nExam: " + exam.getName() +
+                                        "\nPaid: " + prescriptionExam.getPaid() +
+                                        "\nPlease contact us at " + AppConfig.getInfoPhone() + " to arrange a meeting.");
                     }
                 }
             } catch (DAOException ex) {

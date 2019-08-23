@@ -2,11 +2,11 @@
 
 // === PAGE READY ===
 $(document).ready(() => {
-    // Enable Assigned Visit Functionality
-    visitAssignedConfig();
+    // Enable Assigned All Visit Functionality
+    visitAllAssignedConfig();
 });
 
-function visitAssignedConfig() {
+function visitAllAssignedConfig() {
     const visit = {
         $table: $("#visit-assigned-table"),
         i18n: $("#visit-assigned-i18n").data("i18n"),
@@ -69,32 +69,28 @@ function visitAssignedConfig() {
             $province: $("#doctor-province"),
             $avatar: $("#doctor-avatar")
         },
-        writeReport: {
-            $modal: $("#visit-assigned-write-report-modal"),
-            $button: $("#visit-assigned-table button.write-report-modal-button"),
-            $form: $("#write-report-form"),
-            patient: {
-                urlPattern: window.CONTEXT_PATH + "/service/restricted/medical/patient/{1}",
-                $fullName: $("#write-report-patient-full-name"),
-                $fiscalCode: $("#write-report-patient-fiscal-code"),
-                $avatar: $("#write-report-patient-avatar")
-            },
-            data: {
-                $content: $("textarea#write-report-data-content"),
-                $contentLength: $("span#write-report-data-content-length"),
-                $paid: $("#write-report-data-paid"),
-                $examsDropdown: $("#write-report-data-exams"),
-                $medicinesDropdown: $("#write-report-data-medicines")
+        viewReport: {
+            $modal: $("#visit-assigned-view-report-modal"),
+            $button: $("#visit-assigned-table button.view-report-modal-button"),
+            report: {
+                $idHeader: $("span#view-report-id-header"),
+                $id: $("span#view-report-id"),
+                $idSpecialist: $("span#view-report-specialist-id"),
+                $date: $("span#view-report-date"),
+                $time: $("span#view-report-time"),
+                $content: $("textarea#view-report-content"),
+                exam: {
+                    $emptyMessage: $("#view-report-exam-empty"),
+                    $container: $("#view-report-exam-container"),
+                    $list: $("#view-report-exam-list")
+                },
+                medicine: {
+                    $emptyMessage: $("#view-report-medicine-empty"),
+                    $container: $("#view-report-medicine-container"),
+                    $list: $("#view-report-medicine-list")
+                }
             }
         }
-    };
-    // The Object that represent a new Report
-    const newReport = {
-        prescriptionId: undefined,
-        content: undefined,
-        paid: false,
-        exams: [],
-        medicines: []
     };
 
     // Set Moment correct Locale
@@ -103,155 +99,29 @@ function visitAssignedConfig() {
     // Enable Table Sorting
     visit.$table.tablesort();
 
-    // === WRITE REPORT ===
-    // Modal
-    visit.writeReport.$modal.modal({
+    // === VIEW REPORT ===
+    visit.viewReport.$modal.modal({
         inverted: true
     });
-    // Count chars
-    visit.writeReport.data.$content.on("keyup", function () {
-        visit.writeReport.data.$contentLength.html(visit.writeReport.data.$content.attr("maxLength") - this.value.length);
-    });
-    // Checkbox
-    visit.writeReport.data.$paid.checkbox({
-        onChecked: function () {
-            const label = visit.writeReport.data.$paid.find("label");
-            label.html(label.data("paid"));
-        },
-        onUnchecked: function () {
-            const label = visit.writeReport.data.$paid.find("label");
-            label.html(label.data("paid-not"));
-        }
-    });
-    // Dropdown
-    visit.writeReport.data.$examsDropdown.dropdown({
-        clearable: true,
-        allowAdditions: false
-    });
-    visit.writeReport.data.$medicinesDropdown.dropdown({
-        clearable: true,
-        allowAdditions: false
-    });
-    // Triggers Modal
-    visit.writeReport.$button.click(function () {
+    // Populate Modal with information retrieving
+    visit.viewReport.$button.click(function () {
         const $button = $(this);
-        const prescriptionId = $button.data("prescription-id");
-        const patientId = $button.data("patient-id");
+        const reportId = $button.data("doctor-id");
 
-        if (window.UTIL.NUMBER.isNumber(prescriptionId)
-            && window.UTIL.NUMBER.isNumber(patientId)) {
+        if (window.UTIL.NUMBER.isNumber(doctorId)) {
             $button.addClass("loading");
-
-            if (prescriptionId !== newReport.prescriptionId) {
-                // DO ALL only if the last Prescription Id is different
-                // Save prescriptionId into new Report obj
-                newReport.prescriptionId = prescriptionId;
-                // Reset the Modal
-                visit.writeReport.$form.removeClass("disabled success warning");
-                visit.writeReport.data.$content.val("");
-                visit.writeReport.data.$paid.checkbox("enable");
-                visit.writeReport.data.$paid.checkbox("uncheck");
-                visit.writeReport.data.$contentLength.html(visit.writeReport.data.$content.attr("maxLength"));
-                visit.writeReport.data.$examsDropdown.dropdown("refresh");
-                visit.writeReport.data.$examsDropdown.dropdown("clear");
-                visit.writeReport.data.$medicinesDropdown.dropdown("refresh");
-                visit.writeReport.data.$medicinesDropdown.dropdown("clear");
-
-                $.ajax({
-                    type: "GET",
-                    url: window.UTIL.STRING.format(visit.writeReport.patient.urlPattern, patientId),
-                    success: function (data) {
-                        populateWriteReportModal(visit.writeReport, data);
-                        // Disable Paid checkbox if it's already paid
-                        $.each(data.exams, function (index, element) {
-                            if (element.id === prescriptionId) {
-                                if (element.paid) {
-                                    visit.writeReport.data.$paid.checkbox("check");
-                                    visit.writeReport.data.$paid.checkbox("disable");
-                                }
-                                return false;
-                            }
-                        });
-                    },
-                    error: function () {
-                        console.error("Unable to get Patient");
-                    }
-                });
-            }
-
-            visit.writeReport.$modal.modal("show");
-            $button.removeClass("loading");
-        } else {
-            throw "Prescription Id or Patient Id is not a Number";
-        }
-    });
-
-    // Form
-    visit.writeReport.$form.form({
-        fields: {
-            content: {
-                identifier: "content",
-                rules: [
-                    {
-                        type: "empty",
-                        prompt: visit.i18n.newReport.empty
-                    },
-                    {
-                        type: `minLength[${visit.writeReport.data.$content.attr("minlength")}]`,
-                        prompt: visit.i18n.newReport.minLength
-                    },
-                    {
-                        type: `maxLength[${visit.writeReport.data.$content.attr("maxlength")}]`,
-                        prompt: visit.i18n.newReport.maxLength
-                    }
-                ]
-            }
-        },
-        onSuccess: function () {
-            // Show Loading
-            visit.writeReport.$form.removeClass("warning success").addClass("loading");
-
-            // Reset
-            newReport.exams = [];
-            newReport.medicines = [];
-            // Dropdown Values
-            const examsArray = visit.writeReport.data.$examsDropdown.dropdown("get value").split(",");
-            const medicinesArray = visit.writeReport.data.$medicinesDropdown.dropdown("get value").split(",");
-
-            // Set newReport obj template
-            if (examsArray.length !== 0 && examsArray[0] !== "") {
-                newReport.exams = examsArray;
-            }
-            if (medicinesArray.length !== 0 && medicinesArray[0] !== "") {
-                newReport.medicines = medicinesArray;
-            }
-            // Others
-            newReport.content = visit.writeReport.data.$content.val();
-            newReport.paid = visit.writeReport.data.$paid.checkbox("is checked");
-
-            // Send newReport
             $.ajax({
-                type: "POST",
-                url: window.CONTEXT_PATH + "/service/restricted/specialist/report",
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify(newReport),
+                type: "GET",
+                url: window.UTIL.STRING.format(visit.doctor.urlPattern, doctorId),
                 success: function (data) {
-                    visit.writeReport.$form.removeClass("loading");
-                    if (data.error === 0) {
-                        // Added successfully
-                        visit.writeReport.$form.addClass("disabled success");
-                        // Unused row
-                        visit.$table.find(`tr[data-prescription-id="${newReport.prescriptionId}"]`).addClass("disabled positive");
-                    } else
-                        visit.writeReport.$form.addClass("warning");
+                    populateDoctorModal(visit.doctor, data);
+                    $button.removeClass("loading");
+                    visit.doctor.$modal.modal("show");
                 },
                 error: function () {
-                    console.error("Unable to write a Report");
+                    console.error("Unable to get Doctor");
                 }
             });
-
-            return false;
         }
     });
 
@@ -330,16 +200,6 @@ function visitAssignedConfig() {
             });
         }
     });
-}
-
-// Populate the Modal Write Report given a Template and a Patient
-function populateWriteReportModal(writeReportTemplate, patient) {
-    if (writeReportTemplate !== null && writeReportTemplate !== undefined
-        && patient !== null && patient !== undefined) {
-        writeReportTemplate.patient.$fullName.html(patient.fullNameCapitalized);
-        writeReportTemplate.patient.$fiscalCode.html(patient.fiscalCode);
-        writeReportTemplate.patient.$avatar.attr("src", window.UTIL.JSF.resourceURL("_default", patient.avatar.nameAsResource));
-    }
 }
 
 // Populate the Modal Doctor given a Template and a Doctor

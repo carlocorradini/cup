@@ -17,12 +17,14 @@ import java.util.List;
 public class PrescriptionReportModel implements PrescriptionModel {
     private long prescriptionId;
     private String content;
+    private boolean paid;
     private List<Long> exams;
     private List<Long> medicines;
 
     PrescriptionReportModel() {
         prescriptionId = 0L;
         content = "";
+        paid = false;
         exams = Collections.emptyList();
         medicines = Collections.emptyList();
     }
@@ -61,6 +63,24 @@ public class PrescriptionReportModel implements PrescriptionModel {
      */
     public void setContent(String content) {
         this.content = content;
+    }
+
+    /**
+     * Return true if the {@link PrescriptionExam Prescription Exam} has been paid, false otherwise
+     *
+     * @return If is paid or not
+     */
+    public boolean isPaid() {
+        return paid;
+    }
+
+    /**
+     * Set true if the {@link PrescriptionExam Prescription Exam} has been paid, false otherwise
+     *
+     * @param paid If is paid or not
+     */
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 
     /**

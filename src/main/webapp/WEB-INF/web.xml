@@ -78,6 +78,11 @@
         <error-code>503</error-code>
         <location>/WEB-INF/error/503.xhtml</location>
     </error-page>
+    <!-- Session Timeout -->
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/timeout/index.xhtml</location>
+    </error-page>
 
     <!-- MIME MAPPING -->
     <mime-mapping>

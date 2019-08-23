@@ -130,6 +130,11 @@
                             #{i18n["common.assignedVisits"]}
                             <span class="ui red label">#{doctorSpecialist.assignedToDoPrescriptionExamCount}</span>
                         </h:link>
+                        <h:link outcome="/dashboard/specialist/visit_all/index"
+                                styleClass="item">
+                            #{i18n["common.total.assignedVisits"]}
+                            <span class="ui yellow empty circular label"/>
+                        </h:link>
                     </div>
                 </div>
             </ui:fragment>

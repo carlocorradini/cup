@@ -23,7 +23,7 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
     private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM prescription_exam";
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM prescription_exam WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM prescription_exam";
-    private static final String SQL_ADD = "INSERT INTO prescription_exam(person_id, doctor_id, exam_id) VALUES (?, ?, ?)";
+    private static final String SQL_ADD = "INSERT INTO prescription_exam(person_id, doctor_id, exam_id, paid) VALUES (?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE prescription_exam SET doctor_specialist_id = ?, report_id = ?, prescription_date = ?, paid = ?, read = ? WHERE id = ?";
     private static final String SQL_GET_ALL_BY_PERSON_ID = "SELECT * FROM prescription_exam WHERE person_id = ? ORDER BY prescription_date DESC";
     private static final String SQL_GET_ALL_BY_DOCTOR_SPECIALIST_ID = "SELECT * FROM prescription_exam WHERE doctor_specialist_id = ? ORDER BY prescription_date DESC";
@@ -157,6 +157,7 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             pStmt.setLong(1, prescriptionExam.getPersonId());
             pStmt.setLong(2, prescriptionExam.getDoctorId());
             pStmt.setLong(3, prescriptionExam.getExam().getId());
+            pStmt.setBoolean(4, prescriptionExam.getPaid());
 
             if (pStmt.executeUpdate() == 1) {
                 ResultSet rs = pStmt.getGeneratedKeys();

@@ -139,27 +139,36 @@ public final class AuthUtil {
      */
     public static Person signIn(String email, String password, boolean remember, HttpServletRequest req, HttpServletResponse resp) {
         Person person = null;
+        Doctor doctor;
+        DoctorSpecialist doctorSpecialist;
+        HttpSession session;
 
         try {
             isConfigured();
             if (email != null && password != null && req != null) {
                 Person noAuthPerson = personDAO.getByEmail(email);
-                Doctor doctor;
-                DoctorSpecialist doctorSpecialist;
 
                 if (noAuthPerson != null && CryptUtil.validate(password, noAuthPerson.getPassword()) && getAuthPerson(req) == null) {
+                    session = req.getSession(true);
                     person = noAuthPerson;
                     doctor = doctorDAO.getByPrimaryKey(person.getId());
                     doctorSpecialist = doctorSpecialistDAO.getByPrimaryKey(person.getId());
 
-                    req.getSession(true).setAttribute(AuthConfig.getSessionPersonName(), person);
+                    // Add Person to se the current session
+                    session.setAttribute(AuthConfig.getSessionPersonName(), person);
                     if (doctor != null) {
                         // The Person is a Doctor
-                        req.getSession(false).setAttribute(AuthConfig.getSessionDoctorName(), doctor);
+                        session.setAttribute(AuthConfig.getSessionDoctorName(), doctor);
                     }
                     if (doctorSpecialist != null) {
                         // The Person is a Doctor Specialist
-                        req.getSession(false).setAttribute(AuthConfig.getSessionDoctorSpecialistName(), doctorSpecialist);
+                        session.setAttribute(AuthConfig.getSessionDoctorSpecialistName(), doctorSpecialist);
+                    }
+
+                    // === REMEMBER ME
+                    if (remember) {
+                        // Change session Timeout
+                        session.setMaxInactiveInterval(AuthConfig.getCookieRememberMaxAge());
                     }
                 }
             }
