@@ -188,8 +188,10 @@ $(document).ready(() => {
                         writeReport.$form.addClass("disabled success");
                         // Unused row
                         window.visit_creator.v.$table
-                            .find(`tr[data-prescription-id="${newReport.prescriptionId}"]`)
-                            .addClass("disabled positive");
+                            .DataTable()
+                            .row(window.visit_creator.v.$table.find(`tbody tr[data-prescription-id="${newReport.prescriptionId}"]`))
+                            .remove()
+                            .draw();
                     } else {
                         writeReport.$form.addClass("warning");
                     }

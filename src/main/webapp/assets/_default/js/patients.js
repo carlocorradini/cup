@@ -23,7 +23,9 @@ function personalCardConfig() {
         if ($modalPersonalCard.length) {
             // --- Valid patient Id & Modal
             // Enable Accordion
-            $modalPersonalCard.find(".ui.accordion").accordion();
+            $modalPersonalCard.find(".ui.accordion").accordion({
+                animateChildren: false
+            });
             // Enable Datatable
             $modalPersonalCard.find(".ui.table.sortable").DataTable();
             // Enable Report Modal on Top of Personal Card Modal

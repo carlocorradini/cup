@@ -1,13 +1,14 @@
 package it.unitn.disi.wp.cup.model.prescription;
 
 import it.unitn.disi.wp.cup.config.PrescriptionConfig;
+import it.unitn.disi.wp.cup.model.Model;
 
 /**
  * Prescription Medicine Model
  *
  * @author Carlo Corradini
  */
-public class PrescriptionMedicineModel implements PrescriptionModel {
+public class PrescriptionMedicineModel implements Model {
     private long patientId;
     private long medicineId;
     private short quantity;

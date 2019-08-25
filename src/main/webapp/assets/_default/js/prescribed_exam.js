@@ -10,21 +10,29 @@ function prescribedExamConfig() {
     const pExam = {
         $table: $("#prescribed-exam-table"),
         report: {
-            $modalContainer: $("#prescribed-exam-report-modal-container"),
-            buttonIdPattern: "#prescribed-exam-report-modal-button-{1}",
-            modalClass: ".report-modal"
+            modalClass: ".report-modal",
+            $modalButton: $("button.report-modal-button")
         }
     };
 
     // Enable Datatable
     pExam.$table.DataTable();
 
-    // Enable Report Modal
-    pExam.report.$modalContainer.find(pExam.report.modalClass).each(function (index, element) {
-        $(element).modal({
-            allowMultiple: false,
-            closable: true,
-            inverted: true
-        }).modal("attach events", window.UTIL.STRING.format(pExam.report.buttonIdPattern, $(element).data("report-id")), "show");
+    // Triggers
+    pExam.report.$modalButton.click(function () {
+        const $button = $(this);
+        const reportId = $button.data("report-id");
+
+        if (window.UTIL.NUMBER.isNumber(reportId)) {
+            $button.addClass("loading");
+            $(`${pExam.report.modalClass}[data-report-id="${reportId}"`).modal({
+                allowMultiple: false,
+                closable: true,
+                inverted: true,
+                onShow: function () {
+                    $button.removeClass("loading");
+                }
+            }).modal("show");
+        }
     });
 }

@@ -129,18 +129,4 @@ public final class AppConfigBean implements Serializable {
     public int getConfigAvatarMaxFileSize() {
         return AppConfig.getConfigAvatarMaxFileSize();
     }
-
-    /**
-     * @see AppConfig#getConfigAvatarPath()
-     */
-    public String getConfigAvatarPath() {
-        return AppConfig.getConfigAvatarPath();
-    }
-
-    /**
-     * @see AppConfig#getConfigAvatarExtension()
-     */
-    public String getConfigAvatarExtension() {
-        return AppConfig.getConfigAvatarExtension();
-    }
 }

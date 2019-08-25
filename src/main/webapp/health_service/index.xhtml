@@ -1,0 +1,122 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+>
+    <ui:define name="title">#{i18n["health.service.signIn"]}</ui:define>
+
+    <ui:define name="js">
+        <h:outputScript library="_default"
+                        name="js/hs_signin.js"
+                        target="body"/>
+    </ui:define>
+
+    <ui:define name="sidebar"/>
+
+    <ui:define name="header"/>
+
+    <ui:define name="content">
+        <div id="sign-in-i18n" data-i18n="{
+            &quot;hs&quot;: {
+                &quot;empty&quot;: &quot;#{i18n['health.service.signIn.hs.empty']}&quot;
+            },
+            &quot;password&quot;: {
+                &quot;empty&quot;: &quot;#{i18n['signin.password.required']}&quot;,
+                &quot;minLength&quot;: &quot;#{i18n['signin.password.minLength']}&quot;,
+                &quot;maxLength&quot;: &quot;#{i18n['signin.password.maxLength']}&quot;
+            }
+        }"></div>
+
+        <div class="sign-in-fixed">
+            <div class="sign-in">
+                <div class="content">
+                    <h:link outcome="/index"
+                            styleClass="sign-in-return logo medium"
+                            p:data-inverted=""
+                            p:data-tooltip="#{i18n['signin.return']}"
+                            p:data-position="top center">
+                    </h:link>
+                    <div class="ui piled segment">
+                        <form id="sign-in-form"
+                              class="ui attached form segment large"
+                        >
+                            <h1 class="ui horizontal divider header">
+                                <i class="shield icon"/>
+                            </h1>
+                            <div class="field">
+                                <label>#{i18n['common.healthService']}</label>
+                                <input type="hidden" id="sign-in-hs-id" name="health_service"/>
+                                <div id="sign-in-dropdown"
+                                     class="ui floating dropdown labeled icon button fluid large">
+                                    <i class="dot circle outline icon"/>
+                                    <span class="text full-width">#{i18n["health.service.choose"]}</span>
+                                    <div class="menu">
+                                        <div class="header">
+                                            #{i18n["health.service.search"]}
+                                        </div>
+                                        <div class="ui icon search input">
+                                            <i class="search icon"/>
+                                            <input type="text" placeholder="#{i18n['common.search']}..."/>
+                                        </div>
+                                        <div class="divider"></div>
+                                        <div class="header">
+                                            <i class="filter icon"/>
+                                            #{i18n["health.service.filter"]}
+                                        </div>
+                                        <div class="scrolling menu">
+                                            <ui:repeat value="#{healthService.healthServices}" var="hs">
+                                                <div class="item" data-value="#{hs.id}">
+                                                    <h:graphicImage library="_default"
+                                                                    name="#{hs.crestAsResource}"
+                                                                    alt="Avatar"
+                                                                    style="width: 2em; height: 2em;"
+                                                                    styleClass="ui image bordered rounded middle aligned"
+                                                    />
+                                                    #{hs.province.nameLongCapitalized}
+                                                    <span class="text-light text-right">#{hs.id}</span>
+                                                </div>
+                                            </ui:repeat>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>#{i18n['common.password']}</label>
+                                <div class="ui left icon input">
+                                    <input
+                                            id="sign-in-password"
+                                            type="password"
+                                            name="password"
+                                            placeholder="#{i18n['common.password']}"
+                                            required=""
+                                            autocomplete="off"
+                                            spellcheck="false"
+                                            minlength="#{auth.passwordMinLength}"
+                                            maxlength="#{auth.passwordMaxLength}"
+                                    />
+                                    <i class="lock icon"/>
+                                </div>
+                            </div>
+
+                            <div class="ui blue fluid big button submit" tabindex="0">
+                                <i class="send icon"/>
+                                #{i18n['common.signIn']}
+                            </div>
+
+                            <div class="ui error message"></div>
+                        </form>
+
+                        <div class="ui large bottom attached message">
+                            <i class="info circle icon"/>
+                            <span>#{i18n["signin.message"]}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="footer"/>
+</ui:composition>

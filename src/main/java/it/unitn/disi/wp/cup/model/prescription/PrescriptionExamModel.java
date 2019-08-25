@@ -1,11 +1,13 @@
 package it.unitn.disi.wp.cup.model.prescription;
 
+import it.unitn.disi.wp.cup.model.Model;
+
 /**
  * Prescription Exam Model
  *
  * @author Carlo Corradini
  */
-public class PrescriptionExamModel implements PrescriptionModel {
+public class PrescriptionExamModel implements Model {
     private long patientId;
     private long examId;
     private boolean paid;

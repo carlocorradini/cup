@@ -59,7 +59,7 @@
                     <tbody>
                     <ui:repeat value="#{person.prescriptionExamNotRead}" var="pe">
                         <tr data-exam-id="#{pe.id}">
-                            <td class="collapsing">
+                            <td class="center aligned collapsing">
                                 <div class="ui fitted slider checkbox reports-read-checkbox">
                                     <input type="checkbox" data-exam-id="#{pe.id}"/>
                                     <label/>
@@ -180,9 +180,7 @@
                                                     <div class="field">
                                                         <textarea autocomplete="off"
                                                                   readonly=""
-                                                        >
-                                                            #{pe.report.content}
-                                                        </textarea>
+                                                        >#{pe.report.content}</textarea>
                                                     </div>
                                                 </div>
                                             </td>

@@ -315,4 +315,32 @@ public final class AppConfig extends Config {
         }
         return instance.getInt("config.avatar.resizeSize");
     }
+
+    /**
+     * Return the Config Crest Path
+     *
+     * @return The App Config Crest Path
+     */
+    public static String getConfigCrestPath() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Crest Path", ex);
+        }
+        return instance.getString("config.crest.path");
+    }
+
+    /**
+     * Return the Config Crest Extension
+     *
+     * @return The App Config Crest Extension
+     */
+    public static String getConfigCrestExtension() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Crest Extension", ex);
+        }
+        return instance.getString("config.crest.extension");
+    }
 }

@@ -179,7 +179,11 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             throw new DAOException("Prescription Exam is mandatory", new NullPointerException("Prescription Exam is null"));
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_UPDATE)) {
-            pStmt.setLong(1, prescriptionExam.getSpecialistId());
+            if (prescriptionExam.getSpecialistId() != null) {
+                pStmt.setLong(1, prescriptionExam.getSpecialistId());
+            } else {
+                pStmt.setNull(1, Types.BIGINT);
+            }
             if (prescriptionExam.getReport() != null) {
                 pStmt.setLong(2, prescriptionExam.getReport().getId());
             } else {

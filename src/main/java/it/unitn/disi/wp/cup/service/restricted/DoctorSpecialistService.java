@@ -43,8 +43,6 @@ public class DoctorSpecialistService {
 
     @Context
     private HttpServletRequest request;
-    @Context
-    private ServletContext servletContext;
 
     @Context
     public void setServletContext(ServletContext servletContext) {

@@ -151,10 +151,6 @@ window.visit_creator = {
             v.patient.$accordion.accordion({
                 animateChildren: false
             });
-            // Table Datatable
-            v.patient.exams.$table.DataTable();
-            v.patient.medicines.$table.DataTable();
-            v.patient.timeline.$table.DataTable();
             // Populate
             v.patient.$button.click(function () {
                 const $button = $(this);
@@ -167,6 +163,10 @@ window.visit_creator = {
                         url: window.UTIL.STRING.format(v.patient.urlPattern, patientId),
                         success: function (data) {
                             window.visit_creator.populate.patient(data);
+                            // Enable Datatable
+                            v.patient.exams.$table.DataTable();
+                            v.patient.medicines.$table.DataTable();
+                            v.patient.timeline.$table.DataTable();
                             $button.removeClass("loading");
                             v.patient.$modal.modal("show");
                         },

@@ -1,6 +1,7 @@
 package it.unitn.disi.wp.cup.model.prescription;
 
 import it.unitn.disi.wp.cup.config.PrescriptionConfig;
+import it.unitn.disi.wp.cup.model.Model;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.persistence.entity.Report;
 import it.unitn.disi.wp.cup.persistence.entity.Exam;
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Carlo Corradini
  */
-public class PrescriptionReportModel implements PrescriptionModel {
+public class PrescriptionReportModel implements Model {
     private long prescriptionId;
     private String content;
     private boolean paid;
@@ -123,8 +124,8 @@ public class PrescriptionReportModel implements PrescriptionModel {
 
     @Override
     public boolean isValid() {
-        return prescriptionId != 0L && !content.isEmpty()
-                && paid
+        return prescriptionId != 0L && paid
+                && !content.isEmpty()
                 && content.length() >= PrescriptionConfig.getExamReportContentMinLength()
                 && content.length() <= PrescriptionConfig.getExamReportContentMaxLength();
     }

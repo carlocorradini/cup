@@ -80,7 +80,11 @@ function reportsConfig() {
                         const id = data.ids[i];
                         if (window.UTIL.NUMBER.isNumber(id)) {
                             window.UTIL.ARRAY.remove(examsRead, id);
-                            reports.$table.find('tbody tr[data-exam-id="' + id + '"]').addClass("disabled positive");
+                            reports.$table
+                                .DataTable()
+                                .row(reports.$table.find(`tbody tr[data-exam-id="${id}"]`))
+                                .remove()
+                                .draw();
                         }
                     }
 
