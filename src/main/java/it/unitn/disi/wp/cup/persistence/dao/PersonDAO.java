@@ -19,10 +19,10 @@ public interface PersonDAO extends DAO<Person, Long> {
     Person getByEmail(String email) throws DAOException;
 
     /**
-     * Update and return a Person from the Database
+     * Update a {@link Person person} from the Database and return if updated
      *
      * @param person The person to update
-     * @return true if the Person has been updated, false otherwise
+     * @return true if the {@link Person} has been updated, false otherwise
      * @throws DAOException If an error occurred during the information retrieving
      */
     boolean update(Person person) throws DAOException;

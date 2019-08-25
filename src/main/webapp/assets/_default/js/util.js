@@ -95,5 +95,38 @@ window.UTIL = {
 
             return params;
         }
+    },
+    ARRAY: {
+        /**
+         * Remove the {@code item} from the {@code array}.
+         * If the {@code item} is not present in the {@code array} nothing will be touched.
+         *
+         * @param array The array to remove item from
+         * @param item The item to remove from the array
+         */
+        remove: function (array, item) {
+            const index = array.indexOf(item);
+
+            if (index > -1) {
+                array.splice(index, 1);
+            }
+        }
+    },
+    JSF: {
+        /**
+         * Return a correctly formatted JSF URL given {@code library} and relative {@code url}.
+         *  If {@code library} is null | undefined or {@code url} is null | undefined the returned URL is undefined.
+         *
+         * @param library The JSF resource library
+         * @param url The relative URL of the resource
+         * @returns {string|undefined} The correctly formatted JSF URL for resources
+         */
+        resourceURL: function (library, url) {
+            if (library === null || library === undefined
+                || url === null || url === undefined) {
+                return undefined;
+            }
+            return UTIL.STRING.format("{1}/javax.faces.resource{2}.xhtml?ln={3}", window.CONTEXT_PATH, url, library);
+        }
     }
 };

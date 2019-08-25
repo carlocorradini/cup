@@ -8,8 +8,8 @@
     <ui:define name="title">#{i18n["common.prescribedExam"]}</ui:define>
 
     <ui:define name="js">
-        <h:outputScript library="semantic-ui"
-                        name="js/tablesort.js"
+        <h:outputScript library="datatables"
+                        name="js/datatables.min.js"
                         target="body"/>
         <h:outputScript library="_default"
                         name="js/prescribed_exam.js"
@@ -60,21 +60,21 @@
                         <tr>
                             <td>#{pe.exam.name}</td>
                             <td>
-                                <ui:fragment rendered="#{empty pe.date}">
+                                <ui:fragment rendered="#{empty pe.dateTime}">
                                     -
                                 </ui:fragment>
-                                <ui:fragment rendered="#{not empty pe.date}">
-                                    <h:outputText value="#{pe.date}">
+                                <ui:fragment rendered="#{not empty pe.dateTime}">
+                                    <h:outputText value="#{pe.dateTime}">
                                         <f:convertDateTime type="localDate"/>
                                     </h:outputText>
                                 </ui:fragment>
                             </td>
                             <td>
-                                <ui:fragment rendered="#{empty pe.time}">
+                                <ui:fragment rendered="#{empty pe.dateTime}">
                                     -
                                 </ui:fragment>
-                                <ui:fragment rendered="#{not empty pe.time}">
-                                    <h:outputText value="#{pe.time}">
+                                <ui:fragment rendered="#{not empty pe.dateTime}">
+                                    <h:outputText value="#{pe.dateTime}">
                                         <f:convertDateTime type="localTime"/>
                                     </h:outputText>
                                 </ui:fragment>
@@ -140,7 +140,6 @@
                                             <th>#{i18n["common.id"]} #{i18n["common.specialist"]}</th>
                                             <th>#{i18n["common.date"]}</th>
                                             <th>#{i18n["common.hour"]}</th>
-                                            <th>#{i18n["common.content"]}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -148,16 +147,38 @@
                                             <td>#{pe.report.id}</td>
                                             <td>#{pe.specialistId}</td>
                                             <td>
-                                                <h:outputText value="#{pe.report.date}">
+                                                <h:outputText value="#{pe.report.dateTime}">
                                                     <f:convertDateTime type="localDate"/>
                                                 </h:outputText>
                                             </td>
                                             <td>
-                                                <h:outputText value="#{pe.report.time}">
+                                                <h:outputText value="#{pe.report.dateTime}">
                                                     <f:convertDateTime type="localTime"/>
                                                 </h:outputText>
                                             </td>
-                                            <td>#{pe.report.content}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="ui celled table">
+                                        <thead>
+                                        <tr>
+                                            <th>#{i18n["common.content"]}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="ui form">
+                                                    <div class="field">
+                                                        <textarea autocomplete="off"
+                                                                  readonly=""
+                                                        >
+                                                            #{pe.report.content}
+                                                        </textarea>
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>

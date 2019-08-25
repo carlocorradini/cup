@@ -24,8 +24,8 @@ function personalCardConfig() {
             // --- Valid patient Id & Modal
             // Enable Accordion
             $modalPersonalCard.find(".ui.accordion").accordion();
-            // Enable Table Sorting
-            $modalPersonalCard.find(".ui.table.sortable").tablesort();
+            // Enable Datatable
+            $modalPersonalCard.find(".ui.table.sortable").DataTable();
             // Enable Report Modal on Top of Personal Card Modal
             $(personalCard.report.modalClass).each(function (index, element) {
                 $(element).modal({

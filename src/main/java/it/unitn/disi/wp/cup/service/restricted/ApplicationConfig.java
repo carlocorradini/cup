@@ -30,6 +30,8 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(PersonService.class);
         resources.add(DoctorService.class);
+        resources.add(DoctorSpecialistService.class);
+        resources.add(MedicalService.class);
         resources.add(MultiPartFeature.class);
         resources.add(FastJsonProvider.class);
     }

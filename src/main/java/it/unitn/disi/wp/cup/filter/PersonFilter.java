@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
         urlPatterns = {"/dashboard/private/*", "/service/restricted/person/*"},
         dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD}
 )
-public final class PersonAuthFilter implements Filter {
+public final class PersonFilter implements Filter {
 
-    private static final String NAME = "PersonAuthFilter";
+    private static final String NAME = "PersonFilter";
     private static final boolean DEBUG = true;
     private FilterConfig filterConfig = null;
     private boolean authenticated = false;
@@ -100,16 +100,16 @@ public final class PersonAuthFilter implements Filter {
                 problem = ex;
                 servletRequest.getServletContext().log("Impossible to propagate to the next filter", ex);
             }
-        }
 
-        doAfterProcessing(servletRequest, servletResponse);
+            doAfterProcessing(servletRequest, servletResponse);
 
-        if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
-            }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
+            if (problem != null) {
+                if (problem instanceof ServletException) {
+                    throw (ServletException) problem;
+                }
+                if (problem instanceof IOException) {
+                    throw (IOException) problem;
+                }
             }
         }
     }

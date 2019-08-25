@@ -7,7 +7,7 @@ import it.unitn.disi.wp.cup.config.PrescriptionConfig;
  *
  * @author Carlo Corradini
  */
-public class PrescriptionMedicineModel implements Prescription {
+public class PrescriptionMedicineModel implements PrescriptionModel {
     private long patientId;
     private long medicineId;
     private short quantity;

@@ -2,11 +2,13 @@ package it.unitn.disi.wp.cup.util;
 
 import it.unitn.disi.wp.cup.config.AuthConfig;
 import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
+import it.unitn.disi.wp.cup.persistence.dao.DoctorSpecialistDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
+import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +27,7 @@ public final class AuthUtil {
     private static final Logger LOGGER = Logger.getLogger(AuthUtil.class.getName());
     private static PersonDAO personDAO = null;
     private static DoctorDAO doctorDAO = null;
+    private static DoctorSpecialistDAO doctorSpecialistDAO = null;
 
     /**
      * Configure the class
@@ -38,14 +41,15 @@ public final class AuthUtil {
         try {
             personDAO = daoFactory.getDAO(PersonDAO.class);
             doctorDAO = daoFactory.getDAO(DoctorDAO.class);
+            doctorSpecialistDAO = daoFactory.getDAO(DoctorSpecialistDAO.class);
         } catch (DAOFactoryException | NullPointerException ex) {
             LOGGER.log(Level.SEVERE, "Unable to get from DAOFactory", ex);
         }
     }
 
     private static void isConfigured() throws NullPointerException {
-        if (personDAO == null || doctorDAO == null)
-            throw new NullPointerException("PersonDAO or DoctorDAO cannot be null");
+        if (personDAO == null || doctorDAO == null || doctorSpecialistDAO == null)
+            throw new NullPointerException("AuthUtil has not been configured");
     }
 
     /**
@@ -99,6 +103,31 @@ public final class AuthUtil {
     }
 
     /**
+     * Return the current authenticated Doctor Specialist
+     *
+     * @param req The ServletRequest
+     * @return The auth Doctor Specialist, null otherwise
+     */
+    public static DoctorSpecialist getAuthDoctorSpecialist(HttpServletRequest req) {
+        DoctorSpecialist doctorSpecialist = null;
+        HttpSession session;
+
+        try {
+            isConfigured();
+            if (req != null) {
+                session = req.getSession(false);
+                if (session != null) {
+                    doctorSpecialist = (DoctorSpecialist) session.getAttribute(AuthConfig.getSessionDoctorSpecialistName());
+                }
+            }
+        } catch (NullPointerException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Current Auth Doctor Specialist", ex);
+        }
+
+        return doctorSpecialist;
+    }
+
+    /**
      * Perform a Sign In
      *
      * @param email    Email of the Person
@@ -110,21 +139,36 @@ public final class AuthUtil {
      */
     public static Person signIn(String email, String password, boolean remember, HttpServletRequest req, HttpServletResponse resp) {
         Person person = null;
+        Doctor doctor;
+        DoctorSpecialist doctorSpecialist;
+        HttpSession session;
 
         try {
             isConfigured();
             if (email != null && password != null && req != null) {
                 Person noAuthPerson = personDAO.getByEmail(email);
-                Doctor doctor;
 
                 if (noAuthPerson != null && CryptUtil.validate(password, noAuthPerson.getPassword()) && getAuthPerson(req) == null) {
+                    session = req.getSession(true);
                     person = noAuthPerson;
                     doctor = doctorDAO.getByPrimaryKey(person.getId());
+                    doctorSpecialist = doctorSpecialistDAO.getByPrimaryKey(person.getId());
 
-                    req.getSession().setAttribute(AuthConfig.getSessionPersonName(), person);
+                    // Add Person to se the current session
+                    session.setAttribute(AuthConfig.getSessionPersonName(), person);
                     if (doctor != null) {
                         // The Person is a Doctor
-                        req.getSession().setAttribute(AuthConfig.getSessionDoctorName(), doctor);
+                        session.setAttribute(AuthConfig.getSessionDoctorName(), doctor);
+                    }
+                    if (doctorSpecialist != null) {
+                        // The Person is a Doctor Specialist
+                        session.setAttribute(AuthConfig.getSessionDoctorSpecialistName(), doctorSpecialist);
+                    }
+
+                    // === REMEMBER ME
+                    if (remember) {
+                        // Change session Timeout
+                        session.setMaxInactiveInterval(AuthConfig.getCookieRememberMaxAge());
                     }
                 }
             }
@@ -155,6 +199,7 @@ public final class AuthUtil {
                     if (person != null) {
                         session.removeAttribute(AuthConfig.getSessionPersonName());
                         session.removeAttribute(AuthConfig.getSessionDoctorName());
+                        session.removeAttribute(AuthConfig.getSessionDoctorSpecialistName());
                         session.invalidate();
                     }
                 }

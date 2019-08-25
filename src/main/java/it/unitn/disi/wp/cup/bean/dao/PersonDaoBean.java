@@ -6,6 +6,7 @@ import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.*;
 import it.unitn.disi.wp.cup.util.AuthUtil;
+import it.unitn.disi.wp.cup.util.PersonAvatarUtil;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -78,6 +79,27 @@ public final class PersonDaoBean implements Serializable {
      */
     public Person getAuthPerson() {
         return authPerson;
+    }
+
+    /**
+     * Return the {@link PersonAvatar avatar} of the Authenticated {@link Person person}
+     *
+     * @return The {@link PersonAvatar avatar} of the {@link Person person}
+     */
+    public PersonAvatar getAvatar() {
+        PersonAvatar avatar = null;
+
+        if (authPerson != null && personAvatarDAO != null) {
+            try {
+                avatar = PersonAvatarUtil.checkPersonAvatar(personAvatarDAO.getCurrentByPersonId(authPerson.getId()),
+                        authPerson.getId(),
+                        authPerson.getSex());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the current Person Avatar for the authenticated Person", ex);
+            }
+        }
+
+        return avatar;
     }
 
     /**

@@ -5,13 +5,15 @@ package it.unitn.disi.wp.cup.model.prescription;
  *
  * @author Carlo Corradini
  */
-public class PrescriptionExamModel implements Prescription {
+public class PrescriptionExamModel implements PrescriptionModel {
     private long patientId;
     private long examId;
+    private boolean paid;
 
     PrescriptionExamModel() {
         patientId = 0L;
         examId = 0L;
+        paid = false;
     }
 
     /**
@@ -48,6 +50,24 @@ public class PrescriptionExamModel implements Prescription {
      */
     public void setExamId(long examId) {
         this.examId = examId;
+    }
+
+    /**
+     * Return if the ticket has been paid
+     *
+     * @return True if paid, false otherwise
+     */
+    public boolean isPaid() {
+        return paid;
+    }
+
+    /**
+     * Set if the ticket has been paid
+     *
+     * @param paid True if paid, false otherwise
+     */
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 
     @Override

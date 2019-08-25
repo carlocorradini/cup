@@ -103,28 +103,6 @@ public class PrescriptionExam {
     }
 
     /**
-     * Return the {@code dateTime} as {@link LocalDate date}
-     *
-     * @return {@code dateTime} as {@link LocalDate date}
-     */
-    public LocalDate getDate() {
-        if (dateTime != null)
-            return dateTime.toLocalDate();
-        return null;
-    }
-
-    /**
-     * Return the {@code dateTime} as a {@link LocalTime time}
-     *
-     * @return {@code dateTime} as a {@link LocalTime time}
-     */
-    public LocalTime getTime() {
-        if (dateTime != null)
-            return dateTime.toLocalTime();
-        return null;
-    }
-
-    /**
      * Set the Date and Time of the Prescription Exam
      *
      * @param dateTime Prescription Exam Date and Time
@@ -140,28 +118,6 @@ public class PrescriptionExam {
      */
     public LocalDateTime getDateTimeRegistration() {
         return dateTimeRegistration;
-    }
-
-    /**
-     * Return the {@code dateTimeRegistration} as {@link LocalDate date}
-     *
-     * @return {@code dateTimeRegistration} as {@link LocalDate date}
-     */
-    public LocalDate getDateRegistration() {
-        if (dateTimeRegistration != null)
-            return dateTimeRegistration.toLocalDate();
-        return null;
-    }
-
-    /**
-     * Return the {@code dateTimeRegistration} as a {@link LocalTime time}
-     *
-     * @return {@code dateTimeRegistration} as a {@link LocalTime time}
-     */
-    public LocalTime getTimeRegistration() {
-        if (dateTimeRegistration != null)
-            return dateTimeRegistration.toLocalTime();
-        return null;
     }
 
     /**

@@ -1,6 +1,7 @@
 package it.unitn.disi.wp.cup.filter;
 
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
+import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 
 import javax.servlet.*;
@@ -11,16 +12,16 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
- * Filter that check if the doctor is authenticated (and authorized)
+ * Filter that check if the doctor specialist is authenticated (and authorized)
  *
  * @author Carlo Corradini
  */
 @WebFilter(
-        urlPatterns = {"/dashboard/doctor/*", "/service/restricted/doctor/*"},
+        urlPatterns = {"/service/restricted/medical/*"},
         dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD}
 )
-public final class DoctorAuthFilter implements Filter {
-    private static final String NAME = "DoctorAuthFilter";
+public final class MedicalFilter implements Filter {
+    private static final String NAME = "MedicalFilter";
     private static final boolean DEBUG = true;
     private FilterConfig filterConfig = null;
     private boolean authenticated = false;
@@ -51,6 +52,7 @@ public final class DoctorAuthFilter implements Filter {
         HttpServletRequest req;
         HttpServletResponse resp;
         Doctor doctor;
+        DoctorSpecialist doctorSpecialist;
         if (DEBUG) {
             log(NAME + "DoBeforeProcessing");
         }
@@ -60,7 +62,8 @@ public final class DoctorAuthFilter implements Filter {
             resp = (HttpServletResponse) servletResponse;
 
             doctor = AuthUtil.getAuthDoctor(req);
-            if (doctor == null) {
+            doctorSpecialist = AuthUtil.getAuthDoctorSpecialist(req);
+            if (doctor == null && doctorSpecialist == null) {
                 resp.sendRedirect(resp.encodeRedirectURL(req.getServletContext().getContextPath() + "/signin/index.xhtml"));
             } else {
                 authenticated = true;
@@ -98,16 +101,16 @@ public final class DoctorAuthFilter implements Filter {
                 problem = ex;
                 servletRequest.getServletContext().log("Impossible to propagate to the next filter", ex);
             }
-        }
 
-        doAfterProcessing(servletRequest, servletResponse);
+            doAfterProcessing(servletRequest, servletResponse);
 
-        if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
-            }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
+            if (problem != null) {
+                if (problem instanceof ServletException) {
+                    throw (ServletException) problem;
+                }
+                if (problem instanceof IOException) {
+                    throw (IOException) problem;
+                }
             }
         }
     }
@@ -156,3 +159,4 @@ public final class DoctorAuthFilter implements Filter {
         return sb.toString();
     }
 }
+

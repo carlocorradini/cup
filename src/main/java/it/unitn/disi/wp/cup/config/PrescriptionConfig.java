@@ -65,4 +65,34 @@ public final class PrescriptionConfig extends Config {
 
         return instance.getShort("medicine.maxQuantity");
     }
+
+    /**
+     * Return the Prescription Exam Report Content min Length
+     *
+     * @return Exam Report Content min Length
+     */
+    public static short getExamReportContentMinLength() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Exam Report Content min Length", ex);
+        }
+
+        return instance.getShort("exam.report.content.minLength");
+    }
+
+    /**
+     * Return the Prescription Exam Report Content max Length
+     *
+     * @return Exam Report Content max Length
+     */
+    public static short getExamReportContentMaxLength() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Exam Report Content max Length", ex);
+        }
+
+        return instance.getShort("exam.report.content.maxLength");
+    }
 }

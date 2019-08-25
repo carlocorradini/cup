@@ -1,8 +1,6 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * Entity Prescription Medicine
@@ -82,28 +80,6 @@ public class PrescriptionMedicine {
     }
 
     /**
-     * Return the {@code dateTime} as {@link LocalDate date}
-     *
-     * @return {@code dateTime} as {@link LocalDate date}
-     */
-    public LocalDate getDate() {
-        if (dateTime != null)
-            return dateTime.toLocalDate();
-        return null;
-    }
-
-    /**
-     * Return the {@code dateTime} as a {@link LocalTime time}
-     *
-     * @return {@code dateTime} as a {@link LocalTime time}
-     */
-    public LocalTime getTime() {
-        if (dateTime != null)
-            return dateTime.toLocalTime();
-        return null;
-    }
-
-    /**
      * Set the Date and Time of the Prescription Medicine
      *
      * @param dateTime Prescription Medicine Date and Time
@@ -167,7 +143,8 @@ public class PrescriptionMedicine {
     }
 
     /**
-     * Return the amount of cents to pay for the {@link PrescriptionMedicine Prescription Medicine}
+     * Return the amount of cents to pay for the {@link PrescriptionMedicine Prescription Medicine}.
+     * The amount is calculated as: {@code quantity} * {@code medicine.getPrice}
      *
      * @return The amount of cents to pay
      */

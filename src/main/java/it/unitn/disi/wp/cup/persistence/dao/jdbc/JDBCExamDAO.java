@@ -20,6 +20,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, Long> implements ExamDAO {
     private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM exam";
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM exam WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM exam";
+    private static final String SQL_GET_ALL_QUALIFIED_BY_DOCTOR_SPECIALIST_ID = "SELECT exam_id FROM exam_qualification WHERE doctor_specialist_id = ? ORDER BY exam_id";
 
     /**
      * The default constructor of the class
@@ -116,6 +117,26 @@ public class JDBCExamDAO extends JDBCDAO<Exam, Long> implements ExamDAO {
             }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to get the list of Exams", ex);
+        }
+
+        return exams;
+    }
+
+    @Override
+    public List<Exam> getAllQualifiedByDoctorSpecialistId(Long doctorSpecialistId) throws DAOException {
+        List<Exam> exams = new ArrayList<>();
+        if (doctorSpecialistId == null)
+            throw new DAOException("Doctor Specialist is mandatory", new NullPointerException("Doctor Specialist id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_QUALIFIED_BY_DOCTOR_SPECIALIST_ID)) {
+            pStmt.setLong(1, doctorSpecialistId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                while (rs.next()) {
+                    exams.add(getByPrimaryKey(rs.getLong("exam_id")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the list of Qualified Exams by Doctor Specialist Id", ex);
         }
 
         return exams;

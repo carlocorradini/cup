@@ -30,4 +30,18 @@ public final class PrescriptionConfigBean implements Serializable {
     public short getMedicineMaxQuantity() {
         return PrescriptionConfig.getMedicineMaxQuantity();
     }
+
+    /**
+     * @see PrescriptionConfig#getExamReportContentMinLength()
+     */
+    public short getExamReportMinLength() {
+        return PrescriptionConfig.getExamReportContentMinLength();
+    }
+
+    /**
+     * @see PrescriptionConfig#getExamReportContentMaxLength()
+     */
+    public short getExamReportMaxLength() {
+        return PrescriptionConfig.getExamReportContentMaxLength();
+    }
 }

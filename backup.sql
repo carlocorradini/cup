@@ -2,6 +2,14 @@
 /*-------------------- CREATING DATABASE --------------------*/
 /*-----------------------------------------------------------*/
 
+CREATE DATABASE cup WITH 
+	OWNER = postgres
+	ENCODING = 'UTF8'
+	LC_COLLATE = 'Italian_Italy.1252'
+	LC_CTYPE = 'Italian_Italy.1252'
+	TABLESPACE = pg_default
+	CONNECTION LIMIT = -1;
+
 CREATE TABLE region (
 	id		BIGSERIAL,
 	name		varchar(100)    NOT NULL,
@@ -29,6 +37,7 @@ CREATE TABLE city (
 
 CREATE TABLE report (
 	id		BIGSERIAL,
+	content		varchar(255)	NOT NULL,
 	report_date	timestamp(6)
 			without time
 			zone		NOT NULL	DEFAULT CURRENT_TIMESTAMP,
@@ -119,7 +128,6 @@ CREATE TABLE is_patient (
 	CHECK (person_id != doctor_id)
 );
 	
-
 CREATE TABLE prescription_exam (
 	id		BIGSERIAL,
 	person_id	BIGINT		NOT NULL,
@@ -128,9 +136,10 @@ CREATE TABLE prescription_exam (
 	report_id	BIGINT				UNIQUE,
 	doctor_specialist_id		BIGINT,
 	paid 		BOOLEAN		NOT NULL	DEFAULT FALSE,
+	read		BOOLEAN		NOT NULL	DEFAULT FALSE,
 	prescription_date		timestamp(6)
 					without time
-					zone				DEFAULT CURRENT_TIMESTAMP,
+					zone,
 	prescription_date_registration	timestamp(6)
 					without time
 					zone		NOT NULL	DEFAULT CURRENT_TIMESTAMP,
@@ -168,7 +177,16 @@ CREATE TABLE person_avatar (
 	FOREIGN KEY (person_id) REFERENCES person(id)
 );
 
-
+CREATE TABLE exam_qualification (
+	doctor_specialist_id	BIGINT	NOT NULL,
+	exam_id			BIGINT	NOT NULL,
+	since		timestamp(6)
+			without time
+			zone		NOT NULL	DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (doctor_specialist_id, exam_id),
+	FOREIGN KEY (doctor_specialist_id) REFERENCES doctor_specialist(id),
+	FOREIGN KEY (exam_id) REFERENCES exam(id)
+);
 
 /*-----------------------------------------------------------*/
 /*------------------- POPULATING DATABASE -------------------*/
@@ -9618,6 +9636,7 @@ INSERT INTO person(name, surname, email, password, sex, birth_date, birth_city_i
 	('Elisa', 'Ciraldo', 'elisa.ciraldo@studenti.unitn.it', '$2a$15$8pPu1Pc1.oNVYitaiyaTtOq5EOnGxZIhHKWJE8V6VNQYd517pVJa2', 'F', '1998-09-09', 6408, 'CRLLSE98P49B202R', 7323),
 	('Elisa', 'Lunari', 'elisa.lunari@studenti.unitn.it', '$2a$15$T36cjd10tY/4dpCXu9mbCezzmOx.YvmWZ3.jqGu8MJyxpGOPk72jq', 'F', '1998-10-12', 3593, 'LNRLSE98R52F205S', 2600),
 	('Paolo', 'Feroni', 'pablofero96@gmail.com', '$2a$15$XE/K8NGotwu9pBSPmXHavOyLu9LatLaavh.txgEx9PqQRRTyxZwgS', 'M', '1996-02-11', 7963, 'FRNPLA96B11L781D', 7963),
+	('Salvatore', 'Aranzulla', 'web.prj.cup+god@gmail.com', '$2a$15$LDYDFOrLPJ7i1mCfT.MOl.zDvOpmbQxQ2M3c6n5NUUpQPVqcpZtlm', 'M', '1990-02-24', 6414, 'RNZSVT90B24C351H', 6414),
 	/* minions BERGAMO */ -- 11 su 10
 	('Luca', 'Minuti', 'web.prj.cup+9@gmail.com', '$2a$15$w40fLlB.ixHecW2ib2WnaO2QF3EtkOUDROMeeiN.2QYoEBYomVtD.', 'M', '1969-07-06', 2600, 'MNTLCU69L06A794D', 2600),
 	('Sara', 'Broletti', 'web.prj.cup+10@gmail.com', '$2a$15$3P.htSEDGik5vuZW.VuH3Og9VjUhAyoWXTiKiYviynuFG4zZ0xkfC', 'F', '1972-06-04', 2848, 'SRABLT72H44B157W', 2600),
@@ -9626,7 +9645,7 @@ INSERT INTO person(name, surname, email, password, sex, birth_date, birth_city_i
 	('Francesco', 'Papetti', 'web.prj.cup+2@gmail.com', '$2a$15$IE8g3G0YAmLBq3wMGMzVM.qoV4oz5mmGgzuvtiiFE/PNiwQJslaZ2', 'M', '1985-04-24', 2600, 'PPTFNC85D24A794G', 2600),
 	('Federica', 'Papetti', 'web.prj.cup+3@gmail.com', '$2a$15$EV.SRQ.x.lsoioDL1NGNF.WCBVQpXgbcs2x3Sncs4lPQ72z3qkb7S', 'F', '1980-04-24', 2600, 'PPTFRC80D64A794T', 2600),
 	('Giacomo', 'Papetti', 'web.prj.cup+4@gmail.com', '$2a$15$2Af3pS/kvRGPDmHfRAzbI.PWQ8qeU5tKBMQRzMmK/wj/aQvKHMjwa', 'M', '2005-04-24', 2600, 'PPTGCM05D24A794K', 2600),
-	('Alessandra', 'Mandorla', 'web.prj.cup+5@gmail.com', '$2a$15$EV.SRQ.x.lsoioDL1NGNF.WCBVQpXgbcs2x3Sncs4lPQ72z3qkb7S', 'F', '1979-01-01', 2600, 'MNDLSN79A41A794K', 2600),
+	('Alessandra', 'Mandorla', 'web.prj.cup+5@gmail.com', '$2a$15$lJYrN6LMvyNwV.BZGm.QYOSe0Xzsym6/R944BhLMNRCDb9Fr85tOe', 'F', '1979-01-01', 2600, 'MNDLSN79A41A794K', 2600),
 	('Barbara', 'Mandorla', 'web.prj.cup+6@gmail.com', '$2a$15$l/4mFDu8qx97RkEAf68UM.aW7a0/EjOJHhc1o/lgP1oqY2kbBQXqS', 'F', '1979-01-01', 2600, 'MNDBBR79A41A794S', 2600),
 	('Gianni', 'Mandorla', 'web.prj.cup+7@gmail.com', '$2a$15$UACkzDfIB7ZRymBUnsiYL.2C9u6w/bMZI8GCUZYbwEiWV5qhenwaG', 'M', '1930-01-01', 2600, 'MNDGNN30A01A794Q', 2600),
 	('Aldo', 'Mandorla', 'web.prj.cup+8@gmail.com', '$2a$15$0.myMBrmZwwZhwEqEkMAC.72v.q6XSUiyAsR5xk4qTRjfSMJs5uHe', 'M', '1938-12-17', 2600, 'MNDLDA38T17A794I', 2600), /* <- Miraxh T. */
@@ -9638,40 +9657,40 @@ INSERT INTO person(name, surname, email, password, sex, birth_date, birth_city_i
 	('Marco', 'Lombardi', 'web.prj.cup+16@gmail.com', '$2a$15$gbS8KofKXfM3qsXq52xmdek.0aajNPE.06j.E/hT0zsqbbJ6pjZOy', 'M', '1999-05-29', 7323, 'LMBMRC99E29L378O', 7323),
 	('Diego', 'Lombardi', 'web.prj.cup+17@gmail.com', '$2a$15$4maaEJXj82Lb55g29gfUQOXKcWlCPPaUvf9wJlD960g0wBSFSSLgG', 'M', '2002-01-09', 7323, 'LMBDGI02A09L378H', 7323),
 	('Elisa', 'Potrich', 'web.prj.cup+18@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1996-10-02', 7323, 'PTRLSE92B56L378O', 7323),
-	('Enrico', 'Cosi', 'web.prj.cup+19@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1964-06-16', 7323, 'CSONRC64H16L378X', 7323),
-	('Giacomo', 'Rossetti', 'web.prj.cup+20@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1950-12-18', 7323, 'RSSGCM50T18L378W', 7323),
-	('Martina', 'Bosco', 'web.prj.cup+21@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1972-08-08', 7323, 'BSCMTN73M48L378L', 7323), /* <- Luca S. */
-	('Javier Paolo', 'Pala', 'web.prj.cup+22@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1994-11-04', 7323, 'PLAJRP94S04L378H', 7323),
-	('Zara', 'Camicia', 'web.prj.cup+23@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1969-05-06', 7323, 'CMCZRA69E46L378V', 7323),
-	('Marcello', 'Rigotti', 'web.prj.cup+24@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1975-02-04', 7323, 'RGTMCL75B04L378B', 7323),
-	('Lorenzo', 'Rigotti', 'web.prj.cup+25@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1972-09-28', 7323, 'RGTLNZ72P28L378P', 7323),
-	('Gianni', 'Gregori', 'web.prj.cup+26@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1962-09-23', 7323, 'GRGGNN62P23L378D', 7323),
-	('Giselle', 'Smitch', 'web.prj.cup+27@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1838-02-11', 7323, 'SMTGLL68L63L378N', 7323),
-	('Max', 'Dellai', 'web.prj.cup+28@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1996-10-02', 7323, 'DLLMXA83B11L378W', 7323),
-	('Antonio', 'Dellai', 'web.prj.cup+29@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1946-09-14', 7323, 'DLLNTN46P14L378E', 7323),
-	('Matteo', 'Dellai', 'web.prj.cup+30@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1968-05-10', 7323, 'DLLMTT68E10L378P', 7323), /* <- Carlo C. */
-	('Mattea', 'Vesto', 'web.prj.cup+31@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1987-10-17', 7323, 'VSTMTT87R57L378F', 7323),
-	('Gian Vittorio', 'Dal Prà', 'web.prj.cup+32@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1996-10-02', 7323, 'DLPGVT70L11L378S', 7317),
-	('Fabio', 'Dal Prà', 'web.prj.cup+33@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '2006-11-23', 7323, 'DLPFBA06S23L378U', 7317),
-	('Susanna', 'Dal Prà', 'web.prj.cup+34@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1979-07-15', 7323, 'DLPSNN79L55L378I', 7317),
-	('Giulia', 'Bicetti', 'web.prj.cup+35@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1974-11-06', 7323, 'BCTGLI74S46L378A', 7317),
-	('Ginevra', 'Bicetti', 'web.prj.cup+36@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1993-07-25', 7323, 'BCTGVR93L65L378K', 7317),
-	('Viviana', 'Aldrighetti', 'web.prj.cup+37@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '2003-02-19', 7323, 'LDRVVN03B59L378D', 7317),
-	('Tonio', 'Aldrighetti', 'web.prj.cup+38@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1950-02-02', 7323, 'LDRTNO50B02L378A', 7317),
-	('Agnese', 'Cappelletti', 'web.prj.cup+39@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1972-12-16', 7323, 'CPPGNS72T56L378I', 7317),
-	('Marta', 'Ginossa', 'web.prj.cup+40@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1974-09-26', 7317, 'GNSMRT74P66L174V', 7317),
-	('Valentina', 'Franchi', 'web.prj.cup+41@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1992-07-21', 7317, 'FRNVNT92L61L174O', 7317), /* <- Grigore A. */
+	('Enrico', 'Cosi', 'web.prj.cup+19@gmail.com', '$2a$15$LYfSkrhpOol9n4JvCcLYAeSn8.c/iBo96M53ENfkXlJBNxAXmWmTK', 'M', '1964-06-16', 7323, 'CSONRC64H16L378X', 7323),
+	('Giacomo', 'Rossetti', 'web.prj.cup+20@gmail.com', '$2a$15$KC9ATuxG0OHeRhYJ6XgRFOjz8yHNavv.66/N1RmQI5P.EO6to2eCS', 'M', '1950-12-18', 7323, 'RSSGCM50T18L378W', 7323),
+	('Martina', 'Bosco', 'web.prj.cup+21@gmail.com', '$2a$15$i5q/B3SkyY34kovp6X3aruaOFIQFo8xgIOUNA0jRNHwfPM3WDl3t6', 'F', '1972-08-08', 7323, 'BSCMTN73M48L378L', 7323), /* <- Luca S. */
+	('Javier Paolo', 'Pala', 'web.prj.cup+22@gmail.com', '$2a$15$Yn.8bGTo2dGinSbKZxMVlOLTfA7/jZKfedjs3otXrZyprEYU8x9CO', 'M', '1994-11-04', 7323, 'PLAJRP94S04L378H', 7323),
+	('Zara', 'Camicia', 'web.prj.cup+23@gmail.com', '$2a$15$ZxrE1z4balS.BOwKKwtZoOmlQCjuQ/BZDXXj0ptAuedg.bRDBsC4m', 'F', '1969-05-06', 7323, 'CMCZRA69E46L378V', 7323),
+	('Marcello', 'Rigotti', 'web.prj.cup+24@gmail.com', '$2a$15$L31hXdBFmdJ63LDfbOKcKeO.d6uf6BosiLaLG.03dXH1k2MLIfkgu', 'M', '1975-02-04', 7323, 'RGTMCL75B04L378B', 7323),
+	('Lorenzo', 'Rigotti', 'web.prj.cup+25@gmail.com', '$2a$15$Nb1iU7aOYDxQuD4fUQNyweFmnFfi4I0rfRBcOQhGFtM.h2Wtk7QBq', 'M', '1972-09-28', 7323, 'RGTLNZ72P28L378P', 7323),
+	('Gianni', 'Gregori', 'web.prj.cup+26@gmail.com', '$2a$15$RUqjzS1eEEsosap4h8EwFuNkM5ePxE7k/qxTenzVtn2m2DvVpen7S', 'M', '1962-09-23', 7323, 'GRGGNN62P23L378D', 7323),
+	('Giselle', 'Smitch', 'web.prj.cup+27@gmail.com', '$2a$15$jXNTuqUl/gHNVLJb1FefQuWTrrOjV3C9yIuber8AKAdfZvLEYl3fC', 'F', '1838-02-11', 7323, 'SMTGLL68L63L378N', 7323),
+	('Max', 'Dellai', 'web.prj.cup+28@gmail.com', '$2a$15$qMOLdKGtg3eUzRId5uNt8uiX2tApTP0I3EjZHGHqe4uB94seeGZYi', 'M', '1996-10-02', 7323, 'DLLMXA83B11L378W', 7323),
+	('Antonio', 'Dellai', 'web.prj.cup+29@gmail.com', '$2a$15$vEYD2bmkcfP5qYUlAU6Y8OAcEH5Irottai/MMXZdHeRkhJ.MaU31m', 'M', '1946-09-14', 7323, 'DLLNTN46P14L378E', 7323),
+	('Matteo', 'Dellai', 'web.prj.cup+30@gmail.com', '$2a$15$K1Wap3h9cHotidJvxCrlSOMApx9llF8pJFyOPgV.29dYWCKNA4.Dy', 'M', '1968-05-10', 7323, 'DLLMTT68E10L378P', 7323), /* <- Carlo C. */
+	('Mattea', 'Vesto', 'web.prj.cup+31@gmail.com', '$2a$15$MLC2bjHsbL8hdWn0P5ro5eJjTOml7jEk7a/AmydBFMPgrtmvrSw9C', 'F', '1987-10-17', 7323, 'VSTMTT87R57L378F', 7323),
+	('Gian Vittorio', 'Dal Prà', 'web.prj.cup+32@gmail.com', '$2a$15$97YkoSapBmnkNwNgrnZfL.mOn66pdsFGSoVX3fxJ7690oJtB6cKPC', 'M', '1996-10-02', 7323, 'DLPGVT70L11L378S', 7317),
+	('Fabio', 'Dal Prà', 'web.prj.cup+33@gmail.com', '$2a$15$XTu5MwwWkbjHJ6WLcFv7p.Rl0VBApFDVNmSh.V4LfKPAszX6E3AfS', 'M', '2006-11-23', 7323, 'DLPFBA06S23L378U', 7317),
+	('Susanna', 'Dal Prà', 'web.prj.cup+34@gmail.com', '$2a$15$QMm.jfRlS2PFNPWVbXq38e9UGvWfLJSJhI6Mn82a0R3CAzBhj9ivy', 'F', '1979-07-15', 7323, 'DLPSNN79L55L378I', 7317),
+	('Giulia', 'Bicetti', 'web.prj.cup+35@gmail.com', '$2a$15$X4ZzeicjICF8btsR4yh6Du2zNXxM0AmQ2aF0Be1US/fd.w7Ra1puO', 'F', '1974-11-06', 7323, 'BCTGLI74S46L378A', 7317),
+	('Ginevra', 'Bicetti', 'web.prj.cup+36@gmail.com', '$2a$15$boKwFqxH9xQuB0NJ1QXuA.CfwsAfANs.4qPRIh70j9njAWlVgIVmu', 'F', '1993-07-25', 7323, 'BCTGVR93L65L378K', 7317),
+	('Viviana', 'Aldrighetti', 'web.prj.cup+37@gmail.com', '$2a$15$4cZGDRIIgJPrBHQef2xH3u0.zfBF0dEkLk7vUQrtfqoXWeV9YVcae', 'F', '2003-02-19', 7323, 'LDRVVN03B59L378D', 7317),
+	('Tonio', 'Aldrighetti', 'web.prj.cup+38@gmail.com', '$2a$15$ECZ4WV07RpCmK3FwjbKCouvUfQBes1lp4pRn2tFoKJ5qQgL/KAYbW', 'M', '1950-02-02', 7323, 'LDRTNO50B02L378A', 7317),
+	('Agnese', 'Cappelletti', 'web.prj.cup+39@gmail.com', '$2a$15$iPV3i9fHdxzvhdsyVMC5mOaIJAdZxre9iOB9Wqsi3dQeiXEmDpj6S', 'F', '1972-12-16', 7323, 'CPPGNS72T56L378I', 7317),
+	('Marta', 'Ginossa', 'web.prj.cup+40@gmail.com', '$2a$15$eN/tdPbcPkXI8Sy7F27KceoSVWZpRWefbrhk09UdQ9dEwdW9WW7EK', 'F', '1974-09-26', 7317, 'GNSMRT74P66L174V', 7317),
+	('Valentina', 'Franchi', 'web.prj.cup+41@gmail.com', '$2a$15$20Nj7biQJKcy7rgMKn3tC.ZGAmT2OYbfGekT.SoyNpdasLVrs0gKK', 'F', '1992-07-21', 7317, 'FRNVNT92L61L174O', 7317), /* <- Grigore A. */
 	/* minions TIONE */ -- 10 su 10
-	('Martina', 'Franchi', 'web.prj.cup+42@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1996-10-02', 7317, 'FRNMTN95T55L174S', 7317),
-	('Cristina', 'Franchi', 'web.prj.cup+43@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '2000-04-09', 7317, 'FRNCST00D49L174N', 7317),
-	('Aldo', 'Franchi', 'web.prj.cup+44@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1968-07-15', 7317, 'FRNLDA68L15L174G', 7317),
-	('Ivan', 'Bonetti', 'web.prj.cup+45@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1998-07-07', 7317, 'BNTVNI98L07L174X', 7317),
-	('Viola', 'Bonetti', 'web.prj.cup+46@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1992-09-17', 7317, 'BNTVLI92P57L174F', 7317),
-	('Massimo', 'Bonetti', 'web.prj.cup+47@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1975-12-17', 7317, 'BNTMSM75T17L174O', 7317),
-	('Nicola', 'Maucione', 'web.prj.cup+48@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'M', '1993-07-28', 7317, 'MCNNCL93L28L174P', 7317),
-	('Ilaria', 'Colombo', 'web.prj.cup+49@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1995-11-17', 7317, 'CLMLRI95S57L174S', 7317),
-	('Rosa', 'Franca', 'web.prj.cup+50@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '1987-11-12', 7317, 'FRNRSO87S52L174M', 7317),
-	('Bignotti', 'Beatrice', 'web.prj.cup+51@gmail.com', '$2a$15$o17/D.tGNccu7hd2xS7aeuZGGbssgHMzSg.DeMIxlQ7O8VuT9XMO6', 'F', '2005-12-12', 7317, 'BGNBRC05T52L174Q', 7317); /* <- Ayoub S. */
+	('Martina', 'Franchi', 'web.prj.cup+42@gmail.com', '$2a$15$er7xDvI5xHRiufdHdi1p2ez3xehBrL67uec0mpA6lWMb7wMRwjXXe', 'F', '1996-10-02', 7317, 'FRNMTN95T55L174S', 7317),
+	('Cristina', 'Franchi', 'web.prj.cup+43@gmail.com', '$2a$15$A3NY.Lx9Jvt9QtUxeDUo3.e4Is.RoqmNzDRDktSfosgsuDu29r2am', 'F', '2000-04-09', 7317, 'FRNCST00D49L174N', 7317),
+	('Aldo', 'Franchi', 'web.prj.cup+44@gmail.com', '$2a$15$3Tl8N1.QaPGvsDIBXMPhQOQkOi739DCsGgt0LR0023/jvSgPjJyDK', 'M', '1968-07-15', 7317, 'FRNLDA68L15L174G', 7317),
+	('Ivan', 'Bonetti', 'web.prj.cup+45@gmail.com', '$2a$15$eNH0P47sBqYliOd2PQgiQOnJGfyTWWFKfbQ/Quwtqylipq9kkBK.S', 'M', '1998-07-07', 7317, 'BNTVNI98L07L174X', 7317),
+	('Viola', 'Bonetti', 'web.prj.cup+46@gmail.com', '$2a$15$owA23kZQfVJQ9WsRHiSmRuU8f2G3Gh6gKSQQtgJGzv0PX21D6UhjS', 'F', '1992-09-17', 7317, 'BNTVLI92P57L174F', 7317),
+	('Massimo', 'Bonetti', 'web.prj.cup+47@gmail.com', '$2a$15$KZY9XQiBum6kVvpHcRNPxeGLcKOrak.ckKbb9oeQRTpJtYXdar66q', 'M', '1975-12-17', 7317, 'BNTMSM75T17L174O', 7317),
+	('Nicola', 'Maucione', 'web.prj.cup+48@gmail.com', '$2a$15$ldEa28cfEaiwcbN5Ag3vnewry8g1mNSlhXvkCs7zws47X.worwpa.', 'M', '1993-07-28', 7317, 'MCNNCL93L28L174P', 7317),
+	('Ilaria', 'Colombo', 'web.prj.cup+49@gmail.com', '$2a$15$QvCV3QeSYff7zM81Jn8IGehCCBN1DDBQ/ZOYrAee8Y4oJMu/HtBPi', 'F', '1995-11-17', 7317, 'CLMLRI95S57L174S', 7317),
+	('Rosa', 'Franca', 'web.prj.cup+50@gmail.com', '$2a$15$raSSubVpByzmkz5rlpUe5..RJ7bewa/h2s18EbgB2HSSR5o3tnmA6', 'F', '1987-11-12', 7317, 'FRNRSO87S52L174M', 7317),
+	('Beatrice', 'Bignotti', 'web.prj.cup+51@gmail.com', '$2a$15$wLCO/POGNA21oU7YoCT6tunqN79uP5ceApoVbFjrsNvzJi6a.9Ouu', 'F', '2005-12-12', 7317, 'BGNBRC05T52L174Q', 7317); /* <- Ayoub S. */
 
 INSERT INTO doctor(id) VALUES
 	((SELECT id FROM person WHERE fiscal_code='CRRCRL98T24L378T')), /* 10 pazienti */
@@ -9682,7 +9701,8 @@ INSERT INTO doctor(id) VALUES
 
 INSERT INTO doctor_specialist(id) VALUES
 	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I')),
-	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'));
+	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'));
 
 INSERT INTO is_patient(person_id, doctor_id) VALUES
 	((SELECT id FROM person WHERE fiscal_code='CRLLSE98P49B202R'),(SELECT id FROM person WHERE fiscal_code='CRRCRL98T24L378T')),
@@ -9737,3 +9757,79 @@ INSERT INTO is_patient(person_id, doctor_id) VALUES
 	((SELECT id FROM person WHERE fiscal_code='CPPGNS72T56L378I'),(SELECT id FROM person WHERE fiscal_code='NDRGGR98R12E472H')),
 	((SELECT id FROM person WHERE fiscal_code='GNSMRT74P66L174V'),(SELECT id FROM person WHERE fiscal_code='NDRGGR98R12E472H')),
 	((SELECT id FROM person WHERE fiscal_code='FRNVNT92L61L174O'),(SELECT id FROM person WHERE fiscal_code='NDRGGR98R12E472H'));
+
+INSERT INTO exam_qualification(doctor_specialist_id, exam_id) VALUES
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con reazione polimerasica a catena')),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con ibridazione sonde non radiomarcate')),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con ibridazione sonde radiomarcate')),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con reverse dot blot')),				/* Alice */
+	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'),	(SELECT id FROM exam WHERE name='Virus epatite B (HBV) Anticorpi Hbeag')),
+	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'),	(SELECT id FROM exam WHERE name='Virus epatite B (HBV) Antigeni Hbeag')),					/* Paolo */
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di amniociti')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di cellule o tessuti')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di fibroblasti')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di linee cellulari stabilizzate con virus')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di linee linfocitarie stabilizzate con virus o interleuchina'));	/* Aranzulla */
+
+INSERT INTO person_avatar(person_id, name) VALUES
+	((SELECT id FROM person WHERE fiscal_code='CRRCRL98T24L378T'), '1_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SNTLCU96R02L781V'), '2_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SGHYBA97M28L174X'), '3_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='TRZMXH98B14A794Q'), '4_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='NDRGGR98R12E472H'), '5_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'), '6_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='CRLLSE98P49B202R'), '7_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LNRLSE98R52F205S'), '8_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'), '9_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'), '10_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PLAJRP94S04L378H'), '32_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='CMCZRA69E46L378V'), '33_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='RGTMCL75B04L378B'), '34_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='RGTLNZ72P28L378P'), '35_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='GRGGNN62P23L378D'), '36_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SMTGLL68L63L378N'), '37_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLLMXA83B11L378W'), '38_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLLNTN46P14L378E'), '39_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLLMTT68E10L378P'), '40_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SNTRRT59E01F205H'), '22_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SNTSMN89R21L781G'), '23_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LMBTZN58C65L781W'), '24_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='RLNNLC00H55L378I'), '25_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LMBMRC99E29L378O'), '26_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LMBDGI02A09L378H'), '27_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PTRLSE92B56L378O'), '28_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='CSONRC64H16L378X'), '29_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='RSSGCM50T18L378W'), '30_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BSCMTN73M48L378L'), '31_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNMTN95T55L174S'), '52_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNCST00D49L174N'), '53_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNLDA68L15L174G'), '54_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BNTVNI98L07L174X'), '55_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BNTVLI92P57L174F'), '56_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BNTMSM75T17L174O'), '57_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MCNNCL93L28L174P'), '58_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='CLMLRI95S57L174S'), '59_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNRSO87S52L174M'), '60_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BGNBRC05T52L174Q'), '61_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCU69L06A794D'), '11_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='SRABLT72H44B157W'), '12_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNTLSE02B51A794L'), '13_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PPTGCR60D24A794Y'), '14_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PPTFNC85D24A794G'), '15_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PPTFRC80D64A794T'), '16_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='PPTGCM05D24A794K'), '17_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNDLSN79A41A794K'), '18_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNDBBR79A41A794S'), '19_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNDGNN30A01A794Q'), '20_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='MNDLDA38T17A794I'), '21_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='VSTMTT87R57L378F'), '41_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLPGVT70L11L378S'), '42_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLPFBA06S23L378U'), '43_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='DLPSNN79L55L378I'), '44_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BCTGLI74S46L378A'), '45_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='BCTGVR93L65L378K'), '46_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LDRVVN03B59L378D'), '47_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='LDRTNO50B02L378A'), '48_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='CPPGNS72T56L378I'), '49_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='GNSMRT74P66L174V'), '50_23-08-19_10-51-39'),
+	((SELECT id FROM person WHERE fiscal_code='FRNVNT92L61L174O'), '51_23-08-19_10-51-39');

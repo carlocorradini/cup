@@ -1,5 +1,8 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import it.unitn.disi.wp.cup.config.AppConfig;
 import it.unitn.disi.wp.cup.config.AuthConfig;
 import it.unitn.disi.wp.cup.persistence.dao.*;
@@ -35,7 +38,7 @@ import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,7 +93,6 @@ public class PersonService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String changeAvatar(
-            @DefaultValue("true") @FormDataParam("enabled") boolean enabled,
             @FormDataParam("avatar") InputStream avatarInputStream,
             @FormDataParam("avatar") FormDataContentDisposition avatarDetail) {
 
@@ -239,6 +241,50 @@ public class PersonService {
         }
 
         return message.toJsonString();
+    }
+
+    /**
+     * Update the passed {@link PrescriptionExam prescription exams} identified as {@code ids} as read
+     *
+     * @param ids The {@link List list} of {@link PrescriptionExam} ids to update as read
+     * @return A {@link List list} of ids representing the {@link PrescriptionExam} that has been updated
+     */
+    @POST
+    @Path("readExam")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String readExam(final List<Long> ids) {
+        JSONObject object = new JSONObject();
+        List<PrescriptionExam> exams = new ArrayList<>();
+        JSONArray read = new JSONArray();
+
+        if (person != null && prescriptionExamDAO != null && ids != null && !ids.isEmpty()) {
+            try {
+                for (Long id : ids) {
+                    PrescriptionExam exam;
+                    if ((exam = prescriptionExamDAO.getByPrimaryKey(id)) != null
+                            && exam.getPersonId().equals(person.getId())) {
+                        // The Prescription Exam exists
+                        // The Prescription Exam is owned by the authenticated Person
+                        exam.setRead(true);
+                        exams.add(exam);
+                    }
+                }
+
+                // Filtered exams, update them
+                for (PrescriptionExam exam : exams) {
+                    if (prescriptionExamDAO.update(exam)) {
+                        read.add(exam.getId());
+                    }
+                }
+
+                object.put("ids", read);
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to update as read Exams", ex);
+            }
+        }
+
+        return JSON.toJSONString(object);
     }
 
     /**

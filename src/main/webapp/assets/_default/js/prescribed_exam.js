@@ -16,7 +16,8 @@ function prescribedExamConfig() {
         }
     };
 
-    pExam.$table.tablesort();
+    // Enable Datatable
+    pExam.$table.DataTable();
 
     // Enable Report Modal
     pExam.report.$modalContainer.find(pExam.report.modalClass).each(function (index, element) {

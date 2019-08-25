@@ -1,8 +1,6 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -45,28 +43,6 @@ public class Report {
     }
 
     /**
-     * Return the {@code dateTime} as {@link LocalDate date}
-     *
-     * @return {@code dateTime} as {@link LocalDate date}
-     */
-    public LocalDate getDate() {
-        if (dateTime != null)
-            return dateTime.toLocalDate();
-        return null;
-    }
-
-    /**
-     * Return the {@code dateTime} as a {@link LocalTime time}
-     *
-     * @return {@code dateTime} as a {@link LocalTime time}
-     */
-    public LocalTime getTime() {
-        if (dateTime != null)
-            return dateTime.toLocalTime();
-        return null;
-    }
-
-    /**
      * Set the Date and Time of the Report
      *
      * @param dateTime Report Date and Time
@@ -93,18 +69,38 @@ public class Report {
         this.content = content;
     }
 
+    /**
+     * Return the suggested exams of the Report
+     *
+     * @return Suggested exams of the Report
+     */
     public List<Exam> getExams() {
         return exams;
     }
 
+    /**
+     * Set the suggested exams of the Report
+     *
+     * @param exams Suggested exams of the Report
+     */
     public void setExams(List<Exam> exams) {
         this.exams = exams;
     }
 
+    /**
+     * Return the suggested medicines of the Report
+     *
+     * @return Suggested medicines of the Report
+     */
     public List<Medicine> getMedicines() {
         return medicines;
     }
 
+    /**
+     * Set the suggested medicines of the Report
+     *
+     * @param medicines Suggested medicines of the Report
+     */
     public void setMedicines(List<Medicine> medicines) {
         this.medicines = medicines;
     }

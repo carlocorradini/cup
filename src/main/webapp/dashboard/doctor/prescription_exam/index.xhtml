@@ -108,6 +108,17 @@
                             </div>
                         </div>
 
+                        <div class="field">
+                            <label>#{i18n["common.paid"]}</label>
+                            <div class="ui fluid toggle checkbox" id="prescription-exam-paid-checkbox">
+                                <input type="checkbox" tabindex="0" class="hidden"/>
+                                <label data-paid="#{i18n['common.paid']}"
+                                       data-paid-not="#{i18n['common.paidNot']}">
+                                    #{i18n["common.paidNot"]}
+                                </label>
+                            </div>
+                        </div>
+
                         <div class="ui blue fluid big button submit" tabindex="0" id="prescription-exam-button">
                             <i class="syringe icon"/>
                             #{i18n["common.prescribe"]}

@@ -1,0 +1,133 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+>
+    <ui:define name="title">#{i18n["common.dashboard.specialist"]}</ui:define>
+
+    <ui:define name="js">
+        <h:outputScript library="datatables"
+                        name="js/datatables.min.js"
+                        target="body"/>
+        <h:outputScript library="_default"
+                        name="js/dashboard_doctor_specialist.js"
+                        target="body"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <ui:fragment rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
+
+            <h2 class="ui center aligned icon header">
+                <i class="street view icon"/>
+                #{person.authPerson.fullNameCapitalized}
+                <br/>
+                <span class="text-smaller-33 text-light">
+                <h:outputText value="#{doctorSpecialist.authDoctorSpecialist.since}">
+                    <f:convertDateTime type="localDate"/>
+                </h:outputText>
+                </span>
+            </h2>
+
+            <div class="ui divider"></div>
+
+            <div class="ui two statistics">
+                <div class="statistic">
+                    <div class="label">
+                        #{i18n["common.assignedVisits"]}
+                    </div>
+                    <div class="value">
+                        #{doctorSpecialist.assignedToDoPrescriptionExamCount}
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="label">
+                        #{i18n["common.total.assignedVisits"]}
+                    </div>
+                    <div class="value">
+                        #{doctorSpecialist.assignedPrescriptionExamCount}
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <div class="ui top attached tabular menu" id="dashboard-doctor-specialist-tab">
+                <a class="item active" data-tab="qualification">
+                    <i class="certificate icon"/>
+                    <span>#{i18n["common.qualifications"]}</span>
+                </a>
+                <a class="item" data-tab="services">
+                    <i class="compass outline icon"/>
+                    <span>#{i18n["common.services"]}</span>
+                </a>
+            </div>
+
+            <div class="ui bottom attached tab segment active" data-tab="qualification">
+                <ui:fragment rendered="#{empty doctorSpecialist.qualifiedExams}">
+                    <div class="ui icon floating message">
+                        <i class="info circle icon"/>
+                        <div class="content">
+                            <div class="header">
+                                #{i18n["dashboard.specialist.qualifiedExam.empty.message"]}
+                            </div>
+                            <p>#{i18n["dashboard.specialist.qualifiedExam.empty.subMessage"]}</p>
+                        </div>
+                    </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{not empty doctorSpecialist.qualifiedExams}">
+                    <table class="ui celled striped sortable table"
+                           id="dashboard-doctor-specialist-qualification-table">
+                        <thead>
+                        <tr>
+                            <th>#{i18n["common.id"]}</th>
+                            <th>#{i18n["common.name"]}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{doctorSpecialist.qualifiedExams}" var="qe">
+                            <tr>
+                                <td>#{qe.id}</td>
+                                <td>#{qe.name}</td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
+                </ui:fragment>
+            </div>
+
+            <div class="ui bottom attached tab segment" data-tab="services">
+                <div class="ui centered cards">
+                    <h:link outcome="/dashboard/specialist/visit_assigned/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/visit.svg"
+                                            alt="#{i18n['common.assignedVisits']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.assignedVisits"])}
+                        </div>
+                    </h:link>
+                    <h:link outcome="/dashboard/specialist/visit_all/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/visit_check.svg"
+                                            alt="#{i18n['common.total.assignedVisits']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.total.assignedVisits"])}
+                        </div>
+                    </h:link>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+        </ui:fragment>
+    </ui:define>
+</ui:composition>

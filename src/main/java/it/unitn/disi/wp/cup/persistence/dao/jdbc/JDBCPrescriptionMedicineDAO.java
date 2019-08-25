@@ -158,7 +158,7 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
     public Long add(PrescriptionMedicine prescriptionMedicine) throws DAOException {
         Long id = null;
         if (prescriptionMedicine == null)
-            throw new DAOException("Prescription Medicine is mandatory", new NullPointerException());
+            throw new DAOException("Prescription Medicine is mandatory", new NullPointerException("Prescription Medicine is null"));
 
         try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_ADD, Statement.RETURN_GENERATED_KEYS)) {
             pStmt.setLong(1, prescriptionMedicine.getPersonId());

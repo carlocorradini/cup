@@ -41,7 +41,7 @@
                     <h:graphicImage id="sidebar-avatar-image"
                                     styleClass="person-avatar"
                                     library="_default"
-                                    name="#{person.authPerson.avatar.nameAsResource}"
+                                    name="#{person.avatar.nameAsResource}"
                                     alt="Avatar"
                     />
                 </div>
@@ -70,9 +70,15 @@
                 <i class="user md icon"/>
                 #{i18n["common.dashboard.doctor"]}
             </h:link>
+            <h:link outcome="/dashboard/specialist/index"
+                    styleClass="item"
+                    rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
+                <i class="street view icon"/>
+                #{i18n["common.dashboard.specialist"]}
+            </h:link>
 
             <div class="item">
-                <div class="header">#{i18n["common.services"]}</div>
+                <div class="header">#{i18n["common.personal"]}</div>
                 <div class="menu">
                     <h:link outcome="/dashboard/private/report/index"
                             styleClass="item">
@@ -81,34 +87,53 @@
                     </h:link>
                     <h:link outcome="/dashboard/private/exam/index"
                             styleClass="item">
-                        <span class="ui yellow empty circular label"/>
                         #{i18n["common.exams"]}
+                        <span class="ui yellow empty circular label"/>
                     </h:link>
                     <h:link outcome="/dashboard/private/prescription/index"
                             styleClass="item">
-                        <span class="ui green empty circular label"/>
                         #{i18n["common.prescriptions"]}
+                        <span class="ui green empty circular label"/>
                     </h:link>
                 </div>
             </div>
+
             <ui:fragment rendered="#{not empty doctor.authDoctor}">
                 <div class="item">
-                    <div class="header">#{i18n["common.patients"]}</div>
+                    <div class="header">#{i18n["common.doctor"]}</div>
                     <div class="menu">
                         <h:link outcome="/dashboard/doctor/patients/index"
                                 styleClass="item">
+                            #{i18n["common.patients"]}
                             <span class="ui red empty circular label"/>
-                            #{i18n["common.list"]}
                         </h:link>
                         <h:link outcome="/dashboard/doctor/prescription_medicine/index"
                                 styleClass="item">
-                            <span class="ui yellow empty circular label"/>
                             #{i18n["common.prescriptionMedicine"]}
+                            <span class="ui yellow empty circular label"/>
                         </h:link>
                         <h:link outcome="/dashboard/doctor/prescription_exam/index"
                                 styleClass="item">
-                            <span class="ui green empty circular label"/>
                             #{i18n["common.prescriptionExam"]}
+                            <span class="ui green empty circular label"/>
+                        </h:link>
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
+                <div class="item">
+                    <div class="header">#{i18n["common.specialist"]}</div>
+                    <div class="menu">
+                        <h:link outcome="/dashboard/specialist/visit_assigned/index"
+                                styleClass="item">
+                            #{i18n["common.assignedVisits"]}
+                            <span class="ui red label">#{doctorSpecialist.assignedToDoPrescriptionExamCount}</span>
+                        </h:link>
+                        <h:link outcome="/dashboard/specialist/visit_all/index"
+                                styleClass="item">
+                            #{i18n["common.total.assignedVisits"]}
+                            <span class="ui yellow empty circular label"/>
                         </h:link>
                     </div>
                 </div>
