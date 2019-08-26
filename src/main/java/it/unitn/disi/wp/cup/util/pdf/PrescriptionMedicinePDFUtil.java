@@ -10,7 +10,6 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
-import it.unitn.disi.wp.cup.util.CalendarUtil;
 import it.unitn.disi.wp.cup.util.ImageUtil;
 import it.unitn.disi.wp.cup.util.QRCodeUtil;
 import org.apache.pdfbox.pdmodel.PDDocument;
