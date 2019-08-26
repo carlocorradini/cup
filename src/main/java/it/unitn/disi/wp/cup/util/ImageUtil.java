@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 public final class ImageUtil {
 
     private static final Logger LOGGER = Logger.getLogger(ImageUtil.class.getName());
+    public static ServletContext SERVLET_CONTEXT = null;
     private static BufferedImage LOGO = null;
     private static BufferedImage OK = null;
     private static BufferedImage OK_NOT = null;
@@ -32,18 +33,31 @@ public final class ImageUtil {
         if (servletContext == null)
             throw new NullPointerException("ServletContext cannot be null");
 
+        SERVLET_CONTEXT = servletContext;
+
         try {
-            LOGO = ImageIO.read(new File(FilenameUtils.separatorsToUnix(servletContext.getRealPath("/") + "assets/_default/images/favicon/android-chrome-512x512.png")));
-            OK = ImageIO.read(new File(FilenameUtils.separatorsToUnix(servletContext.getRealPath("/") + "assets/_default/images/ui/ok.png")));
-            OK_NOT = ImageIO.read(new File(FilenameUtils.separatorsToUnix(servletContext.getRealPath("/") + "assets/_default/images/ui/ok_not.png")));
+            LOGO = ImageIO.read(new File(FilenameUtils.separatorsToUnix(SERVLET_CONTEXT.getRealPath("/") + "assets/_default/images/favicon/android-chrome-512x512.png")));
+            OK = ImageIO.read(new File(FilenameUtils.separatorsToUnix(SERVLET_CONTEXT.getRealPath("/") + "assets/_default/images/ui/ok.png")));
+            OK_NOT = ImageIO.read(new File(FilenameUtils.separatorsToUnix(SERVLET_CONTEXT.getRealPath("/") + "assets/_default/images/ui/ok_not.png")));
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Unable to retrieve images for ImageUtil", ex);
         }
     }
 
     private static void isConfigured() throws NullPointerException {
-        if (LOGO == null)
+        if (SERVLET_CONTEXT == null)
             throw new NullPointerException("ImageUtil has not been configured");
+    }
+
+    /**
+     * Return the real Image Path on the Server
+     *
+     * @return Image Path on the Server
+     * @throws NullPointerException If ImageUtil has not been configured
+     */
+    public static String getImagePath() throws NullPointerException {
+        isConfigured();
+        return SERVLET_CONTEXT.getRealPath("/") + "/assets/_default";
     }
 
     /**

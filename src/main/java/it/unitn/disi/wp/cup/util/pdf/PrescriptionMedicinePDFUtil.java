@@ -24,6 +24,8 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -119,6 +121,8 @@ public final class PrescriptionMedicinePDFUtil {
 
             PDImageXObject qrCode = JPEGFactory.createFromImage(document, QRCodeUtil.generate(JSON.toJSONString(prescriptionMedicine)));
             PDImageXObject logo = JPEGFactory.createFromImage(document, ImageUtil.getLOGO());
+            PDImageXObject ok = JPEGFactory.createFromImage(document, ImageUtil.getOK());
+            PDImageXObject notOk = JPEGFactory.createFromImage(document, ImageUtil.getOkNot());
             contentStream.drawImage(qrCode, 30, 670, 100, 100);
             contentStream.drawImage(logo, 480, 670, 100, 100);
 
@@ -129,11 +133,13 @@ public final class PrescriptionMedicinePDFUtil {
             contentStream.showText(title);
             contentStream.endText();
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.ITALY);
+            String time = formatter.format(LocalTime.now());
             contentStream.beginText();
             contentStream.setFont(fontBold, fontSize);
             contentStream.setNonStrokingColor(Color.GRAY);
             contentStream.newLineAtOffset(480, 10);
-            contentStream.showText("MEDICO: ");
+            contentStream.showText(""+ LocalDate.now() + "   " + time);
             contentStream.endText();
 
             contentStream.beginText();
@@ -176,8 +182,8 @@ public final class PrescriptionMedicinePDFUtil {
             contentStream.showText("" + prescriptionMedicine.getDateTime().toLocalDate());
             contentStream.endText();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.ITALY);
-            String f = formatter.format(prescriptionMedicine.getDateTime().toLocalTime());
+            DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("HH:mm", Locale.ITALY);
+            String f = formatter1.format(prescriptionMedicine.getDateTime().toLocalTime());
             contentStream.beginText();
             contentStream.setFont(fontBold, fontSize);
             contentStream.setNonStrokingColor(Color.BLACK);
@@ -218,7 +224,24 @@ public final class PrescriptionMedicinePDFUtil {
             contentStream.showText("" + prescriptionMedicine.getQuantity());
             contentStream.endText();
 
-
+            if(prescriptionMedicine.getPaid()){
+                contentStream.beginText();
+                contentStream.setFont(fontBold, fontSize);
+                contentStream.setNonStrokingColor(Color.BLACK);
+                contentStream.newLineAtOffset(150, 520);
+                contentStream.showText("PAGATO: ");
+                contentStream.endText();
+                contentStream.drawImage(ok, 220, 520, 10, 10);
+            }
+            else{
+                contentStream.beginText();
+                contentStream.setFont(fontBold, fontSize);
+                contentStream.setNonStrokingColor(Color.BLACK);
+                contentStream.newLineAtOffset(150, 520);
+                contentStream.showText("PAGATO: ");
+                contentStream.endText();
+                contentStream.drawImage(notOk, 220, 520, 10, 10);
+            }
             contentStream.close();
             document.save(output);
             document.close();
@@ -228,4 +251,5 @@ public final class PrescriptionMedicinePDFUtil {
 
         return output;
     }
+
 }
