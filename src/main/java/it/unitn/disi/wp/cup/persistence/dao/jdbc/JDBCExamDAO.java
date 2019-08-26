@@ -43,6 +43,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, Long> implements ExamDAO {
             exam.setId(rs.getLong("id"));
             exam.setName(rs.getString("name"));
             exam.setPrice(rs.getShort("price"));
+            exam.setSupported(rs.getBoolean("supported"));
         } catch (SQLException ex) {
             throw new DAOException("Impossible to set Exam by ResultSet", ex);
         }

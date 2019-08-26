@@ -7,14 +7,20 @@ $(document).ready(function () {
         input: {
             $dropdownHS: $("#sign-in-dropdown"),
             $inputHiddenHS: $("#sign-in-hs-id"),
-            $password: $("#sign-in-password")
+            $password: $("#sign-in-password"),
+            $remember: $("#sign-in-remember")
+        },
+        error: {
+            errorCode: $("#sign-in-error-code")
         }
     };
     const credentials = {
         id: undefined,
-        password: undefined
+        password: undefined,
+        remember: false
     };
 
+    // Enable Dropdown
     signIn.input.$dropdownHS.dropdown({
         clearable: true,
         onChange: function (value, text, $item) {
@@ -22,6 +28,10 @@ $(document).ready(function () {
         }
     });
 
+    //Enable Checkbox
+    signIn.input.$remember.checkbox();
+
+    // Form handler
     signIn.$form.form({
         fields: {
             health_service: {
@@ -52,7 +62,37 @@ $(document).ready(function () {
             }
         },
         onSuccess: function () {
+            signIn.$form.removeClass("success warning").addClass("loading");
 
+            // Set Credentials
+            credentials.id = parseInt(signIn.input.$dropdownHS.dropdown("get value"), 10);
+            credentials.password = signIn.input.$password.val();
+            credentials.remember = signIn.input.$remember.checkbox("is checked");
+
+            // Send Credentials
+            $.ajax({
+                type: "POST",
+                url: window.CONTEXT_PATH + "/service/open/health_service/signin",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(credentials),
+                success: function (data) {
+                    signIn.$form.removeClass("loading");
+                    if (data.error !== 0) {
+                        signIn.error.errorCode.html(data.error);
+                        signIn.$form.addClass("warning");
+                    } else {
+                        signIn.$form.addClass("success");
+                        // Redirect to Dashboard
+                        setTimeout(function () {
+                            window.location.href = window.location.pathname + "dashboard/index.xhtml";
+                        }, 1500);
+                    }
+                },
+                error: function () {
+                    console.error("Unable to Sign In");
+                }
+            });
 
             return false;
         }

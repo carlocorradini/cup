@@ -7,7 +7,6 @@ import javax.servlet.ServletContext;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -18,10 +17,8 @@ import java.util.logging.Logger;
 public final class ImageUtil {
 
     private static final Logger LOGGER = Logger.getLogger(ImageUtil.class.getName());
-    public static ServletContext SERVLET_CONTEXT = null;
+    private static ServletContext SERVLET_CONTEXT = null;
     private static BufferedImage LOGO = null;
-    private static BufferedImage OK = null;
-    private static BufferedImage OK_NOT = null;
 
     /**
      * Configure the class
@@ -34,16 +31,13 @@ public final class ImageUtil {
             throw new NullPointerException("ServletContext cannot be null");
 
         SERVLET_CONTEXT = servletContext;
-
-        try {
-            LOGO = ImageIO.read(new File(FilenameUtils.separatorsToUnix(SERVLET_CONTEXT.getRealPath("/") + "assets/_default/images/favicon/android-chrome-512x512.png")));
-            OK = ImageIO.read(new File(FilenameUtils.separatorsToUnix(SERVLET_CONTEXT.getRealPath("/") + "assets/_default/images/ui/ok.png")));
-            OK_NOT = ImageIO.read(new File(FilenameUtils.separatorsToUnix(SERVLET_CONTEXT.getRealPath("/") + "assets/_default/images/ui/ok_not.png")));
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, "Unable to retrieve images for ImageUtil", ex);
-        }
     }
 
+    /**
+     * Check if ImageUtil has been configured
+     *
+     * @throws NullPointerException If ImageUtil has not been configured
+     */
     private static void isConfigured() throws NullPointerException {
         if (SERVLET_CONTEXT == null)
             throw new NullPointerException("ImageUtil has not been configured");
@@ -57,7 +51,7 @@ public final class ImageUtil {
      */
     public static String getImagePath() throws NullPointerException {
         isConfigured();
-        return SERVLET_CONTEXT.getRealPath("/") + "/assets/_default";
+        return SERVLET_CONTEXT.getRealPath("/") + "assets/_default/images";
     }
 
     /**
@@ -66,30 +60,11 @@ public final class ImageUtil {
      * @return The Logo of the Application
      * @throws NullPointerException If ImageUtil has not been configured
      */
-    public static BufferedImage getLOGO() throws NullPointerException {
+    public static BufferedImage getLOGO() throws NullPointerException, IOException {
         isConfigured();
+        if (LOGO == null) {
+            LOGO = ImageIO.read(new File(FilenameUtils.separatorsToUnix(getImagePath() + "/favicon/android-chrome-512x512.png")));
+        }
         return LOGO;
-    }
-
-    /**
-     * Return the {@link BufferedImage image} representing the OK image
-     *
-     * @return The OK image
-     * @throws NullPointerException If ImageUtil has not been configured
-     */
-    public static BufferedImage getOK() throws NullPointerException {
-        isConfigured();
-        return OK;
-    }
-
-    /**
-     * Return the {@link BufferedImage image} representing the OK NOT image
-     *
-     * @return The OK NOT image
-     * @throws NullPointerException If ImageUtil has not been configured
-     */
-    public static BufferedImage getOkNot() throws NullPointerException {
-        isConfigured();
-        return OK_NOT;
     }
 }

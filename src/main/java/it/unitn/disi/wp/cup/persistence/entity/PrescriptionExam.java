@@ -1,8 +1,6 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * Entity Prescription Exam
@@ -14,6 +12,7 @@ public class PrescriptionExam {
     private Long personId;
     private Long doctorId;
     private Long specialistId;
+    private Long healthServiceId;
     private LocalDateTime dateTime;
     private LocalDateTime dateTimeRegistration;
     private Exam exam;
@@ -91,6 +90,14 @@ public class PrescriptionExam {
      */
     public void setSpecialistId(Long specialistId) {
         this.specialistId = specialistId;
+    }
+
+    public Long getHealthServiceId() {
+        return healthServiceId;
+    }
+
+    public void setHealthServiceId(Long healthServiceId) {
+        this.healthServiceId = healthServiceId;
     }
 
     /**

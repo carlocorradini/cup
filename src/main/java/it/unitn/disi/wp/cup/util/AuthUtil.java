@@ -3,12 +3,14 @@ package it.unitn.disi.wp.cup.util;
 import it.unitn.disi.wp.cup.config.AuthConfig;
 import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
 import it.unitn.disi.wp.cup.persistence.dao.DoctorSpecialistDAO;
+import it.unitn.disi.wp.cup.persistence.dao.HealthServiceDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
+import it.unitn.disi.wp.cup.persistence.entity.HealthService;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +30,7 @@ public final class AuthUtil {
     private static PersonDAO personDAO = null;
     private static DoctorDAO doctorDAO = null;
     private static DoctorSpecialistDAO doctorSpecialistDAO = null;
+    private static HealthServiceDAO healthServiceDAO = null;
 
     /**
      * Configure the class
@@ -42,13 +45,14 @@ public final class AuthUtil {
             personDAO = daoFactory.getDAO(PersonDAO.class);
             doctorDAO = daoFactory.getDAO(DoctorDAO.class);
             doctorSpecialistDAO = daoFactory.getDAO(DoctorSpecialistDAO.class);
+            healthServiceDAO = daoFactory.getDAO(HealthServiceDAO.class);
         } catch (DAOFactoryException | NullPointerException ex) {
             LOGGER.log(Level.SEVERE, "Unable to get from DAOFactory", ex);
         }
     }
 
     private static void isConfigured() throws NullPointerException {
-        if (personDAO == null || doctorDAO == null || doctorSpecialistDAO == null)
+        if (personDAO == null || doctorDAO == null || doctorSpecialistDAO == null || healthServiceDAO == null)
             throw new NullPointerException("AuthUtil has not been configured");
     }
 
@@ -128,16 +132,40 @@ public final class AuthUtil {
     }
 
     /**
+     * Return the current authenticated Health Service
+     *
+     * @param req The ServletRequest
+     * @return The auth Health Service, null otherwise
+     */
+    public static HealthService getAuthHealthService(HttpServletRequest req) {
+        HealthService healthService = null;
+        HttpSession session;
+
+        try {
+            isConfigured();
+            if (req != null) {
+                session = req.getSession(false);
+                if (session != null) {
+                    healthService = (HealthService) session.getAttribute(AuthConfig.getSessionHealthServiceName());
+                }
+            }
+        } catch (NullPointerException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get current Auth Health service", ex);
+        }
+
+        return healthService;
+    }
+
+    /**
      * Perform a Sign In
      *
      * @param email    Email of the Person
      * @param password Password of the Person
-     * @param remember set to true for 'remember me'
+     * @param remember Set to true for 'remember me'
      * @param req      The request
-     * @param resp     The response
      * @return The authenticated Person, null otherwise
      */
-    public static Person signIn(String email, String password, boolean remember, HttpServletRequest req, HttpServletResponse resp) {
+    public static Person signIn(String email, String password, boolean remember, HttpServletRequest req) {
         Person person = null;
         Doctor doctor;
         DoctorSpecialist doctorSpecialist;
@@ -154,7 +182,7 @@ public final class AuthUtil {
                     doctor = doctorDAO.getByPrimaryKey(person.getId());
                     doctorSpecialist = doctorSpecialistDAO.getByPrimaryKey(person.getId());
 
-                    // Add Person to se the current session
+                    // Add Person to the current session
                     session.setAttribute(AuthConfig.getSessionPersonName(), person);
                     if (doctor != null) {
                         // The Person is a Doctor
@@ -180,14 +208,52 @@ public final class AuthUtil {
     }
 
     /**
-     * Perform a Sign Out
+     * Perform a Sign In for {@link HealthService Health Service} users only
      *
-     * @param req  The request
-     * @param resp The response
+     * @param id       The id to identify the {@link HealthService Health Service}
+     * @param password The password to validate the {@link HealthService Health Service} represented by {@code id}
+     * @param remember Set to true for 'remember me'
+     * @param req      The request
+     * @return The authenticated Health Service, null otherwise
+     */
+    public static HealthService signInHealthService(Long id, String password, boolean remember, HttpServletRequest req) {
+        HealthService healthService = null;
+        HttpSession session;
+
+        try {
+            isConfigured();
+            if (id != null && password != null && req != null) {
+                HealthService noAuthHealthService = healthServiceDAO.getByPrimaryKey(id);
+
+                if (noAuthHealthService != null && CryptUtil.validate(password, noAuthHealthService.getPassword()) && getAuthHealthService(req) == null) {
+                    session = req.getSession(true);
+                    healthService = noAuthHealthService;
+
+                    // Add Health Service to the current session
+                    session.setAttribute(AuthConfig.getSessionHealthServiceName(), healthService);
+
+                    // === REMEMBER ME
+                    if (remember) {
+                        // Change session Timeout
+                        session.setMaxInactiveInterval(AuthConfig.getCookieRememberMaxAge());
+                    }
+                }
+            }
+        } catch (DAOException | NullPointerException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to Sign In with Health Service", ex);
+        }
+
+        return healthService;
+    }
+
+    /**
+     * Perform a Sign Out for all
+     *
+     * @param req The request
      * @return The old authenticated Person, null otherwise
      */
-    public static Person signOut(HttpServletRequest req, HttpServletResponse resp) {
-        Person person = null;
+    public static boolean signOut(HttpServletRequest req) {
+        boolean out = false;
         HttpSession session;
 
         try {
@@ -195,20 +261,18 @@ public final class AuthUtil {
             if (req != null) {
                 session = req.getSession(false);
                 if (session != null) {
-                    person = getAuthPerson(req);
-                    if (person != null) {
-                        session.removeAttribute(AuthConfig.getSessionPersonName());
-                        session.removeAttribute(AuthConfig.getSessionDoctorName());
-                        session.removeAttribute(AuthConfig.getSessionDoctorSpecialistName());
-                        session.invalidate();
-                    }
+                    session.removeAttribute(AuthConfig.getSessionPersonName());
+                    session.removeAttribute(AuthConfig.getSessionDoctorName());
+                    session.removeAttribute(AuthConfig.getSessionDoctorSpecialistName());
+                    session.removeAttribute(AuthConfig.getSessionHealthServiceName());
+                    session.invalidate();
+                    out = true;
                 }
             }
         } catch (NullPointerException ex) {
             LOGGER.log(Level.SEVERE, "Unable to Sign Out", ex);
         }
 
-        return person;
+        return out;
     }
-
 }

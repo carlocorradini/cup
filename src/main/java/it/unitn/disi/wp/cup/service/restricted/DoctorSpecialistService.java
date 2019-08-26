@@ -1,7 +1,7 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
 import it.unitn.disi.wp.cup.config.AppConfig;
-import it.unitn.disi.wp.cup.model.prescription.PrescriptionReportModel;
+import it.unitn.disi.wp.cup.service.model.prescription.PrescriptionReportModel;
 import it.unitn.disi.wp.cup.persistence.dao.*;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;

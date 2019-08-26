@@ -121,8 +121,6 @@ public final class PrescriptionMedicinePDFUtil {
 
             PDImageXObject qrCode = JPEGFactory.createFromImage(document, QRCodeUtil.generate(JSON.toJSONString(prescriptionMedicine)));
             PDImageXObject logo = JPEGFactory.createFromImage(document, ImageUtil.getLOGO());
-            PDImageXObject ok = JPEGFactory.createFromImage(document, ImageUtil.getOK());
-            PDImageXObject notOk = JPEGFactory.createFromImage(document, ImageUtil.getOkNot());
             contentStream.drawImage(qrCode, 30, 670, 100, 100);
             contentStream.drawImage(logo, 480, 670, 100, 100);
 
@@ -231,7 +229,6 @@ public final class PrescriptionMedicinePDFUtil {
                 contentStream.newLineAtOffset(150, 520);
                 contentStream.showText("PAGATO: ");
                 contentStream.endText();
-                contentStream.drawImage(ok, 220, 520, 10, 10);
             }
             else{
                 contentStream.beginText();
@@ -240,7 +237,6 @@ public final class PrescriptionMedicinePDFUtil {
                 contentStream.newLineAtOffset(150, 520);
                 contentStream.showText("PAGATO: ");
                 contentStream.endText();
-                contentStream.drawImage(notOk, 220, 520, 10, 10);
             }
             contentStream.close();
             document.save(output);

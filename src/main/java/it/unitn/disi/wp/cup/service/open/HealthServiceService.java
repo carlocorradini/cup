@@ -1,13 +1,15 @@
 package it.unitn.disi.wp.cup.service.open;
 
-import it.unitn.disi.wp.cup.model.health_service.CredentialsModel;
+import it.unitn.disi.wp.cup.service.model.health_service.CredentialsModel;
 import it.unitn.disi.wp.cup.persistence.dao.HealthServiceDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.HealthService;
+import it.unitn.disi.wp.cup.util.AuthUtil;
 import it.unitn.disi.wp.cup.util.obj.JsonMessage;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -28,6 +30,9 @@ public class HealthServiceService {
 
     private static final Logger LOGGER = Logger.getLogger(HealthServiceService.class.getName());
     private HealthServiceDAO healthServiceDAO = null;
+
+    @Context
+    private HttpServletRequest request;
 
     @Context
     public void setServletContext(ServletContext servletContext) {
@@ -58,13 +63,23 @@ public class HealthServiceService {
 
         if (!credentialsModel.isValid()) {
             // The Model is invalid
-            response = Response.status(Response.Status.BAD_REQUEST);
-            message.setError(JsonMessage.ERROR_INVALID_ID);
+            message.setError(JsonMessage.ERROR_VALIDATION);
+        } else if (AuthUtil.getAuthPerson(request) != null || AuthUtil.getAuthHealthService(request) != null) {
+            // Already signed in with other accounts
+            message.setError(JsonMessage.ERROR_SESSION);
         } else {
-            response = Response.ok();
+            // ALL CORRECT, try to sign in
+            healthService = AuthUtil.signInHealthService(credentialsModel.getId(), credentialsModel.getPassword(), credentialsModel.isRemember(), request);
+
+            if (healthService == null) {
+                message.setError(JsonMessage.ERROR_AUTHENTICATION);
+            } else {
+                // SIGNED IN
+                message.setError(JsonMessage.ERROR_NO_ERROR);
+            }
         }
 
-        return response.entity(message.toJsonString()).build();
+        return Response.ok().entity(message.toJsonString()).build();
     }
 
 }

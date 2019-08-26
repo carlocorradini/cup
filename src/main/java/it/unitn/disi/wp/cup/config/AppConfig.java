@@ -247,6 +247,20 @@ public final class AppConfig extends Config {
     }
 
     /**
+     * Return the Image Path
+     *
+     * @return Image Path
+     */
+    public static String getConfigImagePath() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Image Path", ex);
+        }
+        return instance.getString("config.image.path");
+    }
+
+    /**
      * Return the Config Avatar Max File Size
      *
      * @return The App Config Avatar Max File Size

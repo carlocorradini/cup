@@ -1,7 +1,7 @@
-package it.unitn.disi.wp.cup.model.prescription;
+package it.unitn.disi.wp.cup.service.model.prescription;
 
 import it.unitn.disi.wp.cup.config.PrescriptionConfig;
-import it.unitn.disi.wp.cup.model.Model;
+import it.unitn.disi.wp.cup.service.model.Model;
 
 /**
  * Prescription Medicine Model

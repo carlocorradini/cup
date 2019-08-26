@@ -1,8 +1,8 @@
-package it.unitn.disi.wp.cup.model.health_service;
+package it.unitn.disi.wp.cup.service.model.health_service;
 
 import it.unitn.disi.wp.cup.config.AuthConfig;
 import it.unitn.disi.wp.cup.persistence.entity.HealthService;
-import it.unitn.disi.wp.cup.model.Model;
+import it.unitn.disi.wp.cup.service.model.Model;
 
 /**
  * Credentials Model for authenticating the {@link HealthService Health Service}
@@ -12,10 +12,12 @@ import it.unitn.disi.wp.cup.model.Model;
 public class CredentialsModel implements Model {
     private long id;
     private String password;
+    private boolean remember;
 
     CredentialsModel() {
         id = 0L;
         password = "";
+        remember = false;
     }
 
     /**
@@ -52,6 +54,24 @@ public class CredentialsModel implements Model {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * Return if the authenticated {@link HealthService Health Service} session must be remembered or not
+     *
+     * @return True if remember, false otherwise
+     */
+    public boolean isRemember() {
+        return remember;
+    }
+
+    /**
+     * Set if the authenticated {@link HealthService Health Service} session must be remembered or not
+     *
+     * @param remember True if remember, false otherwise
+     */
+    public void setRemember(boolean remember) {
+        this.remember = remember;
     }
 
     @Override

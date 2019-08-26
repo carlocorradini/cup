@@ -130,8 +130,6 @@ public final class PrescriptionExamPDFUtil {
             contentStream = new PDPageContentStream(document, document.getPage(0));
             PDImageXObject qrCode = JPEGFactory.createFromImage(document, QRCodeUtil.generate(JSON.toJSONString(prescriptionExam)));
             PDImageXObject logo = JPEGFactory.createFromImage(document, ImageUtil.getLOGO());
-            PDImageXObject ok = JPEGFactory.createFromImage(document, ImageUtil.getOK());
-            PDImageXObject notOk = JPEGFactory.createFromImage(document, ImageUtil.getOkNot());
             PDImageXObject avatar = JPEGFactory.createFromImage(document,
                     ImageIO.read(new File(FilenameUtils.separatorsToUnix(ImageUtil.getImagePath() + person.getAvatar().getNameAsResource()))));
             contentStream.drawImage(avatar, 30, 670, 100, 100);

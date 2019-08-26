@@ -1,4 +1,4 @@
-package it.unitn.disi.wp.cup.model;
+package it.unitn.disi.wp.cup.service.model;
 
 /**
  * Model interface

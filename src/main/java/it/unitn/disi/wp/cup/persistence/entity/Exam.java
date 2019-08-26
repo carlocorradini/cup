@@ -9,6 +9,7 @@ public class Exam {
     private Long id;
     private String name;
     private Short price;
+    private boolean supported;
 
     /**
      * Return the id of the Exam
@@ -62,5 +63,23 @@ public class Exam {
      */
     public void setPrice(Short price) {
         this.price = price;
+    }
+
+    /**
+     * Return if the Exam is supported as public
+     *
+     * @return True if supported, false otherwise
+     */
+    public boolean isSupported() {
+        return supported;
+    }
+
+    /**
+     * Set if the Exam is supported as public
+     *
+     * @param supported True if supported, false otherwise
+     */
+    public void setSupported(boolean supported) {
+        this.supported = supported;
     }
 }

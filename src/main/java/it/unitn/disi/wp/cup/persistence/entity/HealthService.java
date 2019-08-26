@@ -108,7 +108,7 @@ public class HealthService {
      * @return The crest as ResourceF
      */
     public String getCrestAsResource() {
-        return AppConfig.getConfigCrestPath() + crest + AppConfig.getConfigCrestExtension();
+        return AppConfig.getConfigImagePath() + AppConfig.getConfigCrestPath() + "/" + crest + AppConfig.getConfigCrestExtension();
     }
 
     /**

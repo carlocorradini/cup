@@ -99,6 +99,15 @@
                                     <i class="lock icon"/>
                                 </div>
                             </div>
+                            <div class="field">
+                                <div class="ui checkbox" id="sign-in-remember">
+                                    <input type="checkbox"
+                                           name="remember"
+                                           class="hidden"
+                                           tabindex="0"/>
+                                    <label>#{i18n["signin.remember"]}</label>
+                                </div>
+                            </div>
 
                             <div class="ui blue fluid big button submit" tabindex="0">
                                 <i class="send icon"/>
@@ -106,6 +115,30 @@
                             </div>
 
                             <div class="ui error message"></div>
+
+                            <div class="ui icon warning message medium">
+                                <i class="exclamation triangle icon"/>
+                                <div class="content">
+                                    <div class="header">
+                                        #{i18n["health.service.signIn.error.message"]}
+                                    </div>
+                                    <p>
+                                        #{i18n["health.service.signIn.error.subMessage"]}
+                                        <br/>
+                                        #{i18n["common.errorCode"]}: <span id="sign-in-error-code"/>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="ui icon success message medium">
+                                <i class="checkmark icon"/>
+                                <div class="content">
+                                    <div class="header">
+                                        #{i18n["health.service.signIn.success.message"]}
+                                    </div>
+                                    <p>#{i18n["health.service.signIn.success.subMessage"]}</p>
+                                </div>
+                            </div>
                         </form>
 
                         <div class="ui large bottom attached message">

@@ -125,6 +125,6 @@ public class PersonAvatar {
      * @return The avatar name as Resource
      */
     public String getNameAsResource() {
-        return AppConfig.getConfigAvatarPath() + name + AppConfig.getConfigAvatarExtension();
+        return AppConfig.getConfigImagePath() + AppConfig.getConfigAvatarPath() + "/" + name + AppConfig.getConfigAvatarExtension();
     }
 }
