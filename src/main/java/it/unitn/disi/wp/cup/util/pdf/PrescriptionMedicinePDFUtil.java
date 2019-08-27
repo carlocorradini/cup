@@ -24,6 +24,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -118,14 +119,17 @@ public final class PrescriptionMedicinePDFUtil {
             String title = "Ricetta Farmaceutica";
             PDFont font = PDType1Font.COURIER;
             PDFont fontBold = PDType1Font.COURIER_BOLD;
-            int fontSize = 14;
+            int fontSize = 12;
+
+            File inavatar = new File(FilenameUtils.separatorsToUnix(ImageUtil.getImagePath() + person.getAvatar().getNameAsImage()));
+            BufferedImage imageava = ImageIO.read(inavatar);
+            BufferedImage resizeavatar = resizeImage(imageava, 100, 100);
 
             contentStream = new PDPageContentStream(document, document.getPage(0));
             PDImageXObject qrCode = JPEGFactory.createFromImage(document, QRCodeUtil.generate(JSON.toJSONString(prescriptionMedicine)));
             PDImageXObject logo = JPEGFactory.createFromImage(document, ImageUtil.getLOGO());
-            PDImageXObject avatar = JPEGFactory.createFromImage(document,
-                    ImageIO.read(new File(FilenameUtils.separatorsToUnix(ImageUtil.getImagePath() + person.getAvatar().getNameAsResource()))));
-            contentStream.drawImage(avatar, 30, 670, 100, 100);
+            PDImageXObject avatar = JPEGFactory.createFromImage(document,resizeavatar);
+            contentStream.drawImage(avatar, 30, 670);
             contentStream.drawImage(logo, 480, 670, 100, 100);
             contentStream.drawImage(qrCode, 30, 550, 100, 100);
             contentStream.beginText();
@@ -197,6 +201,39 @@ public final class PrescriptionMedicinePDFUtil {
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Unable to generatePDF a Prescription Exam PDF", ex);
         }
+    }
+
+    public static BufferedImage resizeImage(BufferedImage img, Integer Width, Integer Height) {
+        int type = img.getType() == 0? BufferedImage.TYPE_INT_ARGB : img.getType();
+        if (Width == 0) {
+            Width = img.getWidth();
+        }
+        if (Height == 0) {
+            Height = img.getHeight();
+        }
+        int fHeight = Height;
+        int fWidth = Width;
+        //Work out the resized width/height
+        if (img.getHeight() > Height || img.getWidth() > Width) {
+            fHeight = Height;
+            int wid = Width;
+            float sum = (float)img.getWidth() / (float)img.getHeight();
+            fWidth = Math.round(fHeight * sum);
+            if (fWidth > wid) {
+                //rezise again for the width this time
+                fHeight = Math.round(wid/sum);
+                fWidth = wid;
+            }
+        }
+        BufferedImage resizedImage = new BufferedImage(fWidth, fHeight, type);
+        Graphics2D g = resizedImage.createGraphics();
+        g.setComposite(AlphaComposite.Src);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.drawImage(img, 0, 0, fWidth, fHeight, null);
+        g.dispose();
+        return resizedImage;
     }
 
 }
