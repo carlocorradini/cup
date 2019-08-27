@@ -125,6 +125,15 @@ public class PersonAvatar {
      * @return The avatar name as Resource
      */
     public String getNameAsResource() {
-        return AppConfig.getConfigImagePath() + AppConfig.getConfigAvatarPath() + "/" + name + AppConfig.getConfigAvatarExtension();
+        return AppConfig.getConfigImagePath() + getNameAsImage();
+    }
+
+    /**
+     * Return the name of the {@link PersonAvatar avatar} for Server Side usage
+     *
+     * @return The avatar name as Image
+     */
+    public String getNameAsImage() {
+        return AppConfig.getConfigAvatarPath() + "/" + name + AppConfig.getConfigAvatarExtension();
     }
 }

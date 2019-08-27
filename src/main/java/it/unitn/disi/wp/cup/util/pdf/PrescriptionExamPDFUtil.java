@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import it.unitn.disi.wp.cup.config.AppConfig;
 import it.unitn.disi.wp.cup.persistence.dao.DoctorDAO;
 import it.unitn.disi.wp.cup.persistence.dao.DoctorSpecialistDAO;
+import it.unitn.disi.wp.cup.persistence.dao.HealthServiceDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
@@ -12,7 +13,6 @@ import it.unitn.disi.wp.cup.persistence.entity.*;
 import it.unitn.disi.wp.cup.util.ImageUtil;
 import it.unitn.disi.wp.cup.util.QRCodeUtil;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -21,9 +21,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javax.imageio.ImageIO;
-import javax.validation.constraints.Null;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +43,7 @@ public final class PrescriptionExamPDFUtil {
     private static PersonDAO personDAO = null;
     private static DoctorDAO doctorDAO = null;
     private static DoctorSpecialistDAO doctorSpecialistDAO = null;
+    private static HealthServiceDAO healthServiceDAO = null;
 
     /**
      * Configure the class
@@ -59,14 +58,15 @@ public final class PrescriptionExamPDFUtil {
             personDAO = daoFactory.getDAO(PersonDAO.class);
             doctorDAO = daoFactory.getDAO(DoctorDAO.class);
             doctorSpecialistDAO = daoFactory.getDAO(DoctorSpecialistDAO.class);
+            healthServiceDAO = daoFactory.getDAO(HealthServiceDAO.class);
         } catch (DAOFactoryException | NullPointerException ex) {
             LOGGER.log(Level.SEVERE, "Unable to get from DAOFactory", ex);
         }
     }
 
     private static void isConfigured() throws NullPointerException {
-        if (personDAO == null || doctorDAO == null || doctorSpecialistDAO == null)
-            throw new NullPointerException("PersonDAO or DoctorDAO or DoctorSpecialistDAO cannot be null");
+        if (personDAO == null || doctorDAO == null || doctorSpecialistDAO == null || healthServiceDAO == null)
+            throw new NullPointerException("Prescription Exam PDF Util has not been configured");
     }
 
     /**
@@ -85,6 +85,7 @@ public final class PrescriptionExamPDFUtil {
         Doctor doctor;
         Person doctorAsPerson;
         Person doctorSpecialistAsPerson = null;
+        HealthService healthService = null;
 
         try {
             person = personDAO.getByPrimaryKey(prescriptionExam.getPersonId());
@@ -92,6 +93,9 @@ public final class PrescriptionExamPDFUtil {
             doctorAsPerson = personDAO.getByPrimaryKey(prescriptionExam.getDoctorId());
             if (prescriptionExam.getSpecialistId() != null) {
                 doctorSpecialistAsPerson = personDAO.getByPrimaryKey(prescriptionExam.getSpecialistId());
+            }
+            if (prescriptionExam.getHealthServiceId() != null) {
+                healthService = healthServiceDAO.getByPrimaryKey(prescriptionExam.getHealthServiceId());
             }
 
             if (person != null
@@ -101,7 +105,7 @@ public final class PrescriptionExamPDFUtil {
                 // Person Exists
                 // Doctor Exists
                 // Person and Doctor are not the same
-                output = generatePDF(person, doctorAsPerson, doctorSpecialistAsPerson, prescriptionExam);
+                output = generatePDF(person, doctorAsPerson, doctorSpecialistAsPerson, healthService, prescriptionExam);
             } else {
                 throw new DAOException("Invalid Doctor and Person correlation");
             }
@@ -112,7 +116,7 @@ public final class PrescriptionExamPDFUtil {
         return output;
     }
 
-    private static ByteArrayOutputStream generatePDF(Person person, Person doctor, Person doctorSpecialist, PrescriptionExam prescriptionExam) throws NullPointerException {
+    private static ByteArrayOutputStream generatePDF(Person person, Person doctor, Person doctorSpecialist, HealthService healthService, PrescriptionExam prescriptionExam) throws NullPointerException {
         isConfigured();
         if (person == null || doctor == null || prescriptionExam == null)
             throw new NullPointerException("Person, Doctor and PrescriptionMedicine are mandatory fields");
@@ -131,7 +135,7 @@ public final class PrescriptionExamPDFUtil {
             PDImageXObject qrCode = JPEGFactory.createFromImage(document, QRCodeUtil.generate(JSON.toJSONString(prescriptionExam)));
             PDImageXObject logo = JPEGFactory.createFromImage(document, ImageUtil.getLOGO());
             PDImageXObject avatar = JPEGFactory.createFromImage(document,
-                    ImageIO.read(new File(FilenameUtils.separatorsToUnix(ImageUtil.getImagePath() + person.getAvatar().getNameAsResource()))));
+                    ImageIO.read(new File(FilenameUtils.separatorsToUnix(ImageUtil.getImagePath() + person.getAvatar().getNameAsImage()))));
             contentStream.drawImage(avatar, 30, 670, 100, 100);
             contentStream.drawImage(logo, 480, 670, 100, 100);
             contentStream.drawImage(qrCode, 30, 550, 100, 100);
@@ -159,7 +163,7 @@ public final class PrescriptionExamPDFUtil {
             contentStream.endText();
 
 
-            if (doctorSpecialist == null && prescriptionExam.getReport() == null && prescriptionExam.getDateTime() == null) {
+            if (prescriptionExam.getReport() == null && prescriptionExam.getDateTime() == null) {
 
                 contentStream.beginText();
                 contentStream.setFont(fontBold, fontSize);
@@ -184,7 +188,7 @@ public final class PrescriptionExamPDFUtil {
                 }
                 contentStream.endText();
 
-            } else if (doctorSpecialist != null && prescriptionExam.getDateTime() != null && prescriptionExam.getReport() == null) {
+            } else if (prescriptionExam.getDateTime() != null && prescriptionExam.getReport() == null) {
                 contentStream.beginText();
                 contentStream.setFont(fontBold, fontSize);
                 contentStream.setNonStrokingColor(Color.BLACK);
@@ -212,6 +216,15 @@ public final class PrescriptionExamPDFUtil {
                     contentStream.showText("IL TICKET NON È STATO PAGATO");
                 }
                 contentStream.endText();
+
+
+                if (doctorSpecialist != null && healthService == null) {
+                    // SPECIALISTA
+                } else if (doctorSpecialist == null && healthService != null) {
+                    // SSP
+                } else {
+                    // ERRORE
+                }
 
             } else if (doctorSpecialist != null && prescriptionExam.getDateTime() != null && prescriptionExam.getReport() != null) {
                 riempiPdf(document, contentStream, 150, 680, Color.BLACK, "ID ESAME: ", "" + prescriptionExam.getId(), font, fontBold, fontSize);

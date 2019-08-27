@@ -105,10 +105,19 @@ public class HealthService {
     /**
      * Return the name of the {@code crest} for resource usage
      *
-     * @return The crest as ResourceF
+     * @return The crest as Resource
      */
     public String getCrestAsResource() {
-        return AppConfig.getConfigImagePath() + AppConfig.getConfigCrestPath() + "/" + crest + AppConfig.getConfigCrestExtension();
+        return AppConfig.getConfigImagePath() + getCrestAsImage();
+    }
+
+    /**
+     * Return the name of the {@code crest} for Server Side usage
+     *
+     * @return The crest as Image
+     */
+    public String getCrestAsImage() {
+        return AppConfig.getConfigCrestPath() + "/" + crest + AppConfig.getConfigCrestExtension();
     }
 
     /**
