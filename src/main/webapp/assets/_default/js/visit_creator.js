@@ -89,7 +89,6 @@ window.visit_creator = {
                     buttonClass: "button.patient-modal-report-button",
                     $idHeader: $("span#patient-report-id-header"),
                     $id: $("span#patient-report-id"),
-                    $idSpecialist: $("span#patient-report-specialist-id"),
                     $date: $("span#patient-report-date"),
                     $time: $("span#patient-report-time"),
                     $content: $("textarea#patient-report-content"),
@@ -151,10 +150,6 @@ window.visit_creator = {
             v.patient.$accordion.accordion({
                 animateChildren: false
             });
-            // Table Datatable
-            v.patient.exams.$table.DataTable();
-            v.patient.medicines.$table.DataTable();
-            v.patient.timeline.$table.DataTable();
             // Populate
             v.patient.$button.click(function () {
                 const $button = $(this);
@@ -167,6 +162,10 @@ window.visit_creator = {
                         url: window.UTIL.STRING.format(v.patient.urlPattern, patientId),
                         success: function (data) {
                             window.visit_creator.populate.patient(data);
+                            // Enable Datatable
+                            v.patient.exams.$table.DataTable();
+                            v.patient.medicines.$table.DataTable();
+                            v.patient.timeline.$table.DataTable();
                             $button.removeClass("loading");
                             v.patient.$modal.modal("show");
                         },
@@ -340,7 +339,6 @@ window.visit_creator = {
 
                 template.$idHeader.html(report.id);
                 template.$id.html(report.id);
-                template.$idSpecialist.html(prescription.specialistId);
                 template.$date.html(moment(report.dateTime).format("ll"));
                 template.$time.html(moment(report.dateTime).format("LTS"));
                 template.$content.val(report.content);

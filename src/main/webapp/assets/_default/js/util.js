@@ -94,6 +94,17 @@ window.UTIL = {
             }
 
             return params;
+        },
+        /**
+         * Return the Base URL.
+         * The URL to extract from can be passed as argument, otherwise {@code window.location.href}
+         * is used instead.
+         * @param url The URL to to get path from, leave empty if you want the current base url
+         * @returns {string} The Base URL
+         */
+        getBaseUrl: function (url) {
+            let queryString = url ? url : window.location.href;
+            return queryString.substring(0, queryString.lastIndexOf("/")) + "/";
         }
     },
     ARRAY: {

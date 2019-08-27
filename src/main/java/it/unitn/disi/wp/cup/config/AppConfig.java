@@ -247,6 +247,20 @@ public final class AppConfig extends Config {
     }
 
     /**
+     * Return the Image Path
+     *
+     * @return Image Path
+     */
+    public static String getConfigImagePath() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Image Path", ex);
+        }
+        return instance.getString("config.image.path");
+    }
+
+    /**
      * Return the Config Avatar Max File Size
      *
      * @return The App Config Avatar Max File Size
@@ -314,5 +328,33 @@ public final class AppConfig extends Config {
             LOGGER.log(Level.SEVERE, "Unable to get Config Avatar Resize Size", ex);
         }
         return instance.getInt("config.avatar.resizeSize");
+    }
+
+    /**
+     * Return the Config Crest Path
+     *
+     * @return The App Config Crest Path
+     */
+    public static String getConfigCrestPath() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Crest Path", ex);
+        }
+        return instance.getString("config.crest.path");
+    }
+
+    /**
+     * Return the Config Crest Extension
+     *
+     * @return The App Config Crest Extension
+     */
+    public static String getConfigCrestExtension() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Config Crest Extension", ex);
+        }
+        return instance.getString("config.crest.extension");
     }
 }

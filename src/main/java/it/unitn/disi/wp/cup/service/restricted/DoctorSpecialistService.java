@@ -1,7 +1,7 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
 import it.unitn.disi.wp.cup.config.AppConfig;
-import it.unitn.disi.wp.cup.model.prescription.PrescriptionReportModel;
+import it.unitn.disi.wp.cup.service.model.prescription.PrescriptionReportModel;
 import it.unitn.disi.wp.cup.persistence.dao.*;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
@@ -43,8 +43,6 @@ public class DoctorSpecialistService {
 
     @Context
     private HttpServletRequest request;
-    @Context
-    private ServletContext servletContext;
 
     @Context
     public void setServletContext(ServletContext servletContext) {
@@ -104,6 +102,10 @@ public class DoctorSpecialistService {
                     message.setError(JsonMessage.ERROR_INVALID_ID);
                 } else if (prescriptionExam.getReport() != null) {
                     // The Prescription already has a Report
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_INVALID_ID);
+                } else if (prescriptionExam.getExam().isSupported()) {
+                    // The Exam is supported by the Health Service, error
                     response = Response.status(Response.Status.BAD_REQUEST);
                     message.setError(JsonMessage.ERROR_INVALID_ID);
                 } else if (!doctorSpecialist.getId().equals(prescriptionExam.getSpecialistId())) {

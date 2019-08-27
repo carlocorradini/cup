@@ -76,7 +76,7 @@ public final class QRCodeUtil {
      * @return An {@link BufferedImage image} representing the generated QR Code
      * @throws NullPointerException If {@code message} is null
      */
-    public static BufferedImage generate(String message, int dimension) throws NullPointerException {
+    public static BufferedImage generate(String message, int dimension) throws NullPointerException, IOException {
         return generate(message, dimension, ImageUtil.getLOGO());
     }
 
@@ -88,7 +88,7 @@ public final class QRCodeUtil {
      * @return An {@link BufferedImage image} representing the generated QR Code
      * @throws NullPointerException If {@code message} is null
      */
-    public static BufferedImage generate(String message) throws NullPointerException {
+    public static BufferedImage generate(String message) throws NullPointerException, IOException {
         return generate(message, DEFAULT_DIMENSION);
     }
 

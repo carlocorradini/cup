@@ -6,6 +6,7 @@ import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.Exam;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
+import it.unitn.disi.wp.cup.persistence.entity.HealthService;
 import it.unitn.disi.wp.cup.persistence.entity.Report;
 
 import java.util.List;
@@ -56,6 +57,16 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
     List<PrescriptionExam> getAllByDoctorSpecialistId(Long doctorSpecialistId) throws DAOException;
 
     /**
+     * Return a {@link List list} of all {@link PrescriptionExam Prescription Exam} that has been assigned to the
+     * {@link HealthService} identified by {@code healthServiceId}
+     *
+     * @param healthServiceId The {@link HealthService Health Service} id
+     * @return A {@link List} of all assigned {@link PrescriptionExam Prescription Exam}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    List<PrescriptionExam> getAllByHealthServiceId(Long healthServiceId) throws DAOException;
+
+    /**
      * Return the {@link List} of all {@link PrescriptionExam} with a {@link Report report} that has not been read
      * by the {@link Person person}
      *
@@ -74,6 +85,16 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @throws DAOException If an error occurred during the information retrieving
      */
     List<PrescriptionExam> getAllToDoByDoctorSpecialistId(Long doctorSpecialistId) throws DAOException;
+
+    /**
+     * Return the {@link List} of all {@link PrescriptionExam} that has been assigned to the {@link HealthService}
+     * identified by {@code healthServiceId} but that has not been performed
+     *
+     * @param healthServiceId The {@link HealthService} id
+     * @return The {@link List} of {@link PrescriptionExam} assigned but not performed
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    List<PrescriptionExam> getAllToDoByHealthServiceId(Long healthServiceId) throws DAOException;
 
     /**
      * Return the Number of {@link Exam exams} prescribed for a {@link Person person} given its {@code personId id}
@@ -104,6 +125,16 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
     Long getCountByDoctorSpecialistId(Long doctorSpecialistId) throws DAOException;
 
     /**
+     * Return the Number of {@link Exam exams} assigned to a {@link HealthService Health Service}
+     * given its {@code doctorSpecialistId id}
+     *
+     * @param healthServiceId The {@link HealthService} id
+     * @return The number of {@link Exam exams} assigned to a {@link HealthService Health Service}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    Long getCountByHealthServiceId(Long healthServiceId) throws DAOException;
+
+    /**
      * Return the Number of {@link PrescriptionExam} with a {@link Report report} that has not been read
      * by the {@link Person person}
      *
@@ -122,4 +153,14 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @throws DAOException If an error occurred during the information retrieving
      */
     Long getCountToDoByDoctorSpecialistId(Long doctorSpecialistId) throws DAOException;
+
+    /**
+     * Return the Number of {@link PrescriptionExam} that has not been performed, assigned to a {@link HealthService Health Service}
+     * identified by {@code healthServiceId}
+     *
+     * @param healthServiceId The {@link HealthService} id
+     * @return The Number of {@link PrescriptionExam} not performed
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    Long getCountToDoByHealthServiceId(Long healthServiceId) throws DAOException;
 }

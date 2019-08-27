@@ -79,6 +79,20 @@ public final class AuthConfig extends Config {
     }
 
     /**
+     * Return the session name of the authenticated Health Service
+     *
+     * @return Session Health Service name
+     */
+    public static String getSessionHealthServiceName() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Session Health Service Name", ex);
+        }
+        return instance.getString("session.healthService.name");
+    }
+
+    /**
      * Return the Cookie Remember Name
      *
      * @return Cookie Remember Name

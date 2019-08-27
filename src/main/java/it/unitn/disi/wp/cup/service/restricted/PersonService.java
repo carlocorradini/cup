@@ -18,6 +18,7 @@ import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 import it.unitn.disi.wp.cup.util.CryptUtil;
 import it.unitn.disi.wp.cup.util.EmailUtil;
+import it.unitn.disi.wp.cup.util.ImageUtil;
 import it.unitn.disi.wp.cup.util.obj.JsonMessage;
 import it.unitn.disi.wp.cup.util.pdf.PrescriptionMedicinePDFUtil;
 import it.unitn.disi.wp.cup.util.pdf.PrescriptionExamPDFUtil;
@@ -61,8 +62,6 @@ public class PersonService {
 
     @Context
     private HttpServletRequest request;
-    @Context
-    private ServletContext servletContext;
 
     @Context
     public void setServletContext(ServletContext servletContext) {
@@ -111,7 +110,7 @@ public class PersonService {
                 String avatarName = String.format("%d_%s", person.getId(), new SimpleDateFormat("dd-MM-yy_HH-mm-ss").format(new Date()));
                 String avatarNameWithExt = avatarName + AppConfig.getConfigAvatarExtension();
 
-                file = new File(FilenameUtils.separatorsToUnix(servletContext.getRealPath("/") + "assets/_default" + AppConfig.getConfigAvatarPath() + avatarNameWithExt));
+                file = new File(FilenameUtils.separatorsToUnix(ImageUtil.getImagePath() + AppConfig.getConfigAvatarPath() + "/" + avatarNameWithExt));
                 FileUtils.copyInputStreamToFile(new ByteArrayInputStream(avatar.toByteArray()), file);
 
                 // Save a Backup file only if the @{link AppConfig::getConfigAvatarBackupPath Backup Path} is valid
@@ -164,6 +163,8 @@ public class PersonService {
                         && oldPassword.length() <= AuthConfig.getPasswordMaxLength()
                         && newPassword.length() >= AuthConfig.getPasswordMinLength()
                         && newPassword.length() <= AuthConfig.getPasswordMaxLength()) {
+                    // Get the latest Person information and update it in the current session
+                    person = personDAO.getByPrimaryKey(person.getId());
                     // Lengths are correct
                     if (CryptUtil.validate(oldPassword, person.getPassword())) {
                         // Old Password match with the current Password

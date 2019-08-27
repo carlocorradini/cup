@@ -17,6 +17,7 @@ public final class JsonMessage {
     public static final int ERROR_PROVINCE = 5;
     public static final int ERROR_HISTORY = 6;
     public static final int ERROR_VALIDATION = 7;
+    public static final int ERROR_SESSION = 8;
     public static final int ERROR_UNKNOWN = 256;
 
     private int error;
