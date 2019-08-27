@@ -104,6 +104,10 @@ public class DoctorSpecialistService {
                     // The Prescription already has a Report
                     response = Response.status(Response.Status.BAD_REQUEST);
                     message.setError(JsonMessage.ERROR_INVALID_ID);
+                } else if (prescriptionExam.getExam().isSupported()) {
+                    // The Exam is supported by the Health Service, error
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_INVALID_ID);
                 } else if (!doctorSpecialist.getId().equals(prescriptionExam.getSpecialistId())) {
                     // The Doctor Specialist of the Prescription is different from the current authenticated Doctor Specialist
                     response = Response.status(Response.Status.UNAUTHORIZED);

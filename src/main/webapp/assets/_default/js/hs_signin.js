@@ -4,6 +4,7 @@ $(document).ready(function () {
     const signIn = {
         i18n: $("#sign-in-i18n").data("i18n"),
         $form: $("#sign-in-form"),
+        timeout: 1500,
         input: {
             $dropdownHS: $("#sign-in-dropdown"),
             $inputHiddenHS: $("#sign-in-hs-id"),
@@ -85,8 +86,8 @@ $(document).ready(function () {
                         signIn.$form.addClass("success");
                         // Redirect to Dashboard
                         setTimeout(function () {
-                            window.location.href = window.location.pathname + "dashboard/index.xhtml";
-                        }, 1500);
+                            window.location.href = window.UTIL.URL.getBaseUrl() + "dashboard/index.xhtml";
+                        }, signIn.timeout);
                     }
                 },
                 error: function () {

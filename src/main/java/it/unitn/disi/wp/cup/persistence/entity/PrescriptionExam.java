@@ -84,20 +84,36 @@ public class PrescriptionExam {
     }
 
     /**
-     * Set the {@link DoctorSpecialist doctorSpecialist} id of the Prescription exam
+     * Set the {@link DoctorSpecialist Doctor Specialist} id of the Prescription exam
+     * This is valid only if the {@code exam} is not supported by the {@link HealthService Health Service}
+     * Remember to set {@link Exam} first
      *
      * @param specialistId Prescription Exam {@link DoctorSpecialist doctorSpecialist} id
      */
     public void setSpecialistId(Long specialistId) {
-        this.specialistId = specialistId;
+        if (exam != null && !exam.isSupported())
+            this.specialistId = specialistId;
     }
 
+    /**
+     * Return the {@link HealthService Health Service} id of the Prescription Exam
+     *
+     * @return Prescription Exam {@link HealthService Health Service} id
+     */
     public Long getHealthServiceId() {
         return healthServiceId;
     }
 
+    /**
+     * Set the {@link HealthService Health Service} id of the Prescription Exam
+     * This is valid only if the {@code exam} is supported by the {@link HealthService Health Service}
+     * Remember to set {@link Exam} first
+     *
+     * @param healthServiceId Prescription Exam {@link HealthService Health Service} id
+     */
     public void setHealthServiceId(Long healthServiceId) {
-        this.healthServiceId = healthServiceId;
+        if (exam != null && exam.isSupported())
+            this.healthServiceId = healthServiceId;
     }
 
     /**

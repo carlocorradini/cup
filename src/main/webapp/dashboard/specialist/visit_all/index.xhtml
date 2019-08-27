@@ -18,7 +18,7 @@
                         name="js/visit_creator.js"
                         target="body"/>
         <h:outputScript library="_default"
-                        name="js/visit_all_assigned.js"
+                        name="js/visit_all.js"
                         target="body"/>
     </ui:define>
 
@@ -294,7 +294,6 @@
                             <thead>
                             <tr>
                                 <th>#{i18n["common.id"]}</th>
-                                <th>#{i18n["common.id"]} #{i18n["common.specialist"]}</th>
                                 <th>#{i18n["common.date"]}</th>
                                 <th>#{i18n["common.hour"]}</th>
                             </tr>
@@ -302,7 +301,6 @@
                             <tbody>
                             <tr>
                                 <td><span id="patient-report-id"/></td>
-                                <td><span id="patient-report-specialist-id"/></td>
                                 <td><span id="patient-report-date"/></td>
                                 <td><span id="patient-report-time"/></td>
                             </tr>

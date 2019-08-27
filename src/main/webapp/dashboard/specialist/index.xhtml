@@ -36,7 +36,7 @@
             <div class="ui two statistics">
                 <div class="statistic">
                     <div class="label">
-                        #{i18n["common.assignedVisits"]}
+                        #{i18n["common.todoVisits"]}
                     </div>
                     <div class="value">
                         #{doctorSpecialist.assignedToDoPrescriptionExamCount}
@@ -100,7 +100,7 @@
 
             <div class="ui bottom attached tab segment" data-tab="services">
                 <div class="ui centered cards">
-                    <h:link outcome="/dashboard/specialist/visit_assigned/index" styleClass="raised link card">
+                    <h:link outcome="/dashboard/specialist/visit_todo/index" styleClass="raised link card">
                         <div class="image">
                             <h:graphicImage styleClass="ui image"
                                             library="_default"
@@ -109,7 +109,7 @@
                             />
                         </div>
                         <div class="extra center aligned">
-                            #{fn:toUpperCase(i18n["common.assignedVisits"])}
+                            #{fn:toUpperCase(i18n["common.todoVisits"])}
                         </div>
                     </h:link>
                     <h:link outcome="/dashboard/specialist/visit_all/index" styleClass="raised link card">
