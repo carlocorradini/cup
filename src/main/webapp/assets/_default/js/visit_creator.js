@@ -205,7 +205,7 @@ window.visit_creator = {
                 template.$fullName.html(doctor.fullNameCapitalized);
                 template.$fullNameHeader.html(doctor.fullNameCapitalized);
                 template.$province.html(doctor.city.province.nameLongCapitalized);
-                template.$avatar.attr("src", window.UTIL.JSF.resourceURL("_default", doctor.avatar.nameAsResource));
+                template.$avatar.attr("src", window.UTIL.JSF.toResourceURL("_default", doctor.avatar.nameAsResource));
             }
         },
         /**
@@ -232,7 +232,7 @@ window.visit_creator = {
                 template.personalInfomation.$birthDate.html(moment(patient.birthDate).format("ll"));
                 template.personalInfomation.$birthCity.html(patient.birthCity.name);
                 template.personalInfomation.$domicile.html(patient.city.name);
-                template.personalInfomation.$avatar.attr("src", window.UTIL.JSF.resourceURL("_default", patient.avatar.nameAsResource));
+                template.personalInfomation.$avatar.attr("src", window.UTIL.JSF.toResourceURL("_default", patient.avatar.nameAsResource));
 
                 // === EXAMS ===
                 // Clean Table
@@ -313,7 +313,7 @@ window.visit_creator = {
                     $.each(patient.avatarHistory, function (index, element) {
                         const tr = `<tr class="center aligned ${patient.avatar.id === element.id ? 'text-strong' : 'disabled'}">` +
                             `<td>` +
-                            `<img src="${window.UTIL.JSF.resourceURL('_default', element.nameAsResource)}" alt="Avatar" class="ui image centered bordered rounded person-avatar tiny middle aligned"/>` +
+                            `<img src="${window.UTIL.JSF.toResourceURL('_default', element.nameAsResource)}" alt="Avatar" class="ui image centered bordered rounded person-avatar tiny middle aligned"/>` +
                             `&#160;&#160;` +
                             `<i class="${patient.avatar.id === element.id ? 'checkmark green' : ''} icon"/>` +
                             `</td>` +

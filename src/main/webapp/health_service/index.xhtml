@@ -65,13 +65,13 @@
                                             <i class="filter icon"/>
                                             #{i18n["health.service.filter"]}
                                         </div>
-                                        <div class="scrolling menu">
+                                        <div class="scrolling menu" id="crest-container">
                                             <ui:repeat value="#{healthService.healthServices}" var="hs">
                                                 <div class="item" data-value="#{hs.id}">
                                                     <h:graphicImage library="_default"
                                                                     name="#{hs.crestAsResource}"
                                                                     alt="Avatar"
-                                                                    style="width: 2em; height: 2em;"
+                                                                    style="width: 2em; height: auto; vertical-align: middle"
                                                                     styleClass="ui image bordered rounded middle aligned"
                                                     />
                                                     #{hs.province.nameLongCapitalized}

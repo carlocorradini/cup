@@ -18,13 +18,13 @@ import java.util.logging.Logger;
 public final class EmailUtil {
 
     private static final Logger LOGGER = Logger.getLogger(EmailUtil.class.getName());
-    private static Properties properties;
+    private static Session session;
 
     /**
      * Configure the Utility with the loaded Property
      */
     public static void configure() {
-        properties = System.getProperties();
+        Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", EmailConfig.getSmtpHost());
         properties.setProperty("mail.smtp.port", Integer.toString(EmailConfig.getSmtpPort()));
         properties.setProperty("mail.smtp.socketFactory.port", Integer.toString(EmailConfig.getSmtpPort()));
@@ -32,6 +32,13 @@ public final class EmailUtil {
         properties.setProperty("mail.smtp.auth", Boolean.toString(EmailConfig.getSmtpAuth()));
         properties.setProperty("mail.smtp.starttls.enable", Boolean.toString(EmailConfig.getSmtpTls()));
         properties.setProperty("mail.debug", Boolean.toString(EmailConfig.getDebug()));
+
+        session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(EmailConfig.getUsername(), EmailConfig.getPassword());
+            }
+        });
     }
 
     /**
@@ -42,17 +49,7 @@ public final class EmailUtil {
      * @param text      The body of the email to send
      */
     public static void send(String recipient, String subject, String text) {
-        Session session;
-        Message message;
-
-        session = Session.getInstance(properties, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(EmailConfig.getUsername(), EmailConfig.getPassword());
-            }
-        });
-
-        message = new MimeMessage(session);
+        Message message = new MimeMessage(session);
 
         try {
             message.setFrom(new InternetAddress(EmailConfig.getUsername()));

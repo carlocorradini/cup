@@ -6,17 +6,71 @@
 >
     <ui:define name="title">#{i18n["common.dashboard.healthService"]}</ui:define>
 
+    <ui:define name="js">
+        <h:outputScript library="_default"
+                        name="js/hs_dashboard.js"
+                        target="body"/>
+    </ui:define>
 
     <ui:define name="content">
         <ui:fragment rendered="#{not empty healthService.authHealthService}">
-            <h2 class="ui center aligned header">
+            <h1 class="ui center aligned header">
                 <h:graphicImage styleClass="ui image"
                                 library="_default"
                                 name="#{healthService.authHealthService.crestAsResource}"
                                 alt="Crest"
                 />
                 #{healthService.authHealthService.province.nameLongCapitalized}
-            </h2>
+            </h1>
+
+            <div class="ui divider"></div>
+
+            <div class="ui top attached tabular menu" id="dashboard-hs-tab">
+                <a class="item active" data-tab="information">
+                    <i class="address card outline icon"/>
+                    <span>#{i18n["common.info.long"]}</span>
+                </a>
+                <a class="item" data-tab="services">
+                    <i class="compass outline icon"/>
+                    <span>#{i18n["common.services"]}</span>
+                </a>
+            </div>
+
+            <div class="ui bottom attached tab segment active" data-tab="information">
+                <table class="ui very basic celled table">
+                    <tbody>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.id"]}</td>
+                        <td>#{healthService.authHealthService.id}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["commom.email"]}</td>
+                        <td>#{healthService.authHealthService.email}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.province"]}</td>
+                        <td>#{healthService.authHealthService.province.nameLongCapitalized}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.province.acronym"]}</td>
+                        <td>#{healthService.authHealthService.province.nameShort}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.region.id"]}</td>
+                        <td>#{healthService.authHealthService.province.region.id}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-strong">#{i18n["common.region"]}</td>
+                        <td>#{healthService.authHealthService.province.region.nameCapitalized}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ui bottom attached tab segment" data-tab="services">
+
+            </div>
+
         </ui:fragment>
     </ui:define>
 </ui:composition>

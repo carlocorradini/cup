@@ -132,7 +132,7 @@ window.UTIL = {
          * @param url The relative URL of the resource
          * @returns {string|undefined} The correctly formatted JSF URL for resources
          */
-        resourceURL: function (library, url) {
+        toResourceURL: function (library, url) {
             if (library === null || library === undefined
                 || url === null || url === undefined) {
                 return undefined;

@@ -24,7 +24,7 @@ $(document).ready(() => {
                 if (patient !== null && patient !== undefined) {
                     writeReport.patient.$fullName.html(patient.fullNameCapitalized);
                     writeReport.patient.$fiscalCode.html(patient.fiscalCode);
-                    writeReport.patient.$avatar.attr("src", window.UTIL.JSF.resourceURL("_default", patient.avatar.nameAsResource));
+                    writeReport.patient.$avatar.attr("src", window.UTIL.JSF.toResourceURL("_default", patient.avatar.nameAsResource));
                 }
             }
         }

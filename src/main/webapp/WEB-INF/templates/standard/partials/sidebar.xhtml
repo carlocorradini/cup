@@ -37,6 +37,22 @@
                     <i class="h square icon"/>
                     #{i18n["common.dashboard"]}
                 </h:link>
+
+                <div class="item">
+                    <div class="header">#{i18n["common.services"]}</div>
+                    <div class="menu">
+                        <h:link outcome="health_service/dashboard/visit_todo/index"
+                                styleClass="item">
+                            #{i18n["common.todoVisits"]}
+                            <span class="ui red label">#{healthService.assignedToDoPrescriptionExamCount}</span>
+                        </h:link>
+                        <h:link outcome="health_service/dashboard/visit_all/index"
+                                styleClass="item">
+                            #{i18n["common.total.assignedVisits"]}
+                            <span class="ui yellow empty circular label"/>
+                        </h:link>
+                    </div>
+                </div>
             </ui:fragment>
             <!-- END HEALTH SERVICE -->
 

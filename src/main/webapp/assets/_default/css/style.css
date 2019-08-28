@@ -328,6 +328,10 @@ nav.sidebar .avatar .avatar-preview.crest > img {
     border-radius: initial;
 }
 
+nav.sidebar .avatar .avatar-preview.crest {
+    height: auto;
+}
+
 /* Name & Surname */
 nav.sidebar .name-surname {
     display: block;
