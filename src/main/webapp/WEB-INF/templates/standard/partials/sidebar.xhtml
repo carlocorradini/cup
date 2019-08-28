@@ -3,141 +3,175 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
 >
-    <ui:fragment rendered="#{not empty person.authPerson}">
+    <ui:fragment rendered="#{not empty person.authPerson or not empty healthService.authHealthService}">
         <nav class="ui left sidebar vertical menu big" id="sidebar-menu">
 
             <div class="close-container">
                 <div id="sidebar-menu-close" class="close"></div>
             </div>
 
-            <div id="sidebar-avatar-error" class="hidden">
-                <div class="ui negative message tiny">
-                    <i class="exclamation triangle icon"/>
-                    #{i18n["sidebar.avatar.error"]}
-                    <h:outputText value="#{app.configAvatarMaxFileSize / 1024}">
-                        <f:convertNumber integerOnly="true"/>
-                    </h:outputText>
-                    KByte
+            <!-- HEALTH SERVICE-->
+            <ui:fragment rendered="#{not empty healthService.authHealthService}">
+                <div class="avatar">
+                    <div class="avatar-preview crest">
+                        <h:graphicImage library="_default"
+                                        name="#{healthService.authHealthService.crestAsResource}"
+                                        alt="Crest"
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div class="avatar">
-                <div class="avatar-edit">
-                    <input type="file" id="sidebar-avatar-input"
-                           accept=".png, .jpg, .jpeg"
-                           data-max-size="#{app.configAvatarMaxFileSize}"
-                    />
-                    <label for="sidebar-avatar-input">
-                        <i class="pencil alternate icon"/>
-                    </label>
-                </div>
-                <div class="avatar-save hidden" id="sidebar-avatar-save">
-                    <i class="save outline icon blue"/>
-                    <i class="check icon green hidden"/>
-                    <i class="close icon red hidden"/>
-                    <i class="notched circle loading icon hidden"/>
-                </div>
-                <div class="avatar-preview">
-                    <h:graphicImage id="sidebar-avatar-image"
-                                    styleClass="person-avatar"
-                                    library="_default"
-                                    name="#{person.avatar.nameAsResource}"
-                                    alt="Avatar"
-                    />
-                </div>
-            </div>
+                <h4 class="name-surname text-overflow-ellipsis">
+                    #{healthService.authHealthService.province.nameLongCapitalized}
+                </h4>
 
-            <h4 class="name-surname text-overflow-ellipsis">
-                #{person.authPerson.fullNameCapitalized}
-            </h4>
-
-            <div class="item">
-                <div class="ui input disabled">
-                    <input type="text" placeholder="#{i18n['common.search']}..."/>
-                </div>
-            </div>
-
-            <h:link outcome="/dashboard/private/index"
-                    styleClass="item"
-            >
-                <i class="th icon"/>
-                #{i18n["common.dashboard.personal"]}
-            </h:link>
-            <h:link outcome="/dashboard/doctor/index"
-                    styleClass="item"
-                    rendered="#{not empty doctor.authDoctor}"
-            >
-                <i class="user md icon"/>
-                #{i18n["common.dashboard.doctor"]}
-            </h:link>
-            <h:link outcome="/dashboard/specialist/index"
-                    styleClass="item"
-                    rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
-                <i class="street view icon"/>
-                #{i18n["common.dashboard.specialist"]}
-            </h:link>
-
-            <div class="item">
-                <div class="header">#{i18n["common.personal"]}</div>
-                <div class="menu">
-                    <h:link outcome="/dashboard/private/report/index"
-                            styleClass="item">
-                        #{i18n["common.reportsNew"]}
-                        <span class="ui red label">#{person.prescriptionExamNotReadCount}</span>
-                    </h:link>
-                    <h:link outcome="/dashboard/private/exam/index"
-                            styleClass="item">
-                        #{i18n["common.exams"]}
-                        <span class="ui yellow empty circular label"/>
-                    </h:link>
-                    <h:link outcome="/dashboard/private/prescription/index"
-                            styleClass="item">
-                        #{i18n["common.prescriptions"]}
-                        <span class="ui green empty circular label"/>
-                    </h:link>
-                </div>
-            </div>
-
-            <ui:fragment rendered="#{not empty doctor.authDoctor}">
                 <div class="item">
-                    <div class="header">#{i18n["common.doctor"]}</div>
+                    <div class="ui input disabled">
+                        <input type="text" placeholder="#{i18n['common.search']}..."/>
+                    </div>
+                </div>
+
+                <h:link outcome="/health_service/dashboard/index"
+                        styleClass="item"
+                >
+                    <i class="h square icon"/>
+                    #{i18n["common.dashboard"]}
+                </h:link>
+            </ui:fragment>
+            <!-- END HEALTH SERVICE -->
+
+            <!-- PERSON -->
+            <ui:fragment rendered="#{not empty person.authPerson}">
+                <div id="sidebar-avatar-error" class="hidden">
+                    <div class="ui negative message tiny">
+                        <i class="exclamation triangle icon"/>
+                        #{i18n["sidebar.avatar.error"]}
+                        <h:outputText value="#{app.configAvatarMaxFileSize / 1024}">
+                            <f:convertNumber integerOnly="true"/>
+                        </h:outputText>
+                        KByte
+                    </div>
+                </div>
+
+                <div class="avatar">
+                    <div class="avatar-edit">
+                        <input type="file" id="sidebar-avatar-input"
+                               accept=".png, .jpg, .jpeg"
+                               data-max-size="#{app.configAvatarMaxFileSize}"
+                        />
+                        <label for="sidebar-avatar-input">
+                            <i class="pencil alternate icon"/>
+                        </label>
+                    </div>
+                    <div class="avatar-save hidden" id="sidebar-avatar-save">
+                        <i class="save outline icon blue"/>
+                        <i class="check icon green hidden"/>
+                        <i class="close icon red hidden"/>
+                        <i class="notched circle loading icon hidden"/>
+                    </div>
+                    <div class="avatar-preview">
+                        <h:graphicImage id="sidebar-avatar-image"
+                                        styleClass="person-avatar"
+                                        library="_default"
+                                        name="#{person.avatar.nameAsResource}"
+                                        alt="Avatar"
+                        />
+                    </div>
+                </div>
+
+                <h4 class="name-surname text-overflow-ellipsis">
+                    #{person.authPerson.fullNameCapitalized}
+                </h4>
+
+                <div class="item">
+                    <div class="ui input disabled">
+                        <input type="text" placeholder="#{i18n['common.search']}..."/>
+                    </div>
+                </div>
+
+                <h:link outcome="/dashboard/private/index"
+                        styleClass="item"
+                >
+                    <i class="th icon"/>
+                    #{i18n["common.dashboard.personal"]}
+                </h:link>
+                <h:link outcome="/dashboard/doctor/index"
+                        styleClass="item"
+                        rendered="#{not empty doctor.authDoctor}"
+                >
+                    <i class="user md icon"/>
+                    #{i18n["common.dashboard.doctor"]}
+                </h:link>
+                <h:link outcome="/dashboard/specialist/index"
+                        styleClass="item"
+                        rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
+                    <i class="street view icon"/>
+                    #{i18n["common.dashboard.specialist"]}
+                </h:link>
+
+                <div class="item">
+                    <div class="header">#{i18n["common.personal"]}</div>
                     <div class="menu">
-                        <h:link outcome="/dashboard/doctor/patients/index"
+                        <h:link outcome="/dashboard/private/report/index"
                                 styleClass="item">
-                            #{i18n["common.patients"]}
-                            <span class="ui red empty circular label"/>
+                            #{i18n["common.reportsNew"]}
+                            <span class="ui red label">#{person.prescriptionExamNotReadCount}</span>
                         </h:link>
-                        <h:link outcome="/dashboard/doctor/prescription_medicine/index"
+                        <h:link outcome="/dashboard/private/exam/index"
                                 styleClass="item">
-                            #{i18n["common.prescriptionMedicine"]}
+                            #{i18n["common.exams"]}
                             <span class="ui yellow empty circular label"/>
                         </h:link>
-                        <h:link outcome="/dashboard/doctor/prescription_exam/index"
+                        <h:link outcome="/dashboard/private/prescription/index"
                                 styleClass="item">
-                            #{i18n["common.prescriptionExam"]}
+                            #{i18n["common.prescriptions"]}
                             <span class="ui green empty circular label"/>
                         </h:link>
                     </div>
                 </div>
-            </ui:fragment>
 
-            <ui:fragment rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
-                <div class="item">
-                    <div class="header">#{i18n["common.specialist"]}</div>
-                    <div class="menu">
-                        <h:link outcome="/dashboard/specialist/visit_todo/index"
-                                styleClass="item">
-                            #{i18n["common.todoVisits"]}
-                            <span class="ui red label">#{doctorSpecialist.assignedToDoPrescriptionExamCount}</span>
-                        </h:link>
-                        <h:link outcome="/dashboard/specialist/visit_all/index"
-                                styleClass="item">
-                            #{i18n["common.total.assignedVisits"]}
-                            <span class="ui yellow empty circular label"/>
-                        </h:link>
+                <ui:fragment rendered="#{not empty doctor.authDoctor}">
+                    <div class="item">
+                        <div class="header">#{i18n["common.doctor"]}</div>
+                        <div class="menu">
+                            <h:link outcome="/dashboard/doctor/patients/index"
+                                    styleClass="item">
+                                #{i18n["common.patients"]}
+                                <span class="ui red empty circular label"/>
+                            </h:link>
+                            <h:link outcome="/dashboard/doctor/prescription_medicine/index"
+                                    styleClass="item">
+                                #{i18n["common.prescriptionMedicine"]}
+                                <span class="ui yellow empty circular label"/>
+                            </h:link>
+                            <h:link outcome="/dashboard/doctor/prescription_exam/index"
+                                    styleClass="item">
+                                #{i18n["common.prescriptionExam"]}
+                                <span class="ui green empty circular label"/>
+                            </h:link>
+                        </div>
                     </div>
-                </div>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
+                    <div class="item">
+                        <div class="header">#{i18n["common.specialist"]}</div>
+                        <div class="menu">
+                            <h:link outcome="/dashboard/specialist/visit_todo/index"
+                                    styleClass="item">
+                                #{i18n["common.todoVisits"]}
+                                <span class="ui red label">#{doctorSpecialist.assignedToDoPrescriptionExamCount}</span>
+                            </h:link>
+                            <h:link outcome="/dashboard/specialist/visit_all/index"
+                                    styleClass="item">
+                                #{i18n["common.total.assignedVisits"]}
+                                <span class="ui yellow empty circular label"/>
+                            </h:link>
+                        </div>
+                    </div>
+                </ui:fragment>
             </ui:fragment>
+            <!-- END PERSON -->
 
             <div class="item">
                 <a href="#{request.contextPath}/signout.handler" class="ui red fluid button">

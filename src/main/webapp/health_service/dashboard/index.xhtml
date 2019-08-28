@@ -1,14 +1,22 @@
 <ui:composition
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
 >
     <ui:define name="title">#{i18n["common.dashboard.healthService"]}</ui:define>
 
 
     <ui:define name="content">
-        <ui:fragment rendered="">
-
+        <ui:fragment rendered="#{not empty healthService.authHealthService}">
+            <h2 class="ui center aligned header">
+                <h:graphicImage styleClass="ui image"
+                                library="_default"
+                                name="#{healthService.authHealthService.crestAsResource}"
+                                alt="Crest"
+                />
+                #{healthService.authHealthService.province.nameLongCapitalized}
+            </h2>
         </ui:fragment>
     </ui:define>
 </ui:composition>

@@ -42,9 +42,9 @@ public final class SignOutServlet extends HttpServlet {
             req.setAttribute(AUTH_SIGN_OUT, true);
             req.getRequestDispatcher("/signin/index.xhtml").forward(req, resp);
         } else if (isHealthService) {
-            resp.sendRedirect("/health_service/index.xhtml");
+            resp.sendRedirect(req.getContextPath() + "/health_service/index.xhtml");
         } else {
-            resp.sendRedirect("/index.xhtml");
+            resp.sendRedirect(req.getContextPath() + "/index.xhtml");
         }
     }
 

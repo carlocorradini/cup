@@ -23,6 +23,7 @@
 /* Person Avatar */
 .person-avatar {
     object-fit: cover;
+    object-position: center center;
 }
 
 .person-avatar.large {
@@ -319,6 +320,12 @@ nav.sidebar .avatar .avatar-preview > img {
     width: 100%;
     height: 100%;
     border-radius: 100%;
+}
+
+/* Crest */
+nav.sidebar .avatar .avatar-preview.crest,
+nav.sidebar .avatar .avatar-preview.crest > img {
+    border-radius: initial;
 }
 
 /* Name & Surname */

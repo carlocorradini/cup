@@ -13,7 +13,7 @@
                     />
                 </h:link>
 
-                <ui:fragment rendered="#{not empty person.authPerson}">
+                <ui:fragment rendered="#{not empty person.authPerson or not empty healthService.authHealthService}">
                     <a class="item" id="sidebar-menu-button">
                         <i class="sidebar icon"/>
                         <span class="text">#{i18n["header.menu"]}</span>
@@ -40,11 +40,12 @@
                         </div>
                     </div>
 
-                    <ui:fragment rendered="#{empty person.authPerson}">
+                    <ui:fragment
+                            rendered="#{empty person.authPerson and empty healthService.authHealthService}">
                         <div class="item">
                             <h:link value="#{i18n['common.signIn']}"
                                     outcome="/signin/index"
-                                    styleClass="ui primary button"
+                                    styleClass="ui primary blue button"
                             />
                         </div>
                     </ui:fragment>
