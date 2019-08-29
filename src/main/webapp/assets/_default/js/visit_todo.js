@@ -3,21 +3,21 @@
 // === PAGE READY ===
 $(document).ready(() => {
     const writeReport = {
-        $modal: $("#visit-assigned-write-report-modal"),
-        $button: $("#visit-assigned-table button.write-report-modal-button"),
-        $form: $("#write-report-form"),
+        $modal: $(".visit-todo-write-report-modal"),
+        $button: $("button.visit-todo-write-report-modal-button"),
+        $form: $("form.visit-todo-write-report-form"),
         patient: {
             urlPattern: window.CONTEXT_PATH + "/service/restricted/medical/patient/{1}",
-            $fullName: $("#write-report-patient-full-name"),
-            $fiscalCode: $("#write-report-patient-fiscal-code"),
-            $avatar: $("#write-report-patient-avatar")
+            $fullName: $(".visit-todo-write-report-patient-full-name"),
+            $fiscalCode: $(".visit-todo-write-report-patient-fiscal-code"),
+            $avatar: $(".visit-todo-write-report-patient-avatar")
         },
         data: {
-            $content: $("textarea#write-report-data-content"),
-            $contentLength: $("span#write-report-data-content-length"),
-            $paid: $("#write-report-data-paid"),
-            $examsDropdown: $("#write-report-data-exams"),
-            $medicinesDropdown: $("#write-report-data-medicines")
+            $content: $("textarea.visit-todo-write-report-data-content"),
+            $contentLength: $("span.visit-todo-write-report-data-content-length"),
+            $paid: $(".visit-todo-write-report-data-paid"),
+            $examsDropdown: $(".visit-todo-write-report-data-exams"),
+            $medicinesDropdown: $(".visit-todo-write-report-data-medicines")
         },
         populate: {
             report: function (patient) {
@@ -118,7 +118,7 @@ $(document).ready(() => {
             writeReport.$modal.modal("show");
             $button.removeClass("loading");
         } else {
-            throw "Prescription Id or Patient Id is not a Number";
+            console.error("Prescription Id or Patient Id is not a Number");
         }
     });
 

@@ -11,6 +11,12 @@
         <h:outputScript library="datatables"
                         name="js/datatables.min.js"
                         target="body"/>
+        <h:outputScript library="moment"
+                        name="js/moment.js"
+                        target="body"/>
+        <h:outputScript library="_default"
+                        name="js/visit_creator.js"
+                        target="body"/>
         <h:outputScript library="_default"
                         name="js/prescribed_exam.js"
                         target="body"/>
@@ -42,7 +48,14 @@
                 </div>
             </ui:fragment>
             <ui:fragment rendered="#{not empty person.prescribedExams}">
-                <table class="ui celled striped sortable table" id="prescribed-exam-table">
+                <div class="visit-creator-i18n"
+                     data-i18n="{
+                         &quot;executorIsSpecialist&quot;: &quot;#{i18n['visit.assigned.executor.isSpecialist']}&quot;,
+                         &quot;executorIsHealthService&quot;: &quot;#{i18n['visit.assigned.executor.isHealthService']}&quot;
+                    }"
+                ></div>
+
+                <table class="ui celled striped sortable table visit-creator-table">
                     <thead>
                     <tr>
                         <th>#{i18n["common.exam"]}</th>
@@ -86,8 +99,8 @@
                                 </ui:fragment>
 
                                 <ui:fragment rendered="#{not empty pe.report}">
-                                    <button class="ui fluid button report-modal-button"
-                                            data-report-id="#{pe.report.id}"
+                                    <button class="ui fluid button prescribed-exam-view-report-modal-button"
+                                            data-prescription-id="#{pe.id}"
                                     >
                                         <i class="shuffle icon"/>
                                         #{i18n["common.view"]}
@@ -119,120 +132,141 @@
                 </table>
 
                 <!--  REPORT MODAL -->
-                <ui:repeat value="#{person.prescribedExams}" var="pe">
-                    <ui:fragment rendered="#{not empty pe.report}">
-                        <div class="ui small modal report-modal"
-                             data-report-id="#{pe.report.id}"
-                        >
-                            <i class="red close icon"/>
-                            <div class="header">
-                                <span class="ui large label">
-                                    #{i18n["common.report"]}
-                                    <span class="detail">#{pe.report.id}</span>
-                                </span>
+                <div class="ui small modal visit-creator-patient-report-modal">
+                    <i class="red close icon"/>
+                    <div class="header">
+                        <span class="ui large label">
+                            #{i18n["common.report"]}
+                            <span class="detail visit-creator-patient-report-id"/>
+                        </span>
+                    </div>
+                    <div class="scrolling content">
+                        <table class="ui celled table">
+                            <thead>
+                            <tr>
+                                <th>#{i18n["common.id"]}</th>
+                                <th>#{i18n["common.date"]}</th>
+                                <th>#{i18n["common.hour"]}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><span class="visit-creator-patient-report-id"/></td>
+                                <td><span class="visit-creator-patient-report-date"/></td>
+                                <td><span class="visit-creator-patient-report-time"/></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- EXECUTOR -->
+                        <div class="ui styled fluid accordion visit-creator-patient-report-executor-accordion">
+                            <div class="title">
+                                <i class="dropdown icon"/>
+                                #{i18n["common.executor"]}
                             </div>
-                            <div class="scrolling content">
-                                <table class="ui celled table">
-                                    <thead>
-                                    <tr>
-                                        <th>#{i18n["common.id"]}</th>
-                                        <th>#{i18n["common.date"]}</th>
-                                        <th>#{i18n["common.hour"]}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>#{pe.report.id}</td>
-                                        <td>
-                                            <h:outputText value="#{pe.report.dateTime}">
-                                                <f:convertDateTime type="localDate"/>
-                                            </h:outputText>
-                                        </td>
-                                        <td>
-                                            <h:outputText value="#{pe.report.dateTime}">
-                                                <f:convertDateTime type="localTime"/>
-                                            </h:outputText>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div class="content">
 
-                                <table class="ui celled table">
-                                    <thead>
-                                    <tr>
-                                        <th>#{i18n["common.content"]}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="ui form">
-                                                <div class="field">
-                                                        <textarea autocomplete="off"
-                                                                  readonly=""
-                                                        >#{pe.report.content}</textarea>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                                <div class="ui divider"></div>
-
-                                <ui:fragment rendered="#{empty pe.report.exams}">
-                                    <div class="ui icon message">
+                                <div class="ui info message">
+                                    <div class="header">
                                         <i class="info circle icon"/>
-                                        <div class="content">
-                                            <div class="header">
-                                                #{i18n["prescribed.exam.report.exam.empty.message"]}
-                                            </div>
-                                            <p>#{i18n["prescribed.exam.report.exam.empty.subMessage"]}</p>
-                                        </div>
+                                        <span class="visit-creator-patient-report-executor-message"/>
                                     </div>
-                                </ui:fragment>
-                                <ui:fragment rendered="#{not empty pe.report.exams}">
-                                    <h4>#{i18n["common.exams.suggested"]}</h4>
-                                    <div class="ui list">
-                                        <div class="item">
-                                            <div class="ui bulleted list">
-                                                <ui:repeat value="#{pe.report.exams}" var="re">
-                                                    <div class="item">#{re.name}</div>
-                                                </ui:repeat>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </ui:fragment>
+                                </div>
 
-                                <div class="ui divider"></div>
-
-                                <ui:fragment rendered="#{empty pe.report.medicines}">
-                                    <div class="ui icon message">
-                                        <i class="info circle icon"/>
-                                        <div class="content">
-                                            <div class="header">
-                                                #{i18n["prescribed.exam.report.medicine.empty.message"]}
-                                            </div>
-                                            <p>#{i18n["prescribed.exam.report.medicine.empty.subMessage"]}</p>
+                                <div class="ui card centered">
+                                    <div class="image">
+                                        <img class="ui image centered visit-creator-patient-report-executor-avatar"
+                                             src=""
+                                             alt="Avatar"/>
+                                    </div>
+                                    <div class="content">
+                                        <div class="header">
+                                            <span class="visit-creator-patient-report-executor-full-name"/>
+                                        </div>
+                                        <div class="meta">
+                                            <i class="dot circle outline fitted icon"/>
+                                            <span class="visit-creator-patient-report-executor-territory"/>
                                         </div>
                                     </div>
-                                </ui:fragment>
-                                <ui:fragment rendered="#{not empty pe.report.medicines}">
-                                    <h4>#{i18n["common.medicines.suggested"]}</h4>
-                                    <div class="ui list">
-                                        <div class="item">
-                                            <div class="ui bulleted list">
-                                                <ui:repeat value="#{pe.report.medicines}" var="rm">
-                                                    <div class="item">#{rm.name}</div>
-                                                </ui:repeat>
-                                            </div>
-                                        </div>
+                                    <div class="extra content">
+                                        <span class="meta">
+                                            <i class="hashtag fitted icon"/>
+                                            <span class="visit-creator-patient-report-executor-id"/>
+                                        </span>
                                     </div>
-                                </ui:fragment>
+                                </div>
                             </div>
                         </div>
-                    </ui:fragment>
-                </ui:repeat>
+
+                        <!-- CONTENT -->
+                        <table class="ui celled table">
+                            <thead>
+                            <tr>
+                                <th>#{i18n["common.content"]}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="ui form">
+                                        <div class="field">
+                                            <textarea class="visit-creator-patient-report-content"
+                                                      autocomplete="off"
+                                                      readonly=""
+                                            />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="ui divider"></div>
+
+                        <!-- SUGGESTED EXAMS -->
+                        <div class="ui icon message visit-creator-patient-report-exam-empty">
+                            <i class="info circle icon"/>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n["doctor.patients.patient.report.exam.empty.message"]}
+                                </div>
+                                <p>#{i18n["doctor.patients.patient.report.exam.empty.subMessage"]}</p>
+                            </div>
+                        </div>
+                        <div class="visit-creator-patient-report-exam-container">
+                            <h4>#{i18n["common.exams.suggested"]}</h4>
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="ui bulleted list visit-creator-patient-report-exam-list">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!---->
+                        <div class="ui divider"></div>
+
+                        <!-- SUGGESTED MEDICINES -->
+                        <div class="ui icon message visit-creator-patient-report-medicine-empty">
+                            <i class="info circle icon"/>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n["doctor.patients.patient.report.medicine.empty.message"]}
+                                </div>
+                                <p>#{i18n["doctor.patients.patient.report.medicine.empty.subMessage"]}</p>
+                            </div>
+                        </div>
+                        <div class="visit-creator-patient-report-medicine-container">
+                            <h4>#{i18n["common.medicines.suggested"]}</h4>
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="ui bulleted list visit-creator-patient-report-medicine-list">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </ui:fragment>
 

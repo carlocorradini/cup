@@ -8,13 +8,8 @@ $(document).ready(() => {
 
 function reportsConfig() {
     const reports = {
-        $table: $("#reports-table"),
-        report: {
-            $modalContainer: $("#reports-report-modal-container"),
-            buttonIdPattern: "#reports-report-modal-button-{1}",
-            modalClass: ".report-modal",
-
-        },
+        urlPattern: window.CONTEXT_PATH + "/service/restricted/person/prescription_exam/{1}",
+        $modalButtons: $("button.report-view-report-modal-button"),
         $readCheckboxes: $(".reports-read-checkbox"),
         snackbar: {
             $snackbar: $("#reports-snackbar"),
@@ -25,16 +20,36 @@ function reportsConfig() {
 
     const examsRead = [];
 
-    // Enable Datatable
-    reports.$table.DataTable();
+    // INIT
+    window.visit_creator.init();
 
-    // Enable Report Modal
-    reports.report.$modalContainer.find(reports.report.modalClass).each(function (index, element) {
-        $(element).modal({
-            allowMultiple: false,
-            closable: true,
-            inverted: true
-        }).modal("attach events", window.UTIL.STRING.format(reports.report.buttonIdPattern, $(element).data("report-id")), "show");
+    // Customize
+    window.visit_creator.v.report.$modal.modal({
+        allowMultiple: false,
+        closable: true,
+        inverted: true
+    });
+
+    // Button Event trigger
+    reports.$modalButtons.click(function () {
+        const $button = $(this);
+        const prescriptionId = $button.data("prescription-id");
+
+        if (window.UTIL.NUMBER.isNumber(prescriptionId)) {
+            $button.addClass("loading");
+            $.ajax({
+                type: "GET",
+                url: window.UTIL.STRING.format(reports.urlPattern, prescriptionId),
+                success: function (data) {
+                    window.visit_creator.populate.report(data);
+                    $button.removeClass("loading");
+                    window.visit_creator.v.report.$modal.modal("show");
+                },
+                error: function () {
+                    console.error("Unable to get Prescription Exam");
+                }
+            });
+        }
     });
 
     // Enable checkbox read
@@ -79,10 +94,11 @@ function reportsConfig() {
                     for (let i = 0; i < data.ids.length; ++i) {
                         const id = data.ids[i];
                         if (window.UTIL.NUMBER.isNumber(id)) {
+                            const row = window.visit_creator.v.$table.find(`tbody tr[data-exam-id="${id}"]`);
                             window.UTIL.ARRAY.remove(examsRead, id);
-                            reports.$table
+                            window.visit_creator.v.$table
                                 .DataTable()
-                                .row(reports.$table.find(`tbody tr[data-exam-id="${id}"]`))
+                                .row(row)
                                 .remove()
                                 .draw();
                         }

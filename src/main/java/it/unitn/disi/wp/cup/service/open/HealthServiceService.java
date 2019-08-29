@@ -1,5 +1,8 @@
 package it.unitn.disi.wp.cup.service.open;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.service.model.health_service.CredentialsModel;
 import it.unitn.disi.wp.cup.persistence.dao.HealthServiceDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
@@ -10,10 +13,7 @@ import it.unitn.disi.wp.cup.util.obj.JsonMessage;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -80,6 +80,49 @@ public class HealthServiceService {
         }
 
         return Response.ok().entity(message.toJsonString()).build();
+    }
+
+    /**
+     * Return the {@link HealthService Health Service} as {@link JSON} given its id.
+     * The password & email is removed for security.
+     *
+     * @param healthServiceId The {@link HealthService id}
+     * @return The {@link HealthService Health Service} as {@link JSON}
+     */
+    @GET
+    @Path("get/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getHealthServiceById(@PathParam("id") Long healthServiceId) {
+        Response.ResponseBuilder response;
+        HealthService healthService;
+        JSONObject o;
+
+        if (healthServiceId == null) {
+            // Health Service Id is missing
+            response = Response.status(Response.Status.BAD_REQUEST);
+        } else {
+            try {
+                if ((healthService = healthServiceDAO.getByPrimaryKey(healthServiceId)) == null) {
+                    // Health Service Id is invalid
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                } else {
+                    // ALL CORRECT, set the Health Service entity
+                    // Remove password
+                    o = (JSONObject) JSON.toJSON(healthService);
+                    o.remove("password");
+                    o.remove("email");
+
+                    response = Response
+                            .ok()
+                            .entity(o.toJSONString());
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to return the Health Service given its id", ex);
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return response.build();
     }
 
 }

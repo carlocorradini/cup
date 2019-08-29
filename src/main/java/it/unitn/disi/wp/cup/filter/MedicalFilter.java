@@ -2,6 +2,7 @@ package it.unitn.disi.wp.cup.filter;
 
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
+import it.unitn.disi.wp.cup.persistence.entity.HealthService;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 
 import javax.servlet.*;
@@ -53,6 +54,7 @@ public final class MedicalFilter implements Filter {
         HttpServletResponse resp;
         Doctor doctor;
         DoctorSpecialist doctorSpecialist;
+        HealthService healthService;
         if (DEBUG) {
             log(NAME + "DoBeforeProcessing");
         }
@@ -63,7 +65,8 @@ public final class MedicalFilter implements Filter {
 
             doctor = AuthUtil.getAuthDoctor(req);
             doctorSpecialist = AuthUtil.getAuthDoctorSpecialist(req);
-            if (doctor == null && doctorSpecialist == null) {
+            healthService = AuthUtil.getAuthHealthService(req);
+            if (doctor == null && doctorSpecialist == null && healthService == null) {
                 resp.sendRedirect(resp.encodeRedirectURL(req.getServletContext().getContextPath() + "/signin/index.xhtml"));
             } else {
                 authenticated = true;

@@ -9,7 +9,8 @@ $(document).ready(() => {
     // INIT
     window.visit_creator.init();
 
-    $("button.view-report-modal-button").click(function () {
+    // Button Event trigger
+    $("button.visit-all-view-report-modal-button").click(function () {
         const $button = $(this);
         const prescriptionId = $button.data("prescription-id");
 

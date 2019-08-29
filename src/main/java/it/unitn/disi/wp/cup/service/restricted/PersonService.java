@@ -289,6 +289,45 @@ public class PersonService {
     }
 
     /**
+     * Return the {@link PrescriptionExam Prescription Exam} as {@link JSON} given its id
+     *
+     * @param prescriptionId The {@link PrescriptionExam Prescription Exam} id
+     * @return The {@link PrescriptionExam Prescription Exam} as {@link JSON}
+     */
+    @GET
+    @Path("prescription_exam/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPrescriptionExamById(@PathParam("id") Long prescriptionId) {
+        Response.ResponseBuilder response;
+        PrescriptionExam prescriptionExam;
+
+        if (prescriptionId == null) {
+            // Prescription Id is missing
+            response = Response.status(Response.Status.BAD_REQUEST);
+        } else {
+            try {
+                if ((prescriptionExam = prescriptionExamDAO.getByPrimaryKey(prescriptionId)) == null) {
+                    // Prescription Id is invalid
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                } else if (!prescriptionExam.getPersonId().equals(person.getId())) {
+                    // The Prescription is not for the authenticated Person
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                } else {
+                    // ALL CORRECT, set the Prescription Exam entity
+                    response = Response
+                            .ok()
+                            .entity(JSON.toJSONString(prescriptionExam));
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to return the Prescription Exam given its id", ex);
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return response.build();
+    }
+
+    /**
      * Given a {@link PrescriptionMedicine prescriptionMedicine} id generate a {@link PrescriptionMedicinePDFUtil PDF}.
      * The {@link PrescriptionMedicine prescription} must be a valid {@link PrescriptionMedicine prescriptionMedicine}
      * and must belong to the Authenticated {@link Person person}

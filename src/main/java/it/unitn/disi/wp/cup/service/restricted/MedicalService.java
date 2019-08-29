@@ -2,15 +2,13 @@ package it.unitn.disi.wp.cup.service.restricted;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import it.unitn.disi.wp.cup.persistence.dao.HealthServiceDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
-import it.unitn.disi.wp.cup.persistence.entity.Doctor;
-import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
-import it.unitn.disi.wp.cup.persistence.entity.Person;
-import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
+import it.unitn.disi.wp.cup.persistence.entity.*;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 
 import javax.servlet.ServletContext;
@@ -64,25 +62,25 @@ public class MedicalService {
     /**
      * Return the {@link PrescriptionExam Prescription Exam} as {@link JSON} given its id
      *
-     * @param prescriptionid The {@link PrescriptionExam Prescription Exam} id
+     * @param prescriptionId The {@link PrescriptionExam Prescription Exam} id
      * @return The {@link PrescriptionExam Prescription Exam} as {@link JSON}
      */
     @GET
     @Path("prescription_exam/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPrescriptionExamById(@PathParam("id") Long prescriptionid) {
+    public Response getPrescriptionExamById(@PathParam("id") Long prescriptionId) {
         Response.ResponseBuilder response;
         PrescriptionExam prescriptionExam;
 
         if (!isAuthenticated()) {
             // Unauthorized
             response = Response.status(Response.Status.UNAUTHORIZED);
-        } else if (prescriptionid == null) {
+        } else if (prescriptionId == null) {
             // Prescription Id is missing
             response = Response.status(Response.Status.BAD_REQUEST);
         } else {
             try {
-                if ((prescriptionExam = prescriptionExamDAO.getByPrimaryKey(prescriptionid)) == null) {
+                if ((prescriptionExam = prescriptionExamDAO.getByPrimaryKey(prescriptionId)) == null) {
                     // Prescription Id is invalid
                     response = Response.status(Response.Status.BAD_REQUEST);
                 } else {
@@ -103,7 +101,7 @@ public class MedicalService {
     /**
      * Return the {@link Person patient} as {@link JSON} given its id.
      * It's available only for authenticated and qualified users.
-     * The password is removed for security.
+     * The password & email is removed for security.
      *
      * @param patientId The {@link Person id}
      * @return The {@link Person person} as {@link JSON}
@@ -132,6 +130,7 @@ public class MedicalService {
                     // Remove password
                     o = (JSONObject) JSON.toJSON(patient);
                     o.remove("password");
+                    o.remove("email");
 
                     response = Response
                             .ok()

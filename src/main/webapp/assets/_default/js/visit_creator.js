@@ -41,70 +41,77 @@ window.visit_creator = {
             if (!window.UTIL) {
                 throw "UTIL is not defined";
             }
+
             const v = window.visit_creator.v = {
-                $table: $("#visit-assigned-table"),
-                i18n: $("#visit-assigned-i18n").data("i18n"),
+                $table: $(".visit-creator-table"),
+                i18n: $(".visit-creator-i18n").data("i18n"),
                 patient: {
                     urlPattern: window.CONTEXT_PATH + "/service/restricted/medical/patient/{1}",
-                    $modal: $("#visit-assigned-patient-modal"),
-                    $button: $("#visit-assigned-table button.patient-modal-button"),
-                    $accordion: $("#patient-accordion"),
+                    $modal: $(".visit-creator-patient-modal"),
+                    $button: $("button.visit-creator-patient-modal-button"),
+                    $accordion: $(".visit-creator-patient-accordion"),
                     personalInfomation: {
-                        $id: $("span#patient-id"),
-                        $name: $("span#patient-name"),
-                        $surname: $("span#patient-surname"),
-                        $fullName: $("span#patient-full-name"),
-                        $sex: $("span#patient-sex"),
-                        $fiscalCode: $("span#patient-fiscal-code"),
-                        $birthDate: $("span#patient-birth-date"),
-                        $birthCity: $("span#patient-birth-city"),
-                        $domicile: $("span#patient-domicile"),
-                        $avatar: $("img#patient-avatar")
+                        $id: $("span.visit-creator-patient-id"),
+                        $name: $("span.visit-creator-patient-name"),
+                        $surname: $("span.visit-creator-patient-surname"),
+                        $fullName: $("span.visit-creator-patient-full-name"),
+                        $sex: $("span.visit-creator-patient-sex"),
+                        $fiscalCode: $("span.visit-creator-patient-fiscal-code"),
+                        $birthDate: $("span.visit-creator-patient-birth-date"),
+                        $birthCity: $("span.visit-creator-patient-birth-city"),
+                        $domicile: $("span.visit-creator-patient-domicile"),
+                        $avatar: $("img.visit-creator-patient-avatar")
                     },
                     exams: {
-                        $table: $("table#patient-exams-table"),
-                        buttonClass: "button.patient-modal-report-button"
+                        $table: $("table.visit-creator-patient-exams-table")
                     },
                     medicines: {
-                        $emptyMessage: $("#patient-medicines-empty"),
-                        $table: $("table#patient-medicines-table")
+                        $emptyMessage: $(".visit-creator-patient-medicines-empty"),
+                        $table: $("table.visit-creator-patient-medicines-table")
                     },
                     timeline: {
-                        $emptyMessage: $("#patient-timeline-empty"),
-                        $table: $("table#patient-timeline-table")
+                        $emptyMessage: $(".visit-creator-patient-timeline-empty"),
+                        $table: $("table.visit-creator-patient-timeline-table")
                     }
                 },
                 doctor: {
                     urlPattern: window.CONTEXT_PATH + "/service/restricted/medical/patient/{1}",
-                    $modal: $("#visit-assigned-doctor-modal"),
-                    $button: $("#visit-assigned-table button.doctor-modal-button"),
-                    $id: $("#doctor-id"),
-                    $fullName: $("#doctor-full-name"),
-                    $fullNameHeader: $("#doctor-full-name-header"),
-                    $province: $("#doctor-province"),
-                    $avatar: $("#doctor-avatar")
+                    $modal: $(".visit-creator-doctor-modal"),
+                    $button: $(".visit-creator-doctor-modal-button"),
+                    $id: $(".visit-creator-doctor-id"),
+                    $fullName: $(".visit-creator-doctor-full-name"),
+                    $province: $(".visit-creator-doctor-province"),
+                    $avatar: $(".visit-creator-doctor-avatar")
                 },
                 report: {
-                    $modal: $("#visit-assigned-patient-report-modal"),
-                    buttonClass: "button.patient-modal-report-button",
-                    $idHeader: $("span#patient-report-id-header"),
-                    $id: $("span#patient-report-id"),
-                    $date: $("span#patient-report-date"),
-                    $time: $("span#patient-report-time"),
-                    $content: $("textarea#patient-report-content"),
+                    $modal: $(".visit-creator-patient-report-modal"),
+                    buttonClass: "visit-creator-patient-modal-report-button",
+                    $id: $("span.visit-creator-patient-report-id"),
+                    $date: $("span.visit-creator-patient-report-date"),
+                    $time: $("span.visit-creator-patient-report-time"),
+                    $content: $("textarea.visit-creator-patient-report-content"),
+                    executor: {
+                        urlPatternSpecialist: window.CONTEXT_PATH + "/service/open/specialist/get/{1}",
+                        urlPatternHealthService: window.CONTEXT_PATH + "/service/open/health_service/get/{1}",
+                        $message: $(".visit-creator-patient-report-executor-message"),
+                        $accordion: $(".visit-creator-patient-report-executor-accordion"),
+                        $id: $(".visit-creator-patient-report-executor-id"),
+                        $fullName: $(".visit-creator-patient-report-executor-full-name"),
+                        $territory: $(".visit-creator-patient-report-executor-territory"),
+                        $avatar: $(".visit-creator-patient-report-executor-avatar")
+                    },
                     exam: {
-                        $emptyMessage: $("#patient-report-exam-empty"),
-                        $container: $("#patient-report-exam-container"),
-                        $list: $("#patient-report-exam-list")
+                        $emptyMessage: $(".visit-creator-patient-report-exam-empty"),
+                        $container: $(".visit-creator-patient-report-exam-container"),
+                        $list: $(".visit-creator-patient-report-exam-list")
                     },
                     medicine: {
-                        $emptyMessage: $("#patient-report-medicine-empty"),
-                        $container: $("#patient-report-medicine-container"),
-                        $list: $("#patient-report-medicine-list")
+                        $emptyMessage: $(".visit-creator-patient-report-medicine-empty"),
+                        $container: $(".visit-creator-patient-report-medicine-container"),
+                        $list: $(".visit-creator-patient-report-medicine-list")
                     }
                 }
             };
-
 
             // Set moment correct locale
             window.moment.locale(window.navigator.userLanguage || window.navigator.language);
@@ -177,6 +184,10 @@ window.visit_creator = {
             });
 
             // === REPORT ===
+            // Accordion
+            v.report.executor.$accordion.accordion({
+                animateChildren: false
+            });
             // Modal
             v.report.$modal.modal({
                 allowMultiple: true,
@@ -203,7 +214,6 @@ window.visit_creator = {
             if (doctor !== null && doctor !== undefined) {
                 template.$id.html(doctor.id);
                 template.$fullName.html(doctor.fullNameCapitalized);
-                template.$fullNameHeader.html(doctor.fullNameCapitalized);
                 template.$province.html(doctor.city.province.nameLongCapitalized);
                 template.$avatar.attr("src", window.UTIL.JSF.toResourceURL("_default", doctor.avatar.nameAsResource));
             }
@@ -254,7 +264,7 @@ window.visit_creator = {
                         tr += `<i class="icon close"/>` +
                             `${i18n.noReport}`;
                     } else {
-                        tr += `<button class="ui fluid button patient-modal-report-button" data-prescription-id="${element.id}">` +
+                        tr += `<button class="ui fluid button ${reportTemplate.buttonClass}" data-prescription-id="${element.id}">` +
                             `<i class="shuffle icon"/>` +
                             `${i18n.view}` +
                             `</button>`;
@@ -263,7 +273,7 @@ window.visit_creator = {
                     template.exams.$table.find("tbody").append(tr);
                 });
                 // Attach Events on Report Button
-                $(template.exams.buttonClass).click(function () {
+                $(`button.${reportTemplate.buttonClass}`).click(function () {
                     const $button = $(this);
                     const prescription = pExamCache[$button.data("prescription-id")];
 
@@ -327,21 +337,20 @@ window.visit_creator = {
         },
         /**
          * Populate the Report
-         * @param prescription The Report obj
+         * @param prescription The Prescription Exam obj
          */
         report: function (prescription) {
             window.visit_creator.check();
             const template = window.visit_creator.v.report;
-            const i18n = window.visit_creator.v.i18n;
 
             if (prescription !== null && prescription !== undefined && prescription.report) {
                 const report = prescription.report;
 
-                template.$idHeader.html(report.id);
                 template.$id.html(report.id);
                 template.$date.html(moment(report.dateTime).format("ll"));
                 template.$time.html(moment(report.dateTime).format("LTS"));
                 template.$content.val(report.content);
+                visit_creator.populate.reportExecutor(prescription);
 
                 if (!report.exams || report.exams.length === 0) {
                     // Empty Exams
@@ -373,6 +382,71 @@ window.visit_creator = {
                         const item = `<div class="item">${element.name}</div>`;
                         template.medicine.$list.append(item);
                     });
+                }
+            }
+        },
+        /**
+         * Populate the Report Executor
+         * @param prescription The Prescription Exam obj
+         */
+        reportExecutor: function (prescription) {
+            window.visit_creator.check();
+            const template = window.visit_creator.v.report.executor;
+            const i18n = window.visit_creator.v.i18n;
+            const executor = {
+                message: undefined,
+                id: undefined,
+                fullName: undefined,
+                territory: undefined,
+                avatar: undefined,
+                populate: function () {
+                    template.$message.html(executor.message);
+                    template.$id.html(executor.id);
+                    template.$fullName.html(executor.fullName);
+                    template.$territory.html(executor.territory);
+                    template.$avatar.attr("src", executor.avatar);
+                }
+            };
+
+            if (prescription !== null && prescription !== undefined) {
+                // Executor
+                if (!prescription.exam.supported && prescription.specialistId) {
+                    // Executor is a Specialist
+                    $.ajax({
+                        type: "GET",
+                        url: window.UTIL.STRING.format(visit_creator.v.report.executor.urlPatternSpecialist, prescription.specialistId),
+                        success: function (data) {
+                            executor.message = i18n.executorIsSpecialist;
+                            executor.id = data.id;
+                            executor.fullName = data.fullNameCapitalized;
+                            executor.territory = data.city.nameCapitalized;
+                            executor.avatar = window.UTIL.JSF.toResourceURL("_default", data.avatar.nameAsResource);
+                            executor.populate();
+                        },
+                        error: function () {
+                            console.error("Unable to get Specialist");
+                        }
+                    });
+                } else if (prescription.exam.supported && prescription.healthServiceId) {
+                    // Executor is the Health Service
+                    $.ajax({
+                        type: "GET",
+                        url: window.UTIL.STRING.format(visit_creator.v.report.executor.urlPatternHealthService, prescription.healthServiceId),
+                        success: function (data) {
+                            executor.message = i18n.executorIsHealthService;
+                            executor.id = data.id;
+                            executor.fullName = data.province.nameLongCapitalized;
+                            executor.territory = data.province.region.nameCapitalized;
+                            executor.avatar = window.UTIL.JSF.toResourceURL("_default", data.crestAsResource);
+                            executor.populate();
+                        },
+                        error: function () {
+                            console.error("Unable to get Health Service");
+                        }
+                    });
+                } else {
+                    // Error
+                    console.error("Found Report without any executor");
                 }
             }
         }

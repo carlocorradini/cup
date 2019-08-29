@@ -2,6 +2,7 @@
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
         xmlns:ui="http://java.sun.com/jsf/facelets"
 >
     <ui:define name="title">#{i18n["common.dashboard.healthService"]}</ui:define>
@@ -68,9 +69,33 @@
             </div>
 
             <div class="ui bottom attached tab segment" data-tab="services">
-
+                <div class="ui centered cards">
+                    <h:link outcome="/health_service/dashboard/visit_todo/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/visit.svg"
+                                            alt="#{i18n['common.assignedVisits']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.todoVisits"])}
+                        </div>
+                    </h:link>
+                    <h:link outcome="/health_service/dashboard/visit_all/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/visit_check.svg"
+                                            alt="#{i18n['common.total.assignedVisits']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.total.assignedVisits"])}
+                        </div>
+                    </h:link>
+                </div>
             </div>
-
         </ui:fragment>
     </ui:define>
 </ui:composition>

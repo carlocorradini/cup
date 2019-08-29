@@ -8,31 +8,39 @@ $(document).ready(() => {
 
 function prescribedExamConfig() {
     const pExam = {
-        $table: $("#prescribed-exam-table"),
-        report: {
-            modalClass: ".report-modal",
-            $modalButton: $("button.report-modal-button")
-        }
+        urlPattern: window.CONTEXT_PATH + "/service/restricted/person/prescription_exam/{1}",
+        $modalButtons: $("button.prescribed-exam-view-report-modal-button"),
     };
 
-    // Enable Datatable
-    pExam.$table.DataTable();
+    // INIT
+    window.visit_creator.init();
 
-    // Triggers
-    pExam.report.$modalButton.click(function () {
+    // Customize
+    window.visit_creator.v.report.$modal.modal({
+        allowMultiple: false,
+        closable: true,
+        inverted: true
+    });
+
+    // Button Event trigger
+    pExam.$modalButtons.click(function () {
         const $button = $(this);
-        const reportId = $button.data("report-id");
+        const prescriptionId = $button.data("prescription-id");
 
-        if (window.UTIL.NUMBER.isNumber(reportId)) {
+        if (window.UTIL.NUMBER.isNumber(prescriptionId)) {
             $button.addClass("loading");
-            $(`${pExam.report.modalClass}[data-report-id="${reportId}"`).modal({
-                allowMultiple: false,
-                closable: true,
-                inverted: true,
-                onShow: function () {
+            $.ajax({
+                type: "GET",
+                url: window.UTIL.STRING.format(pExam.urlPattern, prescriptionId),
+                success: function (data) {
+                    window.visit_creator.populate.report(data);
                     $button.removeClass("loading");
+                    window.visit_creator.v.report.$modal.modal("show");
+                },
+                error: function () {
+                    console.error("Unable to get Prescription Exam");
                 }
-            }).modal("show");
+            });
         }
     });
 }
