@@ -1218,11 +1218,12 @@ div[id^=personal-card-modal-].ui.modal.disabled:after {
     }
 }
 
-/* === SPECIALIST VISIT ASSIGNED === */
-div[id=visit-assigned-patient-modal].ui.modal.disabled:after {
+/* === VISIT CREATOR === */
+/* On Opening Report */
+.visit-creator-patient-modal.ui.modal.disabled:after {
     content: "\01F6AB";
 }
-
-form[id=write-report-form].ui.form.disabled.success:after {
+/* On Writing Report */
+.visit-creator-todo-write-report-form.ui.form.disabled.success:after {
     content: "\02705";
 }

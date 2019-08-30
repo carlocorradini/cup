@@ -316,7 +316,7 @@ public class PersonService {
                     // ALL CORRECT, set the Prescription Exam entity
                     response = Response
                             .ok()
-                            .entity(JSON.toJSONString(prescriptionExam));
+                            .entity(prescriptionExam);
                 }
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to return the Prescription Exam given its id", ex);
@@ -359,7 +359,8 @@ public class PersonService {
                 } else {
                     // ALL CORRECT, generate the PDF
                     response = Response
-                            .ok(PrescriptionMedicinePDFUtil.generate(prescriptionMedicine).toByteArray())
+                            .ok()
+                            .entity(PrescriptionMedicinePDFUtil.generate(prescriptionMedicine).toByteArray())
                             .header("content-disposition", "attachment; filename = Prescription_Medicine_" + prescriptionMedicine.getId() + ".pdf");
                 }
             } catch (DAOException | NullPointerException ex) {
@@ -403,7 +404,8 @@ public class PersonService {
                 } else {
                     // ALL CORRECT, generate the PDF
                     response = Response
-                            .ok(PrescriptionExamPDFUtil.generate(prescriptionExam).toByteArray())
+                            .ok()
+                            .entity(PrescriptionExamPDFUtil.generate(prescriptionExam).toByteArray())
                             .header("content-disposition", "attachment; filename = Prescription_Exam_" + prescriptionExam.getId() + ".pdf");
                 }
             } catch (DAOException | NullPointerException ex) {

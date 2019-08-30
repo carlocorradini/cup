@@ -18,7 +18,7 @@
                         name="js/visit_creator.js"
                         target="body"/>
         <h:outputScript library="_default"
-                        name="js/visit_todo.js"
+                        name="js/specialist_todo.js"
                         target="body"/>
     </ui:define>
 
@@ -104,7 +104,7 @@
                                 </button>
                             </td>
                             <td>
-                                <button class="ui fluid labeled green icon button visit-todo-write-report-modal-button"
+                                <button class="ui fluid labeled green icon button visit-creator-todo-write-report-modal-button"
                                         data-prescription-id="#{pe.id}"
                                         data-patient-id="#{pe.personId}"
                                 >
@@ -118,13 +118,13 @@
                 </table>
 
                 <!-- WRITE REPORT MODAL -->
-                <div class="ui longer modal visit-todo-write-report-modal">
+                <div class="ui longer modal visit-creator-todo-write-report-modal">
                     <i class="red close icon"/>
                     <div class="header">
                         #{i18n["common.writeReport"]}
                     </div>
                     <div class="scrolling content">
-                        <form class="ui large form visit-todo-write-report-form"
+                        <form class="ui large form visit-creator-todo-write-report-form"
                         >
                             <div class="ui icon success message medium" style="z-index: 3;">
                                 <i class="checkmark icon"/>
@@ -153,17 +153,17 @@
                                     <span class="text full-width">
                                         <img src=""
                                              style="width: 2em; height: 2em;"
-                                             class="ui image bordered rounded person-avatar middle aligned visit-todo-write-report-patient-avatar"
+                                             class="ui image bordered rounded person-avatar middle aligned visit-creator-todo-write-report-patient-avatar"
                                              alt="Avatar"
                                         />
-                                        <span class="visit-todo-write-report-patient-full-name"/>
-                                        <span class="text-light text-right visit-todo-write-report-patient-fiscal-code"/>
+                                        <span class="visit-creator-todo-write-report-patient-full-name"/>
+                                        <span class="text-light text-right visit-creator-todo-write-report-patient-fiscal-code"/>
                                     </span>
                                 </div>
                             </div>
                             <div class="field">
                                 <label>#{i18n["common.paid"]}</label>
-                                <div class="ui fluid toggle checkbox visit-todo-write-report-data-paid">
+                                <div class="ui fluid toggle checkbox visit-creator-todo-write-report-data-paid">
                                     <input type="checkbox" tabindex="0" class="hidden" name="paid"/>
                                     <label data-paid="#{i18n['common.paid']}"
                                            data-paid-not="#{i18n['common.paidNot']}">
@@ -173,7 +173,7 @@
                             </div>
                             <div class="field">
                                 <label>#{i18n["common.content"]}</label>
-                                <textarea class="visit-todo-write-report-data-content"
+                                <textarea class="visit-creator-todo-write-report-data-content"
                                           placeholder="#{i18n['common.content']}"
                                           name="content"
                                           required=""
@@ -182,14 +182,14 @@
                                           maxlength="#{prescription.examReportMaxLength}"
                                 />
                                 <p class="text-light text-smaller-25">
-                                    <span class="visit-todo-write-report-data-content-length"/>
+                                    <span class="visit-creator-todo-write-report-data-content-length"/>
                                     &#160;
                                     #{i18n["visit.assigned.characterCount"]}
                                 </p>
                             </div>
                             <div class="field">
                                 <label>#{i18n["common.exams.suggested"]}</label>
-                                <div class="ui fluid multiple search selection dropdown visit-todo-write-report-data-exams">
+                                <div class="ui fluid multiple search selection dropdown visit-creator-todo-write-report-data-exams">
                                     <input type="hidden"/>
                                     <i class="dropdown icon"/>
                                     <div class="default text">#{i18n["common.exams.suggested"]}</div>
@@ -206,7 +206,7 @@
                             </div>
                             <div class="field">
                                 <label>#{i18n["common.medicines.suggested"]}</label>
-                                <div class="ui fluid multiple search selection dropdown visit-todo-write-report-data-medicines">
+                                <div class="ui fluid multiple search selection dropdown visit-creator-todo-write-report-data-medicines">
                                     <input type="hidden"/>
                                     <i class="dropdown icon"/>
                                     <div class="default text">#{i18n["common.medicines.suggested"]}</div>
@@ -322,9 +322,20 @@
                                     #{i18n["common.exams"]}
                                 </div>
                                 <div class="content">
+                                    <div class="ui icon message visit-creator-patient-exams-empty">
+                                        <i class="info circle icon"/>
+                                        <div class="content">
+                                            <div class="header">
+                                                #{i18n["doctor.patients.patient.exam.empty.message"]}
+                                            </div>
+                                            <p>#{i18n["doctor.patients.patient.exam.empty.subMessage"]}</p>
+                                        </div>
+                                    </div>
+
                                     <table class="ui celled striped sortable table visit-creator-patient-exams-table">
                                         <thead>
                                         <tr>
+                                            <th>#{i18n["common.id"]}</th>
                                             <th>#{i18n["common.exam"]}</th>
                                             <th>#{i18n["common.date"]}</th>
                                             <th>#{i18n["common.hour"]}</th>
@@ -354,6 +365,7 @@
                                     <table class="ui celled striped sortable table visit-creator-patient-medicines-table">
                                         <thead>
                                         <tr>
+                                            <th>#{i18n["common.id"]}</th>
                                             <th>#{i18n["common.medicine"]}</th>
                                             <th>#{i18n["common.date"]}</th>
                                             <th>#{i18n["common.hour"]}</th>

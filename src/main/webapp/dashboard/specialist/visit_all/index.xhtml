@@ -18,7 +18,7 @@
                         name="js/visit_creator.js"
                         target="body"/>
         <h:outputScript library="_default"
-                        name="js/visit_all.js"
+                        name="js/specialist_all.js"
                         target="body"/>
     </ui:define>
 
@@ -103,7 +103,7 @@
                                     #{i18n["common.noReport"]}
                                 </ui:fragment>
                                 <ui:fragment rendered="#{not empty pe.report}">
-                                    <button class="ui fluid labeled yellow icon button visit-all-view-report-modal-button"
+                                    <button class="ui fluid labeled yellow icon button visit-creator-done-view-report-modal-button"
                                             data-prescription-id="#{pe.id}"
                                     >
                                         <i class="clipboard check icon"/>
@@ -206,9 +206,20 @@
                                     #{i18n["common.exams"]}
                                 </div>
                                 <div class="content">
+                                    <div class="ui icon message visit-creator-patient-exams-empty">
+                                        <i class="info circle icon"/>
+                                        <div class="content">
+                                            <div class="header">
+                                                #{i18n["doctor.patients.patient.exam.empty.message"]}
+                                            </div>
+                                            <p>#{i18n["doctor.patients.patient.exam.empty.subMessage"]}</p>
+                                        </div>
+                                    </div>
+
                                     <table class="ui celled striped sortable table visit-creator-patient-exams-table">
                                         <thead>
                                         <tr>
+                                            <th>#{i18n["common.id"]}</th>
                                             <th>#{i18n["common.exam"]}</th>
                                             <th>#{i18n["common.date"]}</th>
                                             <th>#{i18n["common.hour"]}</th>
@@ -238,6 +249,7 @@
                                     <table class="ui celled striped sortable table visit-creator-patient-medicines-table">
                                         <thead>
                                         <tr>
+                                            <th>#{i18n["common.id"]}</th>
                                             <th>#{i18n["common.medicine"]}</th>
                                             <th>#{i18n["common.date"]}</th>
                                             <th>#{i18n["common.hour"]}</th>

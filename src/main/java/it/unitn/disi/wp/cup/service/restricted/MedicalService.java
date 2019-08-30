@@ -1,8 +1,6 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import it.unitn.disi.wp.cup.persistence.dao.HealthServiceDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
@@ -10,6 +8,7 @@ import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.*;
 import it.unitn.disi.wp.cup.util.AuthUtil;
+import it.unitn.disi.wp.cup.util.EntitySanitizerUtil;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +33,7 @@ public class MedicalService {
 
     private Doctor authDoctor = null;
     private DoctorSpecialist authDoctorSpecialist = null;
+    private HealthService authHealthService = null;
     private PersonDAO personDAO = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
 
@@ -46,6 +46,7 @@ public class MedicalService {
             try {
                 authDoctor = AuthUtil.getAuthDoctor(request);
                 authDoctorSpecialist = AuthUtil.getAuthDoctorSpecialist(request);
+                authHealthService = AuthUtil.getAuthHealthService(request);
 
                 personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
                 prescriptionExamDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionExamDAO.class);
@@ -56,7 +57,7 @@ public class MedicalService {
     }
 
     private boolean isAuthenticated() {
-        return authDoctor != null || authDoctorSpecialist != null;
+        return authDoctor != null || authDoctorSpecialist != null || authHealthService != null;
     }
 
     /**
@@ -87,7 +88,7 @@ public class MedicalService {
                     // ALL CORRECT, set the Prescription Exam entity
                     response = Response
                             .ok()
-                            .entity(JSON.toJSONString(prescriptionExam));
+                            .entity(prescriptionExam);
                 }
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to return the Prescription Exam given its id", ex);
@@ -112,7 +113,6 @@ public class MedicalService {
     public Response getPatientById(@PathParam("id") Long patientId) {
         Response.ResponseBuilder response;
         Person patient;
-        JSONObject o;
 
         if (!isAuthenticated()) {
             // Unauthorized
@@ -126,15 +126,10 @@ public class MedicalService {
                     // Patient Id is invalid
                     response = Response.status(Response.Status.BAD_REQUEST);
                 } else {
-                    // ALL CORRECT, set the Person entity
-                    // Remove password
-                    o = (JSONObject) JSON.toJSON(patient);
-                    o.remove("password");
-                    o.remove("email");
-
+                    // ALL CORRECT, set the Person entity sanitized
                     response = Response
                             .ok()
-                            .entity(o.toJSONString());
+                            .entity(EntitySanitizerUtil.sanitizePerson(patient, false));
                 }
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to return the Patient given its id", ex);

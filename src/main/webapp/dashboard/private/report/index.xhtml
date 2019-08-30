@@ -18,7 +18,7 @@
                         name="js/visit_creator.js"
                         target="body"/>
         <h:outputScript library="_default"
-                        name="js/reports.js"
+                        name="js/person_new_reports.js"
                         target="body"/>
     </ui:define>
 
@@ -59,6 +59,7 @@
                     <thead>
                     <tr>
                         <th class="center aligned"><i class="bookmark icon"/></th>
+                        <th>#{i18n["common.id"]}</th>
                         <th>#{i18n["common.exam"]}</th>
                         <th>#{i18n["common.date"]}</th>
                         <th>#{i18n["common.hour"]}</th>
@@ -77,6 +78,9 @@
                                     <input type="checkbox" data-exam-id="#{pe.id}"/>
                                     <label/>
                                 </div>
+                            </td>
+                            <td>
+                                #{pe.id}
                             </td>
                             <td>#{pe.exam.name}</td>
                             <td>

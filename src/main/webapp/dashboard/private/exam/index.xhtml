@@ -18,7 +18,7 @@
                         name="js/visit_creator.js"
                         target="body"/>
         <h:outputScript library="_default"
-                        name="js/prescribed_exam.js"
+                        name="js/person_prescribed_exam.js"
                         target="body"/>
     </ui:define>
 
@@ -58,6 +58,7 @@
                 <table class="ui celled striped sortable table visit-creator-table">
                     <thead>
                     <tr>
+                        <th>#{i18n["common.id"]}</th>
                         <th>#{i18n["common.exam"]}</th>
                         <th>#{i18n["common.date"]}</th>
                         <th>#{i18n["common.hour"]}</th>
@@ -71,6 +72,7 @@
                     <tbody>
                     <ui:repeat value="#{person.prescribedExams}" var="pe">
                         <tr>
+                            <td>#{pe.id}</td>
                             <td>#{pe.exam.name}</td>
                             <td>
                                 <ui:fragment rendered="#{empty pe.dateTime}">

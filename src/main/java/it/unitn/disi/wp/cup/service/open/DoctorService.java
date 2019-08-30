@@ -21,16 +21,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Services for Authenticated {@link DoctorSpecialist Doctor Specialist}
+ * Services for Authenticated {@link Doctor Doctor}
  *
  * @author Carlo Corradini
  */
-@Path("specialist")
-public class DoctorSpecialistService {
+@Path("doctor")
+public class DoctorService {
 
-    private static final Logger LOGGER = Logger.getLogger(DoctorSpecialistService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(DoctorService.class.getName());
     private PersonDAO personDAO = null;
-    private DoctorSpecialistDAO doctorSpecialistDAO = null;
+    private DoctorDAO doctorDAO = null;
 
     @Context
     private HttpServletRequest request;
@@ -40,7 +40,7 @@ public class DoctorSpecialistService {
         if (servletContext != null) {
             try {
                 personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
-                doctorSpecialistDAO = DAOFactory.getDAOFactory(servletContext).getDAO(DoctorSpecialistDAO.class);
+                doctorDAO = DAOFactory.getDAOFactory(servletContext).getDAO(DoctorDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
             }
@@ -48,36 +48,36 @@ public class DoctorSpecialistService {
     }
 
     /**
-     * Return the {@link DoctorSpecialist Doctor Specialist} as a {@link Person Person} base information as {@link JSON} given its id.
+     * Return the {@link Doctor Doctor} as a {@link Person Person} base information as {@link JSON} given its id.
      * The entity returned is Sanitized: {@link EntitySanitizerUtil#sanitizePerson(Person)}
      *
-     * @param doctorSpecialistId The {@link DoctorSpecialist Doctor Specialist} id
-     * @return The {@link DoctorSpecialist Doctor Specialist} as {@link JSON}
+     * @param doctorId The {@link Doctor Doctor} id
+     * @return The {@link Doctor Doctor} as {@link JSON}
      */
     @GET
     @Path("get/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDoctorSpecialistById(@PathParam("id") Long doctorSpecialistId) {
+    public Response getDoctorById(@PathParam("id") Long doctorId) {
         Response.ResponseBuilder response;
-        Person doctorSpecialist;
+        Person doctor;
 
-        if (doctorSpecialistId == null) {
-            // Doctor Specialist Id is missing
+        if (doctorId == null) {
+            // Doctor Id is missing
             response = Response.status(Response.Status.BAD_REQUEST);
         } else {
             try {
-                if (doctorSpecialistDAO.getByPrimaryKey(doctorSpecialistId) == null
-                        || (doctorSpecialist = personDAO.getByPrimaryKey(doctorSpecialistId)) == null) {
-                    // Doctor Specialist Id is invalid
+                if (doctorDAO.getByPrimaryKey(doctorId) == null
+                        || (doctor = personDAO.getByPrimaryKey(doctorId)) == null) {
+                    // Doctor Id is invalid
                     response = Response.status(Response.Status.BAD_REQUEST);
                 } else {
-                    // ALL CORRECT, set the Doctor Specialist entity sanitized
+                    // ALL CORRECT, set the Doctor entity sanitized
                     response = Response
                             .ok()
-                            .entity(EntitySanitizerUtil.sanitizePerson(doctorSpecialist));
+                            .entity(EntitySanitizerUtil.sanitizePerson(doctor));
                 }
             } catch (DAOException ex) {
-                LOGGER.log(Level.SEVERE, "Unable to return the Doctor Specialist given its id", ex);
+                LOGGER.log(Level.SEVERE, "Unable to return the Doctor given its id", ex);
                 response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             }
         }

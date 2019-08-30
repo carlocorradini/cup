@@ -1,12 +1,12 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
-import it.unitn.disi.wp.cup.service.model.exception.ServiceModelException;
-import it.unitn.disi.wp.cup.service.model.prescription.PrescriptionReportModel;
-import it.unitn.disi.wp.cup.persistence.dao.*;
+import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.*;
+import it.unitn.disi.wp.cup.service.model.exception.ServiceModelException;
+import it.unitn.disi.wp.cup.service.model.prescription.PrescriptionReportModel;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 import it.unitn.disi.wp.cup.util.EmailUtil;
 import it.unitn.disi.wp.cup.util.WriteReportUtil;
@@ -25,15 +25,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Services for Authenticated {@link DoctorSpecialist Doctor Specialist}
+ * Service for {@link HealthServiceService}
  *
  * @author Carlo Corradini
  */
-@Path("specialist")
-public class DoctorSpecialistService {
-    private static final Logger LOGGER = Logger.getLogger(DoctorSpecialistService.class.getName());
+@Path("health_service")
+public class HealthServiceService {
+    private static final Logger LOGGER = Logger.getLogger(HealthServiceService.class.getName());
 
-    private DoctorSpecialist doctorSpecialist = null;
+    private HealthService healthService = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
 
     @Context
@@ -43,7 +43,8 @@ public class DoctorSpecialistService {
     public void setServletContext(ServletContext servletContext) {
         if (servletContext != null) {
             try {
-                doctorSpecialist = AuthUtil.getAuthDoctorSpecialist(request);
+                healthService = AuthUtil.getAuthHealthService(request);
+
                 prescriptionExamDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionExamDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
@@ -67,12 +68,12 @@ public class DoctorSpecialistService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response writeReport(PrescriptionReportModel prescriptionReportModel) {
-        Response.ResponseBuilder response = Response.status(Response.Status.NOT_ACCEPTABLE);
+        Response.ResponseBuilder response;
         JsonMessage message = new JsonMessage();
         PrescriptionExam prescriptionExam;
 
-        if (doctorSpecialist == null) {
-            // Unauthorized Doctor Specialist
+        if (healthService == null) {
+            // Unauthorized Health Service
             response = Response.status(Response.Status.UNAUTHORIZED);
             message.setError(JsonMessage.ERROR_AUTHENTICATION);
         } else if (!prescriptionReportModel.isValid()) {
@@ -85,8 +86,8 @@ public class DoctorSpecialistService {
                     // The Prescription Id is invalid
                     response = Response.status(Response.Status.BAD_REQUEST);
                     message.setError(JsonMessage.ERROR_INVALID_ID);
-                } else if (!doctorSpecialist.getId().equals(prescriptionExam.getSpecialistId())) {
-                    // The Doctor Specialist of the Prescription is different from the current authenticated Doctor Specialist
+                } else if (!healthService.getId().equals(prescriptionExam.getHealthServiceId())) {
+                    // The Health Service of the Prescription is different from the current authenticated Health Service
                     response = Response.status(Response.Status.UNAUTHORIZED);
                     message.setError(JsonMessage.ERROR_AUTHENTICATION);
                 } else if (!WriteReportUtil.write(prescriptionReportModel)) {
@@ -99,6 +100,7 @@ public class DoctorSpecialistService {
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to add a Report", ex);
                 response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                message.setError(JsonMessage.ERROR_UNKNOWN);
             } catch (ServiceModelException ex) {
                 LOGGER.log(Level.SEVERE, "Report Model Error Validation", ex);
                 response = Response.status(Response.Status.OK);
@@ -106,6 +108,8 @@ public class DoctorSpecialistService {
             }
         }
 
-        return response.entity(message.toJsonString()).build();
+        return response.entity(message.toJsonString()).
+
+                build();
     }
 }

@@ -28,8 +28,9 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(RecoverService.class);
-        resources.add(HealthServiceService.class);
+        resources.add(DoctorService.class);
         resources.add(DoctorSpecialistService.class);
+        resources.add(HealthServiceService.class);
         resources.add(FastJsonProvider.class);
     }
 }

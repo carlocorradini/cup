@@ -12,7 +12,7 @@
                         name="js/datatables.min.js"
                         target="body"/>
         <h:outputScript library="_default"
-                        name="js/prescribed_medicine.js"
+                        name="js/person_prescribed_medicine.js"
                         target="body"/>
     </ui:define>
 
@@ -45,6 +45,7 @@
                 <table class="ui celled striped sortable table" id="prescribed-medicine-table">
                     <thead>
                     <tr>
+                        <th>#{i18n["common.id"]}</th>
                         <th>#{i18n["common.medicine"]}</th>
                         <th>#{i18n["common.date"]}</th>
                         <th>#{i18n["common.hour"]}</th>
@@ -56,6 +57,7 @@
                     <tbody>
                     <ui:repeat value="#{person.prescribedMedicines}" var="pm">
                         <tr>
+                            <td>#{pm.id}</td>
                             <td>#{pm.medicine.name}</td>
                             <td>
                                 <h:outputText value="#{pm.dateTime}">

@@ -32,6 +32,7 @@ public class ApplicationConfig extends Application {
         resources.add(DoctorService.class);
         resources.add(DoctorSpecialistService.class);
         resources.add(MedicalService.class);
+        resources.add(HealthServiceService.class);
         resources.add(MultiPartFeature.class);
         resources.add(FastJsonProvider.class);
     }
