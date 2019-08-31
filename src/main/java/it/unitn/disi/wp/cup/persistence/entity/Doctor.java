@@ -1,7 +1,6 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Entity Doctor
@@ -11,7 +10,6 @@ import java.util.List;
 public class Doctor {
     private Long id;
     private LocalDateTime since;
-    private List<Person> patients;
 
     @Override
     public boolean equals(Object obj) {
@@ -63,23 +61,5 @@ public class Doctor {
      */
     public void setSince(LocalDateTime since) {
         this.since = since;
-    }
-
-    /**
-     * Return the {@link List list} of patients
-     *
-     * @return Doctor patients
-     */
-    public List<Person> getPatients() {
-        return patients;
-    }
-
-    /**
-     * Set the Doctor patients {@link List list}
-     *
-     * @param patients The {@link List list} of patients
-     */
-    public void setPatients(List<Person> patients) {
-        this.patients = patients;
     }
 }

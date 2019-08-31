@@ -59,7 +59,6 @@ public class JDBCDoctorDAO extends JDBCDAO<Doctor, Long> implements DoctorDAO {
 
             doctor.setId(rs.getLong("id"));
             doctor.setSince(rs.getObject("since", LocalDateTime.class));
-            doctor.setPatients(getPatientsByDoctorId(doctor.getId()));
         } catch (SQLException ex) {
             throw new DAOException("Impossible to set Doctor by ResultSet", ex);
         }

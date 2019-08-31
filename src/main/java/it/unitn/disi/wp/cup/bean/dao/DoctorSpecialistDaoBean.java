@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 public final class DoctorSpecialistDaoBean implements Serializable {
     private static final long serialVersionUID = -4017230312605462207L;
     private static final Logger LOGGER = Logger.getLogger(DoctorSpecialistDaoBean.class.getName());
+
     private ExamDAO examDAO = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
     private DoctorSpecialist authDoctorSpecialist = null;
@@ -46,13 +47,11 @@ public final class DoctorSpecialistDaoBean implements Serializable {
 
         if (context.getRequest() instanceof HttpServletRequest) {
             authDoctorSpecialist = AuthUtil.getAuthDoctorSpecialist((HttpServletRequest) context.getRequest());
-            if (authDoctorSpecialist != null) {
-                try {
-                    examDAO = DAOFactory.getDAOFactory().getDAO(ExamDAO.class);
-                    prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
-                } catch (DAOFactoryException ex) {
-                    LOGGER.log(Level.SEVERE, "Unable to get DAO Factory", ex);
-                }
+            try {
+                examDAO = DAOFactory.getDAOFactory().getDAO(ExamDAO.class);
+                prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
+            } catch (DAOFactoryException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
             }
         }
     }

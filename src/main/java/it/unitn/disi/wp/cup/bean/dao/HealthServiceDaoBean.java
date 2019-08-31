@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 public final class HealthServiceDaoBean implements Serializable {
     private static final long serialVersionUID = 9217930324705051203L;
     private static final Logger LOGGER = Logger.getLogger(HealthServiceDaoBean.class.getName());
+
     private PrescriptionExamDAO prescriptionExamDAO = null;
     private HealthServiceDAO healthServiceDAO = null;
     private HealthService authHealthService = null;
@@ -47,9 +48,7 @@ public final class HealthServiceDaoBean implements Serializable {
             authHealthService = AuthUtil.getAuthHealthService((HttpServletRequest) context.getRequest());
             try {
                 healthServiceDAO = DAOFactory.getDAOFactory().getDAO(HealthServiceDAO.class);
-                if (authHealthService != null) {
-                    prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
-                }
+                prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
             }

@@ -35,10 +35,12 @@ import java.util.logging.Logger;
 public final class DoctorDaoBean implements Serializable {
     private static final long serialVersionUID = -4028930644505062207L;
     private static final Logger LOGGER = Logger.getLogger(DoctorDaoBean.class.getName());
+
+    private DoctorDAO doctorDAO = null;
     private PrescriptionMedicineDAO prescriptionMedicineDAO = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
+
     private Doctor authDoctor = null;
-    private List<Person> patients = Collections.emptyList();
 
     /**
      * Initialize the {@link DoctorDaoBean}
@@ -46,22 +48,15 @@ public final class DoctorDaoBean implements Serializable {
     @PostConstruct
     public void init() {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        DoctorDAO doctorDAO;
 
         if (context.getRequest() instanceof HttpServletRequest) {
             authDoctor = AuthUtil.getAuthDoctor((HttpServletRequest) context.getRequest());
-            if (authDoctor != null) {
-                try {
-                    doctorDAO = DAOFactory.getDAOFactory().getDAO(DoctorDAO.class);
-                    prescriptionMedicineDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionMedicineDAO.class);
-                    prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
-
-                    patients = doctorDAO.getPatientsByDoctorId(authDoctor.getId());
-                } catch (DAOFactoryException ex) {
-                    LOGGER.log(Level.SEVERE, "Unable to get DAO Factory", ex);
-                } catch (DAOException ex) {
-                    LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
-                }
+            try {
+                doctorDAO = DAOFactory.getDAOFactory().getDAO(DoctorDAO.class);
+                prescriptionMedicineDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionMedicineDAO.class);
+                prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
+            } catch (DAOFactoryException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
             }
         }
     }
@@ -76,11 +71,21 @@ public final class DoctorDaoBean implements Serializable {
     }
 
     /**
-     * Return the List of patients for the authenticated Doctor
+     * Return the {@link List list} of patients for the authenticated {@link Doctor Doctor}
      *
-     * @return The List of patients
+     * @return The {@link List list} of {@link Person Patients}
      */
     public List<Person> getPatients() {
+        List<Person> patients = Collections.emptyList();
+
+        if (authDoctor != null && doctorDAO != null) {
+            try {
+                patients = doctorDAO.getPatientsByDoctorId(authDoctor.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to return the List of Patients for the Authenticated Doctor", ex);
+            }
+        }
+
         return patients;
     }
 
@@ -92,7 +97,7 @@ public final class DoctorDaoBean implements Serializable {
     public long getPrescriptionMedicineCount() {
         long count = 0L;
 
-        if (authDoctor != null) {
+        if (authDoctor != null && prescriptionMedicineDAO != null) {
             try {
                 count = prescriptionMedicineDAO.getCountByDoctorId(authDoctor.getId());
             } catch (DAOException ex) {
@@ -111,7 +116,7 @@ public final class DoctorDaoBean implements Serializable {
     public Long getPrescriptionExamCount() {
         long count = 0L;
 
-        if (authDoctor != null) {
+        if (authDoctor != null && prescriptionExamDAO != null) {
             try {
                 count = prescriptionExamDAO.getCountByDoctorId(authDoctor.getId());
             } catch (DAOException ex) {

@@ -30,9 +30,10 @@ import java.util.logging.Logger;
 @Named("person")
 @RequestScoped
 public final class PersonDaoBean implements Serializable {
-
     private static final long serialVersionUID = -4058980644509062209L;
     private static final Logger LOGGER = Logger.getLogger(PersonDaoBean.class.getName());
+
+    private PersonDAO personDAO = null;
     private DoctorDAO doctorDAO = null;
     private PersonAvatarDAO personAvatarDAO = null;
     private PrescriptionMedicineDAO prescriptionMedicineDAO = null;
@@ -46,28 +47,17 @@ public final class PersonDaoBean implements Serializable {
     @PostConstruct
     public void init() {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        PersonDAO personDAO;
-        Doctor _doctor;
 
         if (context.getRequest() instanceof HttpServletRequest) {
             authPerson = AuthUtil.getAuthPerson((HttpServletRequest) context.getRequest());
-            if (authPerson != null) {
-                try {
-                    personDAO = DAOFactory.getDAOFactory().getDAO(PersonDAO.class);
-                    doctorDAO = DAOFactory.getDAOFactory().getDAO(DoctorDAO.class);
-                    personAvatarDAO = DAOFactory.getDAOFactory().getDAO(PersonAvatarDAO.class);
-                    prescriptionMedicineDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionMedicineDAO.class);
-                    prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
-
-                    // Check if the authenticated Person has a Doctor
-                    if ((_doctor = doctorDAO.getDoctorByPatientId(authPerson.getId())) != null) {
-                        doctor = personDAO.getByPrimaryKey(_doctor.getId());
-                    }
-                } catch (DAOFactoryException ex) {
-                    LOGGER.log(Level.SEVERE, "Unable to get DAO Factory", ex);
-                } catch (DAOException ex) {
-                    LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
-                }
+            try {
+                personDAO = DAOFactory.getDAOFactory().getDAO(PersonDAO.class);
+                doctorDAO = DAOFactory.getDAOFactory().getDAO(DoctorDAO.class);
+                personAvatarDAO = DAOFactory.getDAOFactory().getDAO(PersonAvatarDAO.class);
+                prescriptionMedicineDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionMedicineDAO.class);
+                prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
+            } catch (DAOFactoryException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
             }
         }
     }
@@ -108,6 +98,20 @@ public final class PersonDaoBean implements Serializable {
      * @return The doctor of the {@link Person person}
      */
     public Person getDoctor() {
+        Person doctor = null;
+        Doctor _doctor;
+
+        if (authPerson != null && doctorDAO != null) {
+            try {
+                if ((_doctor = doctorDAO.getDoctorByPatientId(authPerson.getId())) != null) {
+                    // Person has a Doctor
+                    doctor = personDAO.getByPrimaryKey(_doctor.getId());
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the current Doctor for the Authenticated Person", ex);
+            }
+        }
+
         return doctor;
     }
 

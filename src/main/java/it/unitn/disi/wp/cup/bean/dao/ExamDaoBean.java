@@ -26,31 +26,37 @@ import java.util.logging.Logger;
 public final class ExamDaoBean implements Serializable {
     private static final long serialVersionUID = 2018730124403022209L;
     private static final Logger LOGGER = Logger.getLogger(ExamDaoBean.class.getName());
-    private List<Exam> exams = Collections.emptyList();
+
+    private ExamDAO examDAO = null;
 
     /**
      * Initialize the {@link ExamDaoBean}
      */
     @PostConstruct
     public void init() {
-        ExamDAO examDAO;
-
         try {
             examDAO = DAOFactory.getDAOFactory().getDAO(ExamDAO.class);
-            exams = examDAO.getAll();
         } catch (DAOFactoryException ex) {
-            LOGGER.log(Level.SEVERE, "Unable to get Exam DAO", ex);
-        } catch (DAOException ex) {
-            LOGGER.log(Level.SEVERE, "Unable to get the list of Exams", ex);
+            LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
         }
     }
 
     /**
-     * Return the List of available Exam for the prescription
+     * Return the {@link List List} of all available {@link Exam Exams}
      *
-     * @return The List of Exams
+     * @return The {@link List List} of {@link Exam Exams}
      */
     public List<Exam> getExams() {
+        List<Exam> exams = Collections.emptyList();
+
+        if (examDAO != null) {
+            try {
+                exams = examDAO.getAll();
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the List of all available Exams", ex);
+            }
+        }
+
         return exams;
     }
 }

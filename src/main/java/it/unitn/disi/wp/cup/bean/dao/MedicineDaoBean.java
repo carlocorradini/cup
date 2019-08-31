@@ -26,31 +26,37 @@ import java.util.logging.Logger;
 public final class MedicineDaoBean implements Serializable {
     private static final long serialVersionUID = 2028930324705062207L;
     private static final Logger LOGGER = Logger.getLogger(MedicineDaoBean.class.getName());
-    private List<Medicine> medicines = Collections.emptyList();
+
+    private MedicineDAO medicineDAO = null;
 
     /**
      * Initialize the {@link MedicineDaoBean}
      */
     @PostConstruct
     public void init() {
-        MedicineDAO medicineDAO;
-
         try {
             medicineDAO = DAOFactory.getDAOFactory().getDAO(MedicineDAO.class);
-            medicines = medicineDAO.getAll();
         } catch (DAOFactoryException ex) {
-            LOGGER.log(Level.SEVERE, "Unable to get Medicine DAO", ex);
-        } catch (DAOException ex) {
-            LOGGER.log(Level.SEVERE, "Unable to get the list of Medicines", ex);
+            LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
         }
     }
 
     /**
-     * Return the List of available Medicines for the prescription
+     * Return the {@link List List} of all available {@link Medicine Medicines}
      *
-     * @return The List of Medicines
+     * @return The {@link List List} of {@link Medicine Medicines}
      */
     public List<Medicine> getMedicines() {
+        List<Medicine> medicines = Collections.emptyList();
+
+        if (medicineDAO != null) {
+            try {
+                medicines = medicineDAO.getAll();
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the List of all available Medicines", ex);
+            }
+        }
+
         return medicines;
     }
 }
