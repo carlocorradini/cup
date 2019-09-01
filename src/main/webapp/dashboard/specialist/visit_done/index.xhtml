@@ -18,12 +18,12 @@
                         name="js/visit_creator.js"
                         target="body"/>
         <h:outputScript library="_default"
-                        name="js/hs_all.js"
+                        name="js/specialist_done.js"
                         target="body"/>
     </ui:define>
 
     <ui:define name="content">
-        <ui:fragment rendered="#{not empty healthService.authHealthService}">
+        <ui:fragment rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
             <h2 class="ui center aligned icon header">
                 <i class="clipboard check icon"/>
                 #{i18n["common.total.assignedVisits"]}
@@ -31,7 +31,7 @@
 
             <div class="ui divider"></div>
 
-            <ui:fragment rendered="#{empty healthService.assignedPrescriptionExam}">
+            <ui:fragment rendered="#{empty doctorSpecialist.assignedDonePrescriptionExam}">
                 <div class="ui icon message">
                     <i class="info circle icon"/>
                     <div class="content">
@@ -43,7 +43,7 @@
                 </div>
             </ui:fragment>
 
-            <ui:fragment rendered="#{not empty healthService.assignedPrescriptionExam}">
+            <ui:fragment rendered="#{not empty doctorSpecialist.assignedDonePrescriptionExam}">
                 <div class="visit-creator-i18n"
                      data-i18n="{
                          &quot;noReport&quot;: &quot;#{i18n['common.noReport']}&quot;,
@@ -66,7 +66,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <ui:repeat value="#{healthService.assignedPrescriptionExam}" var="pe">
+                    <ui:repeat value="#{doctorSpecialist.assignedDonePrescriptionExam}" var="pe">
                         <tr data-prescription-id="#{pe.id}">
                             <td>#{pe.id}</td>
                             <td>#{pe.exam.name}</td>

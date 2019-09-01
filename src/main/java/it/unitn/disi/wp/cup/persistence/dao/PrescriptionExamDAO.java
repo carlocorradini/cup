@@ -97,6 +97,26 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
     List<PrescriptionExam> getAllToDoByHealthServiceId(Long healthServiceId) throws DAOException;
 
     /**
+     * Return the {@link List List} of all {@link PrescriptionExam Prescription Exam} that has been made by the
+     * {@link DoctorSpecialist Doctor Specialist} identified by {@code doctorSpecialistId}
+     *
+     * @param doctorSpecialistId The {@link DoctorSpecialist} id
+     * @return The {@link List} of {@link PrescriptionExam} done
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    List<PrescriptionExam> getAllDoneByDoctorSpecialistId(Long doctorSpecialistId) throws DAOException;
+
+    /**
+     * Return the {@link List List} of all {@link PrescriptionExam Prescription Exam} that has been made by the
+     * {@link HealthService Health Service} identified by {@code healthServiceId}
+     *
+     * @param healthServiceId The {@link HealthService} id
+     * @return The {@link List} of {@link PrescriptionExam} done
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    List<PrescriptionExam> getAllDoneByHealthServiceId(Long healthServiceId) throws DAOException;
+
+    /**
      * Return the Number of {@link Exam exams} prescribed for a {@link Person person} given its {@code personId id}
      *
      * @param personId The {@link Person} id

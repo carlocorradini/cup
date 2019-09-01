@@ -89,6 +89,15 @@ window.visit_creator = {
                     $province: $(".visit-creator-doctor-province"),
                     $avatar: $(".visit-creator-doctor-avatar")
                 },
+                executor: {
+                    $modal: $(".visit-creator-executor-modal"),
+                    $button: $(".visit-creator-executor-modal-button"),
+                    $message: $(".visit-creator-executor-message"),
+                    $id: $(".visit-creator-executor-id"),
+                    $fullName: $(".visit-creator-executor-full-name"),
+                    $territory: $(".visit-creator-executor-territory"),
+                    $avatar: $(".visit-creator-executor-avatar")
+                },
                 report: {
                     $modal: $(".visit-creator-patient-report-modal"),
                     buttonClass: "visit-creator-patient-modal-report-button",
@@ -145,6 +154,58 @@ window.visit_creator = {
                         },
                         error: function () {
                             console.error("Unable to get Doctor");
+                        }
+                    });
+                }
+            });
+
+            // === EXECUTOR ===
+            // Modal
+            v.executor.$modal.modal({
+                inverted: true
+            });
+            // Populate
+            v.doctor.$button.click(function () {
+                const $button = $(this);
+                const executorId = $button.data("executor-id");
+                const isSupported = Boolean($button.data("is-supported"));
+                const executor = {
+                    message: undefined,
+                    id: undefined,
+                    fullName: undefined,
+                    territory: undefined,
+                    avatar: undefined
+                };
+
+                if (window.UTIL.NUMBER.isNumber(executorId)) {
+                    const url = (isSupported) ? v.service.healthService : v.service.specialist;
+
+                    $button.addClass("loading");
+                    $.ajax({
+                        type: "GET",
+                        url: window.UTIL.STRING.format(url, executorId),
+                        success: function (data) {
+                            if (isSupported) {
+                                // Health Service
+                                executor.message = v.i18n.executorIsHealthService;
+                                executor.id = data.id;
+                                executor.fullName = data.province.nameLongCapitalized;
+                                executor.territory = data.province.region.nameCapitalized;
+                                executor.avatar = window.UTIL.JSF.toResourceURL("_default", data.crestAsResource);
+                            } else {
+                                // Specialist
+                                executor.message = v.i18n.executorIsSpecialist;
+                                executor.id = data.id;
+                                executor.fullName = data.fullNameCapitalized;
+                                executor.territory = data.city.nameCapitalized;
+                                executor.avatar = window.UTIL.JSF.toResourceURL("_default", data.avatar.nameAsResource);
+                            }
+                            window.visit_creator.populate.executor(executor);
+                            $button.removeClass("loading");
+                            v.executor.$modal.modal("show");
+                        },
+                        error: function () {
+                            console.error("Unable to get Executor");
                         }
                     });
                 }
@@ -462,6 +523,22 @@ window.visit_creator = {
                 template.$fullName.html(doctor.fullNameCapitalized);
                 template.$province.html(doctor.city.province.nameLongCapitalized);
                 template.$avatar.attr("src", window.UTIL.JSF.toResourceURL("_default", doctor.avatar.nameAsResource));
+            }
+        },
+        /**
+         * Populate the Executor
+         * @param executor The Executor data
+         */
+        executor: function (executor) {
+            window.visit_creator.check();
+            const template = window.visit_creator.v.executor;
+
+            if (executor !== null && executor !== undefined) {
+                template.$message.html(executor.message);
+                template.$id.html(executor.id);
+                template.$fullName.html(executor.fullName);
+                template.$territory.html(executor.territory);
+                template.$avatar.attr("src", executor.avatar);
             }
         },
         /**

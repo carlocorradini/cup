@@ -31,6 +31,8 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
     private static final String SQL_GET_ALL_NOT_READ_BY_PERSON_ID = "SELECT * FROM prescription_exam WHERE person_id = ? AND read IS FALSE AND report_id IS NOT NULL ORDER BY prescription_date DESC";
     private static final String SQL_GET_ALL_TO_DO_BY_DOCTOR_SPECIALIST_ID = "SELECT * FROM prescription_exam WHERE doctor_specialist_id = ? AND report_id IS NULL";
     private static final String SQL_GET_ALL_TO_DO_BY_HEALTH_SERVICE_ID = "SELECT * FROM prescription_exam WHERE health_service_id = ? AND report_id IS NULL";
+    private static final String SQL_GET_ALL_DONE_BY_DOCTOR_SPECIALIST_ID = "SELECT * FROM prescription_exam WHERE doctor_specialist_id = ? AND report_id IS NOT NULL";
+    private static final String SQL_GET_ALL_DONE_BY_HEALTH_SERVICE_ID = "SELECT * FROM prescription_exam WHERE health_service_id = ? AND report_id IS NOT NULL";
     private static final String SQL_GET_COUNT_BY_PERSON_ID = "SELECT COUNT(*) FROM prescription_exam WHERE person_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_SPECIALIST_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_specialist_id = ?";
@@ -54,6 +56,7 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
         PrescriptionExam prescriptionExam;
         ExamDAO examDAO;
         ReportDAO reportDAO;
+        Long idCheck;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
 
         try {
@@ -66,8 +69,10 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             prescriptionExam.setExam(examDAO.getByPrimaryKey(rs.getLong("exam_id")));
             prescriptionExam.setPersonId(rs.getLong("person_id"));
             prescriptionExam.setDoctorId(rs.getLong("doctor_id"));
-            prescriptionExam.setSpecialistId(rs.getLong("doctor_specialist_id"));
-            prescriptionExam.setHealthServiceId(rs.getLong("health_service_id"));
+            idCheck = rs.getLong("doctor_specialist_id");
+            if (!rs.wasNull()) prescriptionExam.setSpecialistId(idCheck);
+            idCheck = rs.getLong("health_service_id");
+            if (!rs.wasNull()) prescriptionExam.setHealthServiceId(idCheck);
             prescriptionExam.setDateTime(rs.getObject("prescription_date", LocalDateTime.class));
             prescriptionExam.setDateTimeRegistration(rs.getObject("prescription_date_registration", LocalDateTime.class));
             prescriptionExam.setReport(reportDAO.getByPrimaryKey(rs.getLong("report_id")));
@@ -333,6 +338,46 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to get the List of Prescription Exam assigned but not performed by Health Service Id", ex);
+        }
+
+        return exams;
+    }
+
+    @Override
+    public List<PrescriptionExam> getAllDoneByDoctorSpecialistId(Long doctorSpecialistId) throws DAOException {
+        List<PrescriptionExam> exams = new ArrayList<>();
+        if (doctorSpecialistId == null)
+            throw new DAOException("Doctor Specialist is mandatory", new NullPointerException("Doctor Specialist id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_DONE_BY_DOCTOR_SPECIALIST_ID)) {
+            pStmt.setLong(1, doctorSpecialistId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                while (rs.next()) {
+                    exams.add(setAndGetDAO(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the List of Prescription Exam done by Doctor Specialist Id", ex);
+        }
+
+        return exams;
+    }
+
+    @Override
+    public List<PrescriptionExam> getAllDoneByHealthServiceId(Long healthServiceId) throws DAOException {
+        List<PrescriptionExam> exams = new ArrayList<>();
+        if (healthServiceId == null)
+            throw new DAOException("Health Service id is mandatory", new NullPointerException("Health Service id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_DONE_BY_HEALTH_SERVICE_ID)) {
+            pStmt.setLong(1, healthServiceId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                while (rs.next()) {
+                    exams.add(setAndGetDAO(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the List of Prescription Exam done by Health Service Id", ex);
         }
 
         return exams;

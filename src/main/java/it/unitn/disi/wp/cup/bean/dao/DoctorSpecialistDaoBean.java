@@ -106,6 +106,26 @@ public final class DoctorSpecialistDaoBean implements Serializable {
     }
 
     /**
+     * Return the {@link List List} of all assigned done {@link PrescriptionExam Prescription Exam}
+     * for the authenticated {@link DoctorSpecialist Doctor Specialist}
+     *
+     * @return The {@link List list} of all assigned done {@link PrescriptionExam Prescription Exam}
+     */
+    public List<PrescriptionExam> getAssignedDonePrescriptionExam() {
+        List<PrescriptionExam> exams = Collections.emptyList();
+
+        if (authDoctorSpecialist != null && prescriptionExamDAO != null) {
+            try {
+                exams = prescriptionExamDAO.getAllDoneByDoctorSpecialistId(authDoctorSpecialist.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the List of All Assigned done Prescription Exam for the Authenticated Doctor Specialist", ex);
+            }
+        }
+
+        return exams;
+    }
+
+    /**
      * Return the {@link List} of {@link Exam exams} that the Authenticated {@link DoctorSpecialist Doctor Specialist}
      * is qualified
      *
@@ -162,4 +182,5 @@ public final class DoctorSpecialistDaoBean implements Serializable {
 
         return count;
     }
+
 }

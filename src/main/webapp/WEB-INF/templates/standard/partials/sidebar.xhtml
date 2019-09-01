@@ -46,7 +46,7 @@
                             #{i18n["common.todoVisits"]}
                             <span class="ui red label">#{healthService.assignedToDoPrescriptionExamCount}</span>
                         </h:link>
-                        <h:link outcome="/health_service/dashboard/visit_all/index"
+                        <h:link outcome="/health_service/dashboard/visit_done/index"
                                 styleClass="item">
                             #{i18n["common.total.assignedVisits"]}
                             <span class="ui yellow empty circular label"/>
@@ -178,7 +178,7 @@
                                 #{i18n["common.todoVisits"]}
                                 <span class="ui red label">#{doctorSpecialist.assignedToDoPrescriptionExamCount}</span>
                             </h:link>
-                            <h:link outcome="/dashboard/specialist/visit_all/index"
+                            <h:link outcome="/dashboard/specialist/visit_done/index"
                                     styleClass="item">
                                 #{i18n["common.total.assignedVisits"]}
                                 <span class="ui yellow empty circular label"/>

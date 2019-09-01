@@ -124,6 +124,26 @@ public final class HealthServiceDaoBean implements Serializable {
     }
 
     /**
+     * Return the {@link List List} of all assigned done {@link PrescriptionExam Prescription Exam}
+     * for the authenticated {@link HealthService Health Service}
+     *
+     * @return The {@link List list} of all assigned done {@link PrescriptionExam Prescription Exam}
+     */
+    public List<PrescriptionExam> getAssignedDonePrescriptionExam() {
+        List<PrescriptionExam> exams = Collections.emptyList();
+
+        if (authHealthService != null && prescriptionExamDAO != null) {
+            try {
+                exams = prescriptionExamDAO.getAllDoneByHealthServiceId(authHealthService.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the List of All Assigned done Prescription Exam for the Authenticated Health Service", ex);
+            }
+        }
+
+        return exams;
+    }
+
+    /**
      * Return the Number of {@link PrescriptionExam exams} assigned to the Authenticated {@link HealthService Health Service}
      *
      * @return Number of {@link PrescriptionExam exams} assigned

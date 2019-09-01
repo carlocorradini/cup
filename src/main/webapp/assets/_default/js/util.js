@@ -28,10 +28,11 @@ window.UTIL = {
     },
     NUMBER: {
         /**
-         * Given a {@code n} value che if it's a Number
+         * Given a {@code n} value check if it's a Number
          * @example
-         *  isNumber(23.4);
-         *  isNumber(7);
+         *  isNumber(23.4);  // true
+         *  isNumber(7);     // true
+         *  isNumber("test") // false
          * @param n The value to check
          * @returns {boolean} True if {@code n} is a Number, false otherwise
          * @author Carlo Corradini

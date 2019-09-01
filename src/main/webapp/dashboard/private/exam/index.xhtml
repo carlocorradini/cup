@@ -62,6 +62,7 @@
                         <th>#{i18n["common.exam"]}</th>
                         <th>#{i18n["common.date"]}</th>
                         <th>#{i18n["common.hour"]}</th>
+                        <th>#{i18n["common.executor"]}</th>
                         <th>#{i18n["common.report"]}</th>
                         <th>#{i18n["common.paid"]}</th>
                         <th>
@@ -92,6 +93,21 @@
                                     <h:outputText value="#{pe.dateTime}">
                                         <f:convertDateTime type="localTime"/>
                                     </h:outputText>
+                                </ui:fragment>
+                            </td>
+                            <td class="#{empty pe.specialistId and empty pe.healthServiceId ? 'disabled' : ''}">
+                                <ui:fragment rendered="#{empty pe.specialistId and empty pe.healthServiceId}">
+                                    <i class="icon close"/>
+                                    #{i18n["common.noExecutor"]}
+                                </ui:fragment>
+                                <ui:fragment rendered="#{not empty pe.specialistId or not empty pe.healthServiceId}">
+                                    <button class="ui fluid button visit-creator-doctor-modal-button"
+                                            data-is-supported="#{pe.exam.supported}"
+                                            data-executor-id="#{not empty pe.specialistId ? pe.specialistId : pe.healthServiceId}"
+                                    >
+                                        <i class="heading icon"/>
+                                        #{i18n["common.executor"]}
+                                    </button>
                                 </ui:fragment>
                             </td>
                             <td class="#{empty pe.report ? 'disabled' : 'positive'}">
@@ -132,6 +148,42 @@
                     </ui:repeat>
                     </tbody>
                 </table>
+
+                <!-- EXECUTOR MODAL -->
+                <div class="ui longer modal visit-creator-executor-modal">
+                    <i class="red close icon"/>
+                    <div class="header">
+                        #{i18n["common.executor"]}
+                    </div>
+                    <div class="scrolling content">
+                        <div class="ui info message">
+                            <div class="header">
+                                <i class="info circle icon"/>
+                                <span class="visit-creator-executor-message"/>
+                            </div>
+                        </div>
+
+                        <div class="ui card centered">
+                            <div class="image">
+                                <img class="ui image centered visit-creator-executor-avatar"
+                                     src=""
+                                     alt="Avatar"/>
+                            </div>
+                            <div class="content">
+                                <div class="header"><span class="visit-creator-executor-full-name"/></div>
+                                <div class="meta">
+                                    <i class="dot circle outline fitted icon"/>
+                                    <span class="visit-creator-executor-territory"/>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <span class="meta">
+                                    <i class="hashtag fitted icon"/> <span class="visit-creator-executor-id"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!--  REPORT MODAL -->
                 <div class="ui small modal visit-creator-patient-report-modal">
