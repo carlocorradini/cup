@@ -181,7 +181,7 @@ public class PersonService {
                                         "La password da te impostata è: <b>" + newPassword + "</b><br>" +
                                     "</p>";
                             EmailUtil.sendHTML(person.getEmail(),
-                                    AppConfig.getName().toUpperCase() + " Password Changed",
+                                    AppConfig.getName().toUpperCase() + " cambio password",
                                     html);
                         } else {
                             message.setError(JsonMessage.ERROR_UNKNOWN);

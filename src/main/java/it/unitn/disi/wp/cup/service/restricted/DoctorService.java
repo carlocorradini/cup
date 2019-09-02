@@ -107,7 +107,7 @@ public class DoctorService {
                                 "</p>";
 
                         EmailUtil.sendHTML(patient.getEmail(),
-                                AppConfig.getName().toUpperCase() + " Prescription Medicine",
+                                AppConfig.getName().toUpperCase() + " prescrizione medicinali",
                                 html);
                     }
                 }
@@ -172,7 +172,7 @@ public class DoctorService {
                                 "</p>";
 
                         EmailUtil.sendHTML(patient.getEmail(),
-                                AppConfig.getName().toUpperCase() + " Prescription Exam",
+                                AppConfig.getName().toUpperCase() + " prescrizione esame",
                                 html);
                     }
                 }

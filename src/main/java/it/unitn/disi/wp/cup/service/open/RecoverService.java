@@ -103,7 +103,7 @@ public class RecoverService {
                 "</p>";
 
         EmailUtil.sendHTML(person.getEmail(),
-                AppConfig.getName().toUpperCase() + " Password Recovery",
+                AppConfig.getName().toUpperCase() + " recupero password",
                 html);
     }
 }
