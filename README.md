@@ -56,6 +56,8 @@ We use [Git](https://git-scm.com) for versioning.
 ## Authors
 
 -   **Carlo Corradini** - _Initial work_ -
+-   **Luca Santoro** - _Initial work_ -
+-   **Ayoub Saghir** - _Initial work_ -
 
 ## License
 
