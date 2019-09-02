@@ -165,9 +165,9 @@ public final class DoctorSpecialistDaoBean implements Serializable {
     }
 
     /**
-     * Return the Number of {@link PrescriptionExam exams} assigned but not performed to the Authenticated {@link DoctorSpecialist doctor specialist}
+     * Return the Number of {@link PrescriptionExam exams} assigned but NOT performed to the Authenticated {@link DoctorSpecialist doctor specialist}
      *
-     * @return Number of assigned but not performed {@link PrescriptionExam exams}
+     * @return Number of assigned but NOT performed {@link PrescriptionExam exams}
      */
     public Long getAssignedToDoPrescriptionExamCount() {
         long count = 0L;
@@ -177,6 +177,25 @@ public final class DoctorSpecialistDaoBean implements Serializable {
                 count = prescriptionExamDAO.getCountToDoByDoctorSpecialistId(authDoctorSpecialist.getId());
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to count the assigned and not performed Prescription Exam for the authenticated Doctor Specialist", ex);
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * Return the Number of {@link PrescriptionExam exams} assigned and performed to the Authenticated {@link DoctorSpecialist doctor specialist}
+     *
+     * @return Number of assigned and performed {@link PrescriptionExam exams}
+     */
+    public Long getAssignedDonePrescriptionExamCount() {
+        long count = 0L;
+
+        if (authDoctorSpecialist != null && prescriptionExamDAO != null) {
+            try {
+                count = prescriptionExamDAO.getCountDonebyDoctorSpecialistId(authDoctorSpecialist.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to count the assigned and performed Prescription Exam for the authenticated Doctor Specialist", ex);
             }
         }
 

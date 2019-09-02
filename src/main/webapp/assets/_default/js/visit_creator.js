@@ -314,6 +314,8 @@ window.visit_creator = {
 
             // Modal
             v.$modal.modal({
+                allowMultiple: false,
+                closable: true,
                 inverted: true
             });
             // Count chars
