@@ -141,12 +141,24 @@ public class DoctorService {
                     if (prescriptionExamDAO.add(prescriptionExam) != null) {
                         // Added successfully
                         message.setError(JsonMessage.ERROR_NO_ERROR);
-                        EmailUtil.send(patient.getEmail(),
+                        String strPagamento = "<font color=\"red\"><b>non</b> pagato</font>";
+                        if(prescriptionExam.getPaid()){
+                            strPagamento = "<font color=\"green\">pagato</font>";
+                        }
+                        String html =
+                                "<h1 style=\"color: #5e9ca0;\">Nuova prescrizione <span style=\"color: #2b2301;\">esame</span>!</h1>" +
+                                "<p>" +
+                                    "Ciao <span style=\"color: #2b2301;\"><b>" + patient.getName() + "</b></span>!<br>" +
+                                    "Il tuo medico di base ha aggiunto una prescrizione per te. <br>" +
+                                    "Ecco qui un breve riassunto:<br>" +
+                                    "<b>Esame</b>: <span style=\"color: #2e6c80;\">" + exam.getName() + "</span><br>" +
+                                    "<b>Stato del pagamento</b>: " + strPagamento + "<br>" +
+                                    "<br>" +
+                                    "La preghiamo di contattarci al <b>"+ AppConfig.getInfoPhone() + "</b> per accordare un appuntamento<br>" +
+                                "</p>";
+                        EmailUtil.sendHTML(patient.getEmail(),
                                 AppConfig.getName().toUpperCase() + " Prescription Exam",
-                                "A new Exam has been added." +
-                                        "\nExam: " + exam.getName() +
-                                        "\nPaid: " + prescriptionExam.getPaid() +
-                                        "\nPlease contact us at " + AppConfig.getInfoPhone() + " to arrange a meeting.");
+                                html);
                     }
                 }
             } catch (DAOException ex) {
