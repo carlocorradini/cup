@@ -8,7 +8,6 @@ Questo servizio consente l'accesso al sistema di prenotazione per i Servizi Sani
 
 ## Built With
 
--   [Visual Studio Code](https://code.visualstudio.com) - Editor
 -   [Java](https://www.java.com) - General purpose computer-programming language
 -   [Maven](https://maven.apache.org/) - Dependency Management
 -   [Git](https://git-scm.com) - Distributed version control system
@@ -35,8 +34,7 @@ Questo servizio consente l'accesso al sistema di prenotazione per i Servizi Sani
     | REST API                    | descrivono una serie di linee guida e di approcci che definiscono lo stile con cui i dati vengono trasmessi                                                                                                                |
     | SCALR Image Library         | imgscalr is an simple and efficient best-practices image-scaling and manipulation library implemented in pure Java                                                                                                         |
     | PDF                         | The Apache PDFBox library is an open source Java tool for working with PDF documents                                                                                                                                       |    
-    | QR CODE                     | library to generate QR codes for our application                                                                                                                                                                           |
-                                                                                                                                                                          |
+    | QR CODE                     | library to generate QR codes for our application                                                                                                                                                                           |                                                                                                                                                                                                                                                         |
 > Below there is a table of the javascript libraries used
 
 - ### 
