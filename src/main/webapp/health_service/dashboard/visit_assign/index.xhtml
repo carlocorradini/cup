@@ -100,7 +100,9 @@
                             <td>
                                 <button class="ui fluid labeled teal icon button hs-assign-exam-modal-button"
                                         data-prescription-id="#{pe.id}"
+                                        data-exam-id="#{pe.exam.id}"
                                         data-patient-id="#{pe.personId}"
+                                        data-province-id="#{healthService.authHealthService.province.id}"
                                 >
                                     <i class="random icon"/>
                                     #{i18n["common.assign"]}
@@ -115,11 +117,10 @@
                 <div class="ui longer modal hs-assign-exam-modal">
                     <i class="red close icon"/>
                     <div class="header">
-                        #{i18n["common.assignVisits"]}
+                        #{i18n["common.assignVisit"]}
                     </div>
                     <div class="scrolling content">
-                        <form class="ui large form visit-creator-todo-write-report-form"
-                        >
+                        <form class="ui large form hs-assign-exam-form">
                             <div class="ui icon success message medium" style="z-index: 3;">
                                 <i class="checkmark icon"/>
                                 <div class="content">
@@ -147,78 +148,42 @@
                                     <span class="text full-width">
                                         <img src=""
                                              style="width: 2em; height: 2em;"
-                                             class="ui image bordered rounded person-avatar middle aligned visit-creator-todo-write-report-patient-avatar"
+                                             class="ui image bordered rounded person-avatar middle aligned hs-assign-exam-patient-avatar"
                                              alt="Avatar"
                                         />
-                                        <span class="visit-creator-todo-write-report-patient-full-name"/>
-                                        <span class="text-light text-right visit-creator-todo-write-report-patient-fiscal-code"/>
+                                        <span class="hs-assign-exam-patient-full-name"/>
+                                        <span class="text-light text-right hs-assign-exam-patient-fiscal-code"/>
                                     </span>
                                 </div>
                             </div>
+
                             <div class="field">
-                                <label>#{i18n["common.paid"]}</label>
-                                <div class="ui fluid toggle checkbox visit-creator-todo-write-report-data-paid">
-                                    <input type="checkbox" tabindex="0" class="hidden" name="paid"/>
-                                    <label data-paid="#{i18n['common.paid']}"
-                                           data-paid-not="#{i18n['common.paidNot']}">
-                                        #{i18n["common.paidNot"]}
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label>#{i18n["common.content"]}</label>
-                                <textarea class="visit-creator-todo-write-report-data-content"
-                                          placeholder="#{i18n['common.content']}"
-                                          name="content"
-                                          required=""
-                                          autocomplete="on"
-                                          minlength="#{prescription.examReportMinLength}"
-                                          maxlength="#{prescription.examReportMaxLength}"
-                                />
-                                <p class="text-light text-smaller-25">
-                                    <span class="visit-creator-todo-write-report-data-content-length"/>
-                                    &#160;
-                                    #{i18n["visit.assigned.characterCount"]}
-                                </p>
-                            </div>
-                            <div class="field">
-                                <label>#{i18n["common.exams.suggested"]}</label>
-                                <div class="ui fluid multiple search selection dropdown visit-creator-todo-write-report-data-exams">
-                                    <input type="hidden"/>
-                                    <i class="dropdown icon"/>
-                                    <div class="default text">#{i18n["common.exams.suggested"]}</div>
+                                <label>#{i18n["common.executor"]}</label>
+                                <div class="ui floating dropdown labeled icon button fluid large hs-assign-exam-executor-dropdown">
+                                    <i class="user md icon"/>
+                                    <span class="text full-width">#{i18n["visit.assign.executor.choose"]}</span>
                                     <div class="menu">
-                                        <ui:repeat value="#{exam.exams}" var="e">
-                                            <div class="item" data-value="#{e.id}">
-                                                <span class="ui empty circular label #{['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink'].get(e.id % 10)}"/>
-                                                #{e.name}
-                                                <span class="text-light text-right">#{e.id}</span>
-                                            </div>
-                                        </ui:repeat>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label>#{i18n["common.medicines.suggested"]}</label>
-                                <div class="ui fluid multiple search selection dropdown visit-creator-todo-write-report-data-medicines">
-                                    <input type="hidden"/>
-                                    <i class="dropdown icon"/>
-                                    <div class="default text">#{i18n["common.medicines.suggested"]}</div>
-                                    <div class="menu">
-                                        <ui:repeat value="#{medicine.medicines}" var="m">
-                                            <div class="item" data-value="#{m.id}">
-                                                <span class="ui empty circular label #{['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink'].get(m.id % 10)}"/>
-                                                #{m.name}
-                                                <span class="text-light text-right">#{m.id}</span>
-                                            </div>
-                                        </ui:repeat>
+                                        <div class="header">
+                                            #{i18n["visit.assign.executor.search"]}
+                                        </div>
+                                        <div class="ui icon search input">
+                                            <i class="search icon"/>
+                                            <input type="text" placeholder="#{i18n['common.search']}..."/>
+                                        </div>
+                                        <div class="divider"></div>
+                                        <div class="header">
+                                            <i class="filter icon"/>
+                                            #{i18n["visit.assign.executor.filter"]}
+                                        </div>
+                                        <div class="scrolling menu">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="ui blue fluid big button submit" tabindex="0">
-                                <i class="chevron circle up icon"/>
-                                #{i18n["common.send"]}
+                                <i class="angle double up icon"/>
+                                #{i18n["common.assign"]}
                             </div>
 
                             <div class="ui error message"></div>

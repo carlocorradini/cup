@@ -1,8 +1,7 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
 import com.alibaba.fastjson.JSON;
-import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
+import it.unitn.disi.wp.cup.persistence.dao.*;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
@@ -19,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,6 +36,9 @@ public class MedicalService {
     private HealthService authHealthService = null;
     private PersonDAO personDAO = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
+    private DoctorSpecialistDAO doctorSpecialistDAO = null;
+    private ProvinceDAO provinceDAO = null;
+    private ExamDAO examDAO = null;
 
     @Context
     private HttpServletRequest request;
@@ -50,6 +53,9 @@ public class MedicalService {
 
                 personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
                 prescriptionExamDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionExamDAO.class);
+                doctorSpecialistDAO = DAOFactory.getDAOFactory(servletContext).getDAO(DoctorSpecialistDAO.class);
+                provinceDAO = DAOFactory.getDAOFactory(servletContext).getDAO(ProvinceDAO.class);
+                examDAO = DAOFactory.getDAOFactory(servletContext).getDAO(ExamDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
             }
@@ -133,6 +139,58 @@ public class MedicalService {
                 }
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to return the Patient given its id", ex);
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return response.build();
+    }
+
+    /**
+     * Return the {@link List} of {@link DoctorSpecialist Doctor specialists} represented as {@link Person Person}
+     * in {@link JSON JSON} format that live in the {@link Province Province} identified by {@code provinceId}
+     * and is qualified for the {@link Exam Exam} identified by {@code examId}
+     *
+     * @param provinceId The {@link Province} id
+     * @param examId     The {@link Exam} id
+     * @return The {@link List} of qualified {@link DoctorSpecialist} as {@link JSON}
+     */
+    @GET
+    @Path("qualified/{provinceId}/{examId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getQualifiedDoctorSpecialistsByProvinceIdAndExamId(@PathParam("provinceId") Long provinceId,
+                                                                       @PathParam("examId") Long examId) {
+        Response.ResponseBuilder response;
+        List<Person> qualified;
+        Province province;
+        Exam exam;
+
+        if (!isAuthenticated()) {
+            // Unauthorized
+            response = Response.status(Response.Status.UNAUTHORIZED);
+        } else if (provinceId == null || examId == 0) {
+            // Province Id and/or Exam Id is missing
+            response = Response.status(Response.Status.BAD_REQUEST);
+        } else {
+            try {
+                if ((province = provinceDAO.getByPrimaryKey(provinceId)) == null || (exam = examDAO.getByPrimaryKey(examId)) == null) {
+                    // Patient Id and/or Exam Id is invalid
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                } else {
+                    // ALL CORRECT
+                    // Get qualified Specialists
+                    qualified = doctorSpecialistDAO.getAllQualifiedbyProvinceIdAndExamId(provinceId, examId);
+                    // Sanitize
+                    for (Person person : qualified) {
+                        EntitySanitizerUtil.sanitizePerson(person, true);
+                    }
+                    // Response
+                    response = Response
+                            .ok()
+                            .entity(qualified);
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to return the Qualified Doctor Specialists given Province Id and Exam Id", ex);
                 response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             }
         }

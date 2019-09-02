@@ -281,7 +281,7 @@ window.visit_creator = {
                 patient: {
                     $fullName: $("span.visit-creator-todo-write-report-patient-full-name"),
                     $fiscalCode: $("span.visit-creator-todo-write-report-patient-fiscal-code"),
-                    $avatar: $(".visit-creator-todo-write-report-patient-avatar")
+                    $avatar: $("img.visit-creator-todo-write-report-patient-avatar")
                 },
                 data: {
                     $content: $("textarea.visit-creator-todo-write-report-data-content"),
