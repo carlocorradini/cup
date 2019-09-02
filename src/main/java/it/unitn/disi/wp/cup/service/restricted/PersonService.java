@@ -172,9 +172,17 @@ public class PersonService {
                         person.setPassword(CryptUtil.hashPassword(newPassword));
                         if (personDAO.update(person)) {
                             message.setError(JsonMessage.ERROR_NO_ERROR);
-                            EmailUtil.send(person.getEmail(),
+                            String html =
+                                    "<h1 style=\"color: #5e9ca0;\">Ciao <span style=\"color: #2b2301;\">" + person.getName() + "</span>!</h1>" +
+                                    "<p>" +
+                                        "La tua nuova password è stata impostata.<br>" +
+                                        "Ti invitiamo a non condividere mai la password con nessuno e ti ricordiamo che gli operatori del CUP non chiederanno mai i dati tuoi personali.<br>" +
+                                        "<br>" +
+                                        "La password da te impostata è: <b>" + newPassword + "</b><br>" +
+                                    "</p>";
+                            EmailUtil.sendHTML(person.getEmail(),
                                     AppConfig.getName().toUpperCase() + " Password Changed",
-                                    "Your password has been successfully changed.\nNew Password: " + newPassword);
+                                    html);
                         } else {
                             message.setError(JsonMessage.ERROR_UNKNOWN);
                         }

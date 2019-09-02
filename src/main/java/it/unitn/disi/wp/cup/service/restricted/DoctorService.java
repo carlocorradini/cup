@@ -99,7 +99,7 @@ public class DoctorService {
                                 "<h1 style=\"color: #5e9ca0;\">Nuova prescrizione <span style=\"color: #2b2301;\">medicinale</span>!</h1>" +
                                 "<p>" +
                                     "Ciao <span style=\"color: #2b2301;\"><b>" + patient.getName() + "</b></span>!<br>" +
-                                    "Il tuo medico di base ha aggiunto una prescrizione per te. <br>" +
+                                    "Il tuo medico di base ha aggiunto una prescrizione per te.<br>" +
                                     "Ecco qui un breve riassunto:<br>" +
                                     "<b>Medicinale</b>: <span style=\"color: #2e6c80;\">" + medicine.getName() + "</span><br>" +
                                     "<b>Quantità</b>: <span style=\"color: #2e6c80;\">" + prescriptionMedicineModel.getQuantity() + "</span><br>" +
@@ -163,7 +163,7 @@ public class DoctorService {
                                 "<h1 style=\"color: #5e9ca0;\">Nuova prescrizione <span style=\"color: #2b2301;\">esame</span>!</h1>" +
                                 "<p>" +
                                     "Ciao <span style=\"color: #2b2301;\"><b>" + patient.getName() + "</b></span>!<br>" +
-                                    "Il tuo medico di base ha aggiunto una prescrizione per te. <br>" +
+                                    "Il tuo medico di base ha aggiunto una prescrizione per te.<br>" +
                                     "Ecco qui un breve riassunto:<br>" +
                                     "<b>Esame</b>: <span style=\"color: #2e6c80;\">" + exam.getName() + "</span><br>" +
                                     "<b>Stato del pagamento</b>: " + strPagamento + "<br>" +
