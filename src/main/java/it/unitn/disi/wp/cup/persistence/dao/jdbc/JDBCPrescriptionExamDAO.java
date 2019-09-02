@@ -33,6 +33,9 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
     private static final String SQL_GET_ALL_TO_DO_BY_HEALTH_SERVICE_ID = "SELECT * FROM prescription_exam WHERE health_service_id = ? AND report_id IS NULL";
     private static final String SQL_GET_ALL_DONE_BY_DOCTOR_SPECIALIST_ID = "SELECT * FROM prescription_exam WHERE doctor_specialist_id = ? AND report_id IS NOT NULL";
     private static final String SQL_GET_ALL_DONE_BY_HEALTH_SERVICE_ID = "SELECT * FROM prescription_exam WHERE health_service_id = ? AND report_id IS NOT NULL";
+    private static final String SQL_GET_ALL_TO_ASSIGN_BY_HEALTH_SERVICE_ID = "WITH person_province AS (SELECT person.id FROM person INNER JOIN city ON (person.city_id = city.id) WHERE province_id = ?)" +
+            " SELECT prescription_exam.* FROM person_province INNER JOIN prescription_exam ON (person_province.id = prescription_exam.person_id)" +
+            " WHERE report_id IS NULL AND doctor_specialist_id IS NULL AND health_service_id IS NULL AND prescription_date IS NULL";
     private static final String SQL_GET_COUNT_BY_PERSON_ID = "SELECT COUNT(*) FROM prescription_exam WHERE person_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_SPECIALIST_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_specialist_id = ?";
@@ -40,6 +43,11 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
     private static final String SQL_GET_COUNT_NOT_READ_BY_PERSON_ID = "SELECT COUNT(*) FROM prescription_exam WHERE person_id = ? AND read IS FALSE AND report_id IS NOT NULL";
     private static final String SQL_GET_COUNT_TO_DO_BY_DOCTOR_SPECIALIST_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_specialist_id = ? AND report_id IS NULL";
     private static final String SQL_GET_COUNT_TO_DO_BY_HEALTH_SERVICE_ID = "SELECT COUNT(*) FROM prescription_exam WHERE health_service_id = ? AND report_id IS NULL";
+    private static final String SQL_GET_COUNT_DONE_BY_DOCTOR_SPECIALIST_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_specialist_id = ? AND report_id IS NOT NULL";
+    private static final String SQL_GET_COUNT_DONE_BY_HEALTH_SERVICE_ID = "SELECT COUNT(*) FROM prescription_exam WHERE health_service_id = ? AND report_id IS NOT NULL";
+    private static final String SQL_GET_COUNT_TO_ASSIGN_BY_HEALTH_SERVICE_ID = "WITH person_province AS (SELECT person.id FROM person INNER JOIN city ON (person.city_id = city.id) WHERE province_id = ?)" +
+            " SELECT COUNT(*) FROM person_province INNER JOIN prescription_exam ON (person_province.id = prescription_exam.person_id)" +
+            " WHERE report_id IS NULL AND doctor_specialist_id IS NULL AND health_service_id IS NULL AND prescription_date IS NULL";
 
     /**
      * The default constructor of the class
@@ -75,7 +83,8 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             if (!rs.wasNull()) prescriptionExam.setHealthServiceId(idCheck);
             prescriptionExam.setDateTime(rs.getObject("prescription_date", LocalDateTime.class));
             prescriptionExam.setDateTimeRegistration(rs.getObject("prescription_date_registration", LocalDateTime.class));
-            prescriptionExam.setReport(reportDAO.getByPrimaryKey(rs.getLong("report_id")));
+            idCheck = rs.getLong("report_id");
+            if (!rs.wasNull()) prescriptionExam.setReport(reportDAO.getByPrimaryKey(idCheck));
             prescriptionExam.setPaid(rs.getBoolean("paid"));
             prescriptionExam.setRead(rs.getBoolean("read"));
         } catch (SQLException | DAOFactoryException ex) {
@@ -384,6 +393,26 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
     }
 
     @Override
+    public List<PrescriptionExam> getAllToAssignByHealthServiceId(Long healthServiceId) throws DAOException {
+        List<PrescriptionExam> exams = new ArrayList<>();
+        if (healthServiceId == null)
+            throw new DAOException("Health Service id is mandatory", new NullPointerException("Health Service id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_TO_ASSIGN_BY_HEALTH_SERVICE_ID)) {
+            pStmt.setLong(1, healthServiceId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                while (rs.next()) {
+                    exams.add(setAndGetDAO(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the List of Prescription Exam to assign by Health Service Id", ex);
+        }
+
+        return exams;
+    }
+
+    @Override
     public Long getCountByPersonId(Long personId) throws DAOException {
         Long count = null;
         if (personId == null)
@@ -519,6 +548,66 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to count the Prescription Exam that has not been performed by Health Service Id");
+        }
+
+        return count;
+    }
+
+    @Override
+    public Long getCountDonebyDoctorSpecialistId(Long doctorSpecialistId) throws DAOException {
+        Long count = null;
+        if (doctorSpecialistId == null)
+            throw new DAOException("Doctor Specialist id is mandatory", new NullPointerException("Doctor Specialist id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_COUNT_DONE_BY_DOCTOR_SPECIALIST_ID)) {
+            pStmt.setLong(1, doctorSpecialistId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getLong(1);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to count the Prescription Exam that has been performed by Doctor Specialist Id");
+        }
+
+        return count;
+    }
+
+    @Override
+    public Long getCountDoneByHealthServiceId(Long healthServiceId) throws DAOException {
+        Long count = null;
+        if (healthServiceId == null)
+            throw new DAOException("Health Service id is mandatory", new NullPointerException("Health Service id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_COUNT_DONE_BY_HEALTH_SERVICE_ID)) {
+            pStmt.setLong(1, healthServiceId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getLong(1);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to count the Prescription Exam that has been performed by Health Service Id");
+        }
+
+        return count;
+    }
+
+    @Override
+    public Long getCountToAssignByHealthServiceId(Long healthServiceId) throws DAOException {
+        Long count = null;
+        if (healthServiceId == null)
+            throw new DAOException("Health Service id is mandatory", new NullPointerException("Health Service id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_COUNT_TO_ASSIGN_BY_HEALTH_SERVICE_ID)) {
+            pStmt.setLong(1, healthServiceId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getLong(1);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to count the Prescription Exam that has NOT been assigned by Health Service Id");
         }
 
         return count;

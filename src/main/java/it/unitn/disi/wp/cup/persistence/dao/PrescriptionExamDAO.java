@@ -9,6 +9,8 @@ import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
 import it.unitn.disi.wp.cup.persistence.entity.HealthService;
 import it.unitn.disi.wp.cup.persistence.entity.Report;
 
+import java.time.LocalDateTime;
+
 import java.util.List;
 
 /**
@@ -117,6 +119,18 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
     List<PrescriptionExam> getAllDoneByHealthServiceId(Long healthServiceId) throws DAOException;
 
     /**
+     * Return the {@link List list} of all {@link PrescriptionExam Presctiption Exam} that has been created
+     * by a {@link Doctor Doctor} for a {@link Person Patient} but has not been scheduled.
+     * {@link LocalDateTime Date and Time} is missing.
+     * {@link DoctorSpecialist Doctor Specialist} and/or {@link HealthService Health Service} is missing.
+     *
+     * @param healthServiceId The {@link HealthService Health Service} id
+     * @return The {@link List List} of all created but not scheduled {@link PrescriptionExam Prescription Exam}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    List<PrescriptionExam> getAllToAssignByHealthServiceId(Long healthServiceId) throws DAOException;
+
+    /**
      * Return the Number of {@link Exam exams} prescribed for a {@link Person person} given its {@code personId id}
      *
      * @param personId The {@link Person} id
@@ -165,7 +179,7 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
     Long getCountNotReadByPersonId(Long personId) throws DAOException;
 
     /**
-     * Return the Number of {@link PrescriptionExam} that has not been performed, assigned to a {@link DoctorSpecialist Doctor Specialist}
+     * Return the Number of {@link PrescriptionExam} that has NOT been performed, assigned to a {@link DoctorSpecialist Doctor Specialist}
      * identified by {@code doctorSpecialistId}
      *
      * @param doctorSpecialistId The {@link DoctorSpecialist} id
@@ -175,7 +189,7 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
     Long getCountToDoByDoctorSpecialistId(Long doctorSpecialistId) throws DAOException;
 
     /**
-     * Return the Number of {@link PrescriptionExam} that has not been performed, assigned to a {@link HealthService Health Service}
+     * Return the Number of {@link PrescriptionExam} that has NOT been performed, assigned to a {@link HealthService Health Service}
      * identified by {@code healthServiceId}
      *
      * @param healthServiceId The {@link HealthService} id
@@ -183,4 +197,36 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @throws DAOException If an error occurred during the information retrieving
      */
     Long getCountToDoByHealthServiceId(Long healthServiceId) throws DAOException;
+
+    /**
+     * Return the Number of {@link PrescriptionExam} that has been performed, assigned to a {@link DoctorSpecialist Doctor Specialist}
+     * identified by {@code doctorSpecialistId}
+     *
+     * @param doctorSpecialistId The {@link DoctorSpecialist} id
+     * @return The Number of {@link PrescriptionExam} performed
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    Long getCountDonebyDoctorSpecialistId(Long doctorSpecialistId) throws DAOException;
+
+    /**
+     * Return the Number of {@link PrescriptionExam} that has been performed, assigned to a {@link HealthService Health Service}
+     * identified by {@code healthServiceId}
+     *
+     * @param healthServiceId The {@link HealthService} id
+     * @return The Number of {@link PrescriptionExam} not performed
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    Long getCountDoneByHealthServiceId(Long healthServiceId) throws DAOException;
+
+    /**
+     * Return the Number of all {@link PrescriptionExam Presctiption Exam} that has been created
+     * by a {@link Doctor Doctor} for a {@link Person Patient} but has not been scheduled.
+     * {@link LocalDateTime Date and Time} is missing.
+     * {@link DoctorSpecialist Doctor Specialist} and/or {@link HealthService Health Service} is missing.
+     *
+     * @param healthServiceId The {@link HealthService Health Service} id
+     * @return The Number of {@link PrescriptionExam} that has NOT been assigned
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    Long getCountToAssignByHealthServiceId(Long healthServiceId) throws DAOException;
 }

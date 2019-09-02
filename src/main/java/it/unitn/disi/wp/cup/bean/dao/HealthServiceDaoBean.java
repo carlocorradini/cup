@@ -144,6 +144,26 @@ public final class HealthServiceDaoBean implements Serializable {
     }
 
     /**
+     * Return the {@link List List} of all NOT assigned/scheduled {@link PrescriptionExam Prescription Exam}
+     * for the current Authenticated Health Service
+     *
+     * @return The {@link List List} of all NOT assigned {@link PrescriptionExam Prescription Exam}
+     */
+    public List<PrescriptionExam> getNotAssignedPrescriptionExam() {
+        List<PrescriptionExam> exams = Collections.emptyList();
+
+        if (authHealthService != null && prescriptionExamDAO != null) {
+            try {
+                exams = prescriptionExamDAO.getAllToAssignByHealthServiceId(authHealthService.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the List of All Not Assigned Prescription Exam for the Authenticated Health Service", ex);
+            }
+        }
+
+        return exams;
+    }
+
+    /**
      * Return the Number of {@link PrescriptionExam exams} assigned to the Authenticated {@link HealthService Health Service}
      *
      * @return Number of {@link PrescriptionExam exams} assigned
@@ -163,9 +183,9 @@ public final class HealthServiceDaoBean implements Serializable {
     }
 
     /**
-     * Return the Number of {@link PrescriptionExam exams} assigned but not performed to the Authenticated {@link HealthService Health Service}
+     * Return the Number of {@link PrescriptionExam exams} assigned but NOT performed to the Authenticated {@link HealthService Health Service}
      *
-     * @return Number of assigned but not performed {@link PrescriptionExam exams}
+     * @return Number of assigned but NOT performed {@link PrescriptionExam exams}
      */
     public Long getAssignedToDoPrescriptionExamCount() {
         long count = 0L;
@@ -181,4 +201,41 @@ public final class HealthServiceDaoBean implements Serializable {
         return count;
     }
 
+    /**
+     * Return the Number of {@link PrescriptionExam Prescription Exams} assigned and performed to the Authenticated {@link HealthService Health Service}
+     *
+     * @return Number of assigned and performed {@link PrescriptionExam Prescription Exams}
+     */
+    public Long getAssignedDonePrescriptionExamCount() {
+        long count = 0L;
+
+        if (authHealthService != null && prescriptionExamDAO != null) {
+            try {
+                count = prescriptionExamDAO.getCountDoneByHealthServiceId(authHealthService.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to count the assigned and performed Prescription Exam for the authenticated Health Service", ex);
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * Return the Number of {@link PrescriptionExam Prescription Exams} that has not been assigned for the authenticated {@link HealthService Health Service}
+     *
+     * @return Number of not assigned {@link PrescriptionExam Prescription Exams}
+     */
+    public Long getNotAssignedPrescriptionExamCount() {
+        long count = 0L;
+
+        if (authHealthService != null && prescriptionExamDAO != null) {
+            try {
+                count = prescriptionExamDAO.getCountToAssignByHealthServiceId(authHealthService.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to count the Prescription Exam that has not been assigned for the Authenticated Health Service", ex);
+            }
+        }
+
+        return count;
+    }
 }

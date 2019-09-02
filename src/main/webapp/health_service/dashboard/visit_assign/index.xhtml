@@ -1,0 +1,548 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <ui:define name="title">#{i18n["common.assignVisits"]}</ui:define>
+
+    <ui:define name="js">
+        <h:outputScript library="datatables"
+                        name="js/datatables.min.js"
+                        target="body"/>
+        <h:outputScript library="moment"
+                        name="js/moment.js"
+                        target="body"/>
+        <h:outputScript library="_default"
+                        name="js/visit_creator.js"
+                        target="body"/>
+        <h:outputScript library="_default"
+                        name="js/hs_assign.js"
+                        target="body"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <ui:fragment rendered="#{not empty healthService.authHealthService}">
+            <h2 class="ui center aligned icon header">
+                <i class="random icon"/>
+                #{i18n["common.assignVisits"]}
+            </h2>
+
+            <div class="ui divider"></div>
+
+            <ui:fragment rendered="#{empty healthService.notAssignedPrescriptionExam}">
+                <div class="ui icon message">
+                    <i class="info circle icon"/>
+                    <div class="content">
+                        <div class="header">
+                            #{i18n["visit.assign.empty.message"]}
+                        </div>
+                        <p>#{i18n["visit.assign.empty.subMessage"]}</p>
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{not empty healthService.notAssignedPrescriptionExam}">
+                <div class="visit-creator-i18n"
+                     data-i18n="{
+                         &quot;noReport&quot;: &quot;#{i18n['common.noReport']}&quot;,
+                         &quot;view&quot;: &quot;#{i18n['common.view']}&quot;,
+                         &quot;executorIsSpecialist&quot;: &quot;#{i18n['visit.assigned.executor.isSpecialist']}&quot;,
+                         &quot;executorIsHealthService&quot;: &quot;#{i18n['visit.assigned.executor.isHealthService']}&quot;
+                    }"
+                ></div>
+
+                <table class="ui celled striped sortable table visit-creator-table">
+                    <thead>
+                    <tr>
+                        <th>#{i18n["common.id"]}</th>
+                        <th>#{i18n["common.exam"]}</th>
+                        <th>#{i18n["common.dateRegistration"]}</th>
+                        <th>#{i18n["common.hourRegistration"]}</th>
+                        <th>#{i18n["common.doctor"]}</th>
+                        <th>#{i18n["common.patient"]}</th>
+                        <th>#{i18n["visit.assign.assignExam"]}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{healthService.notAssignedPrescriptionExam}" var="pe">
+                        <tr data-prescription-id="#{pe.id}">
+                            <td>#{pe.id}</td>
+                            <td>#{pe.exam.name}</td>
+                            <td>
+                                <h:outputText value="#{pe.dateTimeRegistration}">
+                                    <f:convertDateTime type="localDate"/>
+                                </h:outputText>
+                            </td>
+                            <td>
+                                <h:outputText value="#{pe.dateTimeRegistration}">
+                                    <f:convertDateTime type="localTime"/>
+                                </h:outputText>
+                            </td>
+                            <td>
+                                <button class="ui fluid labeled icon button visit-creator-doctor-modal-button"
+                                        data-doctor-id="#{pe.doctorId}"
+                                >
+                                    <i class="user md icon"/>
+                                    #{i18n["common.doctor"]}
+                                </button>
+
+                            </td>
+                            <td>
+                                <button class="ui fluid labeled icon button visit-creator-patient-modal-button"
+                                        data-patient-id="#{pe.personId}"
+                                >
+                                    <i class="user icon"/>
+                                    #{i18n["common.patient"]}
+                                </button>
+                            </td>
+                            <td>
+                                <button class="ui fluid labeled teal icon button hs-assign-exam-modal-button"
+                                        data-prescription-id="#{pe.id}"
+                                        data-patient-id="#{pe.personId}"
+                                >
+                                    <i class="random icon"/>
+                                    #{i18n["common.assign"]}
+                                </button>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                    </tbody>
+                </table>
+
+                <!-- ASSIGN EXAM MODAL -->
+                <div class="ui longer modal hs-assign-exam-modal">
+                    <i class="red close icon"/>
+                    <div class="header">
+                        #{i18n["common.assignVisits"]}
+                    </div>
+                    <div class="scrolling content">
+                        <form class="ui large form visit-creator-todo-write-report-form"
+                        >
+                            <div class="ui icon success message medium" style="z-index: 3;">
+                                <i class="checkmark icon"/>
+                                <div class="content">
+                                    <div class="header">
+                                        #{i18n["visit.assigned.addReport.success.message"]}
+                                    </div>
+                                    <p>#{i18n["visit.assigned.addReport.success.subMessage"]}</p>
+                                </div>
+                            </div>
+
+                            <div class="ui icon warning message medium">
+                                <i class="exclamation triangle icon"/>
+                                <div class="content">
+                                    <div class="header">
+                                        #{i18n["visit.assigned.addReport.error.message"]}
+                                    </div>
+                                    <p>#{i18n["visit.assigned.addReport.error.subMessage"]}</p>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label>#{i18n["common.patient"]}</label>
+                                <div class="ui floating dropdown labeled icon button fluid large disabled">
+                                    <i class="user icon"/>
+                                    <span class="text full-width">
+                                        <img src=""
+                                             style="width: 2em; height: 2em;"
+                                             class="ui image bordered rounded person-avatar middle aligned visit-creator-todo-write-report-patient-avatar"
+                                             alt="Avatar"
+                                        />
+                                        <span class="visit-creator-todo-write-report-patient-full-name"/>
+                                        <span class="text-light text-right visit-creator-todo-write-report-patient-fiscal-code"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>#{i18n["common.paid"]}</label>
+                                <div class="ui fluid toggle checkbox visit-creator-todo-write-report-data-paid">
+                                    <input type="checkbox" tabindex="0" class="hidden" name="paid"/>
+                                    <label data-paid="#{i18n['common.paid']}"
+                                           data-paid-not="#{i18n['common.paidNot']}">
+                                        #{i18n["common.paidNot"]}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>#{i18n["common.content"]}</label>
+                                <textarea class="visit-creator-todo-write-report-data-content"
+                                          placeholder="#{i18n['common.content']}"
+                                          name="content"
+                                          required=""
+                                          autocomplete="on"
+                                          minlength="#{prescription.examReportMinLength}"
+                                          maxlength="#{prescription.examReportMaxLength}"
+                                />
+                                <p class="text-light text-smaller-25">
+                                    <span class="visit-creator-todo-write-report-data-content-length"/>
+                                    &#160;
+                                    #{i18n["visit.assigned.characterCount"]}
+                                </p>
+                            </div>
+                            <div class="field">
+                                <label>#{i18n["common.exams.suggested"]}</label>
+                                <div class="ui fluid multiple search selection dropdown visit-creator-todo-write-report-data-exams">
+                                    <input type="hidden"/>
+                                    <i class="dropdown icon"/>
+                                    <div class="default text">#{i18n["common.exams.suggested"]}</div>
+                                    <div class="menu">
+                                        <ui:repeat value="#{exam.exams}" var="e">
+                                            <div class="item" data-value="#{e.id}">
+                                                <span class="ui empty circular label #{['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink'].get(e.id % 10)}"/>
+                                                #{e.name}
+                                                <span class="text-light text-right">#{e.id}</span>
+                                            </div>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>#{i18n["common.medicines.suggested"]}</label>
+                                <div class="ui fluid multiple search selection dropdown visit-creator-todo-write-report-data-medicines">
+                                    <input type="hidden"/>
+                                    <i class="dropdown icon"/>
+                                    <div class="default text">#{i18n["common.medicines.suggested"]}</div>
+                                    <div class="menu">
+                                        <ui:repeat value="#{medicine.medicines}" var="m">
+                                            <div class="item" data-value="#{m.id}">
+                                                <span class="ui empty circular label #{['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink'].get(m.id % 10)}"/>
+                                                #{m.name}
+                                                <span class="text-light text-right">#{m.id}</span>
+                                            </div>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ui blue fluid big button submit" tabindex="0">
+                                <i class="chevron circle up icon"/>
+                                #{i18n["common.send"]}
+                            </div>
+
+                            <div class="ui error message"></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- DOCTOR MODAL -->
+                <div class="ui longer modal visit-creator-doctor-modal">
+                    <i class="red close icon"/>
+                    <div class="header">
+                        <span class="visit-creator-doctor-full-name"/>
+                    </div>
+                    <div class="scrolling content">
+                        <div class="ui card centered">
+                            <div class="image">
+                                <img class="ui image centered person-avatar medium visit-creator-doctor-avatar"
+                                     src=""
+                                     alt="Avatar"/>
+                            </div>
+                            <div class="content">
+                                <div class="header"><span class="visit-creator-doctor-full-name"/></div>
+                                <div class="meta">
+                                    <i class="dot circle outline fitted icon"/>
+                                    <span class="visit-creator-doctor-province"/>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <span class="meta">
+                                    <i class="hashtag fitted icon"/> <span class="visit-creator-doctor-id"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PATIENT MODAL -->
+                <div class="ui longer modal visit-creator-patient-modal">
+                    <i class="red close icon"/>
+                    <div class="header">
+                        <span class="visit-creator-patient-full-name"/>
+                    </div>
+                    <div class="scrolling image content">
+                        <img src=""
+                             class="ui image rounded bordered person-avatar medium visit-creator-patient-avatar"
+                             alt="Avatar"
+                        />
+                        <div class="description">
+                            <div class="ui styled accordion visit-creator-patient-accordion">
+                                <div class="active title">
+                                    <i class="dropdown icon"/>
+                                    #{i18n["common.personalInformation"]}
+                                </div>
+                                <div class="active content">
+                                    <table class="ui very basic celled table">
+                                        <tbody>
+                                        <tr>
+                                            <td class="text-strong">#{i18n["common.id"]}</td>
+                                            <td><span class="visit-creator-patient-id"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-strong">#{i18n["common.name"]}</td>
+                                            <td><span class="visit-creator-patient-name"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-strong">#{i18n["common.surname"]}</td>
+                                            <td><span class="visit-creator-patient-surname"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-strong">#{i18n["common.sex"]}</td>
+                                            <td><span class="visit-creator-patient-sex"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-strong">#{i18n["common.fiscalCode"]}</td>
+                                            <td><span class="visit-creator-patient-fiscal-code"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-strong">#{i18n["common.birthDate"]}</td>
+                                            <td><span class="visit-creator-patient-birth-date"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-strong">#{i18n["common.birthCity"]}</td>
+                                            <td><span class="visit-creator-patient-birth-city"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-strong">#{i18n["common.domicile"]}</td>
+                                            <td><span class="visit-creator-patient-domicile"/></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="title">
+                                    <i class="dropdown icon"/>
+                                    #{i18n["common.exams"]}
+                                </div>
+                                <div class="content">
+                                    <div class="ui icon message visit-creator-patient-exams-empty">
+                                        <i class="info circle icon"/>
+                                        <div class="content">
+                                            <div class="header">
+                                                #{i18n["doctor.patients.patient.exam.empty.message"]}
+                                            </div>
+                                            <p>#{i18n["doctor.patients.patient.exam.empty.subMessage"]}</p>
+                                        </div>
+                                    </div>
+
+                                    <table class="ui celled striped sortable table visit-creator-patient-exams-table">
+                                        <thead>
+                                        <tr>
+                                            <th>#{i18n["common.id"]}</th>
+                                            <th>#{i18n["common.exam"]}</th>
+                                            <th>#{i18n["common.date"]}</th>
+                                            <th>#{i18n["common.hour"]}</th>
+                                            <th>#{i18n["common.report"]}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="title">
+                                    <i class="dropdown icon"/>
+                                    #{i18n["common.prescriptions"]}
+                                </div>
+                                <div class="content">
+                                    <div class="ui icon message visit-creator-patient-medicines-empty">
+                                        <i class="info circle icon"/>
+                                        <div class="content">
+                                            <div class="header">
+                                                #{i18n["doctor.patients.patient.prescription.empty.message"]}
+                                            </div>
+                                            <p>#{i18n["doctor.patients.patient.prescription.empty.subMessage"]}</p>
+                                        </div>
+                                    </div>
+
+                                    <table class="ui celled striped sortable table visit-creator-patient-medicines-table">
+                                        <thead>
+                                        <tr>
+                                            <th>#{i18n["common.id"]}</th>
+                                            <th>#{i18n["common.medicine"]}</th>
+                                            <th>#{i18n["common.date"]}</th>
+                                            <th>#{i18n["common.hour"]}</th>
+                                            <th>#{i18n["common.quantity"]}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="title">
+                                    <i class="dropdown icon"/>
+                                    #{i18n["common.timeline"]}
+                                </div>
+                                <div class="content">
+                                    <div class="ui icon message visit-creator-patient-timeline-empty">
+                                        <i class="info circle icon"/>
+                                        <div class="content">
+                                            <div class="header">
+                                                #{i18n["doctor.patients.patient.timeline.empty.message"]}
+                                            </div>
+                                            <p>#{i18n["doctor.patients.patient.timeline.empty.subMessage"]}</p>
+                                        </div>
+                                    </div>
+
+                                    <table class="ui very basic sortable celled table visit-creator-patient-timeline-table">
+                                        <thead>
+                                        <tr class="center aligned">
+                                            <th>#{i18n["common.image"]}</th>
+                                            <th>#{i18n["common.date"]}</th>
+                                            <th>#{i18n["common.hour"]}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PATIENT REPORT MODAL -->
+                <div class="ui small modal visit-creator-patient-report-modal">
+                    <i class="red close icon"/>
+                    <div class="header">
+                        <span class="ui large label">
+                            #{i18n["common.report"]}
+                            <span class="detail visit-creator-patient-report-id"/>
+                        </span>
+                    </div>
+                    <div class="scrolling content">
+                        <table class="ui celled table">
+                            <thead>
+                            <tr>
+                                <th>#{i18n["common.id"]}</th>
+                                <th>#{i18n["common.date"]}</th>
+                                <th>#{i18n["common.hour"]}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><span class="visit-creator-patient-report-id"/></td>
+                                <td><span class="visit-creator-patient-report-date"/></td>
+                                <td><span class="visit-creator-patient-report-time"/></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- EXECUTOR -->
+                        <div class="ui styled fluid accordion visit-creator-patient-report-executor-accordion">
+                            <div class="title">
+                                <i class="dropdown icon"/>
+                                #{i18n["common.executor"]}
+                            </div>
+                            <div class="content">
+
+                                <div class="ui info message">
+                                    <div class="header">
+                                        <i class="info circle icon"/>
+                                        <span class="visit-creator-patient-report-executor-message"/>
+                                    </div>
+                                </div>
+
+                                <div class="ui card centered">
+                                    <div class="image">
+                                        <img class="ui image centered visit-creator-patient-report-executor-avatar"
+                                             src=""
+                                             alt="Avatar"/>
+                                    </div>
+                                    <div class="content">
+                                        <div class="header">
+                                            <span class="visit-creator-patient-report-executor-full-name"/>
+                                        </div>
+                                        <div class="meta">
+                                            <i class="dot circle outline fitted icon"/>
+                                            <span class="visit-creator-patient-report-executor-territory"/>
+                                        </div>
+                                    </div>
+                                    <div class="extra content">
+                                        <span class="meta">
+                                            <i class="hashtag fitted icon"/>
+                                            <span class="visit-creator-patient-report-executor-id"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CONTENT -->
+                        <table class="ui celled table">
+                            <thead>
+                            <tr>
+                                <th>#{i18n["common.content"]}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="ui form">
+                                        <div class="field">
+                                            <textarea class="visit-creator-patient-report-content"
+                                                      autocomplete="off"
+                                                      readonly=""
+                                            />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="ui divider"></div>
+
+                        <!-- SUGGESTED EXAMS -->
+                        <div class="ui icon message visit-creator-patient-report-exam-empty">
+                            <i class="info circle icon"/>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n["doctor.patients.patient.report.exam.empty.message"]}
+                                </div>
+                                <p>#{i18n["doctor.patients.patient.report.exam.empty.subMessage"]}</p>
+                            </div>
+                        </div>
+                        <div class="visit-creator-patient-report-exam-container">
+                            <h4>#{i18n["common.exams.suggested"]}</h4>
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="ui bulleted list visit-creator-patient-report-exam-list">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!---->
+                        <div class="ui divider"></div>
+
+                        <!-- SUGGESTED MEDICINES -->
+                        <div class="ui icon message visit-creator-patient-report-medicine-empty">
+                            <i class="info circle icon"/>
+                            <div class="content">
+                                <div class="header">
+                                    #{i18n["doctor.patients.patient.report.medicine.empty.message"]}
+                                </div>
+                                <p>#{i18n["doctor.patients.patient.report.medicine.empty.subMessage"]}</p>
+                            </div>
+                        </div>
+                        <div class="visit-creator-patient-report-medicine-container">
+                            <h4>#{i18n["common.medicines.suggested"]}</h4>
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="ui bulleted list visit-creator-patient-report-medicine-list">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </ui:fragment>
+
+            <div class="ui divider"></div>
+        </ui:fragment>
+    </ui:define>
+</ui:composition>

@@ -26,6 +26,35 @@
 
             <div class="ui divider"></div>
 
+            <div class="ui three statistics">
+                <div class="statistic">
+                    <div class="label">
+                        #{i18n["common.assignVisits"]}
+                    </div>
+                    <div class="value">
+                        #{healthService.notAssignedPrescriptionExamCount}
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="label">
+                        #{i18n["common.todoVisits"]}
+                    </div>
+                    <div class="value">
+                        #{healthService.assignedToDoPrescriptionExamCount}
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="label">
+                        #{i18n["common.total.assignedVisits"]}
+                    </div>
+                    <div class="value">
+                        #{healthService.assignedDonePrescriptionExamCount}
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
             <div class="ui top attached tabular menu" id="dashboard-hs-tab">
                 <a class="item active" data-tab="information">
                     <i class="address card outline icon"/>
@@ -70,6 +99,18 @@
 
             <div class="ui bottom attached tab segment" data-tab="services">
                 <div class="ui centered cards">
+                    <h:link outcome="/health_service/dashboard/visit_assign/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/visit_assign.svg"
+                                            alt="#{i18n['common.assignVisits']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.assignVisits"])}
+                        </div>
+                    </h:link>
                     <h:link outcome="/health_service/dashboard/visit_todo/index" styleClass="raised link card">
                         <div class="image">
                             <h:graphicImage styleClass="ui image"
