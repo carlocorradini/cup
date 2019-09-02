@@ -96,10 +96,10 @@ public class RecoverService {
         String html =
                 "<h1 style=\"color: #5e9ca0;\">Ciao <span style=\"color: #2b2301;\">" + person.getName() + "</span>!</h1>" +
                 "<p>" +
-                    "Buongiorno <b>" + person.getName() + "</b>, come da lei richiesto le è stata assegnata una nuova password.<br>" +
-                    "La invitiamo a non condividere mai la sua password con nessuno e le ricordiamo che gli operatori del CUP non le chiederanno mai i dati personali.<br>" +
+                    "Come da te richiesto ti è stata assegnata una nuova password.<br>" +
+                    "Ti invitiamo a non condividere mai la password con nessuno e ti ricordiamo che gli operatori del CUP non chiederanno mai i dati tuoi personali.<br>" +
                     "<br>" +
-                    "La sua nuova password è: <b>" + newPassword + "</b><br>" +
+                    "La tua nuova password è: <b>" + newPassword + "</b><br>" +
                 "</p>";
 
         EmailUtil.sendHTML(person.getEmail(),
