@@ -63,7 +63,7 @@ These instructions will get you a copy of the project up and running on your loc
      
      Start Tomcat server
      
-- ### Restore the backup
+- ### Restore the database backup
 
   1. Open command line window.
   
@@ -77,15 +77,15 @@ These instructions will get you a copy of the project up and running on your loc
   
   5. Check the restore process.
 
-- ### Project propreties
-   | Propreties              | Description                                                                                      |  
+- ### Project properties
+   | Properties              | Description                                                                                      |  
    | ------------------------|--------------------------------------------------------------------------------------------------| 
-   | app.propreties          | info, logo of the application and informations about the authors                                 |
-   | auth.properties         | propreties for cookies and session timeouts                                                      |
+   | app.properties          | info, logo of the application and informations about the authors                                 |
+   | auth.properties         | properties for cookies and session timeouts                                                      |
    | database.properties     | host, port number, name of the database and data for the authentication                          |
    | email.properties        | information about the email used to send emails to the users                                     |
-   | prescription.properties | propreties for the max and min prescriprion quantity, min and max length of the report characters|                                                                                                                                                                       
-   | template.properties     | propreties for the standard layout of the application                                            |
+   | prescription.properties | properties for the max and min prescription quantity, min and max length of the report characters|                                                                                                                                                                       
+   | template.properties     | properties for the standard layout of the application                                            |
   
 ## Built With
 
