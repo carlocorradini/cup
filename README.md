@@ -2,6 +2,8 @@
 
 Centro Unico Prenotazioni
 
+[Read assignment task for more information](WEB_Project_2018_2019.pdf)
+
 ## Descrizione
 
 Questo servizio consente l'accesso al sistema di prenotazione per i Servizi Sanitari delle visite specialistiche e delle prestazioni di diagnostica strumentale.
@@ -53,10 +55,38 @@ These instructions will get you a copy of the project up and running on your loc
        ```console
        $ mvn package
        ```
-  4. Go to CATALINA_HOME/webapps
+  4. Copy the war file and insert it in the doc
+     
+     CATALINA_HOME/webapps
+  
+  5. Go to CATALINA_HOME/webapps
      
      Start Tomcat server
      
+- ### Restore the backup
+
+  1. Open command line window.
+  
+  2. Go to Postgres bin folder. For example: cd "C:\ProgramFiles\PostgreSQL\9.5\bin"
+  
+  3. Enter the command to restore your database
+        ```console
+           $ psql.exe -U postgres -d cup -f D:\Backup\.sql.
+        ```
+  4. Type password for your postgres user.
+  
+  5. Check the restore process.
+
+- ### Project propreties
+   | Propreties              | Description                                                                                      |  
+   | ------------------------|--------------------------------------------------------------------------------------------------| 
+   | app.propreties          | info, logo of the application and informations about the authors                                 |
+   | auth.properties         | propreties for cookies and session timeouts                                                      |
+   | database.properties     | host, port number, name of the database and data for the authentication                          |
+   | email.properties        | information about the email used to send emails to the users                                     |
+   | prescription.properties | propreties for the max and min prescriprion quantity, min and max length of the report characters|                                                                                                                                                                       
+   | template.properties     | propreties for the standard layout of the application                                            |
+  
 ## Built With
 
 -   [Java](https://www.java.com) - General purpose computer-programming language
@@ -94,7 +124,7 @@ These instructions will get you a copy of the project up and running on your loc
     | [datatables](https://datatables.net/)                                  | DataTables is a table enhancing plug-in for the jQuery Javascript library, adding sorting, paging and filtering abilities to plain HTML tables with minimal effort                |
     | [jquery](https://jquery.com/)                                          | It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers |
     | [moment.js](https://momentjs.com/)                                     | A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates                                                                                 |
-    | [semantic-ui](https://semantic-ui.com/)                                | Semantic is a development framework that helps create beautiful, responsive layouts using human-friendly HTML                                                                     |                                                                                                                                                                       |
+    | [semantic-ui](https://semantic-ui.com/)                                | Semantic is a development framework that helps create beautiful, responsive layouts using human-friendly HTML                                                                     |                                                                                                                                                                       
     | [URI.js](http://www.html.it/script/uri-js/)                            | javascript library for working with URLs                                                                                                                                          |
     | [Semantic-UI-Calendar](https://github.com/mdehoog/Semantic-UI-Calendar)| javascript library for formatting date and time                                                                                                                                   |                                                                                                                                                                                                             
 
