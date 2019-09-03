@@ -2,6 +2,8 @@
 
 Centro Unico Prenotazioni
 
+[Leggi il compito assegnato per avere più informazioni](WEB_Project_2018_2019.pdf)
+
 ## Descrizione
 
 Questo servizio consente l'accesso al sistema di prenotazione per i Servizi Sanitari delle visite specialistiche e delle prestazioni di diagnostica strumentale.
@@ -36,7 +38,7 @@ I medici specialisti possono:
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-- ### preparation
+- ### Preparation
 
   1. **Clone** this repo on your host using [Git](https://git-scm.com)
 
@@ -48,15 +50,70 @@ These instructions will get you a copy of the project up and running on your loc
        ```console
        $ cd cup
        ```
-  3. Package with maven
+  3. Create the war file
   
        ```console
-       $ mvn package
+       $ mvn clean install package
        ```
-  4. Go to CATALINA_HOME/webapps
+  4. Change current directory
+        
+       ```console
+       $ cd target/
+       ```
+  5. Copy the war file and insert it in the folder
+  
+     ```console
+     CATALINA_HOME/webapps
+     ```
      
-     Start Tomcat server
+  6. Go to the folder
+     ```console
+     CATALINA_HOME/bin
+     ```
+  7. Start Tomcat server
+  
+     Command for Windows users
+       ```console
+       $ startup.bat
+       ``` 
+     Command for Linux users
+       ```console
+       $ startup.sh
+       ```
      
+     
+- ### Restore the database backup
+   Rename to your database name in database.propreties before you start the database
+   
+  * Create the database before you start working on the project
+    1. Open the SQL Shell
+    2. provide the data requested by the sql shell
+    3. Enter the command
+       ```console
+       $ CREATE DATABASE [DatabaseName]
+       ```
+  1. Open command line window.
+  
+  2. Go to Postgres bin folder. For example: cd "C:\ProgramFiles\PostgreSQL\9.5\bin"
+  
+  3. Enter the command to restore your database
+        ```console
+           $ psql.exe -U [postgres username] -d [Your Database] -f D:\Backup\.sql.
+        ```
+  4. Type password for your postgres user.
+  
+  5. Check the restore process.
+
+- ### Project properties
+   | Properties              | Description                                                                                      |  
+   | ------------------------|--------------------------------------------------------------------------------------------------| 
+   | app.properties          | info, logo of the application and informations about the authors                                 |
+   | auth.properties         | properties for cookies and session timeouts                                                      |
+   | database.properties     | host, port number, name of the database and data for the authentication                          |
+   | email.properties        | information about the email used to send emails to the users                                     |
+   | prescription.properties | properties for the max and min prescription quantity, min and max length of the report characters|                                                                                                                                                                       
+   | template.properties     | properties for the standard layout of the application                                            |
+  
 ## Built With
 
 -   [Java](https://www.java.com) - General purpose computer-programming language
@@ -94,7 +151,7 @@ These instructions will get you a copy of the project up and running on your loc
     | [datatables](https://datatables.net/)                                  | DataTables is a table enhancing plug-in for the jQuery Javascript library, adding sorting, paging and filtering abilities to plain HTML tables with minimal effort                |
     | [jquery](https://jquery.com/)                                          | It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers |
     | [moment.js](https://momentjs.com/)                                     | A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates                                                                                 |
-    | [semantic-ui](https://semantic-ui.com/)                                | Semantic is a development framework that helps create beautiful, responsive layouts using human-friendly HTML                                                                     |                                                                                                                                                                       |
+    | [semantic-ui](https://semantic-ui.com/)                                | Semantic is a development framework that helps create beautiful, responsive layouts using human-friendly HTML                                                                     |                                                                                                                                                                       
     | [URI.js](http://www.html.it/script/uri-js/)                            | javascript library for working with URLs                                                                                                                                          |
     | [Semantic-UI-Calendar](https://github.com/mdehoog/Semantic-UI-Calendar)| javascript library for formatting date and time                                                                                                                                   |                                                                                                                                                                                                             
 
