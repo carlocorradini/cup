@@ -2,7 +2,7 @@
 
 Centro Unico Prenotazioni
 
-[Read assignment task for more information](WEB_Project_2018_2019.pdf)
+[leggi il compito assegnato per più informazioni](WEB_Project_2018_2019.pdf)
 
 ## Descrizione
 
