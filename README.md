@@ -1,11 +1,62 @@
 # CUP
 
-Prenotazione On Line
+Centro Unico Prenotazioni
 
-## Description
+## Descrizione
 
 Questo servizio consente l'accesso al sistema di prenotazione per i Servizi Sanitari delle visite specialistiche e delle prestazioni di diagnostica strumentale.
 
+Al servizio possono accedere pazienti, dottori e specialisti, un dottore e uno specialista sono anche pazienti ma predispongono di determinate funzionalià in più.
+
+I pazienti possono:
+ * scegliere un dottore
+ * modificare la password del proprio profilo
+ * cambiare la loro foto profilo
+ * visualizzare gli esami prescritti dal dottore
+ * visualizzare le medicine prescritte dal dottore
+ * visulizzare e scaricare i propri referti
+ 
+I dottori possono: 
+ * visualizzare la scheda personale dei propri pazienti, nella scheda personale sono presenti le informazioni personali del paziente, esami prescritti e medicine prescritte
+ * prescrivere esami ai propri pazienti
+ * prescrivere farmaci ai propri pazienti
+ 
+I medici specialisti possono:
+ * visualizzare le visite eseguite
+ * visualizzare le visite da eseguire
+ * scrivere un referto relativo alla visita eseguita, nel referto può consigliare esami e/o medicine
+ 
+ Inoltre al servizio può accedere anche il servizio sanitario e può fare determinate operazioni:
+ * assegnare una visita specialistica ad un paziente
+ * visualizzare le visite eseguite
+ * visualizzare le visite da eseguire       
+ * scrivere un referto relativo alla visita eseguita, nel referto può consigliare esami e/o medicine    
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+- ### preparation
+
+  1. **Clone** this repo on your host using [Git](https://git-scm.com)
+
+     ```console
+     $ git clone https://github.com/carlocorradini/cup.git
+     ```
+  2. **Change** current working **directory**
+  
+       ```console
+       $ cd cup
+       ```
+  3. Package with maven
+  
+       ```console
+       $ mvn package
+       ```
+  4. Go to CATALINA_HOME/webapps
+     
+     Start Tomcat server
+     
 ## Built With
 
 -   [Java](https://www.java.com) - General purpose computer-programming language
@@ -37,15 +88,15 @@ Questo servizio consente l'accesso al sistema di prenotazione per i Servizi Sani
 
 - ### 
 
-    | LIBRARIES                                         | Description                                                                                                                                                                       |
-    | --------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    | [cookieconsent](https://cookieconsent.osano.com/) | Cookie Consent is a lightweight JavaScript plugin for alerting users about the use of cookies on your website, it is designed to help you quickly comply with the EU Cookie Law   |
-    | [datatables](https://datatables.net/)             | DataTables is a table enhancing plug-in for the jQuery Javascript library, adding sorting, paging and filtering abilities to plain HTML tables with minimal effort                |
-    | [jquery](https://jquery.com/)                     | It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers |
-    | [moment.js](https://momentjs.com/)                | A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates                                                                                 |
-    | [semantic-ui](https://semantic-ui.com/)           | Semantic is a development framework that helps create beautiful, responsive layouts using human-friendly HTML                                                                     |                                                                                                                                                                       |
-    | [URI.js](http://www.html.it/script/uri-js/)       | javascript library for working with URLs                                                                                                                                          |
-                                                                                                                                                                                                                      
+    | LIBRARIES                                                              | Description                                                                                                                                                                       |
+    | -----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | [cookieconsent](https://cookieconsent.osano.com/)                      | Cookie Consent is a lightweight JavaScript plugin for alerting users about the use of cookies on your website, it is designed to help you quickly comply with the EU Cookie Law   |
+    | [datatables](https://datatables.net/)                                  | DataTables is a table enhancing plug-in for the jQuery Javascript library, adding sorting, paging and filtering abilities to plain HTML tables with minimal effort                |
+    | [jquery](https://jquery.com/)                                          | It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers |
+    | [moment.js](https://momentjs.com/)                                     | A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates                                                                                 |
+    | [semantic-ui](https://semantic-ui.com/)                                | Semantic is a development framework that helps create beautiful, responsive layouts using human-friendly HTML                                                                     |                                                                                                                                                                       |
+    | [URI.js](http://www.html.it/script/uri-js/)                            | javascript library for working with URLs                                                                                                                                          |
+    | [Semantic-UI-Calendar](https://github.com/mdehoog/Semantic-UI-Calendar)| javascript library for formatting date and time                                                                                                                                   |                                                                                                                                                                                                             
 
 ## Versioning
 
@@ -53,10 +104,12 @@ We use [Git](https://git-scm.com) for versioning.
 
 ## Authors
 
--   **Carlo Corradini** - _Initial work_ -
--   **Luca Santoro** - _Initial work_ -
--   **Ayoub Saghir** - _Initial work_ -
+-   **Carlo Corradini** - _Initial work_ - 192451
+-   **Luca Santoro** - _Initial work_ - 195342
+-   **Ayoub Saghir** - _Initial work_ - 195605
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+© CUP 2019
