@@ -2,7 +2,7 @@
 
 Centro Unico Prenotazioni
 
-[leggi il compito assegnato per più informazioni](WEB_Project_2018_2019.pdf)
+[Leggi il compito assegnato per più informazioni](WEB_Project_2018_2019.pdf)
 
 ## Descrizione
 
@@ -38,7 +38,7 @@ I medici specialisti possono:
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-- ### preparation
+- ### Preparation
 
   1. **Clone** this repo on your host using [Git](https://git-scm.com)
 
@@ -55,20 +55,33 @@ These instructions will get you a copy of the project up and running on your loc
        ```console
        $ mvn clean install package
        ```
-  4. Type this command in cmd
+  4. Change
         
        ```console
        $ cd target/
        ```
-  5. Copy the war file and insert it in the doc
-     
-     CATALINA_HOME/webapps
+  5. Copy the war file and insert it in the folder
   
-  6. Go to CATALINA_HOME/webapps
+     ```console
+     CATALINA_HOME/webapps
+     ```
      
-     Start Tomcat server
+  6. Go to CATALINA_HOME/bin
+  
+  7. Start Tomcat server
+  
+     Command for Windows shell
+       ```console
+       $ startup.bat
+       ``` 
+     Command for Linux shell
+       ```console
+       $ startup.sh
+       ```
+     
      
 - ### Restore the database backup
+   Rename to your database name in database.propreties before you start the database
 
   1. Open command line window.
   
@@ -76,7 +89,7 @@ These instructions will get you a copy of the project up and running on your loc
   
   3. Enter the command to restore your database
         ```console
-           $ psql.exe -U postgres -d cup -f D:\Backup\.sql.
+           $ psql.exe -U [postgres username] -d [Your Database] -f D:\Backup\.sql.
         ```
   4. Type password for your postgres user.
   
