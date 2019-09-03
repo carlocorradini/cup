@@ -55,7 +55,7 @@ These instructions will get you a copy of the project up and running on your loc
        ```console
        $ mvn clean install package
        ```
-  4. Change
+  4. Change current directory
         
        ```console
        $ cd target/
@@ -66,15 +66,17 @@ These instructions will get you a copy of the project up and running on your loc
      CATALINA_HOME/webapps
      ```
      
-  6. Go to CATALINA_HOME/bin
-  
+  6. Go to the folder
+     ```console
+     CATALINA_HOME/bin
+     ```
   7. Start Tomcat server
   
-     Command for Windows shell
+     Command for Windows users
        ```console
        $ startup.bat
        ``` 
-     Command for Linux shell
+     Command for Linux users
        ```console
        $ startup.sh
        ```
@@ -82,7 +84,14 @@ These instructions will get you a copy of the project up and running on your loc
      
 - ### Restore the database backup
    Rename to your database name in database.propreties before you start the database
-
+   
+ * Create the database before you start working on the project
+    1. Open the SQL Shell
+    2. Press enter five times to connect to the DB
+    3. Enter the command
+       ```console
+       $ CREATE DATABASE [DatabaseName]
+       ```
   1. Open command line window.
   
   2. Go to Postgres bin folder. For example: cd "C:\ProgramFiles\PostgreSQL\9.5\bin"
