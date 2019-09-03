@@ -16,6 +16,8 @@ $(document).ready(() => {
             $avatar: $("img#hs-assign-exam-patient-avatar")
         },
         executor: {
+            $message: $("#hs-assign-exam-executor-message"),
+            $field: $("#hs-assign-exam-executor-field"),
             $dropdown: $("#hs-assign-exam-executor-dropdown"),
             $dropdownItems: $("#hs-assign-exam-executor-dropdown-items"),
             $inputHidden: $("#hs-assign-exam-executor-input-hidden")
@@ -48,11 +50,19 @@ $(document).ready(() => {
             }
         },
         do: {
-            entry: function (patientId, provinceId, examId, doAfter) {
+            entry: function (patientId, provinceId, examId, examIsSupported, doAfter) {
                 assign.do.patient(patientId, function () {
-                    assign.do.executor(provinceId, examId, function () {
+                    if (!examIsSupported) {
+                        assign.executor.$message.addClass("hidden");
+                        assign.executor.$field.removeClass("hidden");
+                        assign.do.executor(provinceId, examId, function () {
+                            doAfter();
+                        });
+                    } else {
+                        assign.executor.$message.removeClass("hidden");
+                        assign.executor.$field.addClass("hidden");
                         doAfter();
-                    });
+                    }
                 });
             },
             patient: function (patientId, doAfter) {
@@ -123,16 +133,19 @@ $(document).ready(() => {
     });
 
     // Date Picker
+    const today = new Date();
     assign.$inputDate.calendar({
         type: "date",
-        minDate: new Date(),
+        minDate: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1),
         firstDayOfWeek: 1
     });
 
     // Time Picker
     assign.$inputTime.calendar({
         type: "time",
-        ampm: false
+        ampm: false,
+        minDate: new Date(today.getFullYear(), today.getMonth(), today.getDate(), assign.$inputTime.data("min")),
+        maxDate: new Date(today.getFullYear(), today.getMonth(), today.getDate(), assign.$inputTime.data("max"))
     });
 
     // Trigger Button
@@ -140,6 +153,7 @@ $(document).ready(() => {
         const $button = $(this);
         const prescriptionId = $button.data("prescription-id");
         const examId = $button.data("exam-id");
+        const examIsSupported = Boolean($button.data("exam-supported"));
         const patientId = $button.data("patient-id");
         const provinceId = $button.data("province-id");
         // Finished all settings and loading
@@ -154,8 +168,6 @@ $(document).ready(() => {
 
             if (newAssign.prescriptionId !== prescriptionId) {
                 // DO ALL only if the last Prescription Id is different
-                // Save prescriptionId into new Assign obj
-                newAssign.prescriptionId = prescriptionId;
                 // RESET
                 assign.$form.removeClass("disabled success warning error");
                 assign.$form.find(".field.error").removeClass("error");
@@ -167,8 +179,15 @@ $(document).ready(() => {
                 assign.executor.$dropdownItems.empty();
                 assign.executor.$dropdown.dropdown("restore defaults");
 
+                // Save prescriptionId into new Assign obj
+                newAssign.prescriptionId = prescriptionId;
+                // Save Executor as Health Service
+                if (examIsSupported) {
+                    assign.executor.$inputHidden.val(window.visit_creator.v.$table.data("health-service-id"));
+                }
+
                 // Populate
-                assign.do.entry(patientId, provinceId, examId, doAfter);
+                assign.do.entry(patientId, provinceId, examId, examIsSupported, doAfter);
             } else doAfter();
         }
     });
@@ -180,7 +199,7 @@ $(document).ready(() => {
                 rules: [
                     {
                         type: "empty",
-                        prompt: "Executor is empty"
+                        prompt: i18n.executor.empty
                     }
                 ]
             },
@@ -189,7 +208,7 @@ $(document).ready(() => {
                 rules: [
                     {
                         type: "empty",
-                        prompt: "Data"
+                        prompt: i18n.executor.emptyDate
                     }
                 ]
             },
@@ -198,7 +217,7 @@ $(document).ready(() => {
                 rules: [
                     {
                         type: "empty",
-                        prompt: "Tempo"
+                        prompt: i18n.executor.emptyTime
                     }
                 ]
             }
@@ -212,7 +231,7 @@ $(document).ready(() => {
             const visitTime = assign.$inputTime.calendar("get date");
 
             // Set
-            newAssign.executorId = parseInt(assign.executor.$dropdown.dropdown("get value"), 10);
+            newAssign.executorId = parseInt(assign.executor.$inputHidden.val(), 10);
             newAssign.dateTime.date.day = visitDate.getDate();
             newAssign.dateTime.date.month = visitDate.getMonth() + 1;
             newAssign.dateTime.date.year = visitDate.getFullYear();
@@ -232,13 +251,12 @@ $(document).ready(() => {
                     if (data.error === 0) {
                         // Added successfully
                         assign.$form.addClass("disabled success");
-                        /*
+                        // Remove table row
                         window.visit_creator.v.$table
                             .DataTable()
-                            .row(window.visit_creator.v.$table.find(`tbody tr[data-prescription-id="${newReport.prescriptionId}"]`))
+                            .row(window.visit_creator.v.$table.find(`tbody tr[data-prescription-id="${newAssign.prescriptionId}"]`))
                             .remove()
                             .draw();
-                        */
                     } else {
                         assign.$form.addClass("warning");
                     }

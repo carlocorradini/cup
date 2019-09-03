@@ -461,7 +461,7 @@ window.visit_creator = {
                             if (data.error === 0) {
                                 // Added successfully
                                 v.$form.addClass("disabled success");
-                                // Unused row
+                                // Remove table row
                                 window.visit_creator.v.$table
                                     .DataTable()
                                     .row(window.visit_creator.v.$table.find(`tbody tr[data-prescription-id="${newReport.prescriptionId}"]`))

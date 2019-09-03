@@ -58,11 +58,16 @@
                          &quot;noReport&quot;: &quot;#{i18n['common.noReport']}&quot;,
                          &quot;view&quot;: &quot;#{i18n['common.view']}&quot;,
                          &quot;executorIsSpecialist&quot;: &quot;#{i18n['visit.assigned.executor.isSpecialist']}&quot;,
-                         &quot;executorIsHealthService&quot;: &quot;#{i18n['visit.assigned.executor.isHealthService']}&quot;
+                         &quot;executorIsHealthService&quot;: &quot;#{i18n['visit.assigned.executor.isHealthService']}&quot;,
+                         &quot;executor&quot;: {
+                            &quot;empty&quot;: &quot;#{i18n['visit.assign.executor.empty']}&quot;,
+                            &quot;emptyDate&quot;: &quot;#{i18n['visit.assign.executor.date.empty']}&quot;,
+                            &quot;emptyTime&quot;: &quot;#{i18n['visit.assign.executor.time.empty']}&quot;
+                         }
                     }"
                 ></div>
 
-                <table class="ui celled striped sortable table visit-creator-table">
+                <table class="ui celled striped sortable table visit-creator-table" data-health-service-id="#{healthService.authHealthService.id}">
                     <thead>
                     <tr>
                         <th>#{i18n["common.id"]}</th>
@@ -110,6 +115,7 @@
                                 <button class="ui fluid labeled teal icon button hs-assign-exam-modal-button"
                                         data-prescription-id="#{pe.id}"
                                         data-exam-id="#{pe.exam.id}"
+                                        data-exam-supported="#{pe.exam.supported}"
                                         data-patient-id="#{pe.personId}"
                                         data-province-id="#{healthService.authHealthService.province.id}"
                                 >
@@ -134,9 +140,9 @@
                                 <i class="checkmark icon"/>
                                 <div class="content">
                                     <div class="header">
-                                        #{i18n["visit.assigned.addReport.success.message"]}
+                                        #{i18n["visit.assign.executor.success.message"]}
                                     </div>
-                                    <p>#{i18n["visit.assigned.addReport.success.subMessage"]}</p>
+                                    <p>#{i18n["visit.assign.executor.success.subMessage"]}</p>
                                 </div>
                             </div>
 
@@ -144,13 +150,13 @@
                                 <i class="exclamation triangle icon"/>
                                 <div class="content">
                                     <div class="header">
-                                        #{i18n["visit.assigned.addReport.error.message"]}
+                                        #{i18n["visit.assign.executor.error.message"]}
                                     </div>
-                                    <p>#{i18n["visit.assigned.addReport.error.subMessage"]}</p>
+                                    <p>#{i18n["visit.assign.executor.error.subMessage"]}</p>
                                 </div>
                             </div>
 
-                            <div class="field">
+                            <div class="field" id="">
                                 <label>#{i18n["common.patient"]}</label>
                                 <div class="ui floating dropdown labeled icon button fluid large disabled">
                                     <i class="user icon"/>
@@ -167,7 +173,16 @@
                                 </div>
                             </div>
 
-                            <div class="field">
+                            <div class="field hidden" id="hs-assign-exam-executor-message">
+                                <div class="ui info small message">
+                                    <div class="header">
+                                        <i class="info circle icon"/>
+                                        #{i18n["visit.assign.executor.message"]}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field" id="hs-assign-exam-executor-field">
                                 <label>#{i18n["common.executor"]}</label>
                                 <input type="hidden" name="executor" id="hs-assign-exam-executor-input-hidden"/>
                                 <div class="ui floating dropdown labeled icon button fluid large"
@@ -210,7 +225,10 @@
 
                             <div class="field">
                                 <label>#{i18n["common.hour"]}</label>
-                                <div class="ui calendar" id="hs-assign-exam-time">
+                                <div class="ui calendar" id="hs-assign-exam-time"
+                                     data-min="#{prescription.examMinTime}"
+                                     data-max="#{prescription.examMaxTime}"
+                                >
                                     <div class="ui input left icon">
                                         <i class="clock outline icon"/>
                                         <input type="text" placeholder="#{i18n['common.hour']}" name="time"

@@ -1,5 +1,6 @@
 package it.unitn.disi.wp.cup.service.model.health_service;
 
+import it.unitn.disi.wp.cup.config.PrescriptionConfig;
 import it.unitn.disi.wp.cup.service.model.Model;
 import it.unitn.disi.wp.cup.service.model.obj.DateTimeModel;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
@@ -82,6 +83,9 @@ public class AssignPrescriptionExamModel implements Model {
 
     @Override
     public boolean isValid() {
-        return prescriptionId != 0L && executorId != 0L && dateTime != null;
+        return prescriptionId != 0L && executorId != 0L
+                && dateTime != null && dateTime.isValid()
+                && dateTime.toLocalDateTime().getHour() >= PrescriptionConfig.getExamMinTime()
+                && dateTime.toLocalDateTime().getHour() <= PrescriptionConfig.getExamMaxTime();
     }
 }

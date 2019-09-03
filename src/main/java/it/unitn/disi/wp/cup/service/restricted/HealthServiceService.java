@@ -119,13 +119,25 @@ public class HealthServiceService {
         return response.entity(message.toJsonString()).build();
     }
 
+    /**
+     * Given an {@link AssignPrescriptionExamModel Assign Prescritpion Exam Model} update the corresponding
+     * {@link PrescriptionExam Prescription Exam} identified by {@code assignModel.prescriptionId} with
+     * an Executor chosen from {@link HealthService Health Service} or {@link DoctorSpecialist Doctor Specialist}
+     * depending on the {@link Exam Exam} support.
+     * The {@link LocalDateTime Date and Time} of the {@link PrescriptionExam Prescritpion Exam} must be valid
+     * and after the current {@link LocalDateTime Date and Time}.
+     *
+     * @param assignModel The {@link AssignPrescriptionExamModel} to identify and update the {@link PrescriptionExam}
+     * @return A {@link JsonMessage message} representing the result of the process
+     */
     @POST
     @Path("assign")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response assignPrescriptionExam(AssignPrescriptionExamModel assignModel) {
-        Response.ResponseBuilder response = Response.status(Response.Status.OK);
+        Response.ResponseBuilder response;
         JsonMessage message = new JsonMessage();
+        Person patient;
         PrescriptionExam prescription;
         DoctorSpecialist doctorSpecialist = null;
 
@@ -151,7 +163,8 @@ public class HealthServiceService {
                     // The Date and Time of the Prescription are before than the current Date and Time
                     response = Response.status(Response.Status.BAD_REQUEST);
                     message.setError(JsonMessage.ERROR_VALIDATION);
-                } else if (!personDAO.getByPrimaryKey(prescription.getPersonId()).getCity().getProvince().equals(healthService.getProvince())) {
+                } else if ((patient = personDAO.getByPrimaryKey(prescription.getPersonId())) == null
+                        || !patient.getCity().getProvince().equals(healthService.getProvince())) {
                     // The Patient of the Prescription cannot be applied with the current Health Service
                     response = Response.status(Response.Status.BAD_REQUEST);
                     message.setError(JsonMessage.ERROR_INVALID_ID);
@@ -185,7 +198,7 @@ public class HealthServiceService {
                         message.setError(JsonMessage.ERROR_UNKNOWN);
 
                         // Send Email
-
+                        EmailUtil.send("test", "test", "test");
                     } else {
                         response = Response.status(Response.Status.OK);
                         message.setError(JsonMessage.ERROR_NO_ERROR);

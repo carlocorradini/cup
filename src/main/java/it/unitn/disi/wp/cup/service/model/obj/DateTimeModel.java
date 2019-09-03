@@ -47,6 +47,6 @@ public class DateTimeModel implements Model {
 
     @Override
     public boolean isValid() {
-        return date != null && time != null;
+        return date != null && time != null && date.isValid() && time.isValid();
     }
 }
