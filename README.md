@@ -1,8 +1,8 @@
 # CUP
 
-Prenotazione Online
+Centro Unico Prenotazioni
 
-## Description
+## Descrizione
 
 Questo servizio consente l'accesso al sistema di prenotazione per i Servizi Sanitari delle visite specialistiche e delle prestazioni di diagnostica strumentale.
 
@@ -24,7 +24,13 @@ I dottori possono:
 Gli specialisti possono:
  * visualizzare le visite eseguite
  * visualizzare le visite da eseguire
- * scrivere un referto relativo alla visita eseguita, nel referto può consigliare esami e/o medicine           
+ * scrivere un referto relativo alla visita eseguita, nel referto può consigliare esami e/o medicine
+ 
+ Inoltre al servizio può accedere anche il servizio sanitario e può fare determinate operazioni:
+ * assegnare una visita specialistica ad un paziente
+ * visualizzare le visite eseguite
+ * visualizzare le visite da eseguire       
+ * scrivere un referto relativo alla visita eseguita, nel referto può consigliare esami e/o medicine    
 
 ## Built With
 
