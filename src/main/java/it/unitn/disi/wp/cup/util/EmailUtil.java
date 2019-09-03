@@ -55,13 +55,13 @@ public final class EmailUtil {
      * @param text      The body of the email to send
      */
     public static void send(String recipient, String subject, String text) {
-        Message message = new MimeMessage(session);
+        MimeMessage message = new MimeMessage(session);
 
         try {
             message.setFrom(new InternetAddress(EmailConfig.getUsername()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-            message.setSubject(subject);
-            message.setText(text);
+            message.setSubject(subject, "UTF-8");
+            message.setText(text, "UTF-8");
             message.setSentDate(new Date());
 
             Transport.send(message);
@@ -78,7 +78,7 @@ public final class EmailUtil {
      * @param text      The html code of the mail
      */
     public static void sendHTML(String recipient, String subject, String text) {
-        Message message = new MimeMessage(session);
+        MimeMessage message = new MimeMessage(session);
 
         /* EMAIL DI PROVA:
             <h1 style="color: #5e9ca0;">Nuova prescrizione <span style="color: #2b2301;">medicinali</span>!</h1>
@@ -94,7 +94,7 @@ public final class EmailUtil {
         try {
             message.setFrom(new InternetAddress(EmailConfig.getUsername()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-            message.setSubject(subject);
+            message.setSubject(subject, "UTF-8");
             message.setSentDate(new Date());
 
             // contenuto mail
@@ -103,7 +103,7 @@ public final class EmailUtil {
             //MimeBodyPart avatarPart;                          // immagine
 
             // testo
-            htmlPart.setContent(text, "text/html");
+            htmlPart.setContent(text, "text/html; charset=UTF-8");
 
             /* avatar
             avatarPart = new MimeBodyPart();

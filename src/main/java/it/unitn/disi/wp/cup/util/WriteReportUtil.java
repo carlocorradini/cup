@@ -166,48 +166,76 @@ public final class WriteReportUtil {
     private static void sendEmail(PrescriptionExam prescription, Person patient, HealthService healthService, Person doctorSpecialist) {
         Report report = prescription.getReport();
 
-        String email_body = "The Report for the Prescribed Exam with id " + prescription.getId() + " is available!."
-                + "\nReport Id: " + report.getId()
-                + "\nReport Date: " + report.getDateTime().toLocalDate()
-                + "\nReport Time: " + report.getDateTime().toLocalTime()
-                + "\nPaid: " + prescription.getPaid()
-                + "\nExecutor: {";
+        // Set the string based on the fact that is payed or not
+        String strPagamento = "<font color=\"red\"><b>non</b> pagato</font>";
+        if(prescription.getPaid()){
+            strPagamento = "<font color=\"green\">pagato</font>";
+        }
+        // Generate the html string for the email
+        String html =
+                "<h1 style=\"color: #5e9ca0;\">Nuovo <span style=\"color: #2b2301;\">report</span>!</h1>" +
+                "<p>" +
+                    "Ciao <span style=\"color: #2b2301;\"><b>" + patient.getName() + "</b></span>!<br>" +
+                    "È stato aggiunto un report riguardo il tuo esame n° " + prescription.getId() + ".<br>" +
+                    "Ecco qui un breve riassunto:<br>" +
+                    "<b>ID Report</b>: <span style=\"color: #2e6c80;\">" + report.getId() + "</span><br>" +
+                    "<b>Data</b>: <span style=\"color: #2e6c80;\">" + report.getDateTime().toLocalDate() + "</span><br>" +
+                    "<b>Ora</b>: <span style=\"color: #2e6c80;\">" + report.getDateTime().toLocalTime() + "</span><br>" +
+                    "<b>Stato del pagamento</b>: <span style=\"color: #2e6c80;\">" + strPagamento + "</span><br>" +
+                "</p>";
 
-
+        // Add info
+        // Executor
+        html += "<p>" +
+                "   <b>Esecutore dell'esame</b>:<br>";
         if (prescription.getExam().isSupported() && healthService != null) {
-            email_body += "\n\ttype: Health Service"
-                    + "\n\tid: " + healthService.getId()
-                    + "\n\tname: " + healthService.getProvince().getNameLongCapitalized();
+            html +=   "   <b>Tipo</b>: <span style=\"color: #2e6c80;\">servizio sanitario</span><br>"
+                    + "   <b>Id</b>: <span style=\"color: #2e6c80;\">" + healthService.getId() + "</span><br>"
+                    + "   <b>Nome</b>: <span style=\"color: #2e6c80;\">" + healthService.getProvince().getNameLongCapitalized() + "</span><br>";
         } else if (!prescription.getExam().isSupported() && doctorSpecialist != null) {
-            email_body += "\n\ttype: Doctor Specialist"
-                    + "\n\tid: " + doctorSpecialist.getId()
-                    + "\n\tname: " + doctorSpecialist.getFullNameCapitalized();
+            html +=   "   <b>Tipo</b>: <span style=\"color: #2e6c80;\">dottore specialista</span><br>"
+                    + "   <b>Id</b>: <span style=\"color: #2e6c80;\">" + doctorSpecialist.getId() + "</span><br>"
+                    + "   <b>Nome</b>: <span style=\"color: #2e6c80;\">" + doctorSpecialist.getFullNameCapitalized() + "</span><br>";
         } else {
-            email_body += "\n\tERROR";
+            html += "ERROR";
         }
-        email_body += "\n}";
+        html += "</p>";
 
-        email_body += "\nReport Content: "
-                + "\n============================"
-                + "\n" + report.getContent()
-                + "\n============================"
-                + "\nSuggested Exams: ";
+        // Report content
+        html += "<p><b>Contenuto report</b>:" +
+                    "<hr/>" +
+                        report.getContent().replaceAll("(\r\n|\n)", "<br>") +
+                    "<hr/>" +
+                "</p>";
+
+        // Suggested Exams
+        html += "<p><b>Esami suggeriti</b>:<br>";
+
         if (report.getExams().isEmpty()) {
-            email_body += "NO EXAMS";
+            html += "<font color=\"gainsboro\">nessun esame suggerito</font><br>";
         } else {
+            html += "<span style=color: \"#2e6c80;\">";
             for (Exam e : report.getExams()) {
-                email_body += "\n\t* " + e.getName();
+                html += "• " + e.getName() + "<br>";
             }
+            html += "</span>";
         }
-        email_body += "\nSuggested Medicines: ";
-        if (report.getMedicines().isEmpty()) {
-            email_body += "NO MEDICINES";
-        } else {
-            for (Medicine m : report.getMedicines()) {
-                email_body += "\n\t* " + m.getName();
-            }
-        }
+        html += "</p>";
 
-        EmailUtil.send(patient.getEmail(), AppConfig.getName().toUpperCase() + " New Report Available", email_body);
+        // Suggested Medicines
+        html += "<p><b>Farmaci suggeriti</b>:<br>";
+
+        if (report.getMedicines().isEmpty()) {
+            html += "<font color=\"gainsboro\">nessun farmaco suggerito</font><br>";
+        } else {
+            html += "<span style=color: \"#2e6c80;\">";
+            for (Medicine m : report.getMedicines()) {
+                html += "• " + m.getName() + "<br>";
+            }
+            html += "</span>";
+        }
+        html += "</p>";
+
+        EmailUtil.sendHTML(patient.getEmail(), AppConfig.getName().toUpperCase() + " nuovo report disponibile", html);
     }
 }

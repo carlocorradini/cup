@@ -96,18 +96,18 @@ public class DoctorService {
                         message.setError(JsonMessage.ERROR_NO_ERROR);
                         // Generate the html string for the email
                         String html =
-                                "<h1 style=\"color: #5e9ca0;\">Nuova prescrizione <span style=\"color: #2b2301;\">medicinale</span>!</h1>" +
+                                "<h1 style=\"color: #5e9ca0;\">Nuova prescrizione <span style=\"color: #2b2301;\">farmaco</span>!</h1>" +
                                 "<p>" +
                                     "Ciao <span style=\"color: #2b2301;\"><b>" + patient.getName() + "</b></span>!<br>" +
                                     "Il tuo medico di base ha aggiunto una prescrizione per te.<br>" +
                                     "Ecco qui un breve riassunto:<br>" +
-                                    "<b>Medicinale</b>: <span style=\"color: #2e6c80;\">" + medicine.getName() + "</span><br>" +
+                                    "<b>Farmaco</b>: <span style=\"color: #2e6c80;\">" + medicine.getName() + "</span><br>" +
                                     "<b>Quantità</b>: <span style=\"color: #2e6c80;\">" + prescriptionMedicineModel.getQuantity() + "</span><br>" +
                                     "<br>" +
                                 "</p>";
 
                         EmailUtil.sendHTML(patient.getEmail(),
-                                AppConfig.getName().toUpperCase() + " prescrizione medicinali",
+                                AppConfig.getName().toUpperCase() + " prescrizione farmaci",
                                 html);
                     }
                 }
