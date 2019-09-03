@@ -50,16 +50,21 @@ These instructions will get you a copy of the project up and running on your loc
        ```console
        $ cd cup
        ```
-  3. Package with maven
+  3. Create the war file
   
        ```console
-       $ mvn package
+       $ mvn clean install package
        ```
-  4. Copy the war file and insert it in the doc
+  4. Type this command in cmd
+        
+     ```console
+        $ cd target/
+        ```
+  5. Copy the war file and insert it in the doc
      
      CATALINA_HOME/webapps
   
-  5. Go to CATALINA_HOME/webapps
+  6. Go to CATALINA_HOME/webapps
      
      Start Tomcat server
      
