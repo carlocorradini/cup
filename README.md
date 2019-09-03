@@ -57,9 +57,9 @@ These instructions will get you a copy of the project up and running on your loc
        ```
   4. Type this command in cmd
         
-     ```console
-        $ cd target/
-        ```
+       ```console
+       $ cd target/
+       ```
   5. Copy the war file and insert it in the doc
      
      CATALINA_HOME/webapps
