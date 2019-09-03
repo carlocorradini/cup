@@ -85,7 +85,7 @@ These instructions will get you a copy of the project up and running on your loc
 - ### Restore the database backup
    Rename to your database name in database.propreties before you start the database
    
- * Create the database before you start working on the project
+  * Create the database before you start working on the project
     1. Open the SQL Shell
     2. Press enter five times to connect to the DB
     3. Enter the command
