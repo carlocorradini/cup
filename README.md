@@ -87,7 +87,7 @@ These instructions will get you a copy of the project up and running on your loc
    
   * Create the database before you start working on the project
     1. Open the SQL Shell
-    2. Press enter five times to connect to the DB
+    2. provide the data requested by the sql shell
     3. Enter the command
        ```console
        $ CREATE DATABASE [DatabaseName]
