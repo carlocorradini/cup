@@ -1,10 +1,30 @@
 # CUP
 
-Prenotazione On Line
+Prenotazione Online
 
 ## Description
 
 Questo servizio consente l'accesso al sistema di prenotazione per i Servizi Sanitari delle visite specialistiche e delle prestazioni di diagnostica strumentale.
+
+Al servizio possono accedere pazienti, dottori e specialisti, un dottore e uno specialista sono anche pazienti ma predispongono di determinate funzionalià in più.
+
+I pazienti possono:
+ * scegliere un dottore
+ * modificare la password del proprio profilo
+ * cambiare la loro foto profilo
+ * visualizzare gli esami prescritti dal dottore
+ * visualizzare le medicine prescritte dal dottore
+ * visulizzare e scaricare i propri referti
+ 
+I dottori possono: 
+ * visualizzare la scheda personale dei propri pazienti, nella scheda personale sono presenti le informazioni personali del paziente, esami prescritti e medicine prescritte
+ * prescrivere esami ai propri pazienti
+ * prescrivere farmaci ai propri pazienti
+ 
+Gli specialisti possono:
+ * visualizzare le visite eseguite
+ * visualizzare le visite da eseguire
+ * scrivere un referto relativo alla visita eseguita, nel referto può consigliare esami e/o medicine           
 
 ## Built With
 
@@ -53,10 +73,12 @@ We use [Git](https://git-scm.com) for versioning.
 
 ## Authors
 
--   **Carlo Corradini** - _Initial work_ -
--   **Luca Santoro** - _Initial work_ -
--   **Ayoub Saghir** - _Initial work_ -
+-   **Carlo Corradini** - _Initial work_ - 192451
+-   **Luca Santoro** - _Initial work_ - 195342
+-   **Ayoub Saghir** - _Initial work_ - 195605
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+© CUP 2019
