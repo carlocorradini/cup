@@ -355,8 +355,9 @@ window.visit_creator = {
                         // DO ALL only if the last Prescription Id is different
                         // Save prescriptionId into new Report obj
                         newReport.prescriptionId = prescriptionId;
-                        // Reset the Modal
-                        v.$form.removeClass("disabled success warning");
+                        // RESET
+                        v.$form.removeClass("disabled success warning error");
+                        v.$form.find(".field.error").removeClass("error");
                         v.data.$content.val("");
                         v.data.$paid.checkbox("enable");
                         v.data.$paid.checkbox("uncheck");
@@ -366,6 +367,7 @@ window.visit_creator = {
                         v.data.$medicinesDropdown.dropdown("refresh");
                         v.data.$medicinesDropdown.dropdown("clear");
 
+                        // Populate
                         $.ajax({
                             type: "GET",
                             url: window.UTIL.STRING.format(window.visit_creator.v.service.patient, patientId),

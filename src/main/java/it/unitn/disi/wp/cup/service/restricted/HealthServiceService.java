@@ -1,11 +1,14 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
+import it.unitn.disi.wp.cup.persistence.dao.DoctorSpecialistDAO;
+import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.*;
 import it.unitn.disi.wp.cup.service.model.exception.ServiceModelException;
+import it.unitn.disi.wp.cup.service.model.health_service.AssignPrescriptionExamModel;
 import it.unitn.disi.wp.cup.service.model.prescription.PrescriptionReportModel;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 import it.unitn.disi.wp.cup.util.EmailUtil;
@@ -21,6 +24,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,7 +38,9 @@ public class HealthServiceService {
     private static final Logger LOGGER = Logger.getLogger(HealthServiceService.class.getName());
 
     private HealthService healthService = null;
+    private PersonDAO personDAO = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
+    private DoctorSpecialistDAO doctorSpecialistDAO = null;
 
     @Context
     private HttpServletRequest request;
@@ -45,9 +51,11 @@ public class HealthServiceService {
             try {
                 healthService = AuthUtil.getAuthHealthService(request);
 
+                personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
                 prescriptionExamDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionExamDAO.class);
+                doctorSpecialistDAO = DAOFactory.getDAOFactory(servletContext).getDAO(DoctorSpecialistDAO.class);
             } catch (DAOFactoryException ex) {
-                LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
+                LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
             }
         }
     }
@@ -108,8 +116,88 @@ public class HealthServiceService {
             }
         }
 
-        return response.entity(message.toJsonString()).
+        return response.entity(message.toJsonString()).build();
+    }
 
-                build();
+    @POST
+    @Path("assign")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response assignPrescriptionExam(AssignPrescriptionExamModel assignModel) {
+        Response.ResponseBuilder response = Response.status(Response.Status.OK);
+        JsonMessage message = new JsonMessage();
+        PrescriptionExam prescription;
+        DoctorSpecialist doctorSpecialist = null;
+
+        if (healthService == null) {
+            // Unauthorized Health Service
+            response = Response.status(Response.Status.UNAUTHORIZED);
+            message.setError(JsonMessage.ERROR_AUTHENTICATION);
+        } else if (!assignModel.isValid()) {
+            // The Assign Model is invalid
+            response = Response.status(Response.Status.BAD_REQUEST);
+            message.setError(JsonMessage.ERROR_VALIDATION);
+        } else {
+            try {
+                if ((prescription = prescriptionExamDAO.getByPrimaryKey(assignModel.getPrescriptionId())) == null) {
+                    // The Prescription Id is invalid
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_INVALID_ID);
+                } else if (prescription.getReport() != null || prescription.getHealthServiceId() != null || prescription.getSpecialistId() != null) {
+                    // The Prescription is already assigned
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_VALIDATION);
+                } else if (!assignModel.getDateTime().toLocalDateTime().isAfter(LocalDateTime.now())) {
+                    // The Date and Time of the Prescription are before than the current Date and Time
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_VALIDATION);
+                } else if (!personDAO.getByPrimaryKey(prescription.getPersonId()).getCity().getProvince().equals(healthService.getProvince())) {
+                    // The Patient of the Prescription cannot be applied with the current Health Service
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_INVALID_ID);
+                } else if (!prescription.getExam().isSupported()
+                        && (doctorSpecialist = doctorSpecialistDAO.getByPrimaryKey(assignModel.getExecutorId())) == null) {
+                    // The Prescription Exam is not supported and there is no Doctor Specialist
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_INVALID_ID);
+                } else if (!prescription.getExam().isSupported()
+                        && doctorSpecialist != null
+                        && !doctorSpecialistDAO.getAllQualifiedbyProvinceIdAndExamId(healthService.getId(), prescription.getExam().getId())
+                        .contains(personDAO.getByPrimaryKey(doctorSpecialist.getId()))) {
+                    // The Prescription Exam is not supported and the Doctor Specialist chosen is not qualified for the Exam
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_INVALID_ID);
+                } else {
+                    // ALL CORRECT
+                    // Set the correct Prescription Exam data
+                    prescription.setDateTime(assignModel.getDateTime().toLocalDateTime());
+                    if (!prescription.getExam().isSupported() && doctorSpecialist != null) {
+                        // Doctor Specialist Executor
+                        prescription.setSpecialistId(doctorSpecialist.getId());
+                    } else {
+                        // Health Service Executor
+                        prescription.setHealthServiceId(healthService.getId());
+                    }
+
+                    // Update
+                    if (!prescriptionExamDAO.update(prescription)) {
+                        response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                        message.setError(JsonMessage.ERROR_UNKNOWN);
+
+                        // Send Email
+
+                    } else {
+                        response = Response.status(Response.Status.OK);
+                        message.setError(JsonMessage.ERROR_NO_ERROR);
+                    }
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to assign a Prescription Exam", ex);
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                message.setError(JsonMessage.ERROR_UNKNOWN);
+            }
+        }
+
+        return response.entity(message).build();
     }
 }
