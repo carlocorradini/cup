@@ -177,8 +177,7 @@ public class HealthServiceService {
                 } else if (!prescription.getExam().isSupported()
                         && doctorSpecialist != null
                         && (doctorSpecialistAsPerson = personDAO.getByPrimaryKey(doctorSpecialist.getId())) != null
-                        && !doctorSpecialistDAO.getAllQualifiedbyProvinceIdAndExamId(healthService.getId(), prescription.getExam().getId())
-                        .contains(doctorSpecialistAsPerson)) {
+                        && !doctorSpecialistDAO.getAllQualifiedbyExamId(prescription.getExam().getId()).contains(doctorSpecialistAsPerson)) {
                     // The Prescription Exam is not supported and the Doctor Specialist chosen is not qualified for the Exam
                     response = Response.status(Response.Status.BAD_REQUEST);
                     message.setError(JsonMessage.ERROR_INVALID_ID);
