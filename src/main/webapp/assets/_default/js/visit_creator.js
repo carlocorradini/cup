@@ -130,7 +130,9 @@ window.visit_creator = {
             window.moment.locale(window.navigator.userLanguage || window.navigator.language);
 
             // Enable Datatable
-            v.$table.DataTable();
+            v.$table.DataTable({
+                "aaSorting": []
+            });
 
             // === DOCTOR ===
             // Modal
@@ -222,6 +224,16 @@ window.visit_creator = {
             v.patient.$accordion.accordion({
                 animateChildren: false
             });
+            // Enable Datatable
+            v.patient.exams.$table.DataTable({
+                "aaSorting": []
+            });
+            v.patient.medicines.$table.DataTable({
+                "aaSorting": []
+            });
+            v.patient.timeline.$table.DataTable({
+                "aaSorting": []
+            });
             // Populate
             v.patient.$button.click(function () {
                 const $button = $(this);
@@ -234,10 +246,6 @@ window.visit_creator = {
                         url: window.UTIL.STRING.format(v.service.patient, patientId),
                         success: function (data) {
                             window.visit_creator.populate.patient(data);
-                            // Enable Datatable
-                            v.patient.exams.$table.DataTable();
-                            v.patient.medicines.$table.DataTable();
-                            v.patient.timeline.$table.DataTable();
                             $button.removeClass("loading");
                             v.patient.$modal.modal("show");
                         },
@@ -463,7 +471,6 @@ window.visit_creator = {
                                 v.$form.addClass("disabled success");
                                 // Remove table row
                                 window.visit_creator.v.$table
-                                    .DataTable()
                                     .row(window.visit_creator.v.$table.find(`tbody tr[data-prescription-id="${newReport.prescriptionId}"]`))
                                     .remove()
                                     .draw();
@@ -580,7 +587,7 @@ window.visit_creator = {
                     template.exams.$emptyMessage.addClass("hidden");
                     template.exams.$table.parents("div.dataTables_wrapper").first().show();
                     // Clean Table
-                    template.exams.$table.find("tbody").empty();
+                    template.exams.$table.DataTable().clear().draw();
                     // Populate table
                     $.each(patient.exams, function (index, element) {
                         // Cache exams if Report is present
@@ -605,7 +612,7 @@ window.visit_creator = {
                                 `</button>`;
                         }
                         tr += `</td></tr>`;
-                        template.exams.$table.find("tbody").append(tr);
+                        template.exams.$table.DataTable().row.add($(tr)).draw();
                     });
                     // Attach Events on Report Button
                     $(`button.${reportTemplate.buttonClass}`).click(function () {
@@ -632,7 +639,7 @@ window.visit_creator = {
                     template.medicines.$emptyMessage.addClass("hidden");
                     template.medicines.$table.parents("div.dataTables_wrapper").first().show();
                     // Clean Table
-                    template.medicines.$table.find("tbody").empty();
+                    template.medicines.$table.DataTable().clear().draw();
                     // Populate Table
                     $.each(patient.medicines, function (index, element) {
                         const tr = `<tr>` +
@@ -642,7 +649,7 @@ window.visit_creator = {
                             `<td>${moment(element.dateTime).format("LTS")}</td>` +
                             `<td>${element.quantity}</td>` +
                             `</tr>`;
-                        template.medicines.$table.find("tbody").append(tr);
+                        template.medicines.$table.DataTable().row.add($(tr)).draw();
                     });
                 }
 
@@ -655,7 +662,7 @@ window.visit_creator = {
                     template.timeline.$emptyMessage.addClass("hidden");
                     template.timeline.$table.parents("div.dataTables_wrapper").first().show();
                     // Clean Table
-                    template.timeline.$table.find("tbody").empty();
+                    template.timeline.$table.DataTable().clear().draw();
                     // Populate Table
                     $.each(patient.avatarHistory, function (index, element) {
                         const tr = `<tr class="center aligned ${patient.avatar.id === element.id ? 'text-strong' : 'disabled'}">` +
@@ -667,7 +674,7 @@ window.visit_creator = {
                             `<td>${moment(element.upload).format("ll")}</td>` +
                             `<td>${moment(element.upload).format("LTS")}</td>` +
                             `</tr>`;
-                        template.timeline.$table.find("tbody").append(tr);
+                        template.timeline.$table.DataTable().row.add($(tr)).draw();
                     });
                 }
             }

@@ -5,5 +5,7 @@ $(document).ready(() => {
     const $table = $("#prescribed-medicine-table");
 
     // Enable Datatable
-    $table.DataTable();
+    $table.DataTable({
+        "aaSorting": []
+    });
 });
