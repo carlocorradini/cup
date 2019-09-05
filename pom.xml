@@ -184,6 +184,7 @@
 
     <!-- === PLUGINS === -->
     <build>
+        <finalName>cup</finalName>
         <plugins>
             <!-- Apache Java Compiler -->
             <plugin>

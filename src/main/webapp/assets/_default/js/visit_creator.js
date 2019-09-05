@@ -281,7 +281,7 @@ window.visit_creator = {
                 patient: {
                     $fullName: $("span.visit-creator-todo-write-report-patient-full-name"),
                     $fiscalCode: $("span.visit-creator-todo-write-report-patient-fiscal-code"),
-                    $avatar: $(".visit-creator-todo-write-report-patient-avatar")
+                    $avatar: $("img.visit-creator-todo-write-report-patient-avatar")
                 },
                 data: {
                     $content: $("textarea.visit-creator-todo-write-report-data-content"),
@@ -355,8 +355,9 @@ window.visit_creator = {
                         // DO ALL only if the last Prescription Id is different
                         // Save prescriptionId into new Report obj
                         newReport.prescriptionId = prescriptionId;
-                        // Reset the Modal
-                        v.$form.removeClass("disabled success warning");
+                        // RESET
+                        v.$form.removeClass("disabled success warning error");
+                        v.$form.find(".field.error").removeClass("error");
                         v.data.$content.val("");
                         v.data.$paid.checkbox("enable");
                         v.data.$paid.checkbox("uncheck");
@@ -366,6 +367,7 @@ window.visit_creator = {
                         v.data.$medicinesDropdown.dropdown("refresh");
                         v.data.$medicinesDropdown.dropdown("clear");
 
+                        // Populate
                         $.ajax({
                             type: "GET",
                             url: window.UTIL.STRING.format(window.visit_creator.v.service.patient, patientId),
@@ -459,7 +461,7 @@ window.visit_creator = {
                             if (data.error === 0) {
                                 // Added successfully
                                 v.$form.addClass("disabled success");
-                                // Unused row
+                                // Remove table row
                                 window.visit_creator.v.$table
                                     .DataTable()
                                     .row(window.visit_creator.v.$table.find(`tbody tr[data-prescription-id="${newReport.prescriptionId}"]`))

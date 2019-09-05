@@ -95,4 +95,34 @@ public final class PrescriptionConfig extends Config {
 
         return instance.getShort("exam.report.content.maxLength");
     }
+
+    /**
+     * Return the Prescription Exam minimum Time
+     *
+     * @return Exam minimum time
+     */
+    public static short getExamMinTime() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get minimum Exam Time", ex);
+        }
+
+        return instance.getShort("exam.time.min");
+    }
+
+    /**
+     * Return the Prescription Exam maximum Time
+     *
+     * @return Exam maximum time
+     */
+    public static short getExamMaxTime() {
+        try {
+            checkInstance();
+        } catch (ConfigException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get maximum Exam Time", ex);
+        }
+
+        return instance.getShort("exam.time.max");
+    }
 }
