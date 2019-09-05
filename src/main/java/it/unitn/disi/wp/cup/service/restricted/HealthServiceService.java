@@ -25,6 +25,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -207,6 +208,11 @@ public class HealthServiceService {
                             strPagamento = "";
                         }
 
+                        // Format the date for the user output
+                        String formattedDate;
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
+                        formattedDate = prescription.getDateTime().format(formatter);
+
                         if (!prescription.getExam().isSupported() && doctorSpecialist != null && doctorSpecialistAsPerson != null) {
                             // Exam assigned to a doctorSpecialist
                             // Generate the string for the patient email
@@ -215,9 +221,9 @@ public class HealthServiceService {
                                     "<p>" +
                                         "Ciao <span style=\"color: #2b2301;\"><b>" + patient.getName() + "</b></span>!<br>" +
                                         "Il tuo esame n° <b>" + prescription.getExam().getId() + "</b>, registrato in data <b>" + prescription.getDateTimeRegistration() + "</b>, è stato assegnato al medico specialista <b>" + doctorSpecialistAsPerson.getFullName() + "</b>(id: " + doctorSpecialist.getId() + ").<br>" +
-                                        "L'esame si terrà il <b>" + prescription.getDateTime() + "</b>.<br>" +
+                                        "L'esame si terrà il <b>" + formattedDate + "</b>.<br>" +
                                         strPagamento +
-                                        "Per info e necessità, non esitare a contattarci!<br>" +
+                                        "Per info o necessità, non esitare a contattarci!<br>" +
                                     "</p>";
 
                             // Generate the string for the doctorSpecialist email
@@ -228,14 +234,15 @@ public class HealthServiceService {
                                         "Ti è stato assegnato l'esame n° <b>" + prescription.getExam().getId() + "</b>.<br>" +
                                         "<br>" +
                                         "Ecco un po' di informazioni a riguardo:<br>" +
-                                        "<h3><b>Paziente</b>:</h3><br>" +
+                                        "<b>Paziente</b>:<br>" +
                                             "<b>Nome</b>: " + patient.getName() + "<br>" +
                                             "<b>Cognome</b>: " + patient.getSurname() + "<br>" +
                                             "<b>Codice Fiscale</b>: " + patient.getFiscalCode() + "<br>" +
-                                            "<b>Sesso</b>: " + patient.getSex() + "<br>" +
-                                        "<h3><b>Esame</b>:</h3><br>" +
+                                            "<b>Sesso</b>: " + patient.getSex().getSex() + "<br>" +
+                                        "<b>Esame</b>:<br>" +
                                             "<b>Nome</b>: " + prescription.getExam().getName() + "<br>" +
                                             "<b>Descrizione</b>: " + prescription.getExam().getDescription() + "<br>" +
+                                        "<br>" +
                                         "Per saperne di più, visita il tuo profilo ed entra nella pagina dedicata.<br>" +
                                     "</p>";
 
@@ -250,9 +257,9 @@ public class HealthServiceService {
                                     "<p>" +
                                         "Ciao <span style=\"color: #2b2301;\"><b>" + patient.getName() + "</b></span>!<br>" +
                                         "Il tuo esame n° <b>" + prescription.getExam().getId() + "</b>, registrato in data <b>" + prescription.getDateTimeRegistration() + "</b>, è stato assegnato al medico specialista <b>" + doctorSpecialistAsPerson.getFullName() + "</b>(id: " + doctorSpecialist.getId() + ").<br>" +
-                                        "L'esame si terrà il <b>" + prescription.getDateTime() + "</b>.<br>" +
+                                        "L'esame si terrà il <b>" + formattedDate + "</b>.<br>" +
                                         strPagamento +
-                                        "Per info e necessità, non esitare a contattarci!<br>" +
+                                        "Per info o necessità, non esitare a contattarci!<br>" +
                                     "</p>";
 
                             // Send Emails
