@@ -138,7 +138,7 @@ public class HealthServiceService {
         Response.ResponseBuilder response;
         JsonMessage message = new JsonMessage();
         Person patient;
-        Person doctorSpecialistAsPerson;
+        Person doctorSpecialistAsPerson = null;
         PrescriptionExam prescription;
         DoctorSpecialist doctorSpecialist = null;
 
@@ -198,12 +198,56 @@ public class HealthServiceService {
                     if (!prescriptionExamDAO.update(prescription)) {
                         response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
                         message.setError(JsonMessage.ERROR_UNKNOWN);
-
-                        // Send Email
-                        EmailUtil.send("test", "test", "test");
                     } else {
                         response = Response.status(Response.Status.OK);
                         message.setError(JsonMessage.ERROR_NO_ERROR);
+
+                        // Set the string based on the fact that is payed or not
+                        String strPagamento = "Le ricordiamo inoltre che il suo esame <b>non</b> è ancora stato pagato";
+                        if (prescription.getPaid()) {
+                            strPagamento = "";
+                        }
+
+                        if (!prescription.getExam().isSupported() && doctorSpecialist != null && doctorSpecialistAsPerson != null) {
+                            // Exam assigned to a doctorSpecialist
+                            // Generate the string for the patient email
+                            String htmlPatient =
+                                    "<h1 style=\"color: #5e9ca0;\">Assegnamento <span style=\"color: #2b2301;\">esame</span>!</h1>" +
+                                            "<p>" +
+                                            "Ciao <span style=\"color: #2b2301;\"><b>" + patient.getName() + "</b></span>!<br>" +
+                                            "Il tuo esame n° " + prescription.getExam().getId() + ", registrato in data " + prescription.getDateTimeRegistration() + ", è stato assegnato al medico specialista " + doctorSpecialistAsPerson.getFullName() + "(id: " + doctorSpecialist.getId() + ").<br>" +
+                                            "L'esame si terrà il " + prescription.getDateTime() + ".<br>" +
+                                            strPagamento + ".<br>" +
+                                            "</p>";
+
+                            // Generate the string for the doctorSpecialist email
+                            String htmlDoctor_Specialist =
+                                    "<h1 style=\"color: #5e9ca0;\">Nuovo <span style=\"color: #2b2301;\">esame</span>!</h1>" +
+                                            "<p>" +
+                                            "Ciao <span style=\"color: #2b2301;\"><b>" + doctorSpecialistAsPerson.getName() + "</b></span>!<br>" +
+                                            "Ti è stato assegnato l'esame n° " + prescription.getExam().getId() + ".<br>" +
+                                            "</p>";
+
+                            // Send Emails
+                            EmailUtil.sendHTML(patient.getEmail(), "assegnamento esame n° " + prescription.getId(), htmlPatient);
+                            EmailUtil.sendHTML(patient.getEmail(), "assegnamento esame n° " + prescription.getId(), htmlDoctor_Specialist);
+                        } else if (prescription.getExam().isSupported() && healthService != null) {
+                            // HEALTH SERVICE
+                            // Generate the string for the patient email
+                            String htmlPatient =
+                                    "<h1 style=\"color: #5e9ca0;\">Assegnamento <span style=\"color: #2b2301;\">esame</span>!</h1>" +
+                                            "<p>" +
+                                            "Ciao <span style=\"color: #2b2301;\"><b>" + patient.getName() + "</b></span>!<br>" +
+                                            "Il tuo esame n° " + prescription.getExam().getId() + ", registrato in data " + prescription.getDateTimeRegistration() + ", è stato assegnato al servizio sanitario della provincia " + healthService.getProvince().getNameLongCapitalized() + ".<br>" +
+                                            "L'esame si terrà il " + prescription.getDateTime() + ".<br>" +
+                                            strPagamento + ".<br>" +
+                                            "</p>";
+
+                            // Send Emails
+                            EmailUtil.sendHTML(patient.getEmail(), "assegnamento esame n° " + prescription.getId(), htmlPatient);
+                        } else {
+                            // ERRORE
+                        }
                     }
                 }
             } catch (DAOException ex) {
