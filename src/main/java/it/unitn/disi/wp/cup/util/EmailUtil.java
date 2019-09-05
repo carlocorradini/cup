@@ -1,11 +1,6 @@
 package it.unitn.disi.wp.cup.util;
 
 import it.unitn.disi.wp.cup.config.EmailConfig;
-import it.unitn.disi.wp.cup.persistence.entity.Person;
-
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
