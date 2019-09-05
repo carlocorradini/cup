@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  *
  * @author Carlo Corradini
  */
-@Path("Exam")
+@Path("medicine")
 public class MedicineService {
 
     private static final Logger LOGGER = Logger.getLogger(MedicineService.class.getName());

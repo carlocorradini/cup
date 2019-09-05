@@ -47,8 +47,58 @@
             </div>
         </div>
 
-        <div class="ui piled segment" id="info-exam-segment">
+        <div class="ui green placeholder segment" id="info-exam-message">
+            <div class="ui icon header">
+                <i class="info circle icon"/>
+                #{i18n["info.exam.message"]}
+            </div>
+        </div>
 
+        <div class="ui green raised big segment hidden" id="info-exam-segment">
+            <table class="ui fixed table">
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="ui label fluid">
+                            <i class="hashtag icon"/>#{i18n["common.id"]}
+                        </div>
+                    </td>
+                    <td id="info-exam-td-id"/>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="ui label fluid">
+                            <i class="bullseye icon"/>#{i18n["common.name"]}
+                        </div>
+                    </td>
+                    <td id="info-exam-td-name"/>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="ui label fluid">
+                            <i class="euro sign icon"/>#{i18n["common.price"]}
+                        </div>
+                    </td>
+                    <td id="info-exam-td-price"/>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="ui label fluid">
+                            <i class="heading icon"/>#{i18n["common.supported"]}
+                        </div>
+                    </td>
+                    <td id="info-exam-td-supported"/>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="ui label fluid">
+                            <i class="info icon"/>#{i18n["common.description"]}
+                        </div>
+                    </td>
+                    <td id="info-exam-td-description"/>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
     </ui:define>

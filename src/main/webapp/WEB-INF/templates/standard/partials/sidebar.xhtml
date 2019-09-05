@@ -1,6 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
 >
     <ui:fragment rendered="#{not empty person.authPerson or not empty healthService.authHealthService}">
@@ -180,12 +181,14 @@
                         <div class="header">#{i18n["common.specialist"]}</div>
                         <div class="menu">
                             <h:link outcome="/dashboard/specialist/visit_todo/index"
-                                    styleClass="item">
+                                    styleClass="item"
+                            >
                                 #{i18n["common.todoVisits"]}
                                 <span class="ui red label">#{doctorSpecialist.assignedToDoPrescriptionExamCount}</span>
                             </h:link>
                             <h:link outcome="/dashboard/specialist/visit_done/index"
-                                    styleClass="item">
+                                    styleClass="item"
+                            >
                                 #{i18n["common.total.assignedVisits"]}
                                 <span class="ui yellow empty circular label"/>
                             </h:link>
@@ -194,6 +197,26 @@
                 </ui:fragment>
             </ui:fragment>
             <!-- END PERSON -->
+
+            <div class="item">
+                <div class="header">
+                    <i class="info circular icon"/> #{fn:toUpperCase(i18n["common.help"])}
+                </div>
+                <div class="menu">
+                    <h:link outcome="/info/exam/index"
+                            styleClass="item"
+                    >
+                        #{i18n["info.exam"]}
+                        <span class="ui red empty circular label"/>
+                    </h:link>
+                    <h:link outcome="/info/medicine/index"
+                            styleClass="item"
+                    >
+                        #{i18n["info.medicine"]}
+                        <span class="ui yellow empty circular label"/>
+                    </h:link>
+                </div>
+            </div>
 
             <div class="item">
                 <a href="#{request.contextPath}/signout.handler" class="ui red fluid button">

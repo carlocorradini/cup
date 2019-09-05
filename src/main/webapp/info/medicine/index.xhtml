@@ -1,0 +1,97 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">#{i18n["info.medicine"]}</ui:define>
+
+    <ui:define name="js">
+        <h:outputScript library="_default"
+                        name="js/info_medicine.js"
+                        target="body"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h2 class="ui center aligned icon header">
+            <i class="pills icon"/>
+            #{i18n["info.medicine"]}
+        </h2>
+
+        <div class="ui divider"></div>
+
+        <div class="ui floating dropdown labeled icon button fluid large" id="info-medicine-dropdown">
+            <i class="pills icon"/>
+            <span class="text full-width">#{i18n["prescription.medicine.choose.medicine"]}</span>
+            <div class="menu">
+                <div class="header">
+                    #{i18n["prescription.medicine.searchMedicine"]}
+                </div>
+                <div class="ui icon search input">
+                    <i class="search icon"/>
+                    <input type="text" placeholder="#{i18n['common.search']}..."/>
+                </div>
+                <div class="divider"></div>
+                <div class="header">
+                    <i class="filter icon"/>
+                    #{i18n["prescription.medicine.filter.medicine"]}
+                </div>
+                <div class="scrolling menu">
+                    <ui:repeat value="#{medicine.medicines}" var="m">
+                        <div class="item" data-value="#{m.id}">
+                            <span class="ui empty circular label #{['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink'].get(m.id % 10)}"/>
+                            #{m.name}
+                            <span class="text-light text-right">#{m.id}</span>
+                        </div>
+                    </ui:repeat>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui yellow placeholder segment" id="info-medicine-message">
+            <div class="ui icon header">
+                <i class="info circle icon"/>
+                #{i18n["info.medicine.message"]}
+            </div>
+        </div>
+
+        <div class="ui yellow raised big segment hidden" id="info-medicine-segment">
+            <table class="ui fixed table">
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="ui label fluid">
+                            <i class="hashtag icon"/>#{i18n["common.id"]}
+                        </div>
+                    </td>
+                    <td id="info-medicine-td-id"/>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="ui label fluid">
+                            <i class="bullseye icon"/>#{i18n["common.name"]}
+                        </div>
+                    </td>
+                    <td id="info-medicine-td-name"/>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="ui label fluid">
+                            <i class="euro sign icon"/>#{i18n["common.price"]}
+                        </div>
+                    </td>
+                    <td id="info-medicine-td-price"/>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="ui label fluid">
+                            <i class="info icon"/>#{i18n["common.description"]}
+                        </div>
+                    </td>
+                    <td id="info-medicine-td-description"/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </ui:define>
+</ui:composition>
