@@ -26,16 +26,16 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
     private static final String SQL_ADD = "INSERT INTO prescription_exam(person_id, doctor_id, exam_id, paid) VALUES (?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE prescription_exam SET doctor_specialist_id = ?, health_service_id = ?, report_id = ?, prescription_date = ?, paid = ?, read = ? WHERE id = ?";
     private static final String SQL_GET_ALL_BY_PERSON_ID = "SELECT * FROM prescription_exam WHERE person_id = ? ORDER BY prescription_date DESC";
-    private static final String SQL_GET_ALL_BY_DOCTOR_SPECIALIST_ID = "SELECT * FROM prescription_exam WHERE doctor_specialist_id = ? ORDER BY prescription_date DESC";
-    private static final String SQL_GET_ALL_BY_HEALTH_SERVICE_ID = "SELECT * FROM prescription_exam WHERE health_service_id = ? ORDER BY prescription_date DESC";
+    private static final String SQL_GET_ALL_BY_DOCTOR_SPECIALIST_ID = "SELECT * FROM prescription_exam WHERE doctor_specialist_id = ?";
+    private static final String SQL_GET_ALL_BY_HEALTH_SERVICE_ID = "SELECT * FROM prescription_exam WHERE health_service_id = ?";
     private static final String SQL_GET_ALL_NOT_READ_BY_PERSON_ID = "SELECT * FROM prescription_exam WHERE person_id = ? AND read IS FALSE AND report_id IS NOT NULL ORDER BY prescription_date DESC";
-    private static final String SQL_GET_ALL_TO_DO_BY_DOCTOR_SPECIALIST_ID = "SELECT * FROM prescription_exam WHERE doctor_specialist_id = ? AND report_id IS NULL";
-    private static final String SQL_GET_ALL_TO_DO_BY_HEALTH_SERVICE_ID = "SELECT * FROM prescription_exam WHERE health_service_id = ? AND report_id IS NULL";
-    private static final String SQL_GET_ALL_DONE_BY_DOCTOR_SPECIALIST_ID = "SELECT * FROM prescription_exam WHERE doctor_specialist_id = ? AND report_id IS NOT NULL";
-    private static final String SQL_GET_ALL_DONE_BY_HEALTH_SERVICE_ID = "SELECT * FROM prescription_exam WHERE health_service_id = ? AND report_id IS NOT NULL";
+    private static final String SQL_GET_ALL_TO_DO_BY_DOCTOR_SPECIALIST_ID = "SELECT * FROM prescription_exam WHERE doctor_specialist_id = ? AND report_id IS NULL ORDER BY prescription_date ASC";
+    private static final String SQL_GET_ALL_TO_DO_BY_HEALTH_SERVICE_ID = "SELECT * FROM prescription_exam WHERE health_service_id = ? AND report_id IS NULL ORDER BY prescription_date ASC";
+    private static final String SQL_GET_ALL_DONE_BY_DOCTOR_SPECIALIST_ID = "SELECT * FROM prescription_exam WHERE doctor_specialist_id = ? AND report_id IS NOT NULL ORDER BY prescription_date DESC";
+    private static final String SQL_GET_ALL_DONE_BY_HEALTH_SERVICE_ID = "SELECT * FROM prescription_exam WHERE health_service_id = ? AND report_id IS NOT NULL ORDER BY prescription_date DESC";
     private static final String SQL_GET_ALL_TO_ASSIGN_BY_HEALTH_SERVICE_ID = "WITH person_province AS (SELECT person.id FROM person INNER JOIN city ON (person.city_id = city.id) WHERE province_id = ?)" +
             " SELECT prescription_exam.* FROM person_province INNER JOIN prescription_exam ON (person_province.id = prescription_exam.person_id)" +
-            " WHERE report_id IS NULL AND doctor_specialist_id IS NULL AND health_service_id IS NULL AND prescription_date IS NULL";
+            " WHERE report_id IS NULL AND doctor_specialist_id IS NULL AND health_service_id IS NULL AND prescription_date IS NULL ORDER BY prescription_date_registration DESC";
     private static final String SQL_GET_COUNT_BY_PERSON_ID = "SELECT COUNT(*) FROM prescription_exam WHERE person_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_SPECIALIST_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_specialist_id = ?";

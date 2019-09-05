@@ -97,7 +97,6 @@ function reportsConfig() {
                             const row = window.visit_creator.v.$table.find(`tbody tr[data-exam-id="${id}"]`);
                             window.UTIL.ARRAY.remove(examsRead, id);
                             window.visit_creator.v.$table
-                                .DataTable()
                                 .row(row)
                                 .remove()
                                 .draw();
