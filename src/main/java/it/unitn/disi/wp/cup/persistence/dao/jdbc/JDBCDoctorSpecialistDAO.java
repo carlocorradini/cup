@@ -23,9 +23,7 @@ public class JDBCDoctorSpecialistDAO extends JDBCDAO<DoctorSpecialist, Long> imp
     private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM doctor_specialist";
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM doctor_specialist WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM doctor_specialist";
-    private static final String SQL_GET_ALL_QUALIFIED_BY_PROVINCE_ID_AND_EXAM_ID = "WITH specialist_city AS (SELECT doctor_specialist.id, city_id FROM doctor_specialist INNER JOIN person ON (doctor_specialist.id = person.id))," +
-            "specialist_exam AS (SELECT doctor_specialist.id FROM doctor_specialist INNER JOIN exam_qualification ON (doctor_specialist.id = exam_qualification.doctor_specialist_id) WHERE exam_qualification.exam_id = ?)" +
-            " SELECT specialist_exam.id FROM specialist_exam, specialist_city INNER JOIN city ON (specialist_city.city_id = city.id) WHERE city.province_id = ? AND specialist_city.id = specialist_exam.id";
+    private static final String SQL_GET_ALL_QUALIFIED_EXAM_ID = "SELECT doctor_specialist.id FROM doctor_specialist INNER JOIN exam_qualification ON (doctor_specialist.id = exam_qualification.doctor_specialist_id) WHERE exam_qualification.exam_id = ?";
 
     /**
      * The default constructor of the class
@@ -128,27 +126,26 @@ public class JDBCDoctorSpecialistDAO extends JDBCDAO<DoctorSpecialist, Long> imp
     }
 
     @Override
-    public List<Person> getAllQualifiedbyProvinceIdAndExamId(Long provinceId, Long examId) throws DAOException {
+    public List<Person> getAllQualifiedbyExamId(Long examId) throws DAOException {
         List<Person> qualified = new ArrayList<>();
         PersonDAO personDAO;
-        if (provinceId == null || examId == null)
-            throw new DAOException("Province Id and Exam Id are mandatory", new NullPointerException("Province Id and/or Exam Id is null"));
+        if (examId == null)
+            throw new DAOException("Exam Id are mandatory", new NullPointerException("Exam Id is null"));
         try {
             personDAO = DAO_FACTORY.getDAO(PersonDAO.class);
         } catch (DAOFactoryException ex) {
             throw new DAOException("Unable to get Person DAO for qualification", ex);
         }
 
-        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_QUALIFIED_BY_PROVINCE_ID_AND_EXAM_ID)) {
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_QUALIFIED_EXAM_ID)) {
             pStmt.setLong(1, examId);
-            pStmt.setLong(2, provinceId);
             try (ResultSet rs = pStmt.executeQuery()) {
                 while (rs.next()) {
                     qualified.add(personDAO.getByPrimaryKey(rs.getLong(1)));
                 }
             }
         } catch (SQLException ex) {
-            throw new DAOException("Unable to get the List of qualified Doctor Specialist by Province Id and Exam Id");
+            throw new DAOException("Unable to get the List of qualified Doctor Specialist by Exam Id");
         }
 
         return qualified;
