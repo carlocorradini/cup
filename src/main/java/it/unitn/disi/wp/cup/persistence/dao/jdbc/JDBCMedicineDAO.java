@@ -42,6 +42,7 @@ public class JDBCMedicineDAO extends JDBCDAO<Medicine, Long> implements Medicine
             medicine.setId(rs.getLong("id"));
             medicine.setName(rs.getString("name"));
             medicine.setPrice(rs.getShort("price"));
+            medicine.setDescription(rs.getString("description"));
         } catch (SQLException ex) {
             throw new DAOException("Impossible to set Medicine by ResultSet", ex);
         }

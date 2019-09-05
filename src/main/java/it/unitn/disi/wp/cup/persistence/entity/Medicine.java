@@ -9,6 +9,7 @@ public class Medicine {
     private Long id;
     private String name;
     private Short price;
+    private String description;
 
     /**
      * Return the id of the Medicine
@@ -62,5 +63,23 @@ public class Medicine {
      */
     public void setPrice(Short price) {
         this.price = price;
+    }
+
+    /**
+     * Return the description of the Medicine
+     *
+     * @return Medicine description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Set the description of the Medicine
+     *
+     * @param description Medicine description
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

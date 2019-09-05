@@ -9,6 +9,7 @@ public class Exam {
     private Long id;
     private String name;
     private Short price;
+    private String description;
     private boolean supported;
 
     /**
@@ -63,6 +64,24 @@ public class Exam {
      */
     public void setPrice(Short price) {
         this.price = price;
+    }
+
+    /**
+     * Return the description of the Exam
+     *
+     * @return Exam description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Set the description of the Exam
+     *
+     * @param description Exam description
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**

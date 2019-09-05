@@ -37,7 +37,6 @@ public class MedicalService {
     private PersonDAO personDAO = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
     private DoctorSpecialistDAO doctorSpecialistDAO = null;
-    private ProvinceDAO provinceDAO = null;
     private ExamDAO examDAO = null;
 
     @Context
@@ -54,7 +53,6 @@ public class MedicalService {
                 personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
                 prescriptionExamDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionExamDAO.class);
                 doctorSpecialistDAO = DAOFactory.getDAOFactory(servletContext).getDAO(DoctorSpecialistDAO.class);
-                provinceDAO = DAOFactory.getDAOFactory(servletContext).getDAO(ProvinceDAO.class);
                 examDAO = DAOFactory.getDAOFactory(servletContext).getDAO(ExamDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Impossible to get dao factory for storage system", ex);
@@ -148,38 +146,33 @@ public class MedicalService {
 
     /**
      * Return the {@link List} of {@link DoctorSpecialist Doctor specialists} represented as {@link Person Person}
-     * in {@link JSON JSON} format that live in the {@link Province Province} identified by {@code provinceId}
-     * and is qualified for the {@link Exam Exam} identified by {@code examId}
+     * in {@link JSON JSON} format that is qualified for the {@link Exam Exam} identified by {@code examId}
      *
-     * @param provinceId The {@link Province} id
-     * @param examId     The {@link Exam} id
+     * @param examId The {@link Exam} id
      * @return The {@link List} of qualified {@link DoctorSpecialist} as {@link JSON}
      */
     @GET
-    @Path("qualified/{provinceId}/{examId}")
+    @Path("qualified/{examId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getQualifiedDoctorSpecialistsByProvinceIdAndExamId(@PathParam("provinceId") Long provinceId,
-                                                                       @PathParam("examId") Long examId) {
+    public Response getQualifiedDoctorSpecialistsByProvinceIdAndExamId(@PathParam("examId") Long examId) {
         Response.ResponseBuilder response;
         List<Person> qualified;
-        Province province;
-        Exam exam;
 
         if (!isAuthenticated()) {
             // Unauthorized
             response = Response.status(Response.Status.UNAUTHORIZED);
-        } else if (provinceId == null || examId == 0) {
-            // Province Id and/or Exam Id is missing
+        } else if (examId == null) {
+            // Exam Id is missing
             response = Response.status(Response.Status.BAD_REQUEST);
         } else {
             try {
-                if ((province = provinceDAO.getByPrimaryKey(provinceId)) == null || (exam = examDAO.getByPrimaryKey(examId)) == null) {
-                    // Patient Id and/or Exam Id is invalid
+                if (examDAO.getByPrimaryKey(examId) == null) {
+                    // Exam Id is invalid
                     response = Response.status(Response.Status.BAD_REQUEST);
                 } else {
                     // ALL CORRECT
                     // Get qualified Specialists
-                    qualified = doctorSpecialistDAO.getAllQualifiedbyProvinceIdAndExamId(provinceId, examId);
+                    qualified = doctorSpecialistDAO.getAllQualifiedbyExamId(examId);
                     // Sanitize
                     for (Person person : qualified) {
                         EntitySanitizerUtil.sanitizePerson(person, true);
@@ -190,7 +183,7 @@ public class MedicalService {
                             .entity(qualified);
                 }
             } catch (DAOException ex) {
-                LOGGER.log(Level.SEVERE, "Unable to return the Qualified Doctor Specialists given Province Id and Exam Id", ex);
+                LOGGER.log(Level.SEVERE, "Unable to return the Qualified Doctor Specialists given Exam Id", ex);
                 response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             }
         }

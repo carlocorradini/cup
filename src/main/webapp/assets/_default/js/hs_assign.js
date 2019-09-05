@@ -4,7 +4,7 @@
 $(document).ready(() => {
     const assign = {
         service: {
-            qualified: window.CONTEXT_PATH + "/service/restricted/medical/qualified/{1}/{2}",
+            qualified: window.CONTEXT_PATH + "/service/restricted/medical/qualified/{1}",
             assign: window.CONTEXT_PATH + "/service/restricted/health_service/assign"
         },
         $modal: $("#hs-assign-exam-modal"),
@@ -50,12 +50,12 @@ $(document).ready(() => {
             }
         },
         do: {
-            entry: function (patientId, provinceId, examId, examIsSupported, doAfter) {
+            entry: function (patientId, examId, examIsSupported, doAfter) {
                 assign.do.patient(patientId, function () {
                     if (!examIsSupported) {
                         assign.executor.$message.addClass("hidden");
                         assign.executor.$field.removeClass("hidden");
-                        assign.do.executor(provinceId, examId, function () {
+                        assign.do.executor(examId, function () {
                             doAfter();
                         });
                     } else {
@@ -78,10 +78,10 @@ $(document).ready(() => {
                     }
                 });
             },
-            executor: function (provinceId, examId, doAfter) {
+            executor: function (examId, doAfter) {
                 $.ajax({
                     type: "GET",
-                    url: window.UTIL.STRING.format(assign.service.qualified, provinceId, examId),
+                    url: window.UTIL.STRING.format(assign.service.qualified, examId),
                     success: function (data) {
                         assign.populate.executor(data);
                         doAfter();
@@ -155,7 +155,6 @@ $(document).ready(() => {
         const examId = $button.data("exam-id");
         const examIsSupported = Boolean($button.data("exam-supported"));
         const patientId = $button.data("patient-id");
-        const provinceId = $button.data("province-id");
         // Finished all settings and loading
         const doAfter = function () {
             assign.$modal.modal("show");
@@ -163,7 +162,7 @@ $(document).ready(() => {
         };
 
         if (window.UTIL.NUMBER.isNumber(prescriptionId) && window.UTIL.NUMBER.isNumber(examId)
-            && window.UTIL.NUMBER.isNumber(patientId) && window.UTIL.NUMBER.isNumber(provinceId)) {
+            && window.UTIL.NUMBER.isNumber(patientId)) {
             $button.addClass("loading");
 
             if (newAssign.prescriptionId !== prescriptionId) {
@@ -187,7 +186,7 @@ $(document).ready(() => {
                 }
 
                 // Populate
-                assign.do.entry(patientId, provinceId, examId, examIsSupported, doAfter);
+                assign.do.entry(patientId, examId, examIsSupported, doAfter);
             } else doAfter();
         }
     });
@@ -253,6 +252,7 @@ $(document).ready(() => {
                         assign.$form.addClass("disabled success");
                         // Remove table row
                         window.visit_creator.v.$table
+                            .DataTable()
                             .row(window.visit_creator.v.$table.find(`tbody tr[data-prescription-id="${newAssign.prescriptionId}"]`))
                             .remove()
                             .draw();

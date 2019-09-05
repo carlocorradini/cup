@@ -1,12 +1,12 @@
 package it.unitn.disi.wp.cup.service.open;
 
-import com.alibaba.fastjson.JSON;
-import it.unitn.disi.wp.cup.persistence.dao.*;
+import it.unitn.disi.wp.cup.persistence.dao.MedicineDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
-import it.unitn.disi.wp.cup.persistence.entity.*;
-import it.unitn.disi.wp.cup.util.EntitySanitizerUtil;
+import it.unitn.disi.wp.cup.persistence.entity.Medicine;
+
+import com.alibaba.fastjson.JSON;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -21,16 +21,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Services for {@link Doctor Doctor}
+ * Services for {@link Medicine}
  *
  * @author Carlo Corradini
  */
-@Path("doctor")
-public class DoctorService {
+@Path("Exam")
+public class MedicineService {
 
-    private static final Logger LOGGER = Logger.getLogger(DoctorService.class.getName());
-    private PersonDAO personDAO = null;
-    private DoctorDAO doctorDAO = null;
+    private static final Logger LOGGER = Logger.getLogger(MedicineService.class.getName());
+    private MedicineDAO medicineDAO = null;
 
     @Context
     private HttpServletRequest request;
@@ -39,8 +38,7 @@ public class DoctorService {
     public void setServletContext(ServletContext servletContext) {
         if (servletContext != null) {
             try {
-                personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
-                doctorDAO = DAOFactory.getDAOFactory(servletContext).getDAO(DoctorDAO.class);
+                medicineDAO = DAOFactory.getDAOFactory(servletContext).getDAO(MedicineDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
             }
@@ -48,36 +46,34 @@ public class DoctorService {
     }
 
     /**
-     * Return the {@link Doctor Doctor} as a {@link Person Person} base information as {@link JSON} given its id.
-     * The entity returned is Sanitized: {@link EntitySanitizerUtil#sanitizePerson(Person)}
+     * Return the {@link Medicine Exam} as {@link JSON} given it's {@code medicineId}
      *
-     * @param doctorId The {@link Doctor Doctor} id
-     * @return The {@link Doctor Doctor} as {@link JSON}
+     * @param medicineId The {@link Medicine} id
+     * @return The {@link Medicine Medicine} given it's {@code medicineId}
      */
     @GET
     @Path("get/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDoctorById(@PathParam("id") Long doctorId) {
+    public Response getExamById(@PathParam("id") Long medicineId) {
         Response.ResponseBuilder response;
-        Person doctor;
+        Medicine medicine;
 
-        if (doctorId == null) {
-            // Doctor Id is missing
+        if (medicineId == null) {
+            // Medicine Id is missing
             response = Response.status(Response.Status.BAD_REQUEST);
         } else {
             try {
-                if (doctorDAO.getByPrimaryKey(doctorId) == null
-                        || (doctor = personDAO.getByPrimaryKey(doctorId)) == null) {
-                    // Doctor Id is invalid
+                if ((medicine = medicineDAO.getByPrimaryKey(medicineId)) == null) {
+                    // Medicine Id is invalid
                     response = Response.status(Response.Status.BAD_REQUEST);
                 } else {
-                    // ALL CORRECT, set the Doctor entity sanitized
+                    // ALL CORRECT
                     response = Response
                             .ok()
-                            .entity(EntitySanitizerUtil.sanitizePerson(doctor));
+                            .entity(medicine);
                 }
             } catch (DAOException ex) {
-                LOGGER.log(Level.SEVERE, "Unable to return the Doctor given its id", ex);
+                LOGGER.log(Level.SEVERE, "Unable to return the Medicine given its id", ex);
                 response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             }
         }
