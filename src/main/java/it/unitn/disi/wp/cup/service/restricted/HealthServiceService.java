@@ -229,7 +229,7 @@ public class HealthServiceService {
 
                             // Send Emails
                             EmailUtil.sendHTML(patient.getEmail(), "assegnamento esame n° " + prescription.getId(), htmlPatient);
-                            EmailUtil.sendHTML(patient.getEmail(), "assegnamento esame n° " + prescription.getId(), htmlDoctor_Specialist);
+                            EmailUtil.sendHTML(doctorSpecialistAsPerson.getEmail(), "assegnamento esame n° " + prescription.getId(), htmlDoctor_Specialist);
                         } else if (prescription.getExam().isSupported() && healthService != null) {
                             // HEALTH SERVICE
                             // Generate the string for the patient email
