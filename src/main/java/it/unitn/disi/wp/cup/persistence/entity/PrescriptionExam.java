@@ -38,7 +38,8 @@ public class PrescriptionExam implements Cloneable {
         prescription.dateTime = this.getDateTime();
         prescription.dateTimeRegistration = this.getDateTimeRegistration();
         prescription.exam = (Exam) this.getExam().clone();
-        prescription.report = (Report) this.getReport().clone();
+        if (this.getReport() != null)
+            prescription.report = (Report) this.getReport().clone();
         prescription.paid = this.getPaid();
         prescription.read = this.getRead();
 
