@@ -124,16 +124,20 @@ public final class PrescriptionMedicinePDFUtil {
 
             File inavatar = new File(FilenameUtils.separatorsToUnix(ImageUtil.getImagePath() + person.getAvatar().getNameAsImage()));
             BufferedImage imageava = ImageIO.read(inavatar);
-            BufferedImage resizeavatar = resizeImage(imageava, 100, 100);
+            float x = imageava.getWidth();
+            float y = imageava.getHeight();
 
             contentStream = new PDPageContentStream(document, document.getPage(0));
             PDImageXObject qrCode = JPEGFactory.createFromImage(document,
                     QRCodeUtil.generate(JSON.toJSONString(EntitySanitizerUtil.sanitizePrescriptionMedicine((PrescriptionMedicine) prescriptionMedicine.clone()))));
             PDImageXObject logo = JPEGFactory.createFromImage(document, ImageUtil.getLOGO());
-            PDImageXObject avatar = JPEGFactory.createFromImage(document, resizeavatar);
-            contentStream.drawImage(avatar, 30, 550);
-            contentStream.drawImage(logo, 480, 670, 100, 100);
-            contentStream.drawImage(qrCode, 30, 670, 100, 100);
+            PDImageXObject avatar = JPEGFactory.createFromImage(document, imageava);
+
+
+            contentStream.drawImage(avatar,6,510,110,y/x * 108);
+            contentStream.drawImage(logo, 495, 685, 100, 100);
+            contentStream.drawImage(qrCode, 6, 676, 110, 110);
+
             contentStream.beginText();
             contentStream.setFont(font, 20);
             contentStream.setNonStrokingColor(new Color(231, 68, 35));
