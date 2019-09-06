@@ -143,6 +143,30 @@
                             #{fn:toUpperCase(i18n["common.total.assignedVisits"])}
                         </div>
                     </h:link>
+                    <h:link outcome="/health_service/dashboard/medicine_assign/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/pills.svg"
+                                            alt="#{i18n['common.assignMedicine']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.assignMedicine"])}
+                        </div>
+                    </h:link>
+                    <h:link outcome="/health_service/dashboard/report/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/chart.svg"
+                                            alt="#{i18n['health.service.report']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["health.service.report"])}
+                        </div>
+                    </h:link>
                 </div>
             </div>
         </ui:fragment>
