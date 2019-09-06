@@ -91,8 +91,7 @@ public class PrescriptionExam {
      * @param specialistId Prescription Exam {@link DoctorSpecialist doctorSpecialist} id
      */
     public void setSpecialistId(Long specialistId) {
-        if (exam != null && !exam.isSupported())
-            this.specialistId = specialistId;
+        this.specialistId = specialistId;
     }
 
     /**
@@ -112,8 +111,7 @@ public class PrescriptionExam {
      * @param healthServiceId Prescription Exam {@link HealthService Health Service} id
      */
     public void setHealthServiceId(Long healthServiceId) {
-        if (exam != null && exam.isSupported())
-            this.healthServiceId = healthServiceId;
+        this.healthServiceId = healthServiceId;
     }
 
     /**

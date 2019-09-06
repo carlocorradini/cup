@@ -42,7 +42,6 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
         PersonAvatarDAO personAvatarDAO;
         PersonSexDAO personSexDAO;
         CityDAO cityDAO;
-        DoctorDAO doctorDAO;
         PrescriptionExamDAO prescriptionExamDAO;
         PrescriptionMedicineDAO prescriptionMedicineDAO;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
@@ -51,7 +50,6 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
             personAvatarDAO = DAO_FACTORY.getDAO(PersonAvatarDAO.class);
             personSexDAO = DAO_FACTORY.getDAO(PersonSexDAO.class);
             cityDAO = DAO_FACTORY.getDAO(CityDAO.class);
-            doctorDAO = DAO_FACTORY.getDAO(DoctorDAO.class);
             prescriptionExamDAO = DAO_FACTORY.getDAO(PrescriptionExamDAO.class);
             prescriptionMedicineDAO = DAO_FACTORY.getDAO(PrescriptionMedicineDAO.class);
 

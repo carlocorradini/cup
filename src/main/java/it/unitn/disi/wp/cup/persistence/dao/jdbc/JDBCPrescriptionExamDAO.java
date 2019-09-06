@@ -65,6 +65,7 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
         ExamDAO examDAO;
         ReportDAO reportDAO;
         Long idCheck;
+        LocalDateTime dateTimeCheck;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
 
         try {
@@ -77,16 +78,17 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             prescriptionExam.setExam(examDAO.getByPrimaryKey(rs.getLong("exam_id")));
             prescriptionExam.setPersonId(rs.getLong("person_id"));
             prescriptionExam.setDoctorId(rs.getLong("doctor_id"));
+            prescriptionExam.setPaid(rs.getBoolean("paid"));
+            prescriptionExam.setRead(rs.getBoolean("read"));
+            prescriptionExam.setDateTimeRegistration(rs.getObject("prescription_date_registration", LocalDateTime.class));
             idCheck = rs.getLong("doctor_specialist_id");
             if (!rs.wasNull()) prescriptionExam.setSpecialistId(idCheck);
             idCheck = rs.getLong("health_service_id");
             if (!rs.wasNull()) prescriptionExam.setHealthServiceId(idCheck);
-            prescriptionExam.setDateTime(rs.getObject("prescription_date", LocalDateTime.class));
-            prescriptionExam.setDateTimeRegistration(rs.getObject("prescription_date_registration", LocalDateTime.class));
+            dateTimeCheck = rs.getObject("prescription_date", LocalDateTime.class);
+            if (!rs.wasNull()) prescriptionExam.setDateTime(dateTimeCheck);
             idCheck = rs.getLong("report_id");
             if (!rs.wasNull()) prescriptionExam.setReport(reportDAO.getByPrimaryKey(idCheck));
-            prescriptionExam.setPaid(rs.getBoolean("paid"));
-            prescriptionExam.setRead(rs.getBoolean("read"));
         } catch (SQLException | DAOFactoryException ex) {
             throw new DAOException("Impossible to set Prescription Exam by ResultSet", ex);
         }
