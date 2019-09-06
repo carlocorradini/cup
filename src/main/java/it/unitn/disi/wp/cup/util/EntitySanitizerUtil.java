@@ -2,6 +2,7 @@ package it.unitn.disi.wp.cup.util;
 
 import it.unitn.disi.wp.cup.persistence.entity.HealthService;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
+import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 
 import java.util.logging.Logger;
 
@@ -27,7 +28,7 @@ public final class EntitySanitizerUtil {
 
     /**
      * Sanitize a {@link Person person}.
-     * The passed {@code person} as parameter will change
+     * The passed {@code person} as parameter will be modified
      *
      * @param person The {@link Person Person} to sanitize
      * @param hard   If set to true the sanitization will remove more sensible information
@@ -49,7 +50,7 @@ public final class EntitySanitizerUtil {
 
     /**
      * Sanitize a {@link HealthService Health Service}.
-     * The passed {@code healthService} as parameter will change
+     * The passed {@code healthService} as parameter will be modified
      *
      * @param healthService The {@link HealthService Health Service} to sanitize
      * @return The sanitized {@link HealthService Health Service}
@@ -59,5 +60,18 @@ public final class EntitySanitizerUtil {
         healthService.setEmail(null);
 
         return healthService;
+    }
+
+    /**
+     * Sanitize a {@link PrescriptionExam Prescription Exam}.
+     * The passed {@code prescriptionExam} as parameter will be modified
+     *
+     * @param prescriptionExam The {@link PrescriptionExam Prescription Exam} to sanitize
+     * @return The sanitized {@link PrescriptionExam Prescription Exam}
+     */
+    public static PrescriptionExam sanitizePrescriptionExam(PrescriptionExam prescriptionExam) {
+        prescriptionExam.setReport(null);
+
+        return prescriptionExam;
     }
 }

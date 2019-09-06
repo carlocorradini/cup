@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  *
  * @author Carlo Corradini
  */
-public class PrescriptionExam {
+public class PrescriptionExam implements Cloneable {
     private Long id;
     private Long personId;
     private Long doctorId;
@@ -19,6 +19,31 @@ public class PrescriptionExam {
     private Report report;
     private Boolean paid;
     private Boolean read;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        PrescriptionExam prescription;
+
+        try {
+            prescription = (PrescriptionExam) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            prescription = new PrescriptionExam();
+        }
+
+        prescription.id = this.getId();
+        prescription.personId = this.getPersonId();
+        prescription.doctorId = this.getDoctorId();
+        prescription.specialistId = this.getSpecialistId();
+        prescription.healthServiceId = this.getHealthServiceId();
+        prescription.dateTime = this.getDateTime();
+        prescription.dateTimeRegistration = this.getDateTimeRegistration();
+        prescription.exam = (Exam) this.getExam().clone();
+        prescription.report = (Report) this.getReport().clone();
+        prescription.paid = this.getPaid();
+        prescription.read = this.getRead();
+
+        return prescription;
+    }
 
     /**
      * Return the id of the Prescription Exam

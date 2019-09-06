@@ -5,11 +5,29 @@ package it.unitn.disi.wp.cup.persistence.entity;
  *
  * @author Carlo Corradini
  */
-public class Medicine {
+public class Medicine implements Cloneable {
     private Long id;
     private String name;
     private Short price;
     private String description;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Medicine medicine;
+
+        try {
+            medicine = (Medicine) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            medicine = new Medicine();
+        }
+
+        medicine.id = this.getId();
+        medicine.name = this.getName();
+        medicine.price = this.getPrice();
+        medicine.description = this.getDescription();
+
+        return medicine;
+    }
 
     /**
      * Return the id of the Medicine

@@ -7,15 +7,37 @@ import java.time.LocalDateTime;
  *
  * @author Carlo Corradini
  */
-public class PrescriptionMedicine {
+public class PrescriptionMedicine implements Cloneable {
     private Long id;
     private Long personId;
-    private Long DoctorId;
+    private Long doctorId;
     private LocalDateTime dateTime;
     private LocalDateTime dateTimeProvide;
     private Medicine medicine;
     private Short quantity;
     private Boolean paid;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        PrescriptionMedicine prescription;
+
+        try {
+            prescription = (PrescriptionMedicine) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            prescription = new PrescriptionMedicine();
+        }
+
+        prescription.id = this.getId();
+        prescription.personId = this.getPersonId();
+        prescription.doctorId = this.getDoctorId();
+        prescription.dateTime = this.getDateTime();
+        prescription.dateTimeProvide = this.getDateTimeProvide();
+        prescription.medicine = (Medicine) this.getMedicine().clone();
+        prescription.quantity = this.getQuantity();
+        prescription.paid = this.getPaid();
+
+        return prescription;
+    }
 
     /**
      * Return the id of the Prescription Medicine
@@ -59,7 +81,7 @@ public class PrescriptionMedicine {
      * @return Prescription Medicine {@link Doctor doctor} id
      */
     public Long getDoctorId() {
-        return DoctorId;
+        return doctorId;
     }
 
     /**
@@ -68,7 +90,7 @@ public class PrescriptionMedicine {
      * @param doctorId Prescription Medicine {@link Doctor doctor} id
      */
     public void setDoctorId(Long doctorId) {
-        DoctorId = doctorId;
+        this.doctorId = doctorId;
     }
 
     /**

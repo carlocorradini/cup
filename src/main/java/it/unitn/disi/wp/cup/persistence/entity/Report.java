@@ -1,6 +1,7 @@
 package it.unitn.disi.wp.cup.persistence.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,12 +9,31 @@ import java.util.List;
  *
  * @author Carlo Corradini
  */
-public class Report {
+public class Report implements Cloneable {
     private Long id;
     private LocalDateTime dateTime;
     private String content;
     private List<Exam> exams;
     private List<Medicine> medicines;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Report report;
+
+        try {
+            report = (Report) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            report = new Report();
+        }
+
+        report.id = this.getId();
+        report.dateTime = this.getDateTime();
+        report.content = this.getContent();
+        report.exams = new ArrayList<>(this.getExams());
+        report.medicines = new ArrayList<>(this.getMedicines());
+
+        return report;
+    }
 
     /**
      * Return the id of the Report

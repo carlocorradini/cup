@@ -5,12 +5,31 @@ package it.unitn.disi.wp.cup.persistence.entity;
  *
  * @author Carlo Corradini
  */
-public class Exam {
+public class Exam implements Cloneable {
     private Long id;
     private String name;
     private Short price;
     private String description;
     private boolean supported;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Exam exam;
+
+        try {
+            exam = (Exam) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            exam = new Exam();
+        }
+
+        exam.id = this.getId();
+        exam.name = this.getName();
+        exam.price = this.getPrice();
+        exam.description = this.getDescription();
+        exam.supported = this.isSupported();
+
+        return exam;
+    }
 
     /**
      * Return the id of the Exam
