@@ -10,6 +10,7 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
+import it.unitn.disi.wp.cup.util.EntitySanitizerUtil;
 import it.unitn.disi.wp.cup.util.ImageUtil;
 import it.unitn.disi.wp.cup.util.QRCodeUtil;
 import org.apache.commons.io.FilenameUtils;
@@ -126,12 +127,13 @@ public final class PrescriptionMedicinePDFUtil {
             BufferedImage resizeavatar = resizeImage(imageava, 100, 100);
 
             contentStream = new PDPageContentStream(document, document.getPage(0));
-            PDImageXObject qrCode = JPEGFactory.createFromImage(document, QRCodeUtil.generate(JSON.toJSONString(prescriptionMedicine)));
+            PDImageXObject qrCode = JPEGFactory.createFromImage(document,
+                    QRCodeUtil.generate(JSON.toJSONString(EntitySanitizerUtil.sanitizePrescriptionMedicine((PrescriptionMedicine) prescriptionMedicine.clone()))));
             PDImageXObject logo = JPEGFactory.createFromImage(document, ImageUtil.getLOGO());
-            PDImageXObject avatar = JPEGFactory.createFromImage(document,resizeavatar);
-            contentStream.drawImage(avatar, 30, 670);
+            PDImageXObject avatar = JPEGFactory.createFromImage(document, resizeavatar);
+            contentStream.drawImage(avatar, 30, 550);
             contentStream.drawImage(logo, 480, 670, 100, 100);
-            contentStream.drawImage(qrCode, 30, 550, 100, 100);
+            contentStream.drawImage(qrCode, 30, 670, 100, 100);
             contentStream.beginText();
             contentStream.setFont(font, 20);
             contentStream.setNonStrokingColor(new Color(231, 68, 35));
@@ -142,7 +144,7 @@ public final class PrescriptionMedicinePDFUtil {
             contentStream.beginText();
             contentStream.setFont(fontBold, 10);
             contentStream.setNonStrokingColor(Color.GRAY);
-            contentStream.newLineAtOffset(520, 660);
+            contentStream.newLineAtOffset(30, 10);
             contentStream.showText("© 2019, CUP");
             contentStream.endText();
 
@@ -160,9 +162,10 @@ public final class PrescriptionMedicinePDFUtil {
             riempiPdf(document, contentStream, 150, 640, Color.BLACK, "PAZIENTE: ", "" + person.getFullNameCapitalized(), font, fontBold, fontSize);
             riempiPdf(document, contentStream, 150, 620, Color.BLACK, "CODICE FISCALE PAZIENTE: ", "" + person.getFiscalCode(), font, fontBold, fontSize);
             riempiPdf(document, contentStream, 150, 600, Color.BLACK, "DATA PRESCRIZIONE: ", "" + prescriptionMedicine.getDateTime().toLocalDate(), font, fontBold, fontSize);
-            riempiPdf(document, contentStream, 150, 580, Color.BLACK, "ORA PRESCRIZIONE: ", "" + prescriptionMedicine.getDateTime().toLocalTime(), font, fontBold, fontSize);
+            String time2 = formatter.format(prescriptionMedicine.getDateTime().toLocalTime());
+            riempiPdf(document, contentStream, 150, 580, Color.BLACK, "ORA PRESCRIZIONE: ", "" + time2, font, fontBold, fontSize);
             riempiPdf(document, contentStream, 150, 560, Color.BLACK, "IDENTIFICATIVO PRESCRIZIONE: ", "" + prescriptionMedicine.getId(), font, fontBold, fontSize);
-            riempiPdf(document, contentStream, 150, 540, Color.BLACK, "DESCRIZIONE FARMACO: ", "" + prescriptionMedicine.getMedicine().getName(), font, fontBold, fontSize);
+            riempiPdf(document, contentStream, 150, 540, Color.BLACK, "FARMACO: ", "" + prescriptionMedicine.getMedicine().getName(), font, fontBold, fontSize);
             riempiPdf(document, contentStream, 150, 520, Color.BLACK, "QUANTITÀ FARMACO: ", "" + prescriptionMedicine.getQuantity(), font, fontBold, fontSize);
 
             contentStream.beginText();
@@ -170,10 +173,14 @@ public final class PrescriptionMedicinePDFUtil {
             contentStream.newLineAtOffset(150, 500);
             if (prescriptionMedicine.getPaid()) {
                 contentStream.setNonStrokingColor(Color.BLACK);
-                contentStream.showText("LA MEDICINA È STATA PAGATA");
+                contentStream.showText("PAGAMENTO ");
+                contentStream.setNonStrokingColor(Color.GREEN);
+                contentStream.showText("CONFERMATO");
             } else {
+                contentStream.setNonStrokingColor(Color.BLACK);
+                contentStream.showText("PAGAMENTO ");
                 contentStream.setNonStrokingColor(Color.RED);
-                contentStream.showText("LA MEDICINA NON È STATA PAGATA");
+                contentStream.showText("NON CONFERMATO");
             }
             contentStream.endText();
 
@@ -204,7 +211,7 @@ public final class PrescriptionMedicinePDFUtil {
     }
 
     public static BufferedImage resizeImage(BufferedImage img, Integer Width, Integer Height) {
-        int type = img.getType() == 0? BufferedImage.TYPE_INT_ARGB : img.getType();
+        int type = img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img.getType();
         if (Width == 0) {
             Width = img.getWidth();
         }
@@ -217,11 +224,11 @@ public final class PrescriptionMedicinePDFUtil {
         if (img.getHeight() > Height || img.getWidth() > Width) {
             fHeight = Height;
             int wid = Width;
-            float sum = (float)img.getWidth() / (float)img.getHeight();
+            float sum = (float) img.getWidth() / (float) img.getHeight();
             fWidth = Math.round(fHeight * sum);
             if (fWidth > wid) {
                 //rezise again for the width this time
-                fHeight = Math.round(wid/sum);
+                fHeight = Math.round(wid / sum);
                 fWidth = wid;
             }
         }

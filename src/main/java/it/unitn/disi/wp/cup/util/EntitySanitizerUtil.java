@@ -90,7 +90,6 @@ public final class EntitySanitizerUtil {
     public static PrescriptionMedicine sanitizePrescriptionMedicine(PrescriptionMedicine prescriptionMedicine) {
         prescriptionMedicine.getMedicine().setDescription(null);
         prescriptionMedicine.getMedicine().setName(null);
-        prescriptionMedicine.getMedicine().setPrice(null);
 
         return prescriptionMedicine;
     }

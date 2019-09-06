@@ -87,13 +87,13 @@ public final class WriteReportUtil {
                 throw new ServiceModelException("The Prescription Exam already has a Report");
             if ((patient = personDAO.getByPrimaryKey(prescription.getPersonId())) == null)
                 throw new ServiceModelException("The Prescription Exam Patient is invalid");
-            if (prescription.getExam().isSupported() && prescription.getHealthServiceId() == null)
+            if (prescription.getExam().getSupported() && prescription.getHealthServiceId() == null)
                 throw new ServiceModelException("The Prescription Exam is supported and does not have a Health Service");
-            if (!prescription.getExam().isSupported() && prescription.getSpecialistId() == null)
+            if (!prescription.getExam().getSupported() && prescription.getSpecialistId() == null)
                 throw new ServiceModelException("The Prescription Exam is NOT supported and does not have a Doctor Specialist");
-            if (prescription.getExam().isSupported() && (healthService = healthServiceDAO.getByPrimaryKey(prescription.getHealthServiceId())) == null)
+            if (prescription.getExam().getSupported() && (healthService = healthServiceDAO.getByPrimaryKey(prescription.getHealthServiceId())) == null)
                 throw new ServiceModelException("The Prescription Exam is supported but no Health Service has been found");
-            if (!prescription.getExam().isSupported() && (doctorSpecialist = personDAO.getByPrimaryKey(prescription.getSpecialistId())) == null)
+            if (!prescription.getExam().getSupported() && (doctorSpecialist = personDAO.getByPrimaryKey(prescription.getSpecialistId())) == null)
                 throw new ServiceModelException("The Prescription Exam is NOT supported but no Doctor Specialist has been found");
         } catch (DAOException ex) {
             throw new ServiceModelException("Unable to verify the Prescription Report Model", ex);
@@ -188,11 +188,11 @@ public final class WriteReportUtil {
         // Executor
         html += "<p>" +
                 "   <b>Esecutore dell'esame</b>:<br>";
-        if (prescription.getExam().isSupported() && healthService != null) {
+        if (prescription.getExam().getSupported() && healthService != null) {
             html +=   "   <b>Tipo</b>: <span style=\"color: #2e6c80;\">servizio sanitario</span><br>"
                     + "   <b>Id</b>: <span style=\"color: #2e6c80;\">" + healthService.getId() + "</span><br>"
                     + "   <b>Nome</b>: <span style=\"color: #2e6c80;\">" + healthService.getProvince().getNameLongCapitalized() + "</span><br>";
-        } else if (!prescription.getExam().isSupported() && doctorSpecialist != null) {
+        } else if (!prescription.getExam().getSupported() && doctorSpecialist != null) {
             html +=   "   <b>Tipo</b>: <span style=\"color: #2e6c80;\">dottore specialista</span><br>"
                     + "   <b>Id</b>: <span style=\"color: #2e6c80;\">" + doctorSpecialist.getId() + "</span><br>"
                     + "   <b>Nome</b>: <span style=\"color: #2e6c80;\">" + doctorSpecialist.getFullNameCapitalized() + "</span><br>";

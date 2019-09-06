@@ -26,7 +26,7 @@ public class Exam implements Cloneable {
         exam.name = this.getName();
         exam.price = this.getPrice();
         exam.description = this.getDescription();
-        exam.supported = this.isSupported();
+        exam.supported = this.getSupported();
 
         return exam;
     }
@@ -108,7 +108,7 @@ public class Exam implements Cloneable {
      *
      * @return True if supported, false otherwise
      */
-    public Boolean isSupported() {
+    public Boolean getSupported() {
         return supported;
     }
 

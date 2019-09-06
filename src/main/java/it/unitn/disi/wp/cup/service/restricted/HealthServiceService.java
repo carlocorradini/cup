@@ -172,12 +172,12 @@ public class HealthServiceService {
                     // The Patient of the Prescription cannot be applied with the current Health Service
                     response = Response.status(Response.Status.BAD_REQUEST);
                     message.setError(JsonMessage.ERROR_INVALID_ID);
-                } else if (!prescription.getExam().isSupported()
+                } else if (!prescription.getExam().getSupported()
                         && (doctorSpecialist = doctorSpecialistDAO.getByPrimaryKey(assignModel.getExecutorId())) == null) {
                     // The Prescription Exam is not supported and there is no Doctor Specialist
                     response = Response.status(Response.Status.BAD_REQUEST);
                     message.setError(JsonMessage.ERROR_INVALID_ID);
-                } else if (!prescription.getExam().isSupported()
+                } else if (!prescription.getExam().getSupported()
                         && doctorSpecialist != null
                         && (doctorSpecialistAsPerson = personDAO.getByPrimaryKey(doctorSpecialist.getId())) != null
                         && !doctorSpecialistDAO.getAllQualifiedbyExamId(prescription.getExam().getId()).contains(doctorSpecialistAsPerson)) {
@@ -188,7 +188,7 @@ public class HealthServiceService {
                     // ALL CORRECT
                     // Set the correct Prescription Exam data
                     prescription.setDateTime(assignModel.getDateTime().toLocalDateTime());
-                    if (!prescription.getExam().isSupported() && doctorSpecialist != null) {
+                    if (!prescription.getExam().getSupported() && doctorSpecialist != null) {
                         // Doctor Specialist Executor
                         prescription.setSpecialistId(doctorSpecialist.getId());
                     } else {
@@ -216,7 +216,7 @@ public class HealthServiceService {
                         formattedDate = prescription.getDateTime().format(formatter);
                         formattedDateRegistration = prescription.getDateTimeRegistration().format(formatter);
 
-                        if (!prescription.getExam().isSupported() && doctorSpecialist != null && doctorSpecialistAsPerson != null) {
+                        if (!prescription.getExam().getSupported() && doctorSpecialist != null && doctorSpecialistAsPerson != null) {
                             // Exam assigned to a doctorSpecialist
                             // Generate the string for the patient email
                             String htmlPatient =
@@ -254,7 +254,7 @@ public class HealthServiceService {
                             // Send Emails
                             EmailUtil.sendHTML(patient.getEmail(), "assegnamento esame n° " + prescription.getId(), htmlPatient);
                             EmailUtil.sendHTML(doctorSpecialistAsPerson.getEmail(), "assegnamento esame n° " + prescription.getId(), htmlDoctor_Specialist);
-                        } else if (prescription.getExam().isSupported() && healthService != null) {
+                        } else if (prescription.getExam().getSupported() && healthService != null) {
                             // HEALTH SERVICE
                             // Generate the string for the patient email
                             String htmlPatient =
