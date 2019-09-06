@@ -12,7 +12,7 @@ public class Medicine implements Cloneable {
     private String description;
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         Medicine medicine;
 
         try {

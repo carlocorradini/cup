@@ -13,7 +13,7 @@ public class Exam implements Cloneable {
     private boolean supported;
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         Exam exam;
 
         try {

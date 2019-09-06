@@ -21,7 +21,7 @@ public class PrescriptionExam implements Cloneable {
     private Boolean read;
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         PrescriptionExam prescription;
 
         try {

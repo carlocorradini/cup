@@ -17,7 +17,7 @@ public class Report implements Cloneable {
     private List<Medicine> medicines;
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         Report report;
 
         try {
