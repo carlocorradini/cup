@@ -369,7 +369,7 @@ public class HealthServiceService {
     @GET
     @Path("downloadReportExam/{year}/{month}/{day}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response downloadReport(@PathParam("year") Short year,
+    public Response downloadReportExam(@PathParam("year") Short year,
                                    @PathParam("month") Short month,
                                    @PathParam("day") Short day) {
         Response.ResponseBuilder response;
@@ -394,9 +394,9 @@ public class HealthServiceService {
                 } else {
                     // ALL CORRECT, generate XLS
                     response = Response
-                            .ok()
-                            .entity(PrescriptionExamXLSUtil.generate(exams).toByteArray())
-                            .header("content-disposition", "attachment; filename = " + fileName + ".xls");
+                            .ok();
+                            /*.entity(PrescriptionExamXLSUtil.generate(exams).toByteArray())
+                            .header("content-disposition", "attachment; filename = " + fileName + ".xls");*/
                 }
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to serve the Report Exam XLS", ex);
@@ -421,7 +421,7 @@ public class HealthServiceService {
     @GET
     @Path("downloadReportMedicine/{year}/{month}/{day}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response downloadReport(@PathParam("year") Short year,
+    public Response downloadReportMedicine(@PathParam("year") Short year,
                                    @PathParam("month") Short month,
                                    @PathParam("day") Short day) {
         Response.ResponseBuilder response;
@@ -446,9 +446,9 @@ public class HealthServiceService {
                 } else {
                     // ALL CORRECT, generate XLS
                     response = Response
-                            .ok()
-                            .entity(PrescriptionMedicineXLSUtil.generate(medicines).toByteArray())
-                            .header("content-disposition", "attachment; filename = " + fileName + ".xls");
+                            .ok();
+                            /*.entity(PrescriptionMedicineXLSUtil.generate(medicines).toByteArray())
+                            .header("content-disposition", "attachment; filename = " + fileName + ".xls");*/
                 }
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to serve the Report Medicine XLS", ex);
