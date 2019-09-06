@@ -1,0 +1,88 @@
+<ui:composition
+        template="#{stdTemplate.masterLayout}"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">#{i18n["health.service.report"]}</ui:define>
+
+    <ui:define name="css">
+        <h:outputStylesheet library="semantic-ui-calendar"
+                            name="css/calendar.min.css"
+                            target="head"/>
+    </ui:define>
+
+    <ui:define name="js">
+        <h:outputScript library="semantic-ui-calendar"
+                        name="js/calendar.min.js"
+                        target="body"/>
+        <h:outputScript library="_default"
+                        name="js/hs_report.js"
+                        target="body"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h2 class="ui center aligned icon header">
+            <i class="chart bar outline icon"/>
+            #{i18n["health.service.report"]}
+        </h2>
+
+        <div class="ui divider"></div>
+
+        <div class="ui three top attached steps">
+            <div class="step">
+                <i class="check square outline icon"/>
+                <div class="content">
+                    <div class="title">
+                        #{i18n["health.service.report.step1.title"]}
+                    </div>
+                    <div class="description">
+                        #{i18n["health.service.report.step1.description"]}
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <i class="calendar alternate outline icon"/>
+                <div class="content">
+                    <div class="title">
+                        #{i18n["health.service.report.step2.title"]}
+                    </div>
+                    <div class="description">
+                        #{i18n["health.service.report.step2.description"]}
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <i class="file excel outline icon"/>
+                <div class="content">
+                    <div class="title">
+                        #{i18n["health.service.report.step3.title"]}
+                    </div>
+                    <div class="description">
+                        #{i18n["health.service.report.step3.description"]}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui raised big attached segment">
+            <div class="ui form" id="hs-report-form">
+                <div class="grouped fields">
+                    <label>#{i18n["health.service.report.choose"]}:</label>
+                    <div class="field">
+                        <div class="ui slider checkbox">
+                            <input type="radio" checked="checked" name="option" data-option="exam"/>
+                            <label>#{i18n["common.exams"]}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui slider checkbox">
+                            <input type="radio" name="option" data-option="medicine"/>
+                            <label>#{i18n["common.medicines"]}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui calendar" id="hs-report-date"></div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

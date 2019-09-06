@@ -66,6 +66,12 @@
                             #{i18n["common.assignMedicines"]}
                             <span class="ui teal label">#{healthService.notAssignedPrescriptionMedicineCount}</span>
                         </h:link>
+                        <h:link outcome="/health_service/dashboard/report/index"
+                                styleClass="item"
+                        >
+                            #{i18n["health.service.report"]}
+                            <span class="ui blue empty circular label"/>
+                        </h:link>
                     </div>
                 </div>
             </ui:fragment>
