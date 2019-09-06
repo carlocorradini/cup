@@ -9,6 +9,7 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,19 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
     private static final String SQL_GET_COUNT = "SELECT COUNT(*) FROM prescription_medicine";
     private static final String SQL_GET_BY_PRIMARY_KEY = "SELECT * FROM prescription_medicine WHERE id = ? LIMIT 1";
     private static final String SQL_GET_ALL = "SELECT * FROM prescription_medicine";
-    private static final String SQL_GET_ALL_BY_PERSON_ID = "SELECT * FROM prescription_medicine WHERE person_id = ? ORDER BY prescription_date DESC";
     private static final String SQL_ADD = "INSERT INTO prescription_medicine(person_id, doctor_id, medicine_id, quantity) VALUES (?, ?, ?, ?)";
+    private static final String SQL_UPDATE = "UPDATE prescription_medicine SET paid = ?, prescription_date_provide = CURRENT_TIMESTAMP WHERE id = ?";
+    private static final String SQL_GET_ALL_BY_PERSON_ID = "SELECT * FROM prescription_medicine WHERE person_id = ? ORDER BY prescription_date DESC";
+    private static final String SQL_GET_ALL_TO_ASSIGN_BY_HEALTH_SERVICE_ID = "WITH person_province AS (SELECT person.id FROM person INNER JOIN city ON (person.city_id = city.id) WHERE province_id = ?)" +
+            " SELECT prescription_medicine.* FROM person_province INNER JOIN prescription_medicine ON (person_province.id = prescription_medicine.person_id)" +
+            " WHERE prescription_date_provide IS NULL AND paid IS FALSE ORDER BY prescription_date DESC";
+    private static final String SQL_GET_ALL_DONE_BY_HEALTH_SERVICE_ID_AND_DATE = "WITH person_province AS (SELECT person.id FROM person INNER JOIN city ON (person.city_id = city.id) WHERE province_id = ?)" +
+            " SELECT prescription_medicine.* FROM prescription_medicine INNER JOIN person_province ON (prescription_medicine.person_id = person_province.id) WHERE paid IS TRUE AND prescription_date_provide::date = ?";
     private static final String SQL_GET_COUNT_BY_PERSON_ID = "SELECT COUNT(*) FROM prescription_medicine WHERE person_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_ID = "SELECT COUNT(*) FROM prescription_medicine WHERE doctor_id = ?";
+    private static final String SQL_GET_COUNT_TO_ASSIGN_BY_HEALTH_SERVICE_ID = "WITH person_province AS (SELECT person.id FROM person INNER JOIN city ON (person.city_id = city.id) WHERE province_id = ?)" +
+            " SELECT COUNT(*) FROM person_province INNER JOIN prescription_medicine ON (person_province.id = prescription_medicine.person_id)" +
+            " WHERE prescription_date_provide IS NULL AND paid IS FALSE";
 
     /**
      * The default constructor of the class
@@ -41,6 +51,7 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
     public PrescriptionMedicine setAndGetDAO(ResultSet rs) throws DAOException {
         PrescriptionMedicine prescriptionMedicine;
         MedicineDAO medicineDAO;
+        LocalDateTime dateTimeCheck;
         if (rs == null) throw new DAOException("ResultSet cannot be null");
 
         try {
@@ -55,6 +66,8 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
             prescriptionMedicine.setMedicine(medicineDAO.getByPrimaryKey(rs.getLong("medicine_id")));
             prescriptionMedicine.setQuantity(rs.getShort("quantity"));
             prescriptionMedicine.setPaid(rs.getBoolean("paid"));
+            dateTimeCheck = rs.getObject("prescription_date_provide", LocalDateTime.class);
+            if (!rs.wasNull()) prescriptionMedicine.setDateTimeProvide(dateTimeCheck);
         } catch (SQLException | DAOFactoryException ex) {
             throw new DAOException("Impossible to set Prescription Medicine by ResultSet", ex);
         }
@@ -135,26 +148,6 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
     }
 
     @Override
-    public List<PrescriptionMedicine> getAllByPersonId(Long personId) throws DAOException {
-        List<PrescriptionMedicine> medicines = new ArrayList<>();
-        if (personId == null)
-            throw new DAOException("Person id is mandatory");
-
-        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_BY_PERSON_ID)) {
-            pStmt.setLong(1, personId);
-            try (ResultSet rs = pStmt.executeQuery()) {
-                while (rs.next()) {
-                    medicines.add(setAndGetDAO(rs));
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DAOException("Impossible to get the List of Prescription Medicines for the passed Person ID", ex);
-        }
-
-        return medicines;
-    }
-
-    @Override
     public Long add(PrescriptionMedicine prescriptionMedicine) throws DAOException {
         Long id = null;
         if (prescriptionMedicine == null)
@@ -177,6 +170,89 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
         }
 
         return id;
+    }
+
+    @Override
+    public boolean update(PrescriptionMedicine prescriptionMedicine) throws DAOException {
+        boolean updated = false;
+        if (prescriptionMedicine == null)
+            throw new DAOException("Prescription Medicine is mandatory", new NullPointerException("Prescription Medicine is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_UPDATE)) {
+            pStmt.setBoolean(1, prescriptionMedicine.getPaid());
+            pStmt.setLong(2, prescriptionMedicine.getId());
+
+            if (pStmt.executeUpdate() == 1) {
+                updated = true;
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to update the Prescription Medicine", ex);
+        }
+
+        return updated;
+    }
+
+    @Override
+    public List<PrescriptionMedicine> getAllByPersonId(Long personId) throws DAOException {
+        List<PrescriptionMedicine> medicines = new ArrayList<>();
+        if (personId == null)
+            throw new DAOException("Person id is mandatory");
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_BY_PERSON_ID)) {
+            pStmt.setLong(1, personId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                while (rs.next()) {
+                    medicines.add(setAndGetDAO(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the List of Prescription Medicines for the passed Person ID", ex);
+        }
+
+        return medicines;
+    }
+
+    @Override
+    public List<PrescriptionMedicine> getAllToAssignByHealthServiceId(Long healthServiceId) throws DAOException {
+        List<PrescriptionMedicine> medicines = new ArrayList<>();
+        if (healthServiceId == null)
+            throw new DAOException("Health Service id is mandatory", new NullPointerException("Health Service id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_TO_ASSIGN_BY_HEALTH_SERVICE_ID)) {
+            pStmt.setLong(1, healthServiceId);
+
+            try (ResultSet rs = pStmt.executeQuery()) {
+                while (rs.next()) {
+                    medicines.add(setAndGetDAO(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Unable to get the List of Prescription Medicine to assign by Health Service Id", ex);
+        }
+
+        return medicines;
+    }
+
+    @Override
+    public List<PrescriptionMedicine> getAllDoneByHealthServiceIdAndDate(Long healthServiceId, LocalDate date) throws DAOException {
+        List<PrescriptionMedicine> medicines = new ArrayList<>();
+        if (healthServiceId == null || date == null)
+            throw new DAOException("Health Service id and date is mandatory", new NullPointerException("Health Service id and/or date is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_DONE_BY_HEALTH_SERVICE_ID_AND_DATE)) {
+            pStmt.setLong(1, healthServiceId);
+            pStmt.setObject(2, date);
+
+            try (ResultSet rs = pStmt.executeQuery()) {
+                while (rs.next()) {
+                    medicines.add(setAndGetDAO(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Unable to get the List of Prescription Medicine done by Health Service Id and Date", ex);
+        }
+
+        return medicines;
     }
 
     @Override
@@ -214,6 +290,26 @@ public class JDBCPrescriptionMedicineDAO extends JDBCDAO<PrescriptionMedicine, L
             }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to count the Prescription Medicine by Doctor Id");
+        }
+
+        return count;
+    }
+
+    @Override
+    public Long getCountToAssignByHealthServiceId(Long healthServiceId) throws DAOException {
+        Long count = null;
+        if (healthServiceId == null)
+            throw new DAOException("Health Service id is mandatory", new NullPointerException("Health Service id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_COUNT_TO_ASSIGN_BY_HEALTH_SERVICE_ID)) {
+            pStmt.setLong(1, healthServiceId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getLong(1);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to count the Prescription Medicine that has NOT been assigned by Health Service Id");
         }
 
         return count;

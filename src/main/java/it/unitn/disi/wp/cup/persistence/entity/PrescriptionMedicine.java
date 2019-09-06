@@ -12,6 +12,7 @@ public class PrescriptionMedicine {
     private Long personId;
     private Long DoctorId;
     private LocalDateTime dateTime;
+    private LocalDateTime dateTimeProvide;
     private Medicine medicine;
     private Short quantity;
     private Boolean paid;
@@ -86,6 +87,24 @@ public class PrescriptionMedicine {
      */
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    /**
+     * Return the Date and Time of the Prescription Medicine when it has been paid
+     *
+     * @return Prescription Medicine Date and Time paid
+     */
+    public LocalDateTime getDateTimeProvide() {
+        return dateTimeProvide;
+    }
+
+    /**
+     * Set the Date and Time of the Prescription Medicine when it has been paid
+     *
+     * @param dateTimeProvide Prescription Medicine Date and Time paid
+     */
+    public void setDateTimeProvide(LocalDateTime dateTimeProvide) {
+        this.dateTimeProvide = dateTimeProvide;
     }
 
     /**

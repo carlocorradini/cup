@@ -2,11 +2,13 @@ package it.unitn.disi.wp.cup.bean.dao;
 
 import it.unitn.disi.wp.cup.persistence.dao.HealthServiceDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
+import it.unitn.disi.wp.cup.persistence.dao.PrescriptionMedicineDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.HealthService;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
+import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +36,7 @@ public final class HealthServiceDaoBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger(HealthServiceDaoBean.class.getName());
 
     private PrescriptionExamDAO prescriptionExamDAO = null;
+    private PrescriptionMedicineDAO prescriptionMedicineDAO = null;
     private HealthServiceDAO healthServiceDAO = null;
     private HealthService authHealthService = null;
 
@@ -49,6 +52,7 @@ public final class HealthServiceDaoBean implements Serializable {
             try {
                 healthServiceDAO = DAOFactory.getDAOFactory().getDAO(HealthServiceDAO.class);
                 prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
+                prescriptionMedicineDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionMedicineDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
             }
@@ -164,22 +168,23 @@ public final class HealthServiceDaoBean implements Serializable {
     }
 
     /**
-     * Return the Number of {@link PrescriptionExam exams} assigned to the Authenticated {@link HealthService Health Service}
+     * Return the {@link List List} of all NOT assigned/scheduled {@link PrescriptionMedicine Prescription Medicine}
+     * for the current Authenticated Health Service
      *
-     * @return Number of {@link PrescriptionExam exams} assigned
+     * @return The {@link List List} of all NOT assigned {@link PrescriptionMedicine Prescription Medicine}
      */
-    public Long getAssignedPrescriptionExamCount() {
-        long count = 0L;
+    public List<PrescriptionMedicine> getNotAssignedPrescriptionMedicine() {
+        List<PrescriptionMedicine> medicines = Collections.emptyList();
 
-        if (authHealthService != null && prescriptionExamDAO != null) {
+        if (authHealthService != null && prescriptionMedicineDAO != null) {
             try {
-                count = prescriptionExamDAO.getCountByHealthServiceId(authHealthService.getId());
+                medicines = prescriptionMedicineDAO.getAllToAssignByHealthServiceId(authHealthService.getId());
             } catch (DAOException ex) {
-                LOGGER.log(Level.SEVERE, "Unable to count the assigned Prescription Exam for the authenticated Health Service", ex);
+                LOGGER.log(Level.SEVERE, "Unable to get the List of All Not Assigned Prescription Medicine for the Authenticated Health Service", ex);
             }
         }
 
-        return count;
+        return medicines;
     }
 
     /**
@@ -233,6 +238,25 @@ public final class HealthServiceDaoBean implements Serializable {
                 count = prescriptionExamDAO.getCountToAssignByHealthServiceId(authHealthService.getId());
             } catch (DAOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to count the Prescription Exam that has not been assigned for the Authenticated Health Service", ex);
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * Return the Number of {@link PrescriptionMedicine Prescription Medicines} that has not been assigned for the authenticated {@link HealthService Health Service}
+     *
+     * @return Number of not assigned {@link PrescriptionMedicine Prescription Medicines}
+     */
+    public Long getNotAssignedPrescriptionMedicineCount() {
+        long count = 0L;
+
+        if (authHealthService != null && prescriptionMedicineDAO != null) {
+            try {
+                count = prescriptionMedicineDAO.getCountToAssignByHealthServiceId(authHealthService.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to count the Prescription Medicine that has not been assigned for the Authenticated Health Service", ex);
             }
         }
 

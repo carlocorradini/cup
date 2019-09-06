@@ -5,10 +5,12 @@ import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.Exam;
 import it.unitn.disi.wp.cup.persistence.entity.Doctor;
+import it.unitn.disi.wp.cup.persistence.entity.Province;
 import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
 import it.unitn.disi.wp.cup.persistence.entity.HealthService;
 import it.unitn.disi.wp.cup.persistence.entity.Report;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import java.util.List;
@@ -129,6 +131,17 @@ public interface PrescriptionExamDAO extends DAO<PrescriptionExam, Long> {
      * @throws DAOException If an error occurred during the information retrieving
      */
     List<PrescriptionExam> getAllToAssignByHealthServiceId(Long healthServiceId) throws DAOException;
+
+    /**
+     * Return the {@link List list} of all {@link PrescriptionExam Prescription Exam} that has been made
+     * in the {@link Province Province} identified by {@code healthServiceId} in a certain {@link LocalDate Date}
+     *
+     * @param healthServiceId The {@link HealthService Health Service} id
+     * @param date            The {@link LocalDate Date} for filtering
+     * @return The {@link List} of {@link PrescriptionExam} done in a certain {@link LocalDate Date}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    List<PrescriptionExam> getAllDoneByHealthServiceIdAndDate(Long healthServiceId, LocalDate date) throws DAOException;
 
     /**
      * Return the Number of {@link Exam exams} prescribed for a {@link Person person} given its {@code personId id}

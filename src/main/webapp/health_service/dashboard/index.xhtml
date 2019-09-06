@@ -26,7 +26,7 @@
 
             <div class="ui divider"></div>
 
-            <div class="ui three statistics">
+            <div class="ui four statistics">
                 <div class="statistic">
                     <div class="label">
                         #{i18n["common.assignVisits"]}
@@ -49,6 +49,14 @@
                     </div>
                     <div class="value">
                         #{healthService.assignedDonePrescriptionExamCount}
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="label">
+                        #{i18n["common.assignMedicines"]}
+                    </div>
+                    <div class="value">
+                        #{healthService.notAssignedPrescriptionMedicineCount}
                     </div>
                 </div>
             </div>

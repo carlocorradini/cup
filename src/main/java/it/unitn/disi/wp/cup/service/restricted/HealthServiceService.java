@@ -1,29 +1,31 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
-import it.unitn.disi.wp.cup.persistence.dao.DoctorSpecialistDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
-import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
+import it.unitn.disi.wp.cup.persistence.dao.*;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.*;
 import it.unitn.disi.wp.cup.service.model.exception.ServiceModelException;
 import it.unitn.disi.wp.cup.service.model.health_service.AssignPrescriptionExamModel;
+import it.unitn.disi.wp.cup.service.model.health_service.AssignPrescriptionMedicineModel;
 import it.unitn.disi.wp.cup.service.model.prescription.PrescriptionReportModel;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 import it.unitn.disi.wp.cup.util.EmailUtil;
 import it.unitn.disi.wp.cup.util.WriteReportUtil;
 import it.unitn.disi.wp.cup.util.obj.JsonMessage;
+import it.unitn.disi.wp.cup.util.xls.PrescriptionExamXLSUtil;
+import it.unitn.disi.wp.cup.util.xls.PrescriptionMedicineXLSUtil;
 
-import javax.print.attribute.standard.Media;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,6 +41,7 @@ public class HealthServiceService {
     private HealthService healthService = null;
     private PersonDAO personDAO = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
+    private PrescriptionMedicineDAO prescriptionMedicineDAO = null;
     private DoctorSpecialistDAO doctorSpecialistDAO = null;
 
     @Context
@@ -52,6 +55,7 @@ public class HealthServiceService {
 
                 personDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PersonDAO.class);
                 prescriptionExamDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionExamDAO.class);
+                prescriptionMedicineDAO = DAOFactory.getDAOFactory(servletContext).getDAO(PrescriptionMedicineDAO.class);
                 doctorSpecialistDAO = DAOFactory.getDAOFactory(servletContext).getDAO(DoctorSpecialistDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
@@ -281,21 +285,177 @@ public class HealthServiceService {
         return response.entity(message).build();
     }
 
-    /*@GET
-    @Path("downloadReport/{year}/{month}/{day}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response downloadReport(@PathParam("year") Short year,
-                                   @PathParam("month") Short month,
-                                   @PathParam("day") Short day) {
+    /**
+     * Given an {@link AssignPrescriptionMedicineModel Assign Prescritpion Medicine Model} update the corresponding
+     * {@link PrescriptionMedicine Prescription Medicine} identified by {@code assignModel.prescriptionId}
+     * The prescription must be paid
+     *
+     * @param assignModel The {@link AssignPrescriptionMedicineModel} to identify and update the {@link PrescriptionMedicine}
+     * @return A {@link JsonMessage message} representing the result of the process
+     */
+    @POST
+    @Path("assignMedicine")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response assignPrescriptionMedicine(AssignPrescriptionMedicineModel assignModel) {
         Response.ResponseBuilder response;
-        JsonMessage message =
+        JsonMessage message = new JsonMessage();
+        Person patient;
+        Person doctor;
+        PrescriptionMedicine prescription;
 
         if (healthService == null) {
             // Unauthorized Health Service
             response = Response.status(Response.Status.UNAUTHORIZED);
             message.setError(JsonMessage.ERROR_AUTHENTICATION);
-        } else if (year == null || month == null || day == null) {
-            //
+        } else if (!assignModel.isValid()) {
+            // The Assign Model is invalid
+            response = Response.status(Response.Status.BAD_REQUEST);
+            message.setError(JsonMessage.ERROR_VALIDATION);
+        } else {
+            try {
+                if ((prescription = prescriptionMedicineDAO.getByPrimaryKey(assignModel.getPrescriptionId())) == null) {
+                    // The Prescription Id is invalid
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_INVALID_ID);
+                } else if (prescription.getPaid() || prescription.getDateTimeProvide() != null) {
+                    // The Prescription is already assigned
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_VALIDATION);
+                } else if ((patient = personDAO.getByPrimaryKey(prescription.getPersonId())) == null
+                        || (doctor = personDAO.getByPrimaryKey(prescription.getDoctorId())) == null
+                        || !patient.getCity().getProvince().equals(healthService.getProvince())) {
+                    // The Patient of the Prescription cannot be applied with the current Health Service
+                    response = Response.status(Response.Status.BAD_REQUEST);
+                    message.setError(JsonMessage.ERROR_INVALID_ID);
+                } else {
+                    // ALL CORRECT
+                    // Set the correct Prescription Medicine data
+                    prescription.setPaid(assignModel.isPaid());
+
+                    // Update and get
+                    if (!prescriptionMedicineDAO.update(prescription)
+                            || (prescription = prescriptionMedicineDAO.getByPrimaryKey(prescription.getId())) == null) {
+                        response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                        message.setError(JsonMessage.ERROR_UNKNOWN);
+                    } else {
+                        response = Response.status(Response.Status.OK);
+                        message.setError(JsonMessage.ERROR_NO_ERROR);
+
+                        // Send Mail
+                    }
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to assign a Prescription Medicine", ex);
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                message.setError(JsonMessage.ERROR_UNKNOWN);
+            }
         }
-    }*/
+
+        return response.entity(message).build();
+    }
+
+    /**
+     * Given a {@link LocalDate Date} and the {@link HealthService Health Service} id
+     * generate a {@link PrescriptionExamXLSUtil XLS} Exam Report in XLS format.
+     * The {@link LocalDate must} be valid.
+     * The {@link HealthService} id is taken by the current authenticated {@link HealthService}
+     *
+     * @param year  The {@link LocalDate} year
+     * @param month The {@link LocalDate} month
+     * @param day   The {@link LocalDate} day
+     * @return The generated {@link PrescriptionExam} XLS Report
+     */
+    @GET
+    @Path("downloadReportExam/{year}/{month}/{day}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response downloadReport(@PathParam("year") Short year,
+                                   @PathParam("month") Short month,
+                                   @PathParam("day") Short day) {
+        Response.ResponseBuilder response;
+        List<PrescriptionExam> exams;
+        String fileName = "Report_Exam_" + year + "_" + month + "_" + day;
+
+        if (healthService == null) {
+            // Unauthorized Health Service
+            response = Response.status(Response.Status.UNAUTHORIZED);
+        } else if (year == null || month == null || day == null) {
+            // Year or Month or Day is missing
+            response = Response.status(Response.Status.BAD_REQUEST);
+        } else if (month < 1 || month > 12 || day < 1 || day > 31) {
+            // Invalid Date Parameters
+            response = Response.status(Response.Status.BAD_REQUEST);
+        } else {
+            try {
+                if ((exams = prescriptionExamDAO.getAllDoneByHealthServiceIdAndDate(healthService.getId(),
+                        LocalDate.of(year, month, day))) == null) {
+                    // Something goes wrong
+                    response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                } else {
+                    // ALL CORRECT, generate XLS
+                    response = Response
+                            .ok()
+                            .entity(PrescriptionExamXLSUtil.generate(exams).toByteArray())
+                            .header("content-disposition", "attachment; filename = " + fileName + ".xls");
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to serve the Report Exam XLS", ex);
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return response.build();
+    }
+
+    /**
+     * Given a {@link LocalDate Date} and the {@link HealthService Health Service} id
+     * generate a {@link PrescriptionMedicineXLSUtil XLS} Medicine Report in XLS format.
+     * The {@link LocalDate must} be valid.
+     * The {@link HealthService} id is taken by the current authenticated {@link HealthService}
+     *
+     * @param year  The {@link LocalDate} year
+     * @param month The {@link LocalDate} month
+     * @param day   The {@link LocalDate} day
+     * @return The generated {@link PrescriptionMedicine} XLS Report
+     */
+    @GET
+    @Path("downloadReportMedicine/{year}/{month}/{day}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response downloadReport(@PathParam("year") Short year,
+                                   @PathParam("month") Short month,
+                                   @PathParam("day") Short day) {
+        Response.ResponseBuilder response;
+        List<PrescriptionMedicine> medicines;
+        String fileName = "Report_Medicine_" + year + "_" + month + "_" + day;
+
+        if (healthService == null) {
+            // Unauthorized Health Service
+            response = Response.status(Response.Status.UNAUTHORIZED);
+        } else if (year == null || month == null || day == null) {
+            // Year or Month or Day is missing
+            response = Response.status(Response.Status.BAD_REQUEST);
+        } else if (month < 1 || month > 12 || day < 1 || day > 31) {
+            // Invalid Date Parameters
+            response = Response.status(Response.Status.BAD_REQUEST);
+        } else {
+            try {
+                if ((medicines = prescriptionMedicineDAO.getAllDoneByHealthServiceIdAndDate(healthService.getId(),
+                        LocalDate.of(year, month, day))) == null) {
+                    // Something goes wrong
+                    response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                } else {
+                    // ALL CORRECT, generate XLS
+                    response = Response
+                            .ok()
+                            .entity(PrescriptionMedicineXLSUtil.generate(medicines).toByteArray())
+                            .header("content-disposition", "attachment; filename = " + fileName + ".xls");
+                }
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to serve the Report Medicine XLS", ex);
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return response.build();
+    }
 }

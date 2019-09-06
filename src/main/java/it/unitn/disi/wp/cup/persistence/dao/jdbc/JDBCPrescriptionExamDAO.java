@@ -10,6 +10,7 @@ import it.unitn.disi.wp.cup.persistence.dao.factory.jdbc.JDBCDAO;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,8 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
     private static final String SQL_GET_ALL_TO_ASSIGN_BY_HEALTH_SERVICE_ID = "WITH person_province AS (SELECT person.id FROM person INNER JOIN city ON (person.city_id = city.id) WHERE province_id = ?)" +
             " SELECT prescription_exam.* FROM person_province INNER JOIN prescription_exam ON (person_province.id = prescription_exam.person_id)" +
             " WHERE report_id IS NULL AND doctor_specialist_id IS NULL AND health_service_id IS NULL AND prescription_date IS NULL ORDER BY prescription_date_registration DESC";
+    private static final String SQL_GET_ALL_DONE_BY_HEALTH_SERVICE_ID_AND_DATE = "WITH person_province AS (SELECT person.id FROM person INNER JOIN city ON (person.city_id = city.id) WHERE province_id = ?)" +
+            " SELECT prescription_exam.* FROM prescription_exam INNER JOIN person_province ON (prescription_exam.person_id = person_province.id) WHERE report_id IS NULL AND prescription_date::date = ?";
     private static final String SQL_GET_COUNT_BY_PERSON_ID = "SELECT COUNT(*) FROM prescription_exam WHERE person_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_SPECIALIST_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_specialist_id = ?";
@@ -409,6 +412,28 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             }
         } catch (SQLException ex) {
             throw new DAOException("Impossible to get the List of Prescription Exam to assign by Health Service Id", ex);
+        }
+
+        return exams;
+    }
+
+    @Override
+    public List<PrescriptionExam> getAllDoneByHealthServiceIdAndDate(Long healthServiceId, LocalDate date) throws DAOException {
+        List<PrescriptionExam> exams = new ArrayList<>();
+        if (healthServiceId == null || date == null)
+            throw new DAOException("Health Service id and date is mandatory", new NullPointerException("Health Service id and/or date is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_DONE_BY_HEALTH_SERVICE_ID_AND_DATE)) {
+            pStmt.setLong(1, healthServiceId);
+            pStmt.setObject(2, date);
+
+            try (ResultSet rs = pStmt.executeQuery()) {
+                while (rs.next()) {
+                    exams.add(setAndGetDAO(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Unable to get the List of Prescription Exam done by Health Service Id and Date", ex);
         }
 
         return exams;

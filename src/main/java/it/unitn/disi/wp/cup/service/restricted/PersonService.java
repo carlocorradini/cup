@@ -365,7 +365,7 @@ public class PersonService {
                     // The Prescription not belong to the authenticated person
                     response = Response.status(Response.Status.UNAUTHORIZED);
                 } else {
-                    // ALL CORRECT, generate the PDF
+                    // ALL CORRECT, generate PDF
                     response = Response
                             .ok()
                             .entity(PrescriptionMedicinePDFUtil.generate(prescriptionMedicine).toByteArray())
@@ -410,7 +410,7 @@ public class PersonService {
                     // The Prescription not belong to the authenticated person
                     response = Response.status(Response.Status.UNAUTHORIZED);
                 } else {
-                    // ALL CORRECT, generate the PDF
+                    // ALL CORRECT, generate PDF
                     response = Response
                             .ok()
                             .entity(PrescriptionExamPDFUtil.generate(prescriptionExam).toByteArray())

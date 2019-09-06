@@ -5,13 +5,7 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
 >
-    <ui:define name="title">#{i18n["common.assignVisits"]}</ui:define>
-
-    <ui:define name="css">
-        <h:outputStylesheet library="semantic-ui-calendar"
-                            name="css/calendar.min.css"
-                            target="head"/>
-    </ui:define>
+    <ui:define name="title">#{i18n["common.assignMedicine"]}</ui:define>
 
     <ui:define name="js">
         <h:outputScript library="datatables"
@@ -20,83 +14,78 @@
         <h:outputScript library="moment"
                         name="js/moment.js"
                         target="body"/>
-        <h:outputScript library="semantic-ui-calendar"
-                        name="js/calendar.min.js"
-                        target="body"/>
         <h:outputScript library="_default"
                         name="js/visit_creator.js"
                         target="body"/>
         <h:outputScript library="_default"
-                        name="js/hs_assign.js"
+                        name="js/hs_assign_medicine.js"
                         target="body"/>
     </ui:define>
 
     <ui:define name="content">
         <ui:fragment rendered="#{not empty healthService.authHealthService}">
             <h2 class="ui center aligned icon header">
-                <i class="random icon"/>
-                #{i18n["common.assignVisits"]}
+                <i class="pills icon"/>
+                #{i18n["common.assignMedicine"]}
             </h2>
 
             <div class="ui divider"></div>
 
-            <ui:fragment rendered="#{empty healthService.notAssignedPrescriptionExam}">
+            <ui:fragment rendered="#{empty healthService.notAssignedPrescriptionMedicine}">
                 <div class="ui icon message">
                     <i class="info circle icon"/>
                     <div class="content">
                         <div class="header">
-                            #{i18n["visit.assign.empty.message"]}
+                            #{i18n["visit.assign.medicine.empty.message"]}
                         </div>
-                        <p>#{i18n["visit.assign.empty.subMessage"]}</p>
+                        <p>#{i18n["visit.assign.medicine.empty.subMessage"]}</p>
                     </div>
                 </div>
             </ui:fragment>
 
-            <ui:fragment rendered="#{not empty healthService.notAssignedPrescriptionExam}">
+            <ui:fragment rendered="#{not empty healthService.notAssignedPrescriptionMedicine}">
                 <div class="visit-creator-i18n"
                      data-i18n="{
                          &quot;noReport&quot;: &quot;#{i18n['common.noReport']}&quot;,
                          &quot;view&quot;: &quot;#{i18n['common.view']}&quot;,
                          &quot;executorIsSpecialist&quot;: &quot;#{i18n['visit.assigned.executor.isSpecialist']}&quot;,
                          &quot;executorIsHealthService&quot;: &quot;#{i18n['visit.assigned.executor.isHealthService']}&quot;,
-                         &quot;executor&quot;: {
-                            &quot;empty&quot;: &quot;#{i18n['visit.assign.executor.empty']}&quot;,
-                            &quot;emptyDate&quot;: &quot;#{i18n['visit.assign.executor.date.empty']}&quot;,
-                            &quot;emptyTime&quot;: &quot;#{i18n['visit.assign.executor.time.empty']}&quot;
-                         }
+                         &quot;unpaid&quot;: &quot;#{i18n['visit.assigned.newReport.unpaid']}&quot;
                     }"
                 ></div>
 
-                <table class="ui celled striped sortable table visit-creator-table" data-health-service-id="#{healthService.authHealthService.id}">
+                <table class="ui celled striped sortable table visit-creator-table">
                     <thead>
                     <tr>
                         <th>#{i18n["common.id"]}</th>
-                        <th>#{i18n["common.exam"]}</th>
+                        <th>#{i18n["common.medicine"]}</th>
+                        <th>#{i18n["common.quantity"]}</th>
                         <th>#{i18n["common.dateRegistration"]}</th>
                         <th>#{i18n["common.hourRegistration"]}</th>
                         <th>#{i18n["common.doctor"]}</th>
                         <th>#{i18n["common.patient"]}</th>
-                        <th>#{i18n["visit.assign.assignExam"]}</th>
+                        <th>#{i18n["visit.assign.assignMedicine"]}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <ui:repeat value="#{healthService.notAssignedPrescriptionExam}" var="pe">
-                        <tr data-prescription-id="#{pe.id}">
-                            <td>#{pe.id}</td>
-                            <td>#{pe.exam.name}</td>
+                    <ui:repeat value="#{healthService.notAssignedPrescriptionMedicine}" var="pm">
+                        <tr data-prescription-id="#{pm.id}">
+                            <td>#{pm.id}</td>
+                            <td>#{pm.medicine.name}</td>
+                            <td>#{pm.quantity}</td>
                             <td>
-                                <h:outputText value="#{pe.dateTimeRegistration}">
+                                <h:outputText value="#{pm.dateTime}">
                                     <f:convertDateTime type="localDate"/>
                                 </h:outputText>
                             </td>
                             <td>
-                                <h:outputText value="#{pe.dateTimeRegistration}">
+                                <h:outputText value="#{pm.dateTime}">
                                     <f:convertDateTime type="localTime"/>
                                 </h:outputText>
                             </td>
                             <td>
                                 <button class="ui fluid labeled icon button visit-creator-doctor-modal-button"
-                                        data-doctor-id="#{pe.doctorId}"
+                                        data-doctor-id="#{pm.doctorId}"
                                 >
                                     <i class="user md icon"/>
                                     #{i18n["common.doctor"]}
@@ -105,18 +94,16 @@
                             </td>
                             <td>
                                 <button class="ui fluid labeled icon button visit-creator-patient-modal-button"
-                                        data-patient-id="#{pe.personId}"
+                                        data-patient-id="#{pm.personId}"
                                 >
                                     <i class="user icon"/>
                                     #{i18n["common.patient"]}
                                 </button>
                             </td>
                             <td>
-                                <button class="ui fluid labeled teal icon button hs-assign-exam-modal-button"
-                                        data-prescription-id="#{pe.id}"
-                                        data-exam-id="#{pe.exam.id}"
-                                        data-exam-supported="#{pe.exam.supported}"
-                                        data-patient-id="#{pe.personId}"
+                                <button class="ui fluid labeled teal icon button hs-assign-medicine-modal-button"
+                                        data-prescription-id="#{pm.id}"
+                                        data-patient-id="#{pm.personId}"
                                 >
                                     <i class="random icon"/>
                                     #{i18n["common.assign"]}
@@ -127,21 +114,21 @@
                     </tbody>
                 </table>
 
-                <!-- ASSIGN EXAM MODAL -->
-                <div class="ui longer modal" id="hs-assign-exam-modal">
+                <!-- ASSIGN MEDICINE MODAL -->
+                <div class="ui longer modal" id="hs-assign-medicine-modal">
                     <i class="red close icon"/>
                     <div class="header">
-                        #{i18n["common.assignVisit"]}
+                        #{i18n["common.assignMedicine"]}
                     </div>
                     <div class="scrolling content">
-                        <form class="ui large form" id="hs-assign-exam-form">
+                        <form class="ui large form" id="hs-assign-medicine-form">
                             <div class="ui icon success message medium" style="z-index: 3;">
                                 <i class="checkmark icon"/>
                                 <div class="content">
                                     <div class="header">
-                                        #{i18n["visit.assign.executor.success.message"]}
+                                        #{i18n["visit.assign.medicine.success.message"]}
                                     </div>
-                                    <p>#{i18n["visit.assign.executor.success.subMessage"]}</p>
+                                    <p>#{i18n["visit.assign.medicine.success.subMessage"]}</p>
                                 </div>
                             </div>
 
@@ -149,9 +136,9 @@
                                 <i class="exclamation triangle icon"/>
                                 <div class="content">
                                     <div class="header">
-                                        #{i18n["visit.assign.executor.error.message"]}
+                                        #{i18n["visit.assign.medicine.error.message"]}
                                     </div>
-                                    <p>#{i18n["visit.assign.executor.error.subMessage"]}</p>
+                                    <p>#{i18n["visit.assign.medicine.error.subMessage"]}</p>
                                 </div>
                             </div>
 
@@ -162,80 +149,25 @@
                                     <span class="text full-width">
                                         <img src=""
                                              style="width: 2em; height: 2em;"
-                                             id="hs-assign-exam-patient-avatar"
+                                             id="hs-assign-medicine-patient-avatar"
                                              class="ui image bordered rounded person-avatar middle aligned"
                                              alt="Avatar"
                                         />
-                                        <span id="hs-assign-exam-patient-full-name"/>
-                                        <span class="text-light text-right" id="hs-assign-exam-patient-fiscal-code"/>
+                                        <span id="hs-assign-medicine-patient-full-name"/>
+                                        <span class="text-light text-right"
+                                              id="hs-assign-medicine-patient-fiscal-code"/>
                                     </span>
                                 </div>
                             </div>
 
-                            <div class="field hidden" id="hs-assign-exam-executor-message">
-                                <div class="ui info small message">
-                                    <div class="header">
-                                        <i class="info circle icon"/>
-                                        #{i18n["visit.assign.executor.message"]}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="field" id="hs-assign-exam-executor-field">
-                                <label>#{i18n["common.executor"]}</label>
-                                <input type="hidden" name="executor" id="hs-assign-exam-executor-input-hidden"/>
-                                <div class="ui floating dropdown labeled icon button fluid large"
-                                     id="hs-assign-exam-executor-dropdown"
-                                >
-                                    <i class="user md icon"/>
-                                    <span class="text full-width">#{i18n["visit.assign.executor.choose"]}</span>
-                                    <div class="menu">
-                                        <div class="header">
-                                            #{i18n["visit.assign.executor.search"]}
-                                        </div>
-                                        <div class="ui icon search input">
-                                            <i class="search icon"/>
-                                            <input type="text" placeholder="#{i18n['common.search']}..."/>
-                                        </div>
-                                        <div class="divider"></div>
-                                        <div class="header">
-                                            <i class="filter icon"/>
-                                            #{i18n["visit.assign.executor.filter"]}
-                                        </div>
-                                        <div class="scrolling menu" id="hs-assign-exam-executor-dropdown-items">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="field">
-                                <label>#{i18n["common.date"]}</label>
-                                <div class="ui calendar" id="hs-assign-exam-date">
-                                    <div class="ui input left icon">
-                                        <i class="calendar alternate outline icon"/>
-                                        <input type="text" placeholder="#{i18n['common.date']}" name="date"
-                                               required=""
-                                               autocomplete="off"
-                                               spellcheck="false"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="field">
-                                <label>#{i18n["common.hour"]}</label>
-                                <div class="ui calendar" id="hs-assign-exam-time"
-                                     data-min="#{prescription.examMinTime}"
-                                     data-max="#{prescription.examMaxTime}"
-                                >
-                                    <div class="ui input left icon">
-                                        <i class="clock outline icon"/>
-                                        <input type="text" placeholder="#{i18n['common.hour']}" name="time"
-                                               required=""
-                                               autocomplete="off"
-                                               spellcheck="false"
-                                        />
-                                    </div>
+                                <label>#{i18n["common.paid"]}</label>
+                                <div class="ui fluid toggle checkbox" id="hs-assign-medicine-checkbox-paid">
+                                    <input type="checkbox" tabindex="0" class="hidden" name="paid"/>
+                                    <label data-paid="#{i18n['common.paid']}"
+                                           data-paid-not="#{i18n['common.paidNot']}">
+                                        #{i18n["common.paidNot"]}
+                                    </label>
                                 </div>
                             </div>
 
