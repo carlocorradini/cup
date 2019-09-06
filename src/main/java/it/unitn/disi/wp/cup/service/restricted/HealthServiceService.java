@@ -22,6 +22,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -370,8 +371,8 @@ public class HealthServiceService {
     @Path("downloadReportExam/{year}/{month}/{day}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response downloadReportExam(@PathParam("year") Short year,
-                                   @PathParam("month") Short month,
-                                   @PathParam("day") Short day) {
+                                       @PathParam("month") Short month,
+                                       @PathParam("day") Short day) {
         Response.ResponseBuilder response;
         List<PrescriptionExam> exams;
         String fileName = "Report_Exam_" + year + "_" + month + "_" + day;
@@ -394,11 +395,11 @@ public class HealthServiceService {
                 } else {
                     // ALL CORRECT, generate XLS
                     response = Response
-                            .ok();
-                            /*.entity(PrescriptionExamXLSUtil.generate(exams).toByteArray())
-                            .header("content-disposition", "attachment; filename = " + fileName + ".xls");*/
+                            .ok()
+                            .entity(PrescriptionExamXLSUtil.generate(exams).toByteArray())
+                            .header("content-disposition", "attachment; filename = " + fileName + ".xls");
                 }
-            } catch (DAOException ex) {
+            } catch (DAOException | IOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to serve the Report Exam XLS", ex);
                 response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             }
@@ -422,8 +423,8 @@ public class HealthServiceService {
     @Path("downloadReportMedicine/{year}/{month}/{day}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response downloadReportMedicine(@PathParam("year") Short year,
-                                   @PathParam("month") Short month,
-                                   @PathParam("day") Short day) {
+                                           @PathParam("month") Short month,
+                                           @PathParam("day") Short day) {
         Response.ResponseBuilder response;
         List<PrescriptionMedicine> medicines;
         String fileName = "Report_Medicine_" + year + "_" + month + "_" + day;
@@ -446,11 +447,11 @@ public class HealthServiceService {
                 } else {
                     // ALL CORRECT, generate XLS
                     response = Response
-                            .ok();
-                            /*.entity(PrescriptionMedicineXLSUtil.generate(medicines).toByteArray())
-                            .header("content-disposition", "attachment; filename = " + fileName + ".xls");*/
+                            .ok()
+                            .entity(PrescriptionMedicineXLSUtil.generate(medicines).toByteArray())
+                            .header("content-disposition", "attachment; filename = " + fileName + ".xls");
                 }
-            } catch (DAOException ex) {
+            } catch (DAOException | IOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to serve the Report Medicine XLS", ex);
                 response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             }
