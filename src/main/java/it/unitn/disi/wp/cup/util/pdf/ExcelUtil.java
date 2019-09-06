@@ -71,16 +71,21 @@ public final class ExcelUtil {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
             formattedDate = prescriptionMedicine.getDateTime().format(formatter);
 
+            // Date
             Cell date = row.createCell(0);
             date.setCellValue(formattedDate);
             date.setCellStyle(dateCellStyle);
 
+            // Medicine name
             row.createCell(1).setCellValue(prescriptionMedicine.getMedicine().getName());
 
+            // Doctor ID
             row.createCell(2).setCellValue(prescriptionMedicine.getDoctorId());
 
+            // Patient ID
             row.createCell(3).setCellValue(prescriptionMedicine.getPersonId());
 
+            // Price
             row.createCell(4).setCellValue(prescriptionMedicine.getTotalToPay()); // Intanto mettiamo il prezzo del farmaco, giusto per vedere se viene giusto
         }
 
@@ -96,33 +101,7 @@ public final class ExcelUtil {
         workbook.close();
 
         /* --- ENDING THE '.XLS' FILE ------------------------------------------------------------------------------- */
-        // inizio delle cose che non capisco e che non so se devo lasciare o meno :(
-        try {
-            person = personDAO.getByPrimaryKey(prescriptionExam.getPersonId());
-            doctor = doctorDAO.getByPrimaryKey(prescriptionExam.getDoctorId());
-            doctorAsPerson = personDAO.getByPrimaryKey(prescriptionExam.getDoctorId());
-            if (prescriptionExam.getSpecialistId() != null) {
-                doctorSpecialistAsPerson = personDAO.getByPrimaryKey(prescriptionExam.getSpecialistId());
-            }
-            if (prescriptionExam.getHealthServiceId() != null) {
-                healthService = healthServiceDAO.getByPrimaryKey(prescriptionExam.getHealthServiceId());
-            }
-
-            if (person != null
-                    && doctor != null
-                    && doctorAsPerson != null
-                    && !person.equals(doctorAsPerson)) {
-                // Person Exists
-                // Doctor Exists
-                // Person and Doctor are not the same
-                output = generatePDF(person, doctorAsPerson, doctorSpecialistAsPerson, healthService, prescriptionExam);
-            } else {
-                throw new DAOException("Invalid Doctor and Person correlation");
-            }
-        } catch (DAOException | NullPointerException ex) {
-            LOGGER.log(Level.SEVERE, "Unable to generate the Prescription Medicine XLS report", ex);
-        }
-
+        
         return output;
     }
 }
