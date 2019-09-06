@@ -10,7 +10,7 @@ public class Exam implements Cloneable {
     private String name;
     private Short price;
     private String description;
-    private boolean supported;
+    private Boolean supported;
 
     @Override
     public Object clone() {
@@ -108,7 +108,7 @@ public class Exam implements Cloneable {
      *
      * @return True if supported, false otherwise
      */
-    public boolean isSupported() {
+    public Boolean isSupported() {
         return supported;
     }
 
@@ -117,7 +117,7 @@ public class Exam implements Cloneable {
      *
      * @param supported True if supported, false otherwise
      */
-    public void setSupported(boolean supported) {
+    public void setSupported(Boolean supported) {
         this.supported = supported;
     }
 }

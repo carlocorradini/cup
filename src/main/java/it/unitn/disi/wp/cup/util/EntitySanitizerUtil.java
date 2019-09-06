@@ -3,6 +3,7 @@ package it.unitn.disi.wp.cup.util;
 import it.unitn.disi.wp.cup.persistence.entity.HealthService;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
+import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
 
 import java.util.logging.Logger;
 
@@ -71,7 +72,26 @@ public final class EntitySanitizerUtil {
      */
     public static PrescriptionExam sanitizePrescriptionExam(PrescriptionExam prescriptionExam) {
         prescriptionExam.setReport(null);
+        prescriptionExam.getExam().setDescription(null);
+        prescriptionExam.getExam().setSupported(null);
+        prescriptionExam.getExam().setName(null);
+        prescriptionExam.getExam().setPrice(null);
 
         return prescriptionExam;
+    }
+
+    /**
+     * Sanitize a {@link PrescriptionMedicine Prescription Medicine}.
+     * The passed {@code prescriptionMedicine} as parameter will be modified
+     *
+     * @param prescriptionMedicine The {@link PrescriptionMedicine Prescription Medicine} to sanitize
+     * @return The sanitized {@link PrescriptionMedicine Prescription Medicine}
+     */
+    public static PrescriptionMedicine sanitizePrescriptionMedicine(PrescriptionMedicine prescriptionMedicine) {
+        prescriptionMedicine.getMedicine().setDescription(null);
+        prescriptionMedicine.getMedicine().setName(null);
+        prescriptionMedicine.getMedicine().setPrice(null);
+
+        return prescriptionMedicine;
     }
 }
