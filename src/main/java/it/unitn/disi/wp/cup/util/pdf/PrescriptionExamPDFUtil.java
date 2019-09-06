@@ -187,10 +187,11 @@ public final class PrescriptionExamPDFUtil {
                 riempiPdf(document, contentStream, 150, 640, Color.BLACK, "MEDICO: ", "" + doctor.getFullNameCapitalized(), font, fontBold, fontSize);
                 riempiPdf(document, contentStream, 150, 620, Color.BLACK, "ID PAZIENTE: ", "" + person.getId(), font, fontBold, fontSize);
                 riempiPdf(document, contentStream, 150, 600, Color.BLACK, "PAZIENTE: ", "" + person.getFullNameCapitalized(), font, fontBold, fontSize);
-                riempiPdf(document, contentStream, 150, 580, Color.BLACK, "DATA PRESCRIZIONE: ", "" + prescriptionExam.getDateTimeRegistration().toLocalDate(), font, fontBold, fontSize);
-                riempiPdf(document, contentStream, 150, 560, Color.BLACK, "ID ESAME: ", "" + prescriptionExam.getExam().getId(), font, fontBold, fontSize);
+                riempiPdf(document, contentStream, 150, 580, Color.BLACK, "CODICE FISCALE PAZIENTE: ", "" + person.getFiscalCode(), font, fontBold, fontSize);
+                riempiPdf(document, contentStream, 150, 560, Color.BLACK, "DATA PRESCRIZIONE: ", "" + prescriptionExam.getDateTimeRegistration().toLocalDate(), font, fontBold, fontSize);
+                riempiPdf(document, contentStream, 150, 540, Color.BLACK, "ID ESAME: ", "" + prescriptionExam.getExam().getId(), font, fontBold, fontSize);
 
-                float cont = 540;
+                float cont = 520;
                 contentStream.beginText();
                 contentStream.setFont(fontBold, fontSize);
                 contentStream.setNonStrokingColor(Color.BLACK);
@@ -233,10 +234,11 @@ public final class PrescriptionExamPDFUtil {
                     riempiPdf(document, contentStream, 150, 640, Color.BLACK, "MEDICO: ", "" + doctor.getFullNameCapitalized(), font, fontBold, fontSize);
                     riempiPdf(document, contentStream, 150, 620, Color.BLACK, "ID PAZIENTE: ", "" + person.getId(), font, fontBold, fontSize);
                     riempiPdf(document, contentStream, 150, 600, Color.BLACK, "PAZIENTE: ", "" + person.getFullNameCapitalized(), font, fontBold, fontSize);
-                    riempiPdf(document, contentStream, 150, 580, Color.BLACK, "DATA PRESCRIZIONE: ", "" + prescriptionExam.getDateTime().toLocalDate(), font, fontBold, fontSize);
-                    riempiPdf(document, contentStream, 150, 560, Color.BLACK, "ID ESAME: ", "" + prescriptionExam.getExam().getId(), font, fontBold, fontSize);
+                    riempiPdf(document, contentStream, 150, 580, Color.BLACK, "CODICE FISCALE PAZIENTE: ", "" + person.getFiscalCode(), font, fontBold, fontSize);
+                    riempiPdf(document, contentStream, 150, 560, Color.BLACK, "DATA PRESCRIZIONE: ", "" + prescriptionExam.getDateTime().toLocalDate(), font, fontBold, fontSize);
+                    riempiPdf(document, contentStream, 150, 540, Color.BLACK, "ID ESAME: ", "" + prescriptionExam.getExam().getId(), font, fontBold, fontSize);
 
-                    float cont = 540;
+                    float cont = 520;
                     contentStream.beginText();
                     contentStream.setFont(fontBold, fontSize);
                     contentStream.setNonStrokingColor(Color.BLACK);
@@ -280,10 +282,11 @@ public final class PrescriptionExamPDFUtil {
                     riempiPdf(document, contentStream, 150, 640, Color.BLACK, "MEDICO: ", "" + doctor.getFullNameCapitalized(), font, fontBold, fontSize);
                     riempiPdf(document, contentStream, 150, 620, Color.BLACK, "ID PAZIENTE: ", "" + person.getId(), font, fontBold, fontSize);
                     riempiPdf(document, contentStream, 150, 600, Color.BLACK, "PAZIENTE: ", "" + person.getFullNameCapitalized(), font, fontBold, fontSize);
-                    riempiPdf(document, contentStream, 150, 580, Color.BLACK, "DATA PRESCRIZIONE: ", "" + prescriptionExam.getDateTime().toLocalDate(), font, fontBold, fontSize);
-                    riempiPdf(document, contentStream, 150, 560, Color.BLACK, "ID ESAME: ", "" + prescriptionExam.getExam().getId(), font, fontBold, fontSize);
+                    riempiPdf(document, contentStream, 150, 580, Color.BLACK, "CODICE FISCALE PAZIENTE: ", "" + person.getFiscalCode(), font, fontBold, fontSize);
+                    riempiPdf(document, contentStream, 150, 560, Color.BLACK, "DATA PRESCRIZIONE: ", "" + prescriptionExam.getDateTime().toLocalDate(), font, fontBold, fontSize);
+                    riempiPdf(document, contentStream, 150, 540, Color.BLACK, "ID ESAME: ", "" + prescriptionExam.getExam().getId(), font, fontBold, fontSize);
 
-                    float cont = 540;
+                    float cont = 520;
                     contentStream.beginText();
                     contentStream.setFont(fontBold, fontSize);
                     contentStream.setNonStrokingColor(Color.BLACK);
@@ -331,23 +334,24 @@ public final class PrescriptionExamPDFUtil {
                 riempiPdf(document, contentStream, 150, 620, Color.BLACK, "MEDICO: ", "" + doctor.getFullNameCapitalized(), font, fontBold, fontSize);
                 riempiPdf(document, contentStream, 150, 600, Color.BLACK, "ID PAZIENTE: ", "" + person.getId(), font, fontBold, fontSize);
                 riempiPdf(document, contentStream, 150, 580, Color.BLACK, "PAZIENTE: ", "" + person.getFullNameCapitalized(), font, fontBold, fontSize);
+                riempiPdf(document, contentStream, 150, 560, Color.BLACK, "CODICE FISCALE PAZIENTE: ", "" + person.getFiscalCode(), font, fontBold, fontSize);
                 if (doctorSpecialist != null) {
-                    riempiPdf(document, contentStream, 150, 560, Color.BLACK, "ID SPECIALISTA: ", "" + doctorSpecialist.getId(), font, fontBold, fontSize);
-                    riempiPdf(document, contentStream, 150, 540, Color.BLACK, "SPECIALISTA: ", "" + doctorSpecialist.getFullNameCapitalized(), font, fontBold, fontSize);
+                    riempiPdf(document, contentStream, 150, 540, Color.BLACK, "ID SPECIALISTA: ", "" + doctorSpecialist.getId(), font, fontBold, fontSize);
+                    riempiPdf(document, contentStream, 150, 520, Color.BLACK, "SPECIALISTA: ", "" + doctorSpecialist.getFullNameCapitalized(), font, fontBold, fontSize);
                 } else if (healthService != null) {
-                    riempiPdf(document, contentStream, 150, 560, Color.BLACK, "ID SERVIZIO SANITARIO: ", "" + healthService.getId(), font, fontBold, fontSize);
-                    riempiPdf(document, contentStream, 150, 540, Color.BLACK, "SERVIZIO SANITARIO: ", "" + healthService.getProvince().getRegion().getNameCapitalized(), font, fontBold, fontSize);
+                    riempiPdf(document, contentStream, 150, 540, Color.BLACK, "ID SERVIZIO SANITARIO: ", "" + healthService.getId(), font, fontBold, fontSize);
+                    riempiPdf(document, contentStream, 150, 520, Color.BLACK, "SERVIZIO SANITARIO: ", "" + healthService.getProvince().getRegion().getNameCapitalized(), font, fontBold, fontSize);
                 }
-                riempiPdf(document, contentStream, 150, 520, Color.BLACK, "DATA PRESCRIZIONE: ", "" + prescriptionExam.getDateTime().toLocalDate(), font, fontBold, fontSize);
-                riempiPdf(document, contentStream, 150, 500, Color.BLACK, "ID ESAME: ", "" + prescriptionExam.getExam().getId(), font, fontBold, fontSize);
+                riempiPdf(document, contentStream, 150, 500, Color.BLACK, "DATA PRESCRIZIONE: ", "" + prescriptionExam.getDateTime().toLocalDate(), font, fontBold, fontSize);
+                riempiPdf(document, contentStream, 150, 480, Color.BLACK, "ID ESAME: ", "" + prescriptionExam.getExam().getId(), font, fontBold, fontSize);
                 float cont;
                 contentStream.beginText();
                 contentStream.setFont(fontBold, fontSize);
                 contentStream.setNonStrokingColor(Color.BLACK);
-                contentStream.newLineAtOffset(150, 480);
+                contentStream.newLineAtOffset(150, 460);
                 contentStream.showText("ESAME: ");
                 contentStream.endText();
-                cont = longString(prescriptionExam.getExam().getName(),document,contentStream,200,480,9,font,320,15);
+                cont = longString(prescriptionExam.getExam().getName(),document,contentStream,200,460,9,font,320,15);
                 cont -= 40;
                 contentStream.beginText();
                 contentStream.setFont(fontBold, fontSize);
@@ -374,7 +378,7 @@ public final class PrescriptionExamPDFUtil {
                         contentStream.newLineAtOffset(50, cont);
                         contentStream.showText("• ");
                         contentStream.endText();
-                        cont = longString(e.getName(),document,contentStream,60,cont,11,font,465,15);
+                        cont = longString(e.getName(),document,contentStream,60,cont,11,font,460,15);
                         cont -= 5;
                     }
                 }
@@ -393,7 +397,7 @@ public final class PrescriptionExamPDFUtil {
                         contentStream.newLineAtOffset(50, cont);
                         contentStream.showText("• ");
                         contentStream.endText();;
-                        cont = longString(e.getName(),document,contentStream,60,cont,11,font,465,15);
+                        cont = longString(e.getName(),document,contentStream,60,cont,11,font,460,15);
                         cont -= 5;
                     }
                 }
