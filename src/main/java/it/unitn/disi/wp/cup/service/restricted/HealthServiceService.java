@@ -1,5 +1,6 @@
 package it.unitn.disi.wp.cup.service.restricted;
 
+import it.unitn.disi.wp.cup.config.AppConfig;
 import it.unitn.disi.wp.cup.persistence.dao.*;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
@@ -344,6 +345,15 @@ public class HealthServiceService {
                         message.setError(JsonMessage.ERROR_NO_ERROR);
 
                         // Send Mail
+                        String html =
+                                "<h1 style=\"color: #5e9ca0;\">Ciao <span style=\"color: #2b2301;\">" + patient.getName() + "</span>!</h1>" +
+                                "<p>" +
+                                    "Ti avvisiamo che il farmaco della prescrizione n° <b>" + prescription.getId() + "</b> è stato pagato con successo!<br>" +
+                                "</p>";
+                        
+                        EmailUtil.sendHTML(patient.getEmail(),
+                                AppConfig.getName().toUpperCase() + " pagamento prescrizione farmaci n° " + prescription.getId(),
+                                html);
                     }
                 }
             } catch (DAOException ex) {

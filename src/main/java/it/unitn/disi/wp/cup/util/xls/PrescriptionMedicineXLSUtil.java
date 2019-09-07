@@ -23,10 +23,10 @@ public class PrescriptionMedicineXLSUtil {
         /* --- CREATING '.XLS' FILE --------------------------------------------------------------------------------- */
         // Declarations
         String[] columns = {"ID", "Data e Ora", "Farmaco", "Medico di base", "Paziente", "Costo/pz", "Quantità", "Costo Totale"};
-        String[] totTable = {"TOTALE pezzi", "TOTALE Costi"};
+        String[] totTable = {"TOTALE Farmaci", "TOTALE Costi"};
         String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-        int quantityCol = 6;
-        int costCol = 7;
+        int quantityAlphabet = 0;
+        int costAlphabet = 0;
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -110,11 +110,20 @@ public class PrescriptionMedicineXLSUtil {
                 pricePcs.setCellValue((double)prescriptionMedicine.getMedicine().getPrice()/100);
 
                 // Quantity
+                quantityAlphabet = col;
                 row.createCell(col++).setCellValue(prescriptionMedicine.getQuantity());
 
                 // Total price
+                costAlphabet = col;
                 Cell total = row.createCell(col);
                 total.setCellValue((double)prescriptionMedicine.getTotalToPay()/100);
+
+                if(rowNum-1 == 1){
+                    col += 2;
+
+                    row.createCell(col++);
+                    row.createCell(col);
+                }
             }
         }
         else{
@@ -123,7 +132,7 @@ public class PrescriptionMedicineXLSUtil {
 
             row.createCell(1).setCellValue("Nessuna ricetta presente");
         }
-        /*
+
         if(!prescriptionMedicines.isEmpty()){
             // Build the Total table. It contains the sum of all quantities and costs
             // NB: It works with maximum range of the basic alphabet columns
@@ -131,10 +140,10 @@ public class PrescriptionMedicineXLSUtil {
             int spacing = 1;
 
             // Headers
-            Cell cell = headerRow.createCell(columns.length + spacing + i++);
+            Cell cell = headerRow.createCell(columns.length + spacing + i);
             cell.setCellValue(totTable[i]);
             cell.setCellStyle(headerCellStyle);
-
+            i++;
             cell = headerRow.createCell(columns.length + spacing + i);
             cell.setCellValue(totTable[i]);
             cell.setCellStyle(headerCellStyle);
@@ -142,14 +151,22 @@ public class PrescriptionMedicineXLSUtil {
             // Formula of SUM
             i = 0;
             // Tot. Quantity
-            cell = sheet.getRow(1).getCell(columns.length + spacing + i++);
-            cell.setCellValue("=SOMMA(2" + alphabet[quantityCol] + ":" + rowNum + alphabet[quantityCol] + ")");
+            cell = sheet.getRow(1).getCell(columns.length + spacing + i);
+            cell.setCellType(CellType.FORMULA);
+            String formula = "=SOMMA(2" + alphabet[quantityAlphabet] + ":" + rowNum + "" + alphabet[quantityAlphabet] + ")";
+            cell.setCellFormula(formula);
+            sheet.autoSizeColumn(columns.length + spacing + i);
 
+            i++;
             // Tot Costs
             cell = sheet.getRow(1).getCell(columns.length + spacing + i);
-            cell.setCellValue("=SOMMA(2" + alphabet[costCol] + ":" + rowNum + alphabet[costCol] + ")");
+            cell.setCellType(CellType.FORMULA);
+            formula = "=SOMMA(2" + alphabet[costAlphabet] + ":" + rowNum + "" + alphabet[costAlphabet] + ")";
+            cell.setCellFormula(formula);
+            sheet.autoSizeColumn(columns.length + spacing + i);
+
         }
-        */
+
 
         // Resize all columns to fit the content size
         for (int i = 0; i < columns.length; i++){
