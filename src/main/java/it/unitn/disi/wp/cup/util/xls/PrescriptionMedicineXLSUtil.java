@@ -118,7 +118,7 @@ public class PrescriptionMedicineXLSUtil {
                 Cell total = row.createCell(col);
                 total.setCellValue((double)prescriptionMedicine.getTotalToPay()/100);
 
-                if(rowNum-1 == 1){
+                if(rowNum-1 == 1 || rowNum-1 == 2){
                     col += 2;
 
                     row.createCell(col++);
@@ -133,6 +133,7 @@ public class PrescriptionMedicineXLSUtil {
             row.createCell(1).setCellValue("Nessuna ricetta presente");
         }
 
+        // Build the resume of total costs table
         if(!prescriptionMedicines.isEmpty()){
             // Build the Total table. It contains the sum of all quantities and costs
             // NB: It works with maximum range of the basic alphabet columns
@@ -147,6 +148,7 @@ public class PrescriptionMedicineXLSUtil {
             cell = headerRow.createCell(columns.length + spacing + i);
             cell.setCellValue(totTable[i]);
             cell.setCellStyle(headerCellStyle);
+
 
             // Formula of SUM
             i = 0;
@@ -166,7 +168,6 @@ public class PrescriptionMedicineXLSUtil {
             sheet.autoSizeColumn(columns.length + spacing + i);
 
         }
-
 
         // Resize all columns to fit the content size
         for (int i = 0; i < columns.length; i++){

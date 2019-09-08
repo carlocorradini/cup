@@ -350,7 +350,7 @@ public class HealthServiceService {
                                 "<p>" +
                                     "Ti avvisiamo che il farmaco della prescrizione n° <b>" + prescription.getId() + "</b> è stato pagato con successo!<br>" +
                                 "</p>";
-                        
+
                         EmailUtil.sendHTML(patient.getEmail(),
                                 AppConfig.getName().toUpperCase() + " pagamento prescrizione farmaci n° " + prescription.getId(),
                                 html);
