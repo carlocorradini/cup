@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -68,10 +67,6 @@ public class PrescriptionMedicineXLSUtil {
         CellStyle doubleCellStyle = workbook.createCellStyle();
         doubleCellStyle.setDataFormat(
                 workbook.getCreationHelper().createDataFormat().getFormat("#.##"));
-
-        // Create a DecimalFormat to rappresent a maximum number of decimal digits
-        DecimalFormat decimalFormat = new DecimalFormat();
-        decimalFormat.setMaximumFractionDigits(2);
 
         // Fill the table
         int rowNum = 1;
@@ -157,19 +152,16 @@ public class PrescriptionMedicineXLSUtil {
             i = 0;
             // Tot. Quantity
             cell = sheet.getRow(1).getCell(columns.length + spacing + i);
-            cell.setCellType(CellType.FORMULA);
-            String formula = "=SOMMA(2" + alphabet[quantityAlphabet] + ":" + rowNum + "" + alphabet[quantityAlphabet] + ")";
+            String formula = "SUM(" + alphabet[quantityAlphabet] + "2:" + alphabet[quantityAlphabet] + rowNum + ")";
             cell.setCellFormula(formula);
             sheet.autoSizeColumn(columns.length + spacing + i);
 
             i++;
             // Tot Costs
             cell = sheet.getRow(1).getCell(columns.length + spacing + i);
-            cell.setCellType(CellType.FORMULA);
-            formula = "=SOMMA(2" + alphabet[costAlphabet] + ":" + rowNum + "" + alphabet[costAlphabet] + ")";
+            formula = "SUM("+ alphabet[costAlphabet] + "2:" + alphabet[costAlphabet] + rowNum + ")";
             cell.setCellFormula(formula);
             sheet.autoSizeColumn(columns.length + spacing + i);
-
         }
 
         // Resize all columns to fit the content size
