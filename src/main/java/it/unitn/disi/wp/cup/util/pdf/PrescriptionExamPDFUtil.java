@@ -352,7 +352,7 @@ public final class PrescriptionExamPDFUtil {
                 contentStream.newLineAtOffset(150, 460);
                 contentStream.showText("ESAME: ");
                 contentStream.endText();
-                cont = longString2(prescriptionExam.getExam().getName(),document,contentStream,200,460,9,font,320,15);
+                cont = longString(prescriptionExam.getExam().getName(),document,contentStream,200,460,9,font,320,15);
                 cont -= 40;
                 contentStream.beginText();
                 contentStream.setFont(fontBold, fontSize);
@@ -379,7 +379,7 @@ public final class PrescriptionExamPDFUtil {
                         contentStream.newLineAtOffset(50, cont);
                         contentStream.showText("• ");
                         contentStream.endText();
-                        cont = longString2(e.getName(),document,contentStream,60,cont,11,font,460,15);
+                        cont = longString(e.getName(),document,contentStream,60,cont,11,font,460,15);
                         cont -= 5;
                     }
                 }
@@ -398,7 +398,7 @@ public final class PrescriptionExamPDFUtil {
                         contentStream.newLineAtOffset(50, cont);
                         contentStream.showText("• ");
                         contentStream.endText();;
-                        cont = longString2(e.getName(),document,contentStream,60,cont,11,font,460,15);
+                        cont = longString(e.getName(),document,contentStream,60,cont,11,font,460,15);
                         cont -= 5;
                     }
                 }
@@ -460,23 +460,14 @@ public final class PrescriptionExamPDFUtil {
      * @return
      */
     private static float longString(String text, PDDocument document, PDPageContentStream contentStream, float startX, float startY, int fontSize, PDFont pdfFont,int width,int linespacing){
-        try {
+
             String[] wrT = null;
             String s = null;
-            wrT = WordUtils.wrap(text, 100).split("\\r?\\n");
+            wrT = WordUtils.wrap(text, width).split("\\r?\\n");
             for (int i = 0; i < wrT.length; i++) {
-                contentStream.beginText();
-                contentStream.setFont(pdfFont, fontSize);
-                contentStream.newLineAtOffset(startX, startY);
-                startY -= linespacing;
-                s = wrT[i];
-                contentStream.showText(s);
-                contentStream.endText();
+                startY = longString2(wrT[i],document,contentStream,startX,startY,fontSize,pdfFont,width,linespacing);
             }
-        }
-            catch (IOException ex) {
-                LOGGER.log(Level.SEVERE, "Unable to generatePDF a Prescription Exam PDF", ex);
-            }
+
         return startY;
     }
     /**
