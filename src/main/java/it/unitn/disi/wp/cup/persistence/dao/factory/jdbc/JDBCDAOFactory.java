@@ -4,6 +4,7 @@ import it.unitn.disi.wp.cup.persistence.dao.DAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -74,6 +75,12 @@ public class JDBCDAOFactory implements DAOFactory {
      */
     @Override
     public void shutdown() {
+        if (CONNECTION != null) {
+            try {
+                CONNECTION.close();
+            } catch (SQLException ignored) {
+            }
+        }
     }
 
     /**
