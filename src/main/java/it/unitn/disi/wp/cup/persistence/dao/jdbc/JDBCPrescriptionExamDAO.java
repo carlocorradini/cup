@@ -38,7 +38,7 @@ public class JDBCPrescriptionExamDAO extends JDBCDAO<PrescriptionExam, Long> imp
             " SELECT prescription_exam.* FROM person_province INNER JOIN prescription_exam ON (person_province.id = prescription_exam.person_id)" +
             " WHERE report_id IS NULL AND doctor_specialist_id IS NULL AND health_service_id IS NULL AND prescription_date IS NULL ORDER BY prescription_date_registration DESC";
     private static final String SQL_GET_ALL_DONE_BY_HEALTH_SERVICE_ID_AND_DATE = "WITH person_province AS (SELECT person.id FROM person INNER JOIN city ON (person.city_id = city.id) WHERE province_id = ?)" +
-            " SELECT prescription_exam.* FROM prescription_exam INNER JOIN person_province ON (prescription_exam.person_id = person_province.id) WHERE report_id IS NULL AND prescription_date::date = ?";
+            " SELECT prescription_exam.* FROM prescription_exam INNER JOIN person_province ON (prescription_exam.person_id = person_province.id) WHERE report_id IS NOT NULL AND prescription_date::date = ?";
     private static final String SQL_GET_COUNT_BY_PERSON_ID = "SELECT COUNT(*) FROM prescription_exam WHERE person_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_id = ?";
     private static final String SQL_GET_COUNT_BY_DOCTOR_SPECIALIST_ID = "SELECT COUNT(*) FROM prescription_exam WHERE doctor_specialist_id = ?";

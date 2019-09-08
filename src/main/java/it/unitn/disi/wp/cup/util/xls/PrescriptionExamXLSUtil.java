@@ -24,6 +24,9 @@ public class PrescriptionExamXLSUtil {
         /* --- CREATING '.XLS' FILE --------------------------------------------------------------------------------- */
         // Declarations
         String[] columns = {"ID", "Data Prescrizione", "Data Erogazione", "Esame", "Medico di base", "Paziente", "Ticket"};
+        String[] totTable = {"TOTALE Costi"};
+        String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+        int costAlphabet = 0;
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -61,10 +64,10 @@ public class PrescriptionExamXLSUtil {
         CellStyle dateCellStyle = workbook.createCellStyle();
         dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd-MM-yyyy hh:mm"));
 
+        int rowNum = 1;
         if(!prescriptionExams.isEmpty()) {
             // Not empty
             // Create other rows and cells with prescriptions data
-            int rowNum = 1;
             for (PrescriptionExam prescriptionExam : prescriptionExams) {
                 Row row = sheet.createRow(rowNum++);
                 int col = 0;
@@ -98,6 +101,7 @@ public class PrescriptionExamXLSUtil {
                 row.createCell(col++).setCellValue(prescriptionExam.getPersonId());
 
                 // Price based on the dealer of the service
+                costAlphabet = col;
                 if(prescriptionExam.getHealthServiceId() != null) {
                     row.createCell(col++).setCellValue(Double.parseDouble("11"));
                 }
@@ -108,6 +112,13 @@ public class PrescriptionExamXLSUtil {
                         && prescriptionExam.getSpecialistId() != null) {
                     row.createCell(col++).setCellValue("non ancora assegnato");
                 }
+
+                // create cells for the costs table
+                if(rowNum-1 == 1 || rowNum-1 == 2){
+                    col += 2;
+
+                    row.createCell(col);
+                }
             }
         }
         else{
@@ -115,6 +126,26 @@ public class PrescriptionExamXLSUtil {
             Row row = sheet.createRow(1);
 
             row.createCell(1).setCellValue("Nessun esame presente");
+        }
+
+        // Build the resume of total costs table
+        if(!prescriptionExams.isEmpty()){
+            // Build the Total table. It contains the sum of all quantities and costs
+            // NB: It works with maximum range of the basic alphabet columns
+            int i = 0;
+            int spacing = 1;
+
+            // Header
+            Cell cell = headerRow.createCell(columns.length + spacing + i);
+            cell.setCellValue(totTable[i]);
+            cell.setCellStyle(headerCellStyle);
+
+            // Formula of SUM
+            // Tot Costs
+            cell = sheet.getRow(1).getCell(columns.length + spacing + i);
+            String formula = "SUM("+ alphabet[costAlphabet] + "2:" + alphabet[costAlphabet] + rowNum + ")";
+            cell.setCellFormula(formula);
+            sheet.autoSizeColumn(columns.length + spacing + i);
         }
 
         // Resize all columns to fit the content size

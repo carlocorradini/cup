@@ -263,7 +263,7 @@ public class HealthServiceService {
                                     "<h1 style=\"color: #5e9ca0;\">Assegnamento <span style=\"color: #2b2301;\">esame</span>!</h1>" +
                                             "<p>" +
                                             "Ciao <span style=\"color: #2b2301;\"><b>" + patient.getName() + "</b></span>!<br>" +
-                                            "Il tuo esame n° <b>" + prescription.getExam().getId() + "</b>, registrato in data <b>" + formattedDateRegistration + "</b>, è stato assegnato al medico specialista <b>" + doctorSpecialistAsPerson.getFullName() + "</b> (id: " + doctorSpecialist.getId() + ").<br>" +
+                                            "Il tuo esame n° <b>" + prescription.getExam().getId() + "</b>, registrato in data <b>" + formattedDateRegistration + "</b>, è stato assegnato al servizio sanitario <b>" + healthService.getProvince().getNameLongCapitalized() + "</b> (id: " + healthService.getId() + ").<br>" +
                                             "L'esame si terrà il <b>" + formattedDate + "</b>.<br>" +
                                             strPagamento +
                                             "<br>" +
@@ -273,7 +273,9 @@ public class HealthServiceService {
                             // Send Emails
                             EmailUtil.sendHTML(patient.getEmail(), "assegnamento esame n° " + prescription.getId(), htmlPatient);
                         } else {
-                            // ERRORE
+                            LOGGER.log(Level.SEVERE, "Assign Exam unexpected error, the Health Service and Doctor Specialist are both null");
+                            response = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                            message.setError(JsonMessage.ERROR_UNKNOWN);
                         }
                     }
                 }
@@ -347,9 +349,9 @@ public class HealthServiceService {
                         // Send Mail
                         String html =
                                 "<h1 style=\"color: #5e9ca0;\">Ciao <span style=\"color: #2b2301;\">" + patient.getName() + "</span>!</h1>" +
-                                "<p>" +
-                                    "Ti avvisiamo che il farmaco della prescrizione n° <b>" + prescription.getId() + "</b> è stato pagato con successo!<br>" +
-                                "</p>";
+                                        "<p>" +
+                                        "Ti avvisiamo che il farmaco della prescrizione n° <b>" + prescription.getId() + "</b> è stato pagato con successo!<br>" +
+                                        "</p>";
 
                         EmailUtil.sendHTML(patient.getEmail(),
                                 AppConfig.getName().toUpperCase() + " pagamento prescrizione farmaci n° " + prescription.getId(),
