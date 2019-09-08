@@ -9914,14 +9914,17 @@ INSERT INTO exam_qualification(doctor_specialist_id, exam_id) VALUES
 	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con reazione polimerasica a catena')),
 	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con ibridazione sonde non radiomarcate')),
 	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con ibridazione sonde radiomarcate')),
-	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con reverse dot blot')),				/* Alice */
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi mutazione del DNA con reverse dot blot')),
+	((SELECT id FROM person WHERE fiscal_code='MNTLCA97A63A794I'),	(SELECT id FROM exam WHERE name='Analisi di polimorfismi')),							/* Alice */
 	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'),	(SELECT id FROM exam WHERE name='Virus epatite B (HBV) Anticorpi Hbeag')),
-	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'),	(SELECT id FROM exam WHERE name='Virus epatite B (HBV) Antigeni Hbeag')),					/* Paolo */
+	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'),	(SELECT id FROM exam WHERE name='Virus epatite B (HBV) Antigeni Hbeag')),
+	((SELECT id FROM person WHERE fiscal_code='FRNPLA96B11L781D'),	(SELECT id FROM exam WHERE name='Analisi citogenetica per fragilità cromosomica')),				/* Paolo */
 	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di amniociti')),
 	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di cellule o tessuti')),
 	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di fibroblasti')),
 	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di linee cellulari stabilizzate con virus')),
-	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di linee linfocitarie stabilizzate con virus o interleuchina')),	/* Aranzulla */
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di linee linfocitarie stabilizzate con virus o interleuchina')),
+	((SELECT id FROM person WHERE fiscal_code='RNZSVT90B24C351H'),	(SELECT id FROM exam WHERE name='Coltura di linfociti fetali')),						/* Aranzulla */
 	((SELECT id FROM person WHERE fiscal_code='RSSGCM50T18L378W'),	(SELECT id FROM exam WHERE name='Acido 5 idrossi 3 indolacetico')),						/* 30 | 40 -> 44 */
 	((SELECT id FROM person WHERE fiscal_code='RSSGCM50T18L378W'),	(SELECT id FROM exam WHERE name='Risonanza magnetica nucleare (RM) muscoloscheletrica')),
 	((SELECT id FROM person WHERE fiscal_code='RSSGCM50T18L378W'),	(SELECT id FROM exam WHERE name='Risonanza magnetica nucleare (RM) muscoloscheletrica senza e con contrasto')),
