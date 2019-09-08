@@ -10039,6 +10039,14 @@ INSERT INTO person_avatar(person_id, name) VALUES
 	((SELECT id FROM person WHERE fiscal_code='GNSMRT74P66L174V'), '50_23-08-19_10-51-39'),
 	((SELECT id FROM person WHERE fiscal_code='FRNVNT92L61L174O'), '51_23-08-19_10-51-39');
 
+INSERT INTO report(content) VALUES
+	('Dalla visita è risultato che il paziente non soffre di malattie legate al DNA. È però emersa una leggera carenza di potassio'),
+	('Dalla visita riguardo ''analisi mutazione del DNA con reverse dot blot'' non sono stati rilevati livelli fuori alla norma, perciò risulta che il paziente non soffre di malattie legate al DNA');
+
+INSERT INTO prescription_exam(person_id, doctor_id, exam_id, doctor_specialist_id, health_service_id, prescription_date, prescription_date_registration, paid, report_id, read) VALUES 
+	(55, 3, 136, 6, NULL, '2019-09-07 10:30:00.000000', '2019-08-25 16:30:00.000000', TRUE, 1, TRUE),
+	(55, 3, 138, 6, NULL, '2019-09-08 11:00:00.000000', '2019-09-01 11:00:00.000000', TRUE, 2, FALSE);
+
 INSERT INTO prescription_exam(person_id, doctor_id, exam_id, doctor_specialist_id, health_service_id, prescription_date, paid, report_id, read) VALUES 
 (16, 4, 172, NULL, NULL, NULL, TRUE, NULL, FALSE),
 (2, 5, 155, NULL, NULL, NULL, TRUE, NULL, FALSE),
@@ -10240,6 +10248,10 @@ INSERT INTO prescription_exam(person_id, doctor_id, exam_id, doctor_specialist_i
 (39, 1, 13, NULL, NULL, NULL, FALSE, NULL, FALSE),
 (36, 1, 134, NULL, NULL, NULL, TRUE, NULL, FALSE),
 (2, 5, 98, NULL, 96, '2021-10-24 12:45:00.000000', FALSE, NULL, FALSE);
+
+INSERT INTO report_exam(report_id, exam_id) VALUES
+	('1', '1'),
+	('2', '2');
 
 INSERT INTO prescription_medicine(person_id, doctor_id, medicine_id, quantity, paid) VALUES 
 (16, 4, 887, 8, TRUE),
