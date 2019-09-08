@@ -9762,8 +9762,8 @@ INSERT INTO person(name, surname, email, password, sex, birth_date, birth_city_i
 	('Miraxh', 'Tereziu', 'miraxh98@gmail.com', '$2a$15$7VcZpUTGgsAL435rM7ejbu7DlBN4v7r6lieMBVF5sSNZegqkTeqKO', 'M', '1998-02-14', 2600, 'TRZMXH98B14A794Q', 2600),		/* BERGAMO */
 	('Grigore', 'Andronic', 'andronic.grigore@gmail.com', '$2a$15$5Qj.f.FNgh7F2kj81LW3J.Oq2ZJc3WDmzahTyrEee/him5VrIE/Hi', 'M', '1998-10-12', 2064, 'NDRGGR98R12E472H', 7323), /* TRENTO */
 	('Alice', 'Minuti', 'aly.minu97@gmail.com', '$2a$15$HI9BgGME8TPS4D3zcDh5COWFiTcAE2llIPgHX04N2Z8Sm76SQpoCG', 'F', '1997-01-23', 2600, 'MNTLCA97A63A794I', 7323),
-	('Elisa', 'Ciraldo', 'web.prj.cup+52@gmail.co', '$2a$15$8pPu1Pc1.oNVYitaiyaTtOq5EOnGxZIhHKWJE8V6VNQYd517pVJa2', 'F', '1998-09-09', 6408, 'CRLLSE98P49B202R', 7323),
-	('Elisa', 'Lunari', 'web.prj.cup+53@gmail.co', '$2a$15$T36cjd10tY/4dpCXu9mbCezzmOx.YvmWZ3.jqGu8MJyxpGOPk72jq', 'F', '1998-10-12', 3593, 'LNRLSE98R52F205S', 2600),
+	('Elisa', 'Ciraldo', 'web.prj.cup+52@gmail.com', '$2a$15$8pPu1Pc1.oNVYitaiyaTtOq5EOnGxZIhHKWJE8V6VNQYd517pVJa2', 'F', '1998-09-09', 6408, 'CRLLSE98P49B202R', 7323),
+	('Elisa', 'Lunari', 'web.prj.cup+53@gmail.com', '$2a$15$T36cjd10tY/4dpCXu9mbCezzmOx.YvmWZ3.jqGu8MJyxpGOPk72jq', 'F', '1998-10-12', 3593, 'LNRLSE98R52F205S', 2600),
 	('Paolo', 'Feroni', 'pablofero96@gmail.com', '$2a$15$XE/K8NGotwu9pBSPmXHavOyLu9LatLaavh.txgEx9PqQRRTyxZwgS', 'M', '1996-02-11', 7963, 'FRNPLA96B11L781D', 7963),
 	('Salvatore', 'Aranzulla', 'web.prj.cup+god@gmail.com', '$2a$15$LDYDFOrLPJ7i1mCfT.MOl.zDvOpmbQxQ2M3c6n5NUUpQPVqcpZtlm', 'M', '1990-02-24', 6414, 'RNZSVT90B24C351H', 6414),
 	/* minions BERGAMO */ -- 11 su 10
@@ -10039,6 +10039,14 @@ INSERT INTO person_avatar(person_id, name) VALUES
 	((SELECT id FROM person WHERE fiscal_code='GNSMRT74P66L174V'), '50_23-08-19_10-51-39'),
 	((SELECT id FROM person WHERE fiscal_code='FRNVNT92L61L174O'), '51_23-08-19_10-51-39');
 
+INSERT INTO report(content) VALUES
+	('Dalla visita è risultato che il paziente non soffre di malattie legate al DNA. È però emersa una leggera carenza di potassio'),
+	('Dalla visita riguardo ''analisi mutazione del DNA con reverse dot blot'' non sono stati rilevati livelli fuori alla norma, perciò risulta che il paziente non soffre di malattie legate al DNA');
+
+INSERT INTO prescription_exam(person_id, doctor_id, exam_id, doctor_specialist_id, health_service_id, prescription_date, prescription_date_registration, paid, report_id, read) VALUES 
+	(55, 3, 136, 6, NULL, '2019-09-07 10:30:00.000000', '2019-08-25 16:30:00.000000', TRUE, 1, TRUE),
+	(55, 3, 138, 6, NULL, '2019-09-08 11:00:00.000000', '2019-09-01 11:00:00.000000', TRUE, 2, FALSE);
+
 INSERT INTO prescription_exam(person_id, doctor_id, exam_id, doctor_specialist_id, health_service_id, prescription_date, paid, report_id, read) VALUES 
 (16, 4, 172, NULL, NULL, NULL, TRUE, NULL, FALSE),
 (2, 5, 155, NULL, NULL, NULL, TRUE, NULL, FALSE),
@@ -10240,6 +10248,10 @@ INSERT INTO prescription_exam(person_id, doctor_id, exam_id, doctor_specialist_i
 (39, 1, 13, NULL, NULL, NULL, FALSE, NULL, FALSE),
 (36, 1, 134, NULL, NULL, NULL, TRUE, NULL, FALSE),
 (2, 5, 98, NULL, 96, '2021-10-24 12:45:00.000000', FALSE, NULL, FALSE);
+
+INSERT INTO report_exam(report_id, exam_id) VALUES
+	('1', '1'),
+	('2', '2');
 
 INSERT INTO prescription_medicine(person_id, doctor_id, medicine_id, quantity, paid) VALUES 
 (16, 4, 887, 8, TRUE),

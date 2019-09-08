@@ -145,7 +145,7 @@ public final class PersonDaoBean implements Serializable {
     public LocalDateTime getDoctorSince() {
         LocalDateTime since = null;
 
-        if (authPerson != null && doctor != null) {
+        if (authPerson != null) {
             try {
                 since = doctorDAO.getSinceByPatientId(authPerson.getId());
             } catch (DAOException ex) {
