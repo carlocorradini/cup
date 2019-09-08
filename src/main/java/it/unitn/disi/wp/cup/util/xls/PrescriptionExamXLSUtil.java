@@ -67,6 +67,7 @@ public class PrescriptionExamXLSUtil {
         int rowNum = 1;
         if(!prescriptionExams.isEmpty()) {
             // Not empty
+
             // Create other rows and cells with prescriptions data
             for (PrescriptionExam prescriptionExam : prescriptionExams) {
                 Row row = sheet.createRow(rowNum++);
@@ -115,7 +116,7 @@ public class PrescriptionExamXLSUtil {
 
                 // create cells for the costs table
                 if(rowNum-1 == 1 || rowNum-1 == 2){
-                    col += 2;
+                    col += 1;
 
                     row.createCell(col);
                 }
