@@ -1,10 +1,121 @@
 <ui:composition
         template="#{stdTemplate.masterLayout}"
         xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
         xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{i18n["common.homePage"]}</ui:define>
 
     <ui:define name="content">
+        <h1 class="ui centered header">
+            <h:graphicImage library="_default"
+                            name="images/favicon/android-chrome-512x512.png"
+                            styleClass="ui image"
+                            alt="#{fn:toUpperCase(app.name)}"
+            />
+            #{i18n["common.welcome"]}
+        </h1>
 
+        <div class="ui piled segments">
+            <!-- CITIZEN SERVICES -->
+            <div class="ui segment">
+                <h3 class="ui header">
+                    <h:graphicImage library="_default"
+                                    name="images/home/0_header.svg"
+                                    styleClass="ui image"
+                    />
+                    #{i18n["home.0.title"]}
+                </h3>
+                <p>
+                    #{i18n["home.0.description"]}
+                </p>
+            </div>
+
+            <!-- WHO WE ARE -->
+            <div class="ui segment">
+                <h3 class="ui header">
+                    <h:graphicImage library="_default"
+                                    name="images/home/1_header.svg"
+                                    styleClass="ui image"
+                    />
+                    #{i18n["home.1.title"]}
+                </h3>
+                <p>
+                    #{i18n["home.1.description"]}
+                </p>
+            </div>
+
+            <!-- WHAT DO WE DO -->
+            <div class="ui segment">
+                <h3 class="ui header">
+                    <h:graphicImage library="_default"
+                                    name="images/home/2_header.svg"
+                                    styleClass="ui image"
+                    />
+                    #{i18n["home.2.title"]}
+                </h3>
+                <p>
+                    #{i18n["home.2.description"]}
+                </p>
+            </div>
+
+            <!-- BASE ACCOUNT -->
+            <div class="ui segment">
+                <h3 class="ui header">
+                    <h:graphicImage library="_default"
+                                    name="images/home/3_header.svg"
+                                    styleClass="ui image"
+                    />
+                    #{i18n["home.3.title"]}
+                </h3>
+                <p>
+                    #{i18n["home.3.description"]}
+                </p>
+            </div>
+
+            <!-- DOCTOR ACCOUNT -->
+            <div class="ui segment">
+                <h3 class="ui header">
+                    <h:graphicImage library="_default"
+                                    name="images/home/4_header.svg"
+                                    styleClass="ui image"
+                    />
+                    #{i18n["home.4.title"]}
+                </h3>
+                <p>
+                    #{i18n["home.4.description"]}
+                </p>
+            </div>
+
+            <!-- SPECIALIST ACCOUNT -->
+            <div class="ui segment">
+                <h3 class="ui header">
+                    <h:graphicImage library="_default"
+                                    name="images/home/5_header.svg"
+                                    styleClass="ui image"
+                    />
+                    #{i18n["home.5.title"]}
+                </h3>
+                <p>
+                    #{i18n["home.5.description"]}
+                </p>
+            </div>
+
+            <!-- HEALTH SERVICE ACCOUNT -->
+            <div class="ui segment">
+                <h3 class="ui header">
+                    <h:graphicImage library="_default"
+                                    name="images/home/6_header.svg"
+                                    styleClass="ui image"
+                    />
+                    #{i18n["home.6.title"]}
+                </h3>
+                <p>
+                    #{i18n["home.6.description"]}
+                </p>
+            </div>
+        </div>
+
+        <div class="ui divider"></div>
     </ui:define>
 </ui:composition>
