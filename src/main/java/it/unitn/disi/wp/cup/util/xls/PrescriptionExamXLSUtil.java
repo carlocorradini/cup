@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -97,13 +98,16 @@ public class PrescriptionExamXLSUtil {
                 row.createCell(col++).setCellValue(prescriptionExam.getPersonId());
 
                 // Price based on the dealer of the service
-                if(prescriptionExam.getHealthServiceId() != null)
-                    row.createCell(col++).setCellValue("11");
-                else if(prescriptionExam.getSpecialistId() != null)
-                    row.createCell(col++).setCellValue("50");
+                if(prescriptionExam.getHealthServiceId() != null) {
+                    row.createCell(col++).setCellValue(Double.parseDouble("11"));
+                }
+                else if(prescriptionExam.getSpecialistId() != null) {
+                    row.createCell(col++).setCellValue(Double.parseDouble("50"));
+                }
                 else if(prescriptionExam.getHealthServiceId() != null
-                        && prescriptionExam.getSpecialistId() != null)
+                        && prescriptionExam.getSpecialistId() != null) {
                     row.createCell(col++).setCellValue("non ancora assegnato");
+                }
             }
         }
         else{

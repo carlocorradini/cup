@@ -108,15 +108,18 @@ public class PrescriptionMedicineXLSUtil {
                 // Price per pcs
                 Cell pricePcs = row.createCell(col++);
                 pricePcs.setCellValue((double)prescriptionMedicine.getMedicine().getPrice()/100);
+                pricePcs.setCellStyle(doubleCellStyle);
 
                 // Quantity
                 quantityAlphabet = col;
-                row.createCell(col++).setCellValue(prescriptionMedicine.getQuantity());
+                Cell quantity = row.createCell(col++);
+                quantity.setCellValue(prescriptionMedicine.getQuantity());
 
                 // Total price
                 costAlphabet = col;
                 Cell total = row.createCell(col);
                 total.setCellValue((double)prescriptionMedicine.getTotalToPay()/100);
+                total.setCellStyle(doubleCellStyle);
 
                 if(rowNum-1 == 1 || rowNum-1 == 2){
                     col += 2;
