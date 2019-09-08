@@ -14,6 +14,7 @@ import it.unitn.disi.wp.cup.util.EntitySanitizerUtil;
 import it.unitn.disi.wp.cup.util.ImageUtil;
 import it.unitn.disi.wp.cup.util.QRCodeUtil;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.text.WordUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -351,7 +352,7 @@ public final class PrescriptionExamPDFUtil {
                 contentStream.newLineAtOffset(150, 460);
                 contentStream.showText("ESAME: ");
                 contentStream.endText();
-                cont = longString(prescriptionExam.getExam().getName(),document,contentStream,200,460,9,font,320,15);
+                cont = longString2(prescriptionExam.getExam().getName(),document,contentStream,200,460,9,font,320,15);
                 cont -= 40;
                 contentStream.beginText();
                 contentStream.setFont(fontBold, fontSize);
@@ -378,7 +379,7 @@ public final class PrescriptionExamPDFUtil {
                         contentStream.newLineAtOffset(50, cont);
                         contentStream.showText("• ");
                         contentStream.endText();
-                        cont = longString(e.getName(),document,contentStream,60,cont,11,font,460,15);
+                        cont = longString2(e.getName(),document,contentStream,60,cont,11,font,460,15);
                         cont -= 5;
                     }
                 }
@@ -397,7 +398,7 @@ public final class PrescriptionExamPDFUtil {
                         contentStream.newLineAtOffset(50, cont);
                         contentStream.showText("• ");
                         contentStream.endText();;
-                        cont = longString(e.getName(),document,contentStream,60,cont,11,font,460,15);
+                        cont = longString2(e.getName(),document,contentStream,60,cont,11,font,460,15);
                         cont -= 5;
                     }
                 }
@@ -416,6 +417,19 @@ public final class PrescriptionExamPDFUtil {
         return output;
     }
 
+    /**
+     * method needed to add lines with the data to the pdf page
+     * @param document document object of the pdfdocument
+     * @param contentStream contentStream object needed to use the pdfbox tools
+     * @param x ordinate x for the alignment of the text
+     * @param y ordinate y for the alignment of the text
+     * @param color color of the text
+     * @param stringa1 string passed with the data
+     * @param stringa2 string 2 passed with the data
+     * @param font font of the text
+     * @param fontBold fontBold of the text
+     * @param fontSize font size of the text
+     */
     private static void riempiPdf(PDDocument document, PDPageContentStream contentStream, int x, int y, Color color, String stringa1, String stringa2, PDFont font, PDFont fontBold, int fontSize) {
         try {
             contentStream.beginText();
@@ -432,7 +446,54 @@ public final class PrescriptionExamPDFUtil {
         }
     }
 
+    /**
+     *
+     * @param text string with the data to add
+     * @param document document object of the pdfdocument
+     * @param contentStream contentStream object needed to use the pdfbox tools
+     * @param startX ordinate x for the alignment of the text
+     * @param startY ordinate y for the alignment of the text
+     * @param fontSize font size of the text
+     * @param pdfFont font of the text
+     * @param width width for the line
+     * @param linespacing spacing between lines
+     * @return
+     */
     private static float longString(String text, PDDocument document, PDPageContentStream contentStream, float startX, float startY, int fontSize, PDFont pdfFont,int width,int linespacing){
+        try {
+            String[] wrT = null;
+            String s = null;
+            wrT = WordUtils.wrap(text, 100).split("\\r?\\n");
+            for (int i = 0; i < wrT.length; i++) {
+                contentStream.beginText();
+                contentStream.setFont(pdfFont, fontSize);
+                contentStream.newLineAtOffset(startX, startY);
+                startY -= linespacing;
+                s = wrT[i];
+                contentStream.showText(s);
+                contentStream.endText();
+            }
+        }
+            catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to generatePDF a Prescription Exam PDF", ex);
+            }
+        return startY;
+    }
+    /**
+     *
+     * @param text string with the data to add
+     * @param document document object of the pdfdocument
+     * @param contentStream contentStream object needed to use the pdfbox tools
+     * @param startX ordinate x for the alignment of the text
+     * @param startY ordinate y for the alignment of the text
+     * @param fontSize font size of the text
+     * @param pdfFont font of the text
+     * @param width width for the line
+     * @param linespacing spacing between lines
+     * @return
+     */
+    private static float longString2(String text, PDDocument document, PDPageContentStream contentStream, float startX, float startY, int fontSize, PDFont pdfFont,int width,int linespacing){
+
         try {
 
             List<String> lines = new ArrayList<String>();
