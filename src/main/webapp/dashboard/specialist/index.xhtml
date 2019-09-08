@@ -100,6 +100,18 @@
 
             <div class="ui bottom attached tab segment" data-tab="services">
                 <div class="ui centered cards">
+                    <h:link outcome="/dashboard/specialist/patients/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/group.svg"
+                                            alt="#{i18n['common.patients']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.patients"])}
+                        </div>
+                    </h:link>
                     <h:link outcome="/dashboard/specialist/visit_todo/index" styleClass="raised link card">
                         <div class="image">
                             <h:graphicImage styleClass="ui image"

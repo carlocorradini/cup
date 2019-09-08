@@ -1,10 +1,8 @@
 package it.unitn.disi.wp.cup.i18n;
 
-import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.lang3.LocaleUtils;
 
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -51,6 +49,29 @@ public final class I18nBean implements Serializable {
     }
 
     /**
+     * Return the country of the current language if supported
+     *
+     * @return Country of the current language
+     */
+    public String getCountry() {
+        String country = "";
+
+        if (locale.getLanguage().equals(Locale.ITALIAN.getLanguage())) {
+            country = "italy";
+        } else if (locale.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
+            country = "america";
+        } else if (locale.getLanguage().equals(Locale.GERMAN.getLanguage())) {
+            country = "germany";
+        } else if (locale.getLanguage().equals(Locale.FRENCH.getLanguage())) {
+            country = "france";
+        } else if (locale.getLanguage().equals("es")) {
+            country = "spain";
+        }
+
+        return country;
+    }
+
+    /**
      * Change the current session language given the language code
      *
      * @param language Language code
@@ -58,27 +79,6 @@ public final class I18nBean implements Serializable {
     public void setLanguage(String language) {
         locale = new Locale(language);
         FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale(language));
-    }
-
-    /**
-     * Return the default Locale of the Application
-     *
-     * @return Default Locale
-     */
-    public Locale getDefaultLocale() {
-        return FacesContext.getCurrentInstance().getApplication().getDefaultLocale();
-    }
-
-    /**
-     * Return the list of supported languages
-     *
-     * @return The list of languages
-     */
-    public List<Locale> getSupportedLocale() {
-        Iterator<Locale> iterator = FacesContext.getCurrentInstance().getApplication().getSupportedLocales();
-        List<Locale> list = IteratorUtils.toList(iterator);
-        list.add(getDefaultLocale());
-        return list;
     }
 
 }

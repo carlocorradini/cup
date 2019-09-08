@@ -1,12 +1,15 @@
 package it.unitn.disi.wp.cup.bean.dao;
 
 import it.unitn.disi.wp.cup.persistence.dao.HealthServiceDAO;
+import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PrescriptionMedicineDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.HealthService;
+import it.unitn.disi.wp.cup.persistence.entity.Province;
+import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionMedicine;
 import it.unitn.disi.wp.cup.util.AuthUtil;
@@ -39,6 +42,7 @@ public final class HealthServiceDaoBean implements Serializable {
     private PrescriptionMedicineDAO prescriptionMedicineDAO = null;
     private HealthServiceDAO healthServiceDAO = null;
     private HealthService authHealthService = null;
+    private PersonDAO personDAO = null;
 
     /**
      * Initialize the {@link HealthServiceDaoBean}
@@ -53,6 +57,7 @@ public final class HealthServiceDaoBean implements Serializable {
                 healthServiceDAO = DAOFactory.getDAOFactory().getDAO(HealthServiceDAO.class);
                 prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
                 prescriptionMedicineDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionMedicineDAO.class);
+                personDAO = DAOFactory.getDAOFactory().getDAO(PersonDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
             }
@@ -66,6 +71,26 @@ public final class HealthServiceDaoBean implements Serializable {
      */
     public HealthService getAuthHealthService() {
         return authHealthService;
+    }
+
+    /**
+     * Return the {@link List} of {@link Person Patients} that live in the same {@link Province Province}
+     * managed by the current authenticated {@link HealthService Health Service}
+     *
+     * @return The {@link List} of all {@link Person Patients}
+     */
+    public List<Person> getPatients() {
+        List<Person> patients = Collections.emptyList();
+
+        if (authHealthService != null && personDAO != null) {
+            try {
+                patients = personDAO.getAllByHealthServiceId(authHealthService.getId());
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the List of All Patients for the authenticated Health Service", ex);
+            }
+        }
+
+        return patients;
     }
 
     /**

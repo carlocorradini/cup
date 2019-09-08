@@ -1,6 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+>
     <header class="header">
         <div class="ui menu huge">
             <div class="header-limiter">
@@ -23,19 +24,47 @@
                 <div class="right menu">
 
                     <div class="ui dropdown item">
-                        <i class="world icon"/> #{i18nBean.language}
+                        <span class="language">
+                            <i class="#{i18nBean.country} flag"/>
+                            <span class="text"> #{i18nBean.language}</span>
+                        </span>
                         <div class="menu">
                             <h:form>
                                 <h:commandLink
-                                        action="#{i18nBean.setLanguage('en')}"
-                                        value="English"
-                                        styleClass="item"
-                                />
-                                <h:commandLink
                                         action="#{i18nBean.setLanguage('it')}"
-                                        value="Italiano"
                                         styleClass="item"
-                                />
+                                >
+                                    <i class="italy flag"/>
+                                    Italiano
+                                </h:commandLink>
+                                <h:commandLink
+                                        action="#{i18nBean.setLanguage('en')}"
+                                        styleClass="item"
+                                >
+                                    <i class="america flag"/>
+                                    English
+                                </h:commandLink>
+                                <h:commandLink
+                                        action="#{i18nBean.setLanguage('de')}"
+                                        styleClass="item"
+                                >
+                                    <i class="germany flag"/>
+                                    Deutsch
+                                </h:commandLink>
+                                <h:commandLink
+                                        action="#{i18nBean.setLanguage('fr')}"
+                                        styleClass="item"
+                                >
+                                    <i class="france flag"/>
+                                    Français
+                                </h:commandLink>
+                                <h:commandLink
+                                        action="#{i18nBean.setLanguage('es')}"
+                                        styleClass="item"
+                                >
+                                    <i class="spain flag"/>
+                                    Español
+                                </h:commandLink>
                             </h:form>
                         </div>
                     </div>

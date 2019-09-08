@@ -72,6 +72,12 @@
                             #{i18n["health.service.report"]}
                             <span class="ui blue empty circular label"/>
                         </h:link>
+                        <h:link outcome="/health_service/dashboard/patients/index"
+                                styleClass="item"
+                        >
+                            #{i18n["common.patients"]}
+                            <span class="ui purple empty circular label"/>
+                        </h:link>
                     </div>
                 </div>
             </ui:fragment>
@@ -167,6 +173,7 @@
                     </div>
                 </div>
 
+                <!-- DOCTOR -->
                 <ui:fragment rendered="#{not empty doctor.authDoctor}">
                     <div class="item">
                         <div class="header">#{i18n["common.doctor"]}</div>
@@ -190,21 +197,28 @@
                     </div>
                 </ui:fragment>
 
+                <!-- SPECIALIST -->
                 <ui:fragment rendered="#{not empty doctorSpecialist.authDoctorSpecialist}">
                     <div class="item">
                         <div class="header">#{i18n["common.specialist"]}</div>
                         <div class="menu">
+                            <h:link outcome="/dashboard/specialist/patients/index"
+                                    styleClass="item"
+                            >
+                                #{i18n["common.patients"]}
+                                <span class="ui red empty circular label"/>
+                            </h:link>
                             <h:link outcome="/dashboard/specialist/visit_todo/index"
                                     styleClass="item"
                             >
                                 #{i18n["common.todoVisits"]}
-                                <span class="ui red label">#{doctorSpecialist.assignedToDoPrescriptionExamCount}</span>
+                                <span class="ui yellow label">#{doctorSpecialist.assignedToDoPrescriptionExamCount}</span>
                             </h:link>
                             <h:link outcome="/dashboard/specialist/visit_done/index"
                                     styleClass="item"
                             >
                                 #{i18n["common.total.assignedVisits"]}
-                                <span class="ui yellow empty circular label"/>
+                                <span class="ui green empty circular label"/>
                             </h:link>
                         </div>
                     </div>

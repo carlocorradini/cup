@@ -190,10 +190,27 @@ header.header .header-limiter {
     margin: 0 auto;
 }
 
+header.header .language .text {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 /* Media Query */
 @media only screen and (max-width: 768px) {
+    header.header #sidebar-menu-button i.icon {
+        margin: 0;
+    }
+
     header.header #sidebar-menu-button .text {
         display: none;
+    }
+
+    header.header .language .text {
+        display: none;
+    }
+
+    header.header .language i.flag {
+        margin: 0;
     }
 }
 
@@ -1223,7 +1240,15 @@ div[id^=personal-card-modal-].ui.modal.disabled:after {
 .visit-creator-patient-modal.ui.modal.disabled:after {
     content: "\01F6AB";
 }
+
 /* On Writing Report */
 .visit-creator-todo-write-report-form.ui.form.disabled.success:after {
     content: "\02705";
+}
+
+/* === PATIENTS === */
+.patients-empty-message {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
 }

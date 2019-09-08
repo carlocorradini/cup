@@ -2,6 +2,10 @@ package it.unitn.disi.wp.cup.persistence.dao;
 
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.entity.Person;
+import it.unitn.disi.wp.cup.persistence.entity.Province;
+import it.unitn.disi.wp.cup.persistence.entity.HealthService;
+
+import java.util.List;
 
 /**
  * DAO interface of {@link Person}
@@ -26,4 +30,14 @@ public interface PersonDAO extends DAO<Person, Long> {
      * @throws DAOException If an error occurred during the information retrieving
      */
     boolean update(Person person) throws DAOException;
+
+    /**
+     * Return the {@link List} of all {@link Person Patients} that live in the same {@link Province}
+     * managed by the {@link HealthService Health Service} identified by {@code healthServiceId}
+     *
+     * @param healthServiceId The {@link HealthService Health Service} id
+     * @return The {@link List} of {@link Person Patients}
+     * @throws DAOException If an error occurred during the information retrieving
+     */
+    List<Person> getAllByHealthServiceId(Long healthServiceId) throws DAOException;
 }

@@ -25,6 +25,7 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
     private static final String SQL_GET_ALL = "SELECT * FROM person";
     private static final String SQL_GET_BY_EMAIL = "SELECT * FROM person WHERE email = ? LIMIT 1";
     private static final String SQL_UPDATE = "UPDATE person SET email = ?, password = ?, name = ?, surname = ?, sex = ?, fiscal_code = ?, birth_date = ?, birth_city_id = ?, city_id = ? WHERE id = ?";
+    private static final String SQL_GET_ALL_BY_HEALTH_SERVICE_ID = "SELECT person.* FROM person INNER JOIN city ON (person.city_id = city.id) WHERE province_id = ?";
 
     /**
      * The default constructor of the class
@@ -194,5 +195,25 @@ public class JDBCPersonDAO extends JDBCDAO<Person, Long> implements PersonDAO {
         }
 
         return updated;
+    }
+
+    @Override
+    public List<Person> getAllByHealthServiceId(Long healthServiceId) throws DAOException {
+        List<Person> patients = new ArrayList<>();
+        if (healthServiceId == null)
+            throw new DAOException("Health Service id is mandatory", new NullPointerException("Health Service id is null"));
+
+        try (PreparedStatement pStmt = CONNECTION.prepareStatement(SQL_GET_ALL_BY_HEALTH_SERVICE_ID)) {
+            pStmt.setLong(1, healthServiceId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                while (rs.next()) {
+                    patients.add(setAndGetDAO(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to get the List of Patients by Health Service Id", ex);
+        }
+
+        return patients;
     }
 }

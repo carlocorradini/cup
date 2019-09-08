@@ -18,31 +18,25 @@
         <h:outputScript library="_default"
                         name="js/visit_creator.js"
                         target="body"/>
-        <h:outputScript library="URI.js"
-                        name="js/URI.min.js"
-                        target="body"/>
         <h:outputScript library="mixitup"
                         name="js/mixitup.min.js"
                         target="body"/>
         <h:outputScript library="_default"
                         name="js/patients.js"
                         target="body"/>
-        <h:outputScript library="_default"
-                        name="js/doctor_patients.js"
-                        target="body"/>
     </ui:define>
 
     <ui:define name="content">
-        <ui:fragment rendered="#{not empty doctor.authDoctor}">
+        <ui:fragment rendered="#{not empty healthService.authHealthService}">
 
             <h2 class="ui center aligned icon header">
                 <i class="circular users icon"/>
-                #{i18n["common.patients"]} #{i18n["common.of"]} #{person.authPerson.fullNameCapitalized}
+                #{i18n["common.patients"]}
             </h2>
 
             <div class="ui divider"></div>
 
-            <ui:fragment rendered="#{empty doctor.patients}">
+            <ui:fragment rendered="#{empty healthService.patients}">
                 <div class="ui icon floating message">
                     <i class="info circle icon"/>
                     <div class="content">
@@ -53,7 +47,7 @@
                     </div>
                 </div>
             </ui:fragment>
-            <ui:fragment rendered="#{not empty doctor.patients}">
+            <ui:fragment rendered="#{not empty healthService.patients}">
                 <!-- FILTER -->
 
                 <h5 class="ui header">
@@ -115,7 +109,7 @@
 
                 <!-- PATIENT CARD -->
                 <div class="ui cards centered patients-container">
-                    <ui:repeat value="#{doctor.patients}" var="p">
+                    <ui:repeat value="#{healthService.patients}" var="p">
                         <div class="ui raised card"
                              data-id="#{p.id}"
                              data-fc="#{fn:toLowerCase(p.fiscalCode)}"
@@ -300,26 +294,6 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <div class="ui two buttons">
-                            <h:link styleClass="ui green right labeled icon button"
-                                    outcome="/dashboard/doctor/prescription_medicine/index"
-                                    id="patients-prescribe-medicine"
-                            >
-                                <f:param name="patientId" value="0"/>
-                                #{i18n["common.prescribeMedicine"]}
-                                <i class="right chevron icon"/>
-                            </h:link>
-                            <h:link styleClass="ui teal right labeled icon button"
-                                    outcome="/dashboard/doctor/prescription_exam/index"
-                                    id="patients-prescribe-exam"
-                            >
-                                <f:param name="patientId" value="0"/>
-                                #{i18n["common.prescribeExam"]}
-                                <i class="right chevron icon"/>
-                            </h:link>
                         </div>
                     </div>
                 </div>

@@ -7,6 +7,9 @@
         <locale-config>
             <default-locale>it</default-locale>
             <supported-locale>en</supported-locale>
+            <supported-locale>de</supported-locale>
+            <supported-locale>es</supported-locale>
+            <supported-locale>fr</supported-locale>
         </locale-config>
         <resource-bundle>
             <base-name>i18n.messages</base-name>

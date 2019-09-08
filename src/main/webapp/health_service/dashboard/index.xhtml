@@ -167,6 +167,18 @@
                             #{fn:toUpperCase(i18n["health.service.report"])}
                         </div>
                     </h:link>
+                    <h:link outcome="/health_service/dashboard/patients/index" styleClass="raised link card">
+                        <div class="image">
+                            <h:graphicImage styleClass="ui image"
+                                            library="_default"
+                                            name="/images/category/group.svg"
+                                            alt="#{i18n['common.patients']}"
+                            />
+                        </div>
+                        <div class="extra center aligned">
+                            #{fn:toUpperCase(i18n["common.patients"])}
+                        </div>
+                    </h:link>
                 </div>
             </div>
         </ui:fragment>

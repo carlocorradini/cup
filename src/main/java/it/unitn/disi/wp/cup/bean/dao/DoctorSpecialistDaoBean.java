@@ -1,12 +1,14 @@
 package it.unitn.disi.wp.cup.bean.dao;
 
 import it.unitn.disi.wp.cup.persistence.dao.ExamDAO;
+import it.unitn.disi.wp.cup.persistence.dao.PersonDAO;
 import it.unitn.disi.wp.cup.persistence.dao.PrescriptionExamDAO;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOException;
 import it.unitn.disi.wp.cup.persistence.dao.exception.DAOFactoryException;
 import it.unitn.disi.wp.cup.persistence.dao.factory.DAOFactory;
 import it.unitn.disi.wp.cup.persistence.entity.DoctorSpecialist;
 import it.unitn.disi.wp.cup.persistence.entity.Exam;
+import it.unitn.disi.wp.cup.persistence.entity.Person;
 import it.unitn.disi.wp.cup.persistence.entity.PrescriptionExam;
 import it.unitn.disi.wp.cup.util.AuthUtil;
 
@@ -35,6 +37,7 @@ public final class DoctorSpecialistDaoBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger(DoctorSpecialistDaoBean.class.getName());
 
     private ExamDAO examDAO = null;
+    private PersonDAO personDAO = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
     private DoctorSpecialist authDoctorSpecialist = null;
 
@@ -49,6 +52,7 @@ public final class DoctorSpecialistDaoBean implements Serializable {
             authDoctorSpecialist = AuthUtil.getAuthDoctorSpecialist((HttpServletRequest) context.getRequest());
             try {
                 examDAO = DAOFactory.getDAOFactory().getDAO(ExamDAO.class);
+                personDAO = DAOFactory.getDAOFactory().getDAO(PersonDAO.class);
                 prescriptionExamDAO = DAOFactory.getDAOFactory().getDAO(PrescriptionExamDAO.class);
             } catch (DAOFactoryException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to get DAOs", ex);
@@ -63,6 +67,25 @@ public final class DoctorSpecialistDaoBean implements Serializable {
      */
     public DoctorSpecialist getAuthDoctorSpecialist() {
         return authDoctorSpecialist;
+    }
+
+    /**
+     * Return the {@link List} of {@link Person Patients} signed up in the persistence system
+     *
+     * @return The {@link List} of all {@link Person Patients}
+     */
+    public List<Person> getPatients() {
+        List<Person> patients = Collections.emptyList();
+
+        if (authDoctorSpecialist != null && personDAO != null) {
+            try {
+                patients = personDAO.getAll();
+            } catch (DAOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to get the List of All Patients for the authenticated Doctor Specialist", ex);
+            }
+        }
+
+        return patients;
     }
 
     /**
