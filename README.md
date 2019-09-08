@@ -178,6 +178,7 @@ These instructions will get you a copy of the project up and running on your loc
 | [moment.js](https://momentjs.com/)                                      | A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates                                                                                 |
 | [semantic-ui](https://semantic-ui.com/)                                 | Semantic is a development framework that helps create beautiful, responsive layouts using human-friendly HTML                                                                     |
 | [URI.js](http://www.html.it/script/uri-js/)                             | javascript library for working with URLs                                                                                                                                          |
+| [mixitup](https://www.kunkalabs.com/mixitup/)                           | A high-performance, dependency-free library for animated filtering, sorting, insertion, removal and more...                                                                       |
 | [Semantic-UI-Calendar](https://github.com/mdehoog/Semantic-UI-Calendar) | javascript library for formatting date and time                                                                                                                                   |
 
 ## Versioning
