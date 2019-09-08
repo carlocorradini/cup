@@ -39,7 +39,6 @@ public final class PersonDaoBean implements Serializable {
     private PrescriptionMedicineDAO prescriptionMedicineDAO = null;
     private PrescriptionExamDAO prescriptionExamDAO = null;
     private Person authPerson = null;
-    private Person doctor = null;
 
     /**
      * Initialize the {@link PersonDaoBean}

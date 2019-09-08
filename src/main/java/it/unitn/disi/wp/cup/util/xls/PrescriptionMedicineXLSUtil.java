@@ -9,11 +9,16 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class PrescriptionMedicineXLSUtil {
+/**
+ * Util class for generating XLS file from a {@link PrescriptionMedicine Presscription Medicine}
+ *
+ * @author Luca Santoro
+ */
+public final class PrescriptionMedicineXLSUtil {
     /**
-     * Generate a XLS given a date passed as parameter
+     * Generate a XLS given a {@link PrescriptionMedicine Prescription Medicine} {@link List List}
      *
-     * @param prescriptionMedicines The list of prescripted medicines
+     * @param prescriptionMedicines The {@link List} of prescribed medicines
      */
     public static ByteArrayOutputStream generate(List<PrescriptionMedicine> prescriptionMedicines) throws NullPointerException, IOException {
         if (prescriptionMedicines == null)
@@ -53,7 +58,7 @@ public class PrescriptionMedicineXLSUtil {
         Row headerRow = sheet.createRow(0);
 
         // Create cells title
-        for(int i = 0; i < columns.length; i++){
+        for (int i = 0; i < columns.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(columns[i]);
             cell.setCellStyle(headerCellStyle);
@@ -70,7 +75,7 @@ public class PrescriptionMedicineXLSUtil {
 
         // Fill the table
         int rowNum = 1;
-        if(!prescriptionMedicines.isEmpty()) {
+        if (!prescriptionMedicines.isEmpty()) {
             // Not empty
 
             // Create other rows and cells with prescriptions data
@@ -102,7 +107,7 @@ public class PrescriptionMedicineXLSUtil {
 
                 // Price per pcs
                 Cell pricePcs = row.createCell(col++);
-                pricePcs.setCellValue((double)prescriptionMedicine.getMedicine().getPrice()/100);
+                pricePcs.setCellValue((double) prescriptionMedicine.getMedicine().getPrice() / 100);
                 pricePcs.setCellStyle(doubleCellStyle);
 
                 // Quantity
@@ -113,18 +118,17 @@ public class PrescriptionMedicineXLSUtil {
                 // Total price
                 costAlphabet = col;
                 Cell total = row.createCell(col);
-                total.setCellValue((double)prescriptionMedicine.getTotalToPay()/100);
+                total.setCellValue((double) prescriptionMedicine.getTotalToPay() / 100);
                 total.setCellStyle(doubleCellStyle);
 
-                if(rowNum-1 == 1 || rowNum-1 == 2){
+                if (rowNum - 1 == 1 || rowNum - 1 == 2) {
                     col += 2;
 
                     row.createCell(col++);
                     row.createCell(col);
                 }
             }
-        }
-        else{
+        } else {
             // ERROR
             Row row = sheet.createRow(1);
 
@@ -132,7 +136,7 @@ public class PrescriptionMedicineXLSUtil {
         }
 
         // Build the resume of total costs table
-        if(!prescriptionMedicines.isEmpty()){
+        if (!prescriptionMedicines.isEmpty()) {
             // Build the Total table. It contains the sum of all quantities and costs
             // NB: It works with maximum range of the basic alphabet columns
             int i = 0;
@@ -159,13 +163,13 @@ public class PrescriptionMedicineXLSUtil {
             i++;
             // Tot Costs
             cell = sheet.getRow(1).getCell(columns.length + spacing + i);
-            formula = "SUM("+ alphabet[costAlphabet] + "2:" + alphabet[costAlphabet] + rowNum + ")";
+            formula = "SUM(" + alphabet[costAlphabet] + "2:" + alphabet[costAlphabet] + rowNum + ")";
             cell.setCellFormula(formula);
             sheet.autoSizeColumn(columns.length + spacing + i);
         }
 
         // Resize all columns to fit the content size
-        for (int i = 0; i < columns.length; i++){
+        for (int i = 0; i < columns.length; i++) {
             sheet.autoSizeColumn(i);
         }
 

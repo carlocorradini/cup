@@ -6,16 +6,19 @@ import org.apache.poi.ss.usermodel.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class PrescriptionExamXLSUtil {
+/**
+ * Util class for generating XLS file from a {@link PrescriptionExam Presscription Exam}
+ *
+ * @author Luca Santoro
+ */
+public final class PrescriptionExamXLSUtil {
     /**
-     * Generate a XLS given a date passed as parameter
+     * Generate a XLS given a {@link PrescriptionExam Prescription Exam} {@link List List}
      *
-     * @param prescriptionExams The list of prescripted exams
+     * @param prescriptionExams The list of prescribed exams
      */
     public static ByteArrayOutputStream generate(List<PrescriptionExam> prescriptionExams) throws NullPointerException, IOException {
         if (prescriptionExams == null)
@@ -54,7 +57,7 @@ public class PrescriptionExamXLSUtil {
         Row headerRow = sheet.createRow(0);
 
         // Create cells
-        for(int i = 0; i < columns.length; i++){
+        for (int i = 0; i < columns.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(columns[i]);
             cell.setCellStyle(headerCellStyle);
@@ -65,7 +68,7 @@ public class PrescriptionExamXLSUtil {
         dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd-MM-yyyy hh:mm"));
 
         int rowNum = 1;
-        if(!prescriptionExams.isEmpty()) {
+        if (!prescriptionExams.isEmpty()) {
             // Not empty
 
             // Create other rows and cells with prescriptions data
@@ -103,26 +106,23 @@ public class PrescriptionExamXLSUtil {
 
                 // Price based on the dealer of the service
                 costAlphabet = col;
-                if(prescriptionExam.getHealthServiceId() != null) {
+                if (prescriptionExam.getHealthServiceId() != null) {
                     row.createCell(col++).setCellValue(Double.parseDouble("11"));
-                }
-                else if(prescriptionExam.getSpecialistId() != null) {
+                } else if (prescriptionExam.getSpecialistId() != null) {
                     row.createCell(col++).setCellValue(Double.parseDouble("50"));
-                }
-                else if(prescriptionExam.getHealthServiceId() != null
+                } else if (prescriptionExam.getHealthServiceId() != null
                         && prescriptionExam.getSpecialistId() != null) {
                     row.createCell(col++).setCellValue("non ancora assegnato");
                 }
 
                 // create cells for the costs table
-                if(rowNum-1 == 1 || rowNum-1 == 2){
+                if (rowNum - 1 == 1 || rowNum - 1 == 2) {
                     col += 1;
 
                     row.createCell(col);
                 }
             }
-        }
-        else{
+        } else {
             // ERROR
             Row row = sheet.createRow(1);
 
@@ -130,7 +130,7 @@ public class PrescriptionExamXLSUtil {
         }
 
         // Build the resume of total costs table
-        if(!prescriptionExams.isEmpty()){
+        if (!prescriptionExams.isEmpty()) {
             // Build the Total table. It contains the sum of all quantities and costs
             // NB: It works with maximum range of the basic alphabet columns
             int i = 0;
@@ -144,13 +144,13 @@ public class PrescriptionExamXLSUtil {
             // Formula of SUM
             // Tot Costs
             cell = sheet.getRow(1).getCell(columns.length + spacing + i);
-            String formula = "SUM("+ alphabet[costAlphabet] + "2:" + alphabet[costAlphabet] + rowNum + ")";
+            String formula = "SUM(" + alphabet[costAlphabet] + "2:" + alphabet[costAlphabet] + rowNum + ")";
             cell.setCellFormula(formula);
             sheet.autoSizeColumn(columns.length + spacing + i);
         }
 
         // Resize all columns to fit the content size
-        for (int i = 0; i < columns.length; i++){
+        for (int i = 0; i < columns.length; i++) {
             sheet.autoSizeColumn(i);
         }
 
