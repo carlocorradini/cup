@@ -471,6 +471,7 @@ window.visit_creator = {
                                 v.$form.addClass("disabled success");
                                 // Remove table row
                                 window.visit_creator.v.$table
+                                    .DataTable()
                                     .row(window.visit_creator.v.$table.find(`tbody tr[data-prescription-id="${newReport.prescriptionId}"]`))
                                     .remove()
                                     .draw();
